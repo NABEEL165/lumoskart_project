@@ -1,0 +1,2351 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumoskart</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Preconnect for Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link href="https://fonts.cdnfonts.com/css/universal-serif" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap 5 Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Swiper.js CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+<style>
+    :root {
+        --font-primary: 'Universal Serif', sans-serif;
+        --font-secondary: "Poppins", sans-serif;
+        --color-primary: #00c7f7;
+        --text-color: #b3b3b3;
+        --heading-color: #e3e3e3;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: var(--font-secondary);
+        font-size: 14px;
+        line-height: 1.6;
+        background-color: #121212;
+        color: var(--text-color);
+    }
+
+    a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    p {
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 1rem;
+    }
+
+    ul li {
+        color: var(--text-color);
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    button:focus:not(:focus-visible) {
+        box-shadow: none;
+    }
+
+    .navbar {
+        background-color: #121212;
+        padding: 5px 20px;
+        position: sticky;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 99;
+        height: 70px; /* Reduced for better mobile fit */
+    }
+
+    .navbar-brand img {
+        width: 100%;
+        max-width: 180px; /* Base size for desktop */
+        height: auto;
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-brand img:hover {
+        transform: scale(1.1);
+    }
+
+    .search-bar {
+        background-color: #1f1f1f;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 15px;
+        color: #fff;
+        width: 100%;
+        max-width: 400px;
+        padding-left: 40px;
+        font-size: 16px;
+        border: 1px solid #1f1f1f;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+    }
+
+    .search-bar:focus {
+        background-color: #3a3a3a;
+        outline: none;
+        box-shadow: none;
+        color: #fff;
+        border: 1px solid #fff;
+    }
+
+    .search-bar::placeholder {
+        color: var(--text-color);
+        opacity: 1;
+    }
+
+    .search-container {
+        position: relative;
+        margin: 0 20px;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-color);
+        transition: color 0.3s ease;
+    }
+
+    .search-container:focus-within .search-icon {
+        color: #fff;
+    }
+
+    .nav-link {
+        color: var(--text-color) !important;
+        font-size: 18px;
+        position: relative;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+        margin: 0 8px;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #fff !important;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        background-color: var(--color-primary);
+        bottom: -2px;
+        left: 0;
+        transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+    .btn-signup, .btn-login, .btn-open-app {
+        font-size: 18px;
+        padding: 6px 12px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-signup {
+        color: var(--text-color);
+        background-color: transparent;
+        border: none;
+    }
+
+    .btn-signup:hover {
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    .btn-login, .btn-open-app {
+        background-color: #fff;
+        color: #000;
+        border-radius: 20px;
+    }
+
+    .btn-login:hover, .btn-open-app:hover {
+        background-color: #f0f0f0;
+        transform: scale(1.05);
+    }
+
+    .btn-search {
+        background-color: transparent;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        margin-left: 10px;
+        transition: color 0.3s ease;
+    }
+
+    .btn-search:hover {
+        color: var(--text-color);
+    }
+
+    .navbar-toggler {
+        border: none;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.7)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+
+    .offcanvas {
+        background-color: #181818;
+        color: #fff;
+    }
+
+    .offcanvas-header {
+        background-color: #121212;
+    }
+
+    .offcanvas-title img {
+        width: 100%;
+        max-width: 140px; /* Adjusted for off-canvas */
+        height: auto;
+    }
+
+    .offcanvas-body .nav-link {
+        font-size: 14px;
+        width: fit-content;
+    }
+
+    .offcanvas-body .nav-link:hover {
+        color: #fff !important;
+    }
+
+    /* Layout */
+    .layout-wrapper {
+        display: flex;
+        flex-direction: row;
+        min-height: 90vh;
+        gap: 0.6rem;
+        background: #000000;
+        padding: 10px;
+        height: 100%;
+        max-height: 90vh;
+    }
+
+    .sidebar-panel {
+        background-color: #121212;
+        max-width: 450px;
+        padding: 1rem;
+        flex-shrink: 0;
+        border-radius: 7px;
+    }
+
+    .sidebar-title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        font-weight: bold;
+    }
+
+    .sidebar-section {
+        background-color: #1c1c1c;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-section h6 {
+        margin-bottom: 0.5rem;
+    }
+
+    .sidebar-section p {
+        color: #bbb;
+        font-size: 1.3rem;
+    }
+
+    .sidebar-section button {
+        margin-top: 0.5rem;
+        background-color: #fff;
+        font-size: 1rem;
+        color: #000;
+        border: none;
+        padding: 1rem;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .sidebar-footer {
+        font-size: 1rem;
+        color: #777;
+        margin-top: 3rem;
+        padding: 10px;
+    }
+
+    .main-content-area {
+        flex: 1;
+        padding: 2rem;
+        background-color: #121212;
+        border-radius: 7px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .artist-section {
+        padding-bottom: 75px;
+    }
+
+    .section-title-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title-bar h2 {
+        font-size: 2rem;
+        color: var(--heading-color);
+        margin: 0;
+    }
+
+    .section-title-bar a {
+        font-size: 1.3rem;
+        color: #bbb;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    /* Footer Styles */
+    .footer {
+        background: linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 100%);
+        border-top: 2px solid rgba(255, 255, 255, 0.1);
+        padding: 60px 24px 30px;
+        margin-top: 100px;
+    }
+
+    .footer-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+
+    .footer-column h3 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #e0e0e0;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .footer-column h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(90deg, #9e9e9e, #757575);
+        border-radius: 2px;
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 12px;
+    }
+
+    .footer-links a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        display: block;
+        padding: 5px 0;
+    }
+
+    .footer-links a:hover {
+        color: #9e9e9e;
+        transform: translateX(5px);
+    }
+
+    .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .social-link:hover {
+        background: #9e9e9e;
+        transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 30px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+    }
+
+    .influencers-section {
+        position: relative;
+        width: 100%;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+
+    .influencers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+        padding: 1.5rem 0;
+    }
+
+    .influencer-card {
+        min-width: 220px;
+        background-color: #1c1c1c;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.4s ease-in-out;
+        cursor: pointer;
+        transform: scale(1) translateY(0px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .influencer-card:hover {
+        transform: scale(1.03) translateY(-5px);
+        background-color: #252525;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .influencer-img {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background-color: #252525;
+        margin: 0 auto;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+        transition: transform 0.4s ease-in-out;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .influencer-card:hover .influencer-img {
+        transform: scale(1.05);
+        border-color: var(--color-primary);
+    }
+
+    .influencer-img img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .influencer-name, .product-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+        font-size: 1.2rem;
+        color: var(--heading-color);
+    }
+
+    .product-count, .product-brand {
+        color: var(--text-color);
+        font-size: 1.2rem;
+    }
+
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 1.5rem 0;
+    }
+
+    .product-card {
+        background-color: #1f1f1f;
+        border-radius: 7px;
+        overflow: hidden;
+        transition: all 0.4s ease-in-out;
+        cursor: pointer;
+        transform: scale(1) translateY(0px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-card:hover {
+        transform: scale(1.03) translateY(-5px);
+        background-color: #252525;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .product-img {
+        width: 100%;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .product-img img {
+        height: 40vh;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .product-details {
+        padding: 15px;
+    }
+
+    .product-influencer {
+        font-size: 0.85rem;
+        color: #bbb;
+    }
+
+    .product-price {
+        color: #fff;
+        margin-top: 10px;
+        font-weight: 700;
+    }
+
+    .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+    }
+
+    .add-to-cart {
+        background-color: #404040;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        line-height: 30px;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .add-to-cart:hover {
+        background-color: var(--color-primary);
+        transform: scale(1.1);
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+        background-color: rgba(51, 51, 51, 0.8);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        color: white;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .swiper-button-prev:hover,
+    .swiper-button-next:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: var(--heading-color);
+        transform: scale(1.1);
+    }
+
+    .swiper-button-prev::after,
+    .swiper-button-next::after {
+        font-size: 1.5rem;
+    }
+
+    .swiper-button-prev {
+        left: 10px;
+    }
+
+    .swiper-button-next {
+        right: 10px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #bbb;
+    }
+
+    /* ===============================
+       💬 WhatsApp Widget
+    ================================= */
+    .whatsapp-widget {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        transition: all 0.3s ease;
+    }
+
+    .whatsapp-button {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #25d366, #128c7e);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        animation: whatsappPulse 2s infinite;
+        border: none;
+        outline: none;
+    }
+
+    .whatsapp-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+    }
+
+    .whatsapp-button i {
+        font-size: 32px;
+        color: #fff;
+    }
+
+    @keyframes whatsappPulse {
+        0% {
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        }
+        50% {
+            box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7);
+        }
+        100% {
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        }
+    }
+
+    .whatsapp-tooltip {
+        position: absolute;
+        right: 75px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #fff;
+        color: #333;
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .whatsapp-widget:hover .whatsapp-tooltip {
+        opacity: 1;
+        visibility: visible;
+        right: 80px;
+    }
+
+    .whatsapp-tooltip::after {
+        content: '';
+        position: absolute;
+        right: -8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left: 8px solid #fff;
+    }
+
+    /* ===============================
+       🎥 Vertical Video Player (Shorts-Style)
+    ================================= */
+    .video-shorts-container {
+        position: fixed;
+        bottom: 100px;
+        right: 20px;
+        width: 80px;
+        height: 400px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Video Shorts Section Enhancements */
+    .video-shorts-section {
+        margin-top: 60px;
+        padding: 20px 0;
+    }
+
+    .video-shorts-wrapper {
+        position: relative;
+        background: #1b1b1b;
+        border-radius: 30px;
+        padding: 30px 20px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .video-shorts-wrapper .video-shorts-swiper {
+        height: 520px;
+    }
+
+    .video-shorts-frame {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 28px;
+        overflow: hidden;
+        background: #000;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .video-shorts-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .video-shorts-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        color: white;
+    }
+
+    .video-shorts-product-info {
+        margin-bottom: 15px;
+    }
+
+    .video-shorts-product-name {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .video-shorts-influencer {
+        font-size: 1rem;
+        color: #ccc;
+        margin-bottom: 10px;
+    }
+
+    .video-shorts-description {
+        color: #e3e3e3;
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+    }
+
+    .video-shorts-products {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .product-tag {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .video-shorts-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    .video-shorts-action-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    .video-shorts-action-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .video-shorts-pagination {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .video-shorts-pagination-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .video-shorts-pagination-dot.active {
+        background: white;
+        transform: scale(1.3);
+    }
+
+    .video-shorts-section .section-title-bar {
+        align-items: flex-start;
+    }
+
+    .video-shorts-section .section-subtitle {
+        color: #b3b3b3;
+        font-size: 0.95rem;
+        margin-top: 6px;
+    }
+
+    .video-shorts-meta {
+        color: #b3b3b3;
+        font-size: 0.9rem;
+    }
+
+    .video-shorts-empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 100%;
+        gap: 10px;
+        color: #fff;
+    }
+
+    .video-shorts-toggle {
+        background: linear-gradient(135deg, #25d366, #128c7e);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        margin: 0 auto;
+    }
+
+    .video-shorts-toggle:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+    }
+
+    .video-shorts-toggle i {
+        font-size: 24px;
+        color: white;
+    }
+
+    .video-shorts-player {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 2000;
+        display: none;
+        flex-direction: column;
+    }
+
+    .video-shorts-player.active {
+        display: flex;
+    }
+
+    .video-shorts-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background: rgba(18, 18, 18, 0.9);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .video-shorts-title {
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .video-shorts-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .video-shorts-close:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .video-shorts-content {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .video-shorts-swiper {
+        width: 100%;
+        height: 100%;
+    }
+
+    .video-shorts-slide {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .video-shorts-placeholder {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .placeholder-text {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 600;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .video-shorts-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        color: white;
+    }
+
+    .video-shorts-product-info {
+        margin-bottom: 15px;
+    }
+
+    .video-shorts-product-name {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .video-shorts-product-price {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #00c7f7;
+        margin-bottom: 5px;
+    }
+
+    .video-shorts-product-influencer {
+        font-size: 1rem;
+        color: #ccc;
+        margin-bottom: 15px;
+    }
+
+    .video-shorts-actions {
+        display: flex;
+        gap: 15px;
+    }
+
+    .video-shorts-action-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    .video-shorts-action-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .video-shorts-pagination {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .video-shorts-pagination-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .video-shorts-pagination-dot.active {
+        background: white;
+        transform: scale(1.3);
+    }
+
+    .video-shorts-section {
+        margin-top: 60px;
+    }
+
+    .video-shorts-section .section-title-bar {
+        align-items: flex-start;
+    }
+
+    .video-shorts-section .section-subtitle {
+        color: #b3b3b3;
+        font-size: 0.95rem;
+        margin-top: 6px;
+    }
+
+    .video-shorts-wrapper {
+        position: relative;
+        background: #1b1b1b;
+        border-radius: 30px;
+        padding: 30px 20px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+        overflow: hidden;
+    }
+
+    .video-shorts-wrapper .video-shorts-swiper {
+        height: 520px;
+    }
+
+    .video-shorts-frame {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 28px;
+        overflow: hidden;
+        background: #000;
+    }
+
+    .video-shorts-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .video-shorts-products {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .product-tag {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .video-shorts-description {
+        color: #e3e3e3;
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+    }
+
+    .video-shorts-meta {
+        color: #b3b3b3;
+        font-size: 0.9rem;
+    }
+
+    .video-shorts-empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 100%;
+        gap: 10px;
+        color: #fff;
+    }
+
+    /* Mobile Adjustments for WhatsApp Widget */
+    @media (max-width: 768px) {
+        .whatsapp-widget {
+            bottom: 20px;
+            right: 20px;
+        }
+        .whatsapp-button {
+            width: 50px;
+            height: 50px;
+        }
+        .whatsapp-button i {
+            font-size: 28px;
+        }
+        .whatsapp-tooltip {
+            display: none;
+        }
+
+        /* Video Shorts Mobile Adjustments */
+        .video-shorts-container {
+            bottom: 80px;
+            right: 15px;
+            width: 60px;
+        }
+
+        .video-shorts-toggle {
+            width: 50px;
+            height: 50px;
+        }
+
+        .video-shorts-toggle i {
+            font-size: 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .whatsapp-widget {
+            bottom: 15px;
+            right: 15px;
+        }
+        .whatsapp-button {
+            width: 45px;
+            height: 45px;
+        }
+        .whatsapp-button i {
+            font-size: 24px;
+        }
+
+        /* Video Shorts Small Mobile Adjustments */
+        .video-shorts-container {
+            bottom: 70px;
+            right: 10px;
+            width: 50px;
+        }
+
+        .video-shorts-toggle {
+            width: 45px;
+            height: 45px;
+        }
+
+        .video-shorts-toggle i {
+            font-size: 18px;
+        }
+
+        .video-shorts-product-name {
+            font-size: 1.2rem;
+        }
+
+        .video-shorts-product-price {
+            font-size: 1rem;
+        }
+
+        .video-shorts-product-influencer {
+            font-size: 0.9rem;
+        }
+
+        .video-shorts-action-btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Responsive Styles */
+    @media (min-width: 1700px) {
+        .layout-wrapper {
+            height: 100%;
+            max-height: 100%;
+        }
+        .navbar-brand img {
+            max-width: 200px; /* Larger logo for wide screens */
+        }
+    }
+
+    @media (max-width: 1140px) {
+        .sidebar-panel {
+            max-width: 250px;
+        }
+        .navbar-brand img {
+            max-width: 160px;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .mobile-view {
+            display: none !important;
+        }
+        .desktop-view {
+            display: flex !important;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .desktop-view {
+            display: none !important;
+        }
+        .mobile-view {
+            display: flex !important;
+        }
+        .navbar {
+            padding: 10px 15px;
+            height: auto;
+            min-height: 60px;
+        }
+        .navbar-brand img {
+            max-width: 140px; /* Adjusted for tablets */
+        }
+        .btn-open-app {
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+        .search-container {
+            margin: 0;
+        }
+        .swiper-button-prev, .swiper-button-next {
+            width: 30px;
+            height: 30px;
+        }
+        .swiper-button-prev::after, .swiper-button-next::after {
+            font-size: 1rem;
+        }
+        .swiper-button-prev {
+            left: 2px;
+        }
+        .swiper-button-next {
+            right: 2px;
+        }
+        .layout-wrapper {
+            flex-direction: column;
+            max-height: 100%;
+            gap: 10px;
+        }
+        .sidebar-panel {
+            order: 2;
+            max-width: 100%;
+        }
+        .main-content-area {
+            order: 1;
+            padding: 1rem;
+            max-height: 100%;
+        }
+        .influencers-grid {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+        .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .product-img img {
+            height: 35vh;
+        }
+        .product-title {
+            font-size: 1.4rem;
+        }
+        .product-influencer {
+            font-size: 0.9rem;
+        }
+        .product-price {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        body {
+            font-size: 12px;
+        }
+        .navbar {
+            padding: 8px 10px;
+        }
+        .navbar-brand img {
+            max-width: 120px; /* Smaller logo for mobile */
+        }
+        .section-title-bar h2 {
+            font-size: 1.3rem;
+        }
+        .section-title-bar a {
+            font-size: 0.9rem;
+        }
+        .influencer-card {
+            min-width: 120px;
+            padding: 15px;
+        }
+        .influencer-img {
+            width: 100px;
+            height: 100px;
+        }
+        .influencer-name {
+            font-size: 1rem;
+        }
+        .product-count {
+            font-size: 0.85rem;
+        }
+        .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .product-img img {
+            height: 30vh;
+        }
+        .add-to-cart {
+            width: 40px;
+            height: 40px;
+        }
+        .add-to-cart i {
+            font-size: 22px;
+        }
+        .sidebar-title {
+            font-size: 1.4rem;
+        }
+        .sidebar-section p {
+            font-size: 1rem;
+        }
+        .sidebar-section button {
+            font-size: 0.9rem;
+            padding: 0.8rem;
+        }
+        .footer-links li a {
+            font-size: 14px;
+        }
+        .whatsapp-widget {
+            bottom: 20px;
+            right: 20px;
+        }
+        .whatsapp-button {
+            width: 55px;
+            height: 55px;
+        }
+        .whatsapp-button i {
+            font-size: 28px;
+        }
+        .whatsapp-tooltip {
+            display: none;
+        }
+        .offcanvas-title img {
+            max-width: 120px; /* Adjusted for mobile off-canvas */
+        }
+    }
+
+    @media (max-width: 480px) {
+        .navbar-brand img {
+            max-width: 100px; /* Smallest size for very small screens */
+        }
+        .btn-open-app {
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+        .influencers-grid {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        .influencer-card {
+            padding: 10px;
+        }
+        .influencer-img {
+            width: 80px;
+            height: 80px;
+        }
+        .influencer-name {
+            font-size: 0.9rem;
+        }
+        .product-count {
+            font-size: 0.75rem;
+        }
+        .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        .product-img img {
+            height: 25vh;
+        }
+        .product-details {
+            padding: 10px;
+        }
+        .product-title {
+            font-size: 1.1rem;
+        }
+        .product-influencer {
+            font-size: 0.75rem;
+        }
+        .product-price {
+            font-size: 1.2rem;
+        }
+        .add-to-cart {
+            width: 35px;
+            height: 35px;
+        }
+        .add-to-cart i {
+            font-size: 18px;
+        }
+        .section-title-bar h2 {
+            font-size: 1.1rem;
+        }
+        .section-title-bar a {
+            font-size: 0.8rem;
+        }
+        .offcanvas-title img {
+            max-width: 100px;
+        }
+
+        /* Footer Mobile */
+        .footer {
+            padding: 40px 16px 20px;
+            margin-top: 60px;
+        }
+
+        .footer-grid {
+            gap: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+        }
+
+        .footer-links a {
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            gap: 12px;
+        }
+
+        .social-link {
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
+        }
+
+        .footer-bottom {
+            padding-top: 20px;
+            font-size: 0.8rem;
+        }
+    }
+
+    /* Swiper Adjustments */
+    .influencers-swiper .swiper-slide {
+        padding: 0 5px;
+    }
+    .products-swiper .swiper-slide {
+        padding: 0 5px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+        background-color: #363636;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #121212;
+        border-radius: 7px;
+        border: 7px solid #333333;
+    }
+    ::-webkit-scrollbar-track {
+        background-color: #272727;
+        border-radius: 7px;
+    }
+
+    /* Modern Button Effects */
+    .btn-signup, .btn-login, .btn-open-app, .view-all-btn {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-signup::before, .btn-login::before, .btn-open-app::before, .view-all-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: 0.5s;
+    }
+
+    .btn-signup:hover::before, .btn-login:hover::before, .btn-open-app:hover::before, .view-all-btn:hover::before {
+        left: 100%;
+    }
+
+    .view-all-btn {
+        background: transparent;
+        border: 1px solid var(--color-primary);
+        color: var(--color-primary);
+        border-radius: 20px;
+        padding: 8px 20px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .view-all-btn:hover {
+        background: var(--color-primary);
+        color: #000;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 199, 247, 0.4);
+    }
+
+    /* Section Title Enhancements */
+    .section-title-bar h2 {
+        position: relative;
+        display: inline-block;
+        padding-bottom: 15px;
+    }
+
+    .section-title-bar h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 70px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--color-primary), #00a8d6);
+        border-radius: 2px;
+    }
+
+    /* Navigation Link Hover Effect */
+    .navbar-nav .nav-link:hover {
+        color: #00a8d6 !important;
+    }
+
+    /* Admin Dashboard Button */
+    .btn-admin {
+        background-color: #dc3545; /* Red color for admin */
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-admin:hover {
+        background-color: #c82333; /* Darker red on hover */
+        color: white;
+    }
+
+
+
+
+
+
+/*.reels-section {*/
+/*    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);*/
+/*    padding: 50px 20px;*/
+/*    border-radius: 25px;*/
+/*    margin: 30px 10px;*/
+/*}*/
+/*.reels-container {*/
+/*    display: flex;*/
+/*    overflow-x: auto;*/
+/*    gap: 20px;*/
+/*    padding: 15px;*/
+/*    scroll-snap-type: x mandatory;*/
+/*}*/
+/*.reel-card {*/
+/*    min-width: 320px;*/
+/*    background: black;*/
+/*    border-radius: 20px;*/
+/*    overflow: hidden;*/
+/*    box-shadow: 0 15px 30px rgba(0,0,0,0.5);*/
+/*}*/
+/*.reel-video {*/
+/*    width: 100%;*/
+/*    height: 520px;*/
+/*    object-fit: cover;*/
+/*}*/
+/*.reel-info {*/
+/*    padding: 15px;*/
+/*    color: white;*/
+/*}*/
+/*.tagged-products {*/
+/*    margin-top: 10px;*/
+/*}*/
+/*.reels-container::-webkit-scrollbar { display: none; }*/
+
+
+
+.instagram-reels-widget {
+    background: #000;
+    border-radius: 20px;
+    padding: 30px 20px;
+    margin: 40px 10px;
+}
+
+.reels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    padding: 10px 5px;
+}
+
+.reel-widget-card {
+    aspect-ratio: 9/16;
+    background: #111;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reel-widget-card:hover {
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+.reel-widget-card video {
+    border-radius: 12px;
+}
+
+.play-icon-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.reel-overlay-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    pointer-events: none;
+}
+
+.reel-info-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a href="{% url 'home' %}" class="navbar-brand">
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="50" class="d-inline-block align-middle mr-2">
+            </a>
+
+            <div class="mobile-view d-flex align-items-center justify-content-end">
+                <a href="{% url 'login' %}" class="btn btn-open-app mx-auto">Login</a>
+                <button class="btn btn-search" data-bs-toggle="offcanvas" data-bs-target="#searchOffcanvas" aria-controls="searchOffcanvas">
+                    <i class="bi bi-search"></i>
+                </button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <div class="desktop-view collapse navbar-collapse" id="navbarNav">
+                <div class="search-container">
+                    <form action="{% url 'search' %}" method="get" class="d-flex align-items-center" style="gap: 10px;">
+                        <input type="hidden" name="page" value="home">
+                        <button type="submit" style="border-radius: 20px; background: none; border: none; padding: 8px; cursor: pointer;">
+                            <i class="bi bi-search" style="font-size: 20px; color: #6c757d;"></i>
+                        </button>
+                        <input type="text" name="q" class="form-control search-bar" placeholder="Who’s your favorite influencer" value="{{ request.GET.q|default:'' }}" required>
+                        {% if request.GET.q %}
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary" style="border-radius: 20px;">Clear</a>
+                        {% endif %}
+                    </form>
+                </div>
+
+                <!-- Navigation Links - With Language Selection -->
+                <div class="ms-auto d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-globe"></i> <span id="currentLanguage">English</span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <li><a class="dropdown-item lang-option" href="#" data-lang="en">English</a></li>
+                            <li><a class="dropdown-item lang-option" href="#" data-lang="ar">Arabic</a></li>
+                        </ul>
+                    </div>
+                    <a href="{% url 'register_customer' %}" class="btn btn-signup me-2">Sign up</a>
+                    <a href="{% url 'login' %}" class="btn btn-login">Log in</a>
+                    <!--{% if user.is_staff %}-->
+                    <!--<a href="{% url 'admin_dashboard' %}" class="btn btn-admin ms-2">Admin Dashboard</a>-->
+                    <!--{% endif %}-->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Off-canvas Menu for Mobile/Tablet -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="navbarOffcanvasLabel">
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="50" class="d-inline-block align-middle mr-2">
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'order_tracking' %}">Order Tracking</a></li>
+                <!-- Moved Premium option here as a sub-section under Sign Up -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register_influencer' %}">Sign up as an Influencer</a>
+                    <ul class="nav flex-column ms-4">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Premium</a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- Language Selection in Mobile Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="mobileLanguageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-globe"></i> <span id="mobileCurrentLanguage">English</span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="mobileLanguageDropdown">
+                        <li><a class="dropdown-item lang-option" href="#" data-lang="en">English</a></li>
+                        <li><a class="dropdown-item lang-option" href="#" data-lang="ar">Arabic</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register_customer' %}">Sign up</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log in</a></li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="searchOffcanvas" aria-labelledby="searchOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="searchOffcanvasLabel">Search</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form action="{% url 'search' %}" method="get" class="d-flex align-items-center w-100" style="gap: 10px;">
+                <input type="hidden" name="page" value="home">
+                <input
+                    type="text"
+                    name="q"
+                    class="form-control search-bar"
+                    placeholder="Search influencers or products..."
+                    value="{{ request.GET.q|default:'' }}"
+                    style="border-radius: 20px; padding: 8px 15px;"
+                    required
+                >
+                <button
+                    type="submit"
+                    class="btn"
+                    style="border-radius: 50%; background: none; border: none; padding: 6px;"
+                >
+                    <i class="bi bi-search" style="font-size: 20px; color: #6c757d;"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="layout-wrapper">
+        <!-- Main Content -->
+        <main class="main-content-area">
+            <!-- Search Results Feedback -->
+            {% if request.GET.q %}
+                <div class="search-results-feedback mb-4">
+                    <p>Showing results for "{{ request.GET.q }}": {{ products|length }} products, {{ influencers|length }} influencers</p>
+                    {% if not products and not influencers %}
+                        <p>No results found. Try a different search term.</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <!-- Featured Influencers -->
+            <section class="artist-section">
+                <div class="section-title-bar mb-4">
+                    <h2>Featured Influencers</h2>
+                    <a href="{% url 'influencer_list' %}" class="view-all-btn">Show all</a>
+                </div>
+                <div class="influencers-section">
+                    <div class="swiper influencers-swiper">
+                        <div class="swiper-wrapper">
+                            {% for influencer in influencers %}
+                                {% if influencer.is_active and influencer.influencer_profile %}
+                                    <div class="swiper-slide">
+                                        <a href="{% url 'view_influencer_detail' influencer.id %}" class="influencer-card">
+                                            <div class="influencer-img">
+                                                {% if influencer.influencer_profile.photo %}
+                                                    <img src="{{ influencer.influencer_profile.photo.url }}" alt="{{ influencer.username }}">
+                                                {% else %}
+                                                    <img src="{% static 'images/default_profile.png' %}" alt="Default profile">
+                                                {% endif %}
+                                            </div>
+                                            <h3 class="influencer-name">{{ influencer.get_full_name|default:influencer.username }}</h3>
+                                            <p class="product-count">{{ influencer.products.count }} Products</p>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% empty %}
+                                <div class="empty-state">
+                                    <p>No influencers registered yet.</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                    </div>
+                </div>
+            </section>
+
+
+<!-- TRUE INSTAGRAM REELS WIDGET — EXACT COPY OF INSTAGRAM 2025 -->
+<div class="instagram-reels-widget my-5">
+    <div class="reels-header text-center mb-4">
+        <h2 class="text-white fw-bold">Reels</h2>
+    </div>
+
+    {% if reels_videos %}
+    <div class="reels-grid">
+        {% for video in reels_videos %}
+        <div class="reel-widget-card position-relative overflow-hidden rounded-3 shadow-lg">
+            <!-- Video Thumbnail + Play Icon -->
+            <a href="{{ video.video_file.url }}" class="text-decoration-none" data-fancybox="reels">
+                <video class="w-100 h-100 object-fit-cover" muted preload="metadata">
+                    <source src="{{ video.video_file.url }}#t=0.1" type="video/mp4">
+                </video>
+
+                <!-- Play Icon Overlay -->
+                <div class="play-icon-overlay">
+                    <i class="bi bi-play-fill fs-1"></i>
+                </div>
+
+                <!-- Bottom Gradient + Info -->
+                <div class="reel-overlay-gradient"></div>
+                <div class="reel-info-overlay p-3">
+                    <div class="d-flex align-items-center text-white">
+                        <strong>@{{ video.influencer.username }}</strong>
+                    </div>
+                    <p class="text-white small mb-1">{{ video.title|truncatechars:50 }}</p>
+
+                    <!-- Likes & Views -->
+                    <div class="d-flex gap-3 text-white small">
+                        <span><i class="bi bi-heart-fill"></i> {{ video.likes|default:0 }}</span>
+                        <span><i class="bi bi-eye-fill"></i> {{ video.views|default:0 }}</span>
+                    </div>
+
+                    <!-- Tagged Products Count -->
+                    {% if video.products.exists %}
+                    <div class="mt-2">
+                        <span class="badge bg-white text-dark rounded-pill px-3 py-1">
+                            <i class="bi bi-bag"></i> {{ video.products.count }} Product{{ video.products.count|pluralize }}
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <h4 class="text-white">No Reels Yet</h4>
+        <p class="text-white-50">Be the first influencer to post!</p>
+    </div>
+    {% endif %}
+</div>
+
+
+
+
+
+
+
+            <!-- Top Selling Products -->
+            <section class="artist-section">
+                <div class="section-title-bar">
+                    <h2>Top Selling Products</h2>
+                    <a href="{% url 'product_lists' %}" class="view-all-btn">View More</a>
+                </div>
+                <div class="products-section">
+                    <div class="swiper products-swiper">
+                        <div class="swiper-wrapper">
+                            {% for product in products %}
+                                <div class="swiper-slide">
+                                    <div class="product-card" data-product-id="{{ product.id }}" data-category-id="{{ product.category.id|default:'0' }}">
+                                        <div class="product-img">
+                                            {% if product.image %}
+                                                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="height: 40vh;">
+                                            {% else %}
+                                                <img src="{% static 'images/product-placeholder.jpg' %}" alt="Product Image">
+                                            {% endif %}
+                                        </div>
+                                        <div class="product-details">
+                                            <h3 class="product-title">{{ product.name }}</h3>
+                                            <p class="product-influencer">by {{ product.influencer.get_full_name|default:product.influencer.username }}</p>
+                                            <div class="product-footer">
+                                                <span class="product-price">₹{{ product.price }}</span>
+                                                <div>
+                                                    <button class="add-to-cart me-2" data-product-id="{{ product.id }}">
+                                                        <i class="bi bi-bag-plus"></i>
+                                                    </button>
+                                                    <button class="buy-now" data-product-id="{{ product.id }}">
+                                                        <i class="bi bi-bag-check"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="empty-state">
+                                    <p>No products available.</p>
+                                </div>
+                                {% endfor %}
+                        </div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- About Us -->
+                <div class="footer-column">
+                    <h3>About Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'about_us' %}">Our Story</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div class="footer-column">
+                    <h3>Terms & Conditions</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Return Policy</a></li>
+                        <li><a href="#">Shipping Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect With Us -->
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Support Center</a></li>
+                    </ul>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="social-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <!-- Let Us Help You -->
+                <div class="footer-column">
+                    <h3>Let Us Help You</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Customer Service</a></li>
+                        <li><a href="#">Track Your Order</a></li>
+                        <li><a href="#">Returns & Exchanges</a></li>
+                        <li><a href="#">Payment Options</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Lumoskart. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="whatsapp-widget">
+        <div class="whatsapp-tooltip">Chat with us on WhatsApp</div>
+        <a href="https://api.whatsapp.com/send?phone=918075909735&text=Hello!%20I'm%20interested%20in%20your%20products"
+           target="_blank"
+           class="whatsapp-button"
+           aria-label="Chat with us on WhatsApp">
+            <i class="bi bi-whatsapp"></i>
+        </a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        // Handle Add to Cart and Buy Now buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            // Influencers Swiper
+            const influencersSwiper = new Swiper(".influencers-swiper", {
+                slidesPerView: 2,
+                spaceBetween: 10,
+                navigation: {
+                    nextEl: ".influencers-swiper .swiper-button-next",
+                    prevEl: ".influencers-swiper .swiper-button-prev",
+                },
+                loop: false,
+                watchOverflow: true,
+                grabCursor: true,
+                centeredSlides: false,
+                breakpoints: {
+                    320: { slidesPerView: 1.5, spaceBetween: 10 },
+                    480: { slidesPerView: 2.5, spaceBetween: 12 },
+                    640: { slidesPerView: 3, spaceBetween: 15 },
+                    768: { slidesPerView: 3.5, spaceBetween: 18 },
+                    992: { slidesPerView: 4, spaceBetween: 20 },
+                    1200: { slidesPerView: 5, spaceBetween: 20 },
+                    1400: { slidesPerView: 6, spaceBetween: 20 }
+                }
+            });
+
+            // Products Swiper
+            const productsSwiper = new Swiper(".products-swiper", {
+                slidesPerView: 1,
+                spaceBetween: 12,
+                navigation: {
+                    nextEl: ".products-swiper .swiper-button-next",
+                    prevEl: ".products-swiper .swiper-button-prev",
+                },
+                loop: false,
+                watchOverflow: true,
+                grabCursor: true,
+                centeredSlides: false,
+                breakpoints: {
+                    320: { slidesPerView: 1, spaceBetween: 10 },
+                    480: { slidesPerView: 1.2, spaceBetween: 15 },
+                    640: { slidesPerView: 1.5, spaceBetween: 18 },
+                    768: { slidesPerView: 2, spaceBetween: 20 },
+                    992: { slidesPerView: 2.5, spaceBetween: 20 },
+                    1200: { slidesPerView: 3, spaceBetween: 20 }
+                }
+            });
+
+            // Handle language selection
+            const languageItems = document.querySelectorAll('.lang-option');
+            languageItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const selectedLang = this.getAttribute('data-lang');
+                    const languageName = selectedLang === 'en' ? 'English' : 'Arabic';
+
+                    // Update the displayed language in both desktop and mobile
+                    document.getElementById('currentLanguage').textContent = languageName;
+                    document.getElementById('mobileCurrentLanguage').textContent = languageName;
+
+                    // Add visual feedback
+                    this.closest('.dropdown-menu').previousElementSibling.classList.add('btn-success');
+                    setTimeout(() => {
+                        this.closest('.dropdown-menu').previousElementSibling.classList.remove('btn-success');
+                    }, 1000);
+
+                    // In a real implementation, you would:
+                    // 1. Set a language cookie or session variable
+                    // 2. Redirect to the same page with the language parameter
+                    // 3. Or use AJAX to dynamically change the content
+                });
+            });
+
+            // Handle button clicks
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.add-to-cart')) {
+                    // Redirect to login page when Add to Cart is clicked
+                    window.location.href = '{% url "login" %}';
+                }
+
+                if (e.target.closest('.buy-now')) {
+                    // Redirect to login page when Buy Now is clicked
+                    window.location.href = '{% url "login" %}';
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const whatsappButton = document.getElementById('whatsapp-button');
+            let isClickAllowed = true;
+            const cooldownTime = 2000; // 2 seconds cooldown
+
+            whatsappButton.addEventListener('click', function(event) {
+                if (!isClickAllowed) {
+                    event.preventDefault(); // Prevent multiple rapid clicks
+                    return;
+                }
+
+                isClickAllowed = false;
+                setTimeout(function() {
+                    isClickAllowed = true; // Re-enable clicks after cooldown
+                }, cooldownTime);
+
+                // Optional: Log click for debugging
+                console.log('WhatsApp button clicked');
+            });
+        });
+
+        // Ensure search forms work correctly
+        document.addEventListener('DOMContentLoaded', function() {
+            // Desktop search form submission
+            const desktopSearchForm = document.querySelector('.desktop-view .search-container form');
+            if (desktopSearchForm) {
+                desktopSearchForm.addEventListener('submit', function(e) {
+                    const searchInput = this.querySelector('input[name="q"]');
+                    if (searchInput && searchInput.value.trim() === '') {
+                        e.preventDefault();
+                        searchInput.focus();
+                        return false;
+                    }
+                });
+            }
+
+            // Mobile search form submission
+            const mobileSearchForm = document.querySelector('#searchOffcanvas form');
+            if (mobileSearchForm) {
+                mobileSearchForm.addEventListener('submit', function(e) {
+                    const searchInput = this.querySelector('input[name="q"]');
+                    if (searchInput && searchInput.value.trim() === '') {
+                        e.preventDefault();
+                        searchInput.focus();
+                        return false;
+                    }
+                });
+            }
+
+            // Handle Enter key in search inputs
+            const searchInputs = document.querySelectorAll('input[name="q"]');
+            searchInputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const form = this.closest('form');
+                        if (form && this.value.trim() !== '') {
+                            form.submit();
+                        } else if (this.value.trim() === '') {
+                            e.preventDefault();
+                            this.focus();
+                        }
+                    }
+                });
+            });
+        });
+
+        // ===============================
+        // 🎥 Product Reels Functionality
+        // ===============================
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoShortsWrapper = document.querySelector('.video-shorts-swiper');
+            const videoCount = document.getElementById('video-count');
+
+            console.log('Video Reels Section:', videoShortsWrapper ? 'Found' : 'Not Found');
+            console.log('Video Count:', videoCount ? videoCount.textContent : 'Unknown');
+
+            if (videoShortsWrapper) {
+                // Check if there are any slides
+                const slides = videoShortsWrapper.querySelectorAll('.swiper-slide');
+                console.log('Number of video slides:', slides.length);
+
+                if (slides.length > 0) {
+                    const videoShortsSwiper = new Swiper('.video-shorts-swiper', {
+                        direction: 'vertical',
+                        slidesPerView: 1,
+                        spaceBetween: 24,
+                        mousewheel: true,
+                        pagination: {
+                            el: '#videoShortsPagination',
+                            clickable: true,
+                            bulletClass: 'video-shorts-pagination-dot',
+                            bulletActiveClass: 'active',
+                        },
+                        on: {
+                            slideChange: function () {
+                                // Update pagination dots
+                                const dots = document.querySelectorAll('#videoShortsPagination .video-shorts-pagination-dot');
+                                dots.forEach((dot, index) => {
+                                    if (index === this.activeIndex) {
+                                        dot.classList.add('active');
+                                    } else {
+                                        dot.classList.remove('active');
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                    // Set fallback poster for videos
+                    document.querySelectorAll('.video-shorts-video').forEach(video => {
+                        video.addEventListener('error', function() {
+                            console.error('Video load error:', this.src);
+                            this.poster = '{% static "images/video-placeholder.jpg" %}';
+                        });
+                    });
+
+                    const getVideos = () => Array.from(document.querySelectorAll('.video-shorts-video'));
+
+                    const pauseAllVideos = () => {
+                        getVideos().forEach(video => {
+                            video.pause();
+                            video.currentTime = 0;
+                        });
+                    };
+
+                    const playActiveVideo = () => {
+                        const activeSlide = videoShortsWrapper.querySelector('.swiper-slide-active video');
+                        if (!activeSlide) return;
+                        const playPromise = activeSlide.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(() => {
+                                // Autoplay may require user interaction; ignore errors.
+                            });
+                        }
+                    };
+
+                    playActiveVideo();
+
+                    videoShortsSwiper.on('slideChangeTransitionStart', pauseAllVideos);
+                    videoShortsSwiper.on('slideChangeTransitionEnd', playActiveVideo);
+
+                    getVideos().forEach(video => {
+                        video.addEventListener('play', () => {
+                            getVideos()
+                                .filter(other => other !== video)
+                                .forEach(other => other.pause());
+                        });
+                    });
+                } else {
+                    console.log('No video slides found - showing empty state');
+                }
+            } else {
+                console.log('Video shorts wrapper not found');
+            }
+
+            // Handle "Add to Cart" actions from reels
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.video-shorts-action-btn[data-product-id]')) {
+                    const button = e.target.closest('.video-shorts-action-btn');
+                    const productId = button.getAttribute('data-product-id');
+                    alert('Product added to cart! Product ID: ' + productId);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
