@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} | GreenStore</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #000000;
+            --secondary: #1a1a1a;
+            --accent: #333333;
+            --light: #ffffff;
+            --dark: #000000;
+            --gray: #666666;
+            --light-gray: #f5f5f5;
+            --border: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: var(--dark);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            color: var(--light);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 0.5rem;
+            display: block;
+        }
+
+        .nav-links a:hover {
+            color: var(--gray);
+        }
+
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.5rem;
+            font-family: inherit;
+            transition: color 0.3s;
+        }
+
+        .dropdown-toggle:hover {
+            color: var(--gray);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--light);
+            min-width: 150px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            display: none;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--dark);
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--light-gray);
+        }
+
+        /* Hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--light);
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
+
+        .product-container {
+            background-color: var(--light);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .product-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2rem;
+        }
+
+        .product-image {
+            flex: 1;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .product-image img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        .product-info {
+            flex: 2;
+            width: 100%;
+        }
+
+        .product-title {
+            font-size: 1.75rem;
+            margin: 0 0 1rem 0;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .product-description {
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: var(--gray);
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--light-gray);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .stock {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background-color: var(--dark);
+            color: var(--light);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-align: center;
+        }
+
+        .btn-success {
+            background-color: var(--dark);
+            color: var(--light);
+            border: 2px solid var(--dark);
+        }
+
+        .btn-success:hover {
+            background-color: var(--light);
+            color: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            background-color: var(--light);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .reviews-title {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--dark);
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .reviews-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .review-item {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .review-user {
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .review-rating {
+            color: var(--dark);
+        }
+
+        .review-rating i {
+            margin-right: 0.2rem;
+        }
+
+        .review-comment {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        .review-image {
+            margin-top: 1rem;
+        }
+
+        .review-image img {
+            max-width: 100%;
+            width: 200px;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        .no-reviews {
+            font-style: italic;
+            color: var(--gray);
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--dark);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 0;
+                margin-top: 1rem;
+                display: none;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+                padding: 0.75rem 0;
+                border-bottom: 1px solid #444;
+            }
+
+            .nav-links li:last-child {
+                border-bottom: none;
+            }
+
+            .dropdown-toggle {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .dropdown-menu {
+                position: static;
+                box-shadow: none;
+                margin-top: 0;
+                background-color: #222;
+            }
+
+            .dropdown-menu a {
+                color: var(--light);
+                padding-left: 2rem;
+            }
+
+            .dropdown-menu a:hover {
+                background-color: #333;
+            }
+
+            .logo {
+                margin-bottom: 0;
+            }
+
+            .logo-text {
+                font-size: 1.25rem;
+            }
+
+            .container {
+                margin: 1rem auto;
+                padding: 0 0.5rem;
+            }
+
+            .product-container {
+                padding: 1rem;
+            }
+
+            .product-title {
+                font-size: 1.5rem;
+            }
+
+            .product-description {
+                font-size: 0.95rem;
+            }
+
+            .product-meta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .price {
+                font-size: 1.25rem;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 1rem;
+            }
+
+            .reviews-section {
+                padding: 1rem;
+            }
+
+            .reviews-title {
+                font-size: 1.25rem;
+            }
+
+            .review-header {
+                flex-direction: column;
+            }
+
+            .review-image img {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* Tablet Responsive */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .product-header {
+                flex-direction: row;
+                gap: 2rem;
+            }
+
+            .product-image {
+                flex: 1;
+                margin-bottom: 0;
+            }
+
+            .product-info {
+                flex: 1.5;
+            }
+        }
+
+        /* Desktop */
+        @media (min-width: 1025px) {
+            .product-header {
+                flex-direction: row;
+                gap: 2rem;
+            }
+
+            .product-image {
+                flex: 1;
+                margin-bottom: 0;
+            }
+
+            .product-info {
+                flex: 2;
+            }
+
+            .product-title {
+                font-size: 2rem;
+            }
+
+            .product-description {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Small Mobile */
+        @media (max-width: 480px) {
+            .logo img {
+                height: 30px;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .product-title {
+                font-size: 1.3rem;
+            }
+
+            .reviews-title {
+                font-size: 1.1rem;
+            }
+
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}"  alt="YourStore Logo">
+<!--                <span class="logo-text">Lumoskart</span>-->
+            </div>
+
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <ul class="nav-links" id="navLinks">
+                <!--<li><a href="{%url 'home'%}">Home</a></li>-->
+                <li><a href="{%url 'wishlist'%}">Wishlist</a></li>
+                <li class="dropdown">
+                    <button class="dropdown-toggle" onclick="toggleDropdown(event)">
+                        Account ▼
+                    </button>
+                    <div class="dropdown-menu" id="accountDropdown">
+                        <a href="{%url 'customer_dashboard'%}">Dashboard</a>
+                        <a href="{%url 'logout'%}">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="product-container">
+            <div class="product-header">
+                {% if product.image %}
+                <div class="product-image">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                </div>
+                {% endif %}
+                <div class="product-info">
+                    <h2 class="product-title">{{ product.name }}</h2>
+                    <p class="product-description">{{ product.description }}</p>
+                    <div class="product-meta">
+                        <div class="price">₹{{ product.price }}</div>
+                        <div class="stock">{% if product.stock > 0 %}In Stock: {{ product.stock }}{% else %}Out of Stock{% endif %}</div>
+                    </div>
+                    <a href="{% url 'add_review' product.id %}" class="btn btn-success">Write a Review</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="reviews-section">
+            <h3 class="reviews-title">Customer Reviews</h3>
+            {% if reviews %}
+            <ul class="reviews-list">
+                {% for review in reviews %}
+                <li class="review-item">
+                    <div class="review-header">
+                        <span class="review-user">{{ review.user.username }}</span>
+                        <span class="review-rating">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                    <i class="fas fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <span>{{ review.rating }}/5</span>
+                        </span>
+                    </div>
+                    <p class="review-comment">{{ review.comment }}</p>
+                    {% if review.image %}
+                    <div class="review-image">
+                        <img src="{{ review.image.url }}" alt="Review Image">
+                    </div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="no-reviews">No reviews yet. Be the first to review this product!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Lumoskart. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('accountDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('accountDropdown');
+            const dropdownToggle = document.querySelector('.dropdown-toggle');
+
+            if (dropdownToggle && !dropdownToggle.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Close mobile menu when window is resized to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                document.getElementById('navLinks').classList.remove('active');
+                document.querySelector('.hamburger').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
