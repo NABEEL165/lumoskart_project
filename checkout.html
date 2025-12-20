@@ -1,0 +1,1020 @@
+
+
+
+
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Lumoskart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #0a0a0a 50%, #1f1f1f 75%, #000000 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+            animation: float 20s infinite linear;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(90deg); }
+            50% { transform: translateY(0px) rotate(180deg); }
+            75% { transform: translateY(-10px) rotate(270deg); }
+            100% { transform: translateY(0px) rotate(360deg); }
+        }
+
+        .navbar {
+            background: #000000;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(0 4px 8px rgba(255, 255, 255, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        .company-name {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0, #ffffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3)); }
+            to { filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5)); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #ffffff, transparent);
+            border-radius: 2px;
+        }
+
+        .page-header h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0, #c0c0c0, #ffffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            position: relative;
+            animation: slideUp 1s ease-out;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .checkout-row {
+            display: grid;
+            grid-template-columns: 1.8fr 1.2fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .checkout-section {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .checkout-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .checkout-section:hover {
+            transform: translateY(-8px);
+            box-shadow:
+                0 30px 60px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, #ffffff, #e0e0e0);
+            border-radius: 1px;
+        }
+
+        .address-option {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .address-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .address-option:hover::before {
+            left: 100%;
+        }
+
+        .address-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .address-option.selected {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #ffffff;
+            box-shadow:
+                0 0 0 3px rgba(255, 255, 255, 0.2),
+                0 15px 35px rgba(0, 0, 0, 0.5);
+            transform: scale(1.02);
+        }
+
+        .address-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000000;
+            font-weight: bold;
+            font-size: 14px;
+            animation: checkmark 0.5s ease-out;
+        }
+
+        @keyframes checkmark {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(180deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .form-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .form-check-input {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+            margin-top: 3px;
+            flex-shrink: 0;
+            position: relative;
+            appearance: none;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .form-check-input:checked {
+            background: linear-gradient(135deg, #ffffff, #e0e0e0);
+            border-color: #ffffff;
+            box-shadow:
+                0 0 0 4px rgba(255, 255, 255, 0.1),
+                0 4px 12px rgba(255, 255, 255, 0.2);
+            animation: radioSelect 0.3s ease-out;
+        }
+
+        @keyframes radioSelect {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .form-check-input:checked::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #000000;
+            border-radius: 50%;
+            animation: dotAppear 0.2s ease-out 0.1s both;
+        }
+
+        @keyframes dotAppear {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .form-check-label {
+            color: #ffffff;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            cursor: pointer;
+            flex: 1;
+            transition: color 0.3s ease;
+        }
+
+        .form-check-label:hover {
+            color: #e0e0e0;
+        }
+
+        .form-check-label strong {
+            color: #ffffff;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .address-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffffff, #e0e0e0, #ffffff, transparent);
+            margin: 40px 0;
+            border: none;
+            border-radius: 1px;
+            position: relative;
+        }
+
+        .address-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+        }
+
+        .add-address-container {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .add-address-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0, #c0c0c0);
+            color: #000000;
+            text-decoration: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow:
+                0 10px 30px rgba(255, 255, 255, 0.2),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-address-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
+            transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .add-address-link:hover::before {
+            left: 100%;
+        }
+
+        .add-address-link:hover {
+            background: linear-gradient(135deg, #f0f0f0, #d0d0d0, #b0b0b0);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow:
+                0 18px 45px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.3);
+            color: #000000;
+        }
+
+        .order-summary {
+            position: sticky;
+            top: 120px;
+            animation-delay: 0.2s;
+        }
+
+        .order-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #ffffff, #e0e0e0);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .order-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .order-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(8px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .item-details strong {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .item-details small {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.95rem;
+        }
+
+        .item-price {
+            color: #e0e0e0;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .total-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 2px solid #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .total-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: rotate 4s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .total-label {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0, #c0c0c0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ffffff, #e0e0e0, #c0c0c0);
+            color: #000000;
+            width: 100%;
+            padding: 20px;
+            font-size: 1.3rem;
+            margin-top: 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow:
+                0 10px 30px rgba(255, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #f0f0f0, #d0d0d0, #b0b0b0);
+            transform: translateY(-6px) scale(1.02);
+            box-shadow:
+                0 20px 50px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .no-address-msg {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.2rem;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .no-address-msg::before {
+            content: '📍';
+            display: block;
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        /* Enhanced Mobile Responsiveness */
+        @media (max-width: 1200px) {
+            .checkout-row {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+            .container {
+                padding: 40px 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .company-name {
+                font-size: 22px;
+            }
+
+            .page-header h2 {
+                font-size: 2.5rem;
+            }
+
+            .checkout-section {
+                padding: 25px;
+                border-radius: 20px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .address-option {
+                padding: 20px;
+            }
+
+            .order-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                text-align: left;
+            }
+
+            .total-item {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .btn-primary {
+                font-size: 1.2rem;
+                padding: 18px;
+            }
+
+            .add-address-link {
+                padding: 16px 30px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h2 {
+                font-size: 2rem;
+            }
+
+            .checkout-section {
+                padding: 20px;
+            }
+
+            .address-option {
+                padding: 15px;
+            }
+
+            .btn-primary {
+                padding: 16px;
+                font-size: 1.1rem;
+            }
+
+            .total-amount {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 30px 15px;
+            }
+
+            .add-address-link {
+                padding: 14px 25px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Pulse animation for payment button */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                box-shadow: 0 10px 40px rgba(255, 255, 255, 0.3), 0 0 0 8px rgba(255, 255, 255, 0.05);
+            }
+            100% {
+                box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        .btn-primary:hover {
+            animation: pulse 2s infinite;
+        }
+
+        /* Improved scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #ffffff, #e0e0e0);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #f0f0f0, #d0d0d0);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Company Logo" class="logo">
+            <!--<span class="company-name">Lumoskart</span>-->
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Secure Checkout</h2>
+            <p>Complete your order with confidence</p>
+        </div>
+
+        <div class="checkout-row">
+            <div class="checkout-section">
+                <h4 class="section-title">🏠 Shipping Address</h4>
+
+                <form id="address-selection-form">
+                    {% csrf_token %}
+                    {% if addresses %}
+                        {% for addr in addresses %}
+                            <div class="address-option" onclick="selectAddress('addr{{ addr.id }}')">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="selected_address" id="addr{{ addr.id }}" value="{{ addr.id }}" {% if forloop.first %}checked{% endif %}>
+                                    <label class="form-check-label" for="addr{{ addr.id }}">
+                                        <strong>{{ addr.full_name }}</strong>
+                                        {{ addr.street_address }}, {{ addr.city }}, {{ addr.state }} {{ addr.postal_code }}<br>
+                                        <small style="color: #e0e0e0;">📞 {{ addr.phone }}</small>
+                                    </label>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-address-msg">
+                            <p>No saved addresses found.<br>Please add a new address below to continue.</p>
+                        </div>
+                    {% endif %}
+                </form>
+
+                <hr class="address-divider">
+
+                <div class="add-address-container">
+                    <a href="{% url 'select_address' %}" class="add-address-link">
+                        ➕ Add New Address
+                    </a>
+                </div>
+            </div>
+
+            <div class="checkout-section order-summary">
+                <h4 class="section-title">📋 Order Summary</h4>
+
+                {% for item in cart_items %}
+                <div class="order-item">
+                    <div class="item-details">
+                        <strong>{{ item.product.name }}</strong>
+                        <small>Quantity: {{ item.quantity }} × ₹{{ item.product.price }}</small>
+                    </div>
+                    <span class="item-price">₹{{ item.total_price }}</span>
+                </div>
+                {% endfor %}
+
+                <div class="total-item">
+                    <span class="total-label">Total Amount</span>
+                    <span class="total-amount">₹{{ total }}</span>
+                </div>
+
+                <button id="rzp-button" class="btn btn-primary">
+                    🔒 Secure Payment ₹{{ total }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Razorpay checkout script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        // Enhanced address selection with animations
+        function selectAddress(addressId) {
+            // Remove selected class from all address options
+            document.querySelectorAll('.address-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Add selected class to clicked address with animation
+            const addressOption = document.getElementById(addressId).closest('.address-option');
+            addressOption.classList.add('selected');
+
+            // Check the radio button
+            document.getElementById(addressId).checked = true;
+
+            // Add a subtle vibration effect (if supported)
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        // Initialize selected address on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkedRadio = document.querySelector('input[name="selected_address"]:checked');
+            if (checkedRadio) {
+                selectAddress(checkedRadio.id);
+            }
+
+            // Add stagger animation to elements
+            const animateElements = document.querySelectorAll('.address-option, .order-item');
+            animateElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+                el.style.animation = 'fadeInUp 0.6s ease-out forwards';
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Enhanced Razorpay payment flow
+            const rzpButton = document.getElementById('rzp-button');
+            rzpButton.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Check if address is selected
+                const selectedRadio = document.querySelector('input[name="selected_address"]:checked');
+                if (!selectedRadio) {
+                    // Show error animation
+                    const addressSection = document.querySelector('.checkout-section');
+                    addressSection.style.animation = 'shake 0.5s ease-in-out';
+
+                    alert('⚠️ Please select a delivery address before proceeding with payment.');
+
+                    // Reset animation
+                    setTimeout(() => {
+                        addressSection.style.animation = '';
+                    }, 500);
+                    return;
+                }
+
+                // Add loading state to payment button
+                const originalText = rzpButton.innerHTML;
+                rzpButton.innerHTML = '⏳ Processing...';
+                rzpButton.disabled = true;
+                rzpButton.style.opacity = '0.7';
+
+                // Prepare Razorpay options
+                const options = {
+                    "key": "{{ razorpay_key_id }}",
+                    "order_id": "{{ razorpay_order_id }}",
+                    "currency": "INR",
+                    "name": "LumosKart",
+                    "description": "Secure Order Payment",
+                    "theme": {"color": "#000000"},
+                    "handler": function (response) {
+                        // Show success feedback
+                        rzpButton.innerHTML = '✅ Payment Successful!';
+                        rzpButton.style.background = 'linear-gradient(135deg, #ffffff, #f0f0f0)';
+
+                        // Collect selected address
+                        const selected_address_id = selectedRadio.value;
+
+                        // Post to payment handler
+                        const formBody = new URLSearchParams();
+                        formBody.append('razorpay_payment_id', response.razorpay_payment_id);
+                        formBody.append('razorpay_order_id', response.razorpay_order_id);
+                        formBody.append('razorpay_signature', response.razorpay_signature);
+                        formBody.append('selected_address_id', selected_address_id);
+                        formBody.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                        fetch("{% url 'paymenthandler' %}", {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            body: formBody.toString()
+                        }).then(res => {
+                            if (res.redirected) {
+                                // Add redirect animation
+                                document.body.style.transition = 'opacity 0.5s ease';
+                                document.body.style.opacity = '0';
+                                setTimeout(() => {
+                                    window.location.href = res.url;
+                                }, 500);
+                            } else {
+                                return res.text().then(txt => { throw new Error(txt); });
+                            }
+                        }).catch(err => {
+                            console.error('Payment processing error:', err);
+                            alert('❌ Payment processing failed: ' + err.message);
+                            // Reset button state
+                            rzpButton.innerHTML = originalText;
+                            rzpButton.disabled = false;
+                            rzpButton.style.opacity = '1';
+                            rzpButton.style.background = '';
+                        });
+                    },
+                    "modal": {
+                        "ondismiss": function() {
+                            // Reset button if payment was cancelled
+                            rzpButton.innerHTML = originalText;
+                            rzpButton.disabled = false;
+                            rzpButton.style.opacity = '1';
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+            });
+        });
+
+        // Add shake animation for errors
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add smooth scroll behavior for better UX
+        document.documentElement.style.scrollBehavior = 'smooth';
+
+        // Add intersection observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for scroll animations
+        document.querySelectorAll('.checkout-section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+            observer.observe(section);
+        });
+
+    </script>
+</body>
+</html>
