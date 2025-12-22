@@ -60,7 +60,7 @@ import json
 
 def home_view(request):
     categories = Category.objects.all()
-    influencers = CustomUser.objects.filter(user_type='influencer').select_related('influencer_profile')
+    influencers = CustomUser.objects.filter(user_type='influencer')
     products = Product.objects.select_related('category', 'influencer')[:12]
 
     # FIXED: Use correct field names from your model
@@ -73,6 +73,7 @@ def home_view(request):
         'reels_videos': reels_videos,
     }
     return render(request, 'home.html', context)
+
 
 def register_influencer(request):
     if request.method == 'POST':
@@ -180,28 +181,6 @@ def influencer_dashboard(request):
     return render(request, 'influencer_dashboard.html', context)
 
 
-def view_influencer_detail(request, influencer_id):
-    influencer = get_object_or_404(CustomUser, id=influencer_id, user_type='influencer', is_active=True)
-    profile = getattr(influencer, 'influencer_profile', None)
-    category_name = request.GET.get('category', 'All')
-    categories = Category.objects.all()
-
-    if category_name != 'All':
-        category = get_object_or_404(Category, name__iexact=category_name)
-        products = Product.objects.filter(influencer=influencer, category=category, stock__gt=0).select_related('category')
-    else:
-        products = Product.objects.filter(influencer=influencer, stock__gt=0).select_related('category')
-
-    products_count = products.count()
-
-    return render(request, 'influencer_detail.html', {
-        'influencer': influencer,
-        'profile': profile,
-        'categories': categories,
-        'selected_category': category_name,
-        'products': products,
-        'products_count': products_count
-    })
 
 
 @login_required
@@ -246,6 +225,7 @@ def customer_dashboard(request):
         'categories': categories,
     })
 
+
 def logout_view(request):
     logout(request)
     return redirect('home')
@@ -257,6 +237,34 @@ def list_influencers(request):
         user__is_active=True
     ).select_related('user')
     return render(request, 'influencer_list.html', {'profiles': profiles})
+
+
+def about_us(request):
+    return render(request, 'about_us.html')
+
+
+def view_influencer_detail(request, influencer_id):
+    influencer = get_object_or_404(CustomUser, id=influencer_id, user_type='influencer', is_active=True)
+    profile = getattr(influencer, 'influencer_profile', None)
+    category_name = request.GET.get('category', 'All')
+    categories = Category.objects.all()
+
+    if category_name != 'All':
+        category = get_object_or_404(Category, name__iexact=category_name)
+        products = Product.objects.filter(influencer=influencer, category=category, stock__gt=0).select_related('category')
+    else:
+        products = Product.objects.filter(influencer=influencer, stock__gt=0).select_related('category')
+
+    products_count = products.count()
+
+    return render(request, 'influencer_detail.html', {
+        'influencer': influencer,
+        'profile': profile,
+        'categories': categories,
+        'selected_category': category_name,
+        'products': products,
+        'products_count': products_count
+    })
 
 
 @login_required
@@ -284,7 +292,7 @@ def search_view(request):
                 'categories': categories,
             })
         elif current_page == 'home':
-            influencers = CustomUser.objects.filter(user_type='influencer', is_active=True).select_related('influencer_profile')
+            influencers = CustomUser.objects.filter(user_type='influencer', is_active=True)
             products = Product.objects.all().select_related('category', 'influencer')[:12]
             categories = Category.objects.all()
             return render(request, 'home.html', {
@@ -329,6 +337,8 @@ def search_view(request):
         return render(request, 'influencer_list.html', {'profiles': influencers, 'query': query})
     else:
         return render(request, 'search_results.html', context)
+
+
 
 
 
