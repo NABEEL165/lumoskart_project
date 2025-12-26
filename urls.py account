@@ -1,0 +1,78 @@
+from django.urls import path
+from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+
+
+
+
+urlpatterns = [
+    path('register/influencer/', views.register_influencer, name='register_influencer'),
+    path('register/customer/', views.register_customer, name='register_customer'),
+    path('login/', views.user_login, name='login'),
+    path('dashboard/influencer/', views.influencer_dashboard, name='influencer_dashboard'),
+    path('dashboard/customer/', views.customer_dashboard, name='customer_dashboard'),
+    path('edit-profile/', views.edit_influencer_profile, name='edit_profile'),
+    path('view_profile/',views.view_influencer_profile,name='profile'),
+    path('influencers/', views.list_influencers, name='influencer_list'),
+    path('influencer/<int:influencer_id>/', views.view_influencer_detail, name='view_influencer_detail'),
+    path('about/', views.about_us, name='about_us'),
+    path('logout/', views.logout_view, name='logout'),
+    path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
+# urls.py
+path('order-tracking/', views.order_tracking, name='order_tracking'),
+ # Video management URLs
+    path('videos/upload/', views.upload_video, name='upload_video'),
+    path('videos/manage/', views.manage_videos, name='manage_videos'),
+    path('videos/edit/<int:video_id>/', views.edit_video, name='edit_video'),
+    path('videos/delete/<int:video_id>/', views.delete_video, name='delete_video'),
+    path('videos/feed/', views.video_feed, name='video_feed'),
+
+    #  path('influencer/dashboard/', views.influencer_dashboard, name='influencer_dashboard'),
+
+
+    # Forgot password (send reset link)
+    path('password-reset/',
+         auth_views.PasswordResetView.as_view(
+             template_name='password_reset.html',
+             email_template_name='password_reset_email.txt',
+             subject_template_name='password_reset_subject.txt',
+             success_url='/accounts/password-reset/done/'
+         ),
+         name='password_reset'),
+
+    # Confirmation page after submitting email
+    path('password-reset/done/',
+         auth_views.PasswordResetDoneView.as_view(
+             template_name='password_reset_done.html'
+         ),
+         name='password_reset_done'),
+
+    # Link clicked from email → reset form
+    path('reset/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(
+             template_name='password_reset_confirm.html',
+             success_url='/accounts/reset/done/'
+         ),
+         name='password_reset_confirm'),
+
+    # Final success page
+    path('reset/done/',
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='password_reset_complete.html'
+         ),
+         name='password_reset_complete'),
+
+
+    path('search/', views.search_view, name='search'),
+
+# # Admin Dashboard URLs
+#     path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
+#     path('admin/approve-influencer/<int:user_id>/', views.approve_influencer, name='approve_influencer'),
+#     path('admin/approve-withdraw/<int:withdraw_id>/', views.approve_withdraw, name='approve_withdraw'),
+#     path('admin/deny-withdraw/<int:withdraw_id>/', views.deny_withdraw, name='deny_withdraw'),
+
+]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
