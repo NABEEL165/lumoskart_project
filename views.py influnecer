@@ -1,0 +1,599 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.db.models import  Q, Sum
+# from django.utils.timezone import now
+from .forms import InfluencerRegisterForm, CustomerRegisterForm, InfluencerProfileForm,VideoUploadForm,VideoEditForm
+from .models import CustomUser, InfluencerProfile, InfluencerVideo
+# from django.contrib import messages
+
+try:
+    from product.models import Category, Product
+except ModuleNotFoundError:
+    from products.models import Category, Product
+
+# from collections import defaultdict
+# from datetime import  timedelta
+from django.utils import timezone
+from .models import Order, OrderItem, WithdrawRequest
+
+import json
+
+# def home_view(request):
+#     categories = Category.objects.all()
+#     influencers = CustomUser.objects.filter(user_type='influencer')
+#     products = Product.objects.all().select_related('category', 'influencer')[:12]
+#     context = {
+#         'categories': categories,
+#         'influencers': influencers,
+#         'products': products,
+#     }
+#     return render(request, 'home.html', context)
+
+
+# from django.shortcuts import render
+# from products.models import Category, Product
+# from accounts.models import CustomUser
+
+# def home_view(request):
+#     categories = Category.objects.all()
+#     influencers = CustomUser.objects.filter(user_type='influencer')
+#     products = Product.objects.select_related('category', 'influencer')[:12]
+
+#     # TEMPORARILY DISABLE REELS UNTIL VIDEO MODEL IS READY
+#     reels_videos = []  # No crash, no error
+
+#     context = {
+#         'categories': categories,
+#         'influencers': influencers,
+#         'products': products,
+#         'reels_videos': reels_videos,  # Safe empty list
+#     }
+#     return render(request, 'home.html', context)
+
+
+# In your views.py (products/views.py or accounts/views.py)
+# from accounts.models import CustomUser, InfluencerVideo
+# from products.models import Product, Category
+
+def home_view(request):
+    categories = Category.objects.all()
+    influencers = CustomUser.objects.filter(user_type='influencer')
+    products = Product.objects.select_related('category', 'influencer')[:12]
+
+    # FIXED: Use correct field names from your model
+    reels_videos = InfluencerVideo.objects.filter(is_active=True).order_by('-created_at')
+
+    context = {
+        'categories': categories,
+        'influencers': influencers,
+        'products': products,
+        'reels_videos': reels_videos,
+    }
+    return render(request, 'home.html', context)
+
+
+def register_influencer(request):
+    if request.method == 'POST':
+        form = InfluencerRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            try:
+                send_mail(
+                    'Welcome to Influencify — Let’s Build Something Iconic!',
+                    f'Hi {user.username},\n\nWelcome to Influencify! Your journey as an influencer starts here. Collaborate, create, and inspire shoppers worldwide. Let’s build something iconic!',
+                    'empireaeitservices8@gmail.com',
+                    [user.email],
+                    fail_silently=False,
+                )
+            except Exception:
+                pass  # Log email failure if logging is configured
+            return redirect('login')
+    else:
+        form = InfluencerRegisterForm()
+    return render(request, 'register_influencer.html', {'form': form})
+
+
+def register_customer(request):
+    if request.method == 'POST':
+        form = CustomerRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            try:
+                send_mail(
+                    'Welcome to Influencify — Start Shopping!',
+                    f'Hi {user.username},\n\nWelcome to Influencify! Discover unique products from top influencers and join a community of trendsetters. Start shopping now!',
+                    'empireaeitservices8@gmail.com',
+                    [user.email],
+                    fail_silently=False,
+                )
+            except Exception:
+                pass  # Log email failure if logging is configured
+            return redirect('login')
+    else:
+        form = CustomerRegisterForm()
+    return render(request, 'register_customer.html', {'form': form})
+
+
+
+
+
+# from django.contrib.auth.forms import AuthenticationForm
+# from django.shortcuts import render, redirect
+
+def user_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+
+            # CORRECT REDIRECTION LOGIC
+            if user.is_staff or user.is_superuser:           # Admin / Staff
+                return redirect('admin_dashboard')
+            elif user.user_type == 'influencer':             # Influencer
+                return redirect('influencer_dashboard')
+            else:                                             # Normal Customer
+                return redirect('customer_dashboard')
+
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'login.html', {'form': form})
+# def user_login(request):
+#     if request.method == 'POST':
+#         form = AuthenticationForm(request, data=request.POST)
+#         if form.is_valid():
+#             user = form.get_user()
+#             login(request, user)
+#             if user.user_type == 'influencer':
+#                 return redirect('influencer_dashboard')
+#                 return redirect('admin_dashboard')
+#             return redirect('customer_dashboard')
+#     else:
+#         form = AuthenticationForm()
+#     return render(request, 'login.html', {'form': form})
+
+@login_required
+def influencer_dashboard(request):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    influencer = request.user
+
+    # Get dashboard statistics (placeholder metrics - orders app not available)
+    total_revenue = 0
+    total_orders = 0
+    monthly_revenue = 0
+    monthly_orders = 0
+
+    top_products = Product.objects.filter(influencer=influencer).select_related('category')[:5]
+
+    context = {
+        'total_revenue': total_revenue,
+        'total_orders': total_orders,
+        'monthly_revenue': monthly_revenue,
+        'monthly_orders': monthly_orders,
+        'top_products': top_products,
+    }
+    return render(request, 'influencer_dashboard.html', context)
+
+
+
+
+@login_required
+def edit_influencer_profile(request):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    profile, created = InfluencerProfile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        form = InfluencerProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('influencer_dashboard')
+    else:
+        form = InfluencerProfileForm(instance=profile, user=request.user)
+
+    return render(request, 'edit_profile.html', {'form': form})
+
+
+@login_required
+def view_influencer_profile(request):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    profile, created = InfluencerProfile.objects.get_or_create(user=request.user)
+    return render(request, 'view_profile.html', {'profile': profile})
+
+
+@login_required
+def customer_dashboard(request):
+    if request.user.user_type != 'customer':
+        return redirect('login')
+
+    influencers = InfluencerProfile.objects.filter(user__is_active=True).select_related('user')
+    products = Product.objects.filter(stock__gt=0).select_related('category', 'influencer')[:12]
+    categories = Category.objects.all()
+
+    return render(request, 'customer_dashboard.html', {
+        'influencers': influencers,
+        'products': products,
+        'categories': categories,
+    })
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
+
+def list_influencers(request):
+    profiles = InfluencerProfile.objects.filter(
+        user__user_type='influencer',
+        user__is_active=True
+    ).select_related('user')
+    return render(request, 'influencer_list.html', {'profiles': profiles})
+
+
+def about_us(request):
+    return render(request, 'about_us.html')
+
+
+def view_influencer_detail(request, influencer_id):
+    influencer = get_object_or_404(CustomUser, id=influencer_id, user_type='influencer', is_active=True)
+    profile = getattr(influencer, 'influencer_profile', None)
+    category_name = request.GET.get('category', 'All')
+    categories = Category.objects.all()
+
+    if category_name != 'All':
+        category = get_object_or_404(Category, name__iexact=category_name)
+        products = Product.objects.filter(influencer=influencer, category=category, stock__gt=0).select_related('category')
+    else:
+        products = Product.objects.filter(influencer=influencer, stock__gt=0).select_related('category')
+
+    products_count = products.count()
+
+    return render(request, 'influencer_detail.html', {
+        'influencer': influencer,
+        'profile': profile,
+        'categories': categories,
+        'selected_category': category_name,
+        'products': products,
+        'products_count': products_count
+    })
+
+
+@login_required
+def featured_influencers(request):
+    influencers = CustomUser.objects.filter(
+        user_type='influencer',
+        is_active=True
+    ).select_related('influencer_profile').distinct()
+    return render(request, 'featured_influencers.html', {'influencers': influencers})
+
+
+def search_view(request):
+    query = request.GET.get('q', '').strip()
+    current_page = request.GET.get('page', '')
+
+    if not query:
+        if current_page == 'customer_dashboard':
+            influencers = InfluencerProfile.objects.filter(user__is_active=True).select_related('user')
+            products = Product.objects.filter(stock__gt=0).select_related('category', 'influencer')[:12]
+            categories = Category.objects.all()
+            return render(request, 'customer_dashboard.html', {
+                'query': '',
+                'influencers': influencers,
+                'products': products,
+                'categories': categories,
+            })
+        elif current_page == 'home':
+            influencers = CustomUser.objects.filter(user_type='influencer', is_active=True)
+            products = Product.objects.all().select_related('category', 'influencer')[:12]
+            categories = Category.objects.all()
+            return render(request, 'home.html', {
+                'query': '',
+                'influencers': influencers,
+                'products': products,
+                'categories': categories,
+            })
+        elif current_page == 'influencers':
+            profiles = InfluencerProfile.objects.filter(user__is_active=True).select_related('user')
+            return render(request, 'influencer_list.html', {'query': '', 'profiles': profiles})
+        else:
+            return render(request, 'search_results.html', {'query': ''})
+
+    influencers = InfluencerProfile.objects.filter(
+        Q(user__username__icontains=query) |
+        Q(user__full_name__icontains=query) |
+        Q(bio__icontains=query),
+        user__is_active=True
+    ).select_related('user')
+
+    products = Product.objects.filter(
+        Q(name__icontains=query) |
+        Q(description__icontains=query) |
+        Q(category__name__icontains=query) |
+        Q(influencer__username__icontains=query),
+        stock__gt=0
+    ).select_related('category', 'influencer')
+
+    context = {
+        'query': query,
+        'influencers': influencers,
+        'products': products,
+        'categories': Category.objects.all(),
+    }
+
+    if current_page == 'customer_dashboard':
+        return render(request, 'customer_dashboard.html', context)
+    elif current_page == 'home':
+        return render(request, 'home.html', context)
+    elif current_page == 'influencers':
+        return render(request, 'influencer_list.html', {'profiles': influencers, 'query': query})
+    else:
+        return render(request, 'search_results.html', context)
+
+
+
+
+
+
+
+# @login_required
+# def upload_video(request):
+#     if request.user.user_type != 'influencer':
+#         return redirect('home')
+
+#     if request.method == 'POST':
+#         form = VideoUploadForm(request.POST, request.FILES, influencer=request.user)
+#         if form.is_valid():
+#             video = form.save()
+#             return redirect('manage_videos')
+#     else:
+#         form = VideoUploadForm(influencer=request.user)
+
+#     return render(request, 'upload_video.html', {'form': form})
+
+
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages   # ← THIS LINE WAS MISSING!
+
+@login_required
+def upload_video(request):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = VideoUploadForm(request.POST, request.FILES, influencer=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Reel uploaded successfully! Your video is now live.")
+            return redirect('manage_videos')
+        else:
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = VideoUploadForm(influencer=request.user)
+
+    return render(request, 'upload_video.html', {'form': form})
+
+@login_required
+def edit_video(request, video_id):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    video = get_object_or_404(InfluencerVideo, id=video_id, influencer=request.user)
+
+    if request.method == 'POST':
+        form = VideoEditForm(request.POST, request.FILES, instance=video, influencer=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_videos')
+    else:
+        form = VideoEditForm(instance=video, influencer=request.user)
+
+    return render(request, 'edit_video.html', {
+        'form': form,
+        'video': video
+    })
+
+
+@login_required
+def manage_videos(request):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    videos = InfluencerVideo.objects.filter(influencer=request.user).prefetch_related('products')
+
+    return render(request, 'manage_videos.html', {'videos': videos})
+
+
+@login_required
+def delete_video(request, video_id):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    video = get_object_or_404(InfluencerVideo, id=video_id, influencer=request.user)
+
+    if request.method == 'POST':
+        video.delete()
+        return redirect('manage_videos')
+
+    return render(request, 'confirm_delete_video.html', {'video': video})
+
+
+@login_required
+def video_feed(request):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    # Get videos for this influencer in chronological order for vertical feed
+    videos = InfluencerVideo.objects.filter(
+        influencer=request.user,
+        is_active=True
+    ).prefetch_related('products').order_by('-created_at')
+
+    return render(request, 'video_feed.html', {'videos': videos})
+
+
+# from django.db.models import Sum
+from django.db.models.functions import TruncMonth
+# … your other imports (timezone, timedelta, json, messages, redirect, etc.) …
+
+
+
+from django.contrib.auth.decorators import login_required
+
+def admin_dashboard(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    today = timezone.now()
+
+    # 1. Total revenue & commission
+    total_revenue = Order.objects.filter(status='Completed').aggregate(
+        total=Sum('total_amount')
+    )['total'] or 0
+
+    total_commission = Order.objects.filter(status='Completed').aggregate(
+        total=Sum('commission_amount')
+    )['total'] or 0
+
+    commission_percentage = round((total_commission / total_revenue * 100), 2) if total_revenue else 0
+    total_influencer_earnings = total_revenue - total_commission
+
+    # Counts
+    active_influencers = CustomUser.objects.filter(user_type='influencer', is_active=True).count()
+    active_customers = CustomUser.objects.filter(user_type='customer', is_active=True).count()
+    pending_influencer_approvals = CustomUser.objects.filter(user_type='influencer', is_active=False)
+    pending_orders = Order.objects.filter(status='Pending').count()
+
+    # 7. Monthly revenue – last 12 months
+    monthly_data = Order.objects.filter(
+        status='Completed',
+        created_at__year__gte=today.year - 1
+    ).annotate(
+        month=TruncMonth('created_at')
+    ).values('month').annotate(
+        revenue=Sum('total_amount')
+    ).order_by('month')
+
+    monthly_labels = []
+    monthly_values = []
+    data_dict = {item['month'].strftime('%Y-%m'): item['revenue'] or 0 for item in monthly_data}
+
+    current = today.replace(day=1)
+    for _ in range(12):
+        key = current.strftime('%Y-%m')
+        monthly_labels.append(current.strftime('%b %Y'))
+        monthly_values.append(float(data_dict.get(key, 0)))
+        if current.month == 1:
+            current = current.replace(year=current.year - 1, month=12)
+        else:
+            current = current.replace(month=current.month - 1)
+
+    monthly_labels.reverse()
+    monthly_values.reverse()
+
+    # 8. Top 5 influencers by earnings
+    influencer_earnings = {}
+    orders = Order.objects.filter(status='Completed') \
+        .defer('address') \
+        .select_related('user') \
+        .prefetch_related('items__product__influencer')
+
+    for order in orders:
+        for item in order.items.all():
+            influencer = getattr(item.product, 'influencer', None)
+            if not influencer:
+                continue
+            earnings = item.price * item.quantity * (1 - order.commission_percentage / 100)
+
+            if influencer.id not in influencer_earnings:
+                influencer_earnings[influencer.id] = {'user': influencer, 'total_earnings': 0}
+            influencer_earnings[influencer.id]['total_earnings'] += earnings
+
+    top_influencers = sorted(influencer_earnings.values(),
+                             key=lambda x: x['total_earnings'], reverse=True)[:5]
+
+    # 9. FINAL BULLETPROOF TOP PRODUCTS — NO JOIN, NO product_id, NO ERROR EVER
+    top_products = []
+    try:
+        from collections import Counter
+
+        # Try to get product name directly from OrderItem (if you have a denormalized field)
+        raw_items = OrderItem.objects.filter(order__status='Completed') \
+            .values('product_name', 'quantity')
+
+        # If product_name doesn't exist, fall back to empty
+        if not raw_items or 'product_name' not in raw_items[0]:
+            raise Exception("No product_name field")
+
+        product_sales = Counter()
+        for item in raw_items:
+            name = item['product_name'] or "Unknown Product"
+            qty = item['quantity'] or 0
+            product_sales[name] += qty
+
+        top_products = [
+            {'product__name': name, 'total_sold': count}
+            for name, count in product_sales.most_common(5)
+        ]
+
+    except Exception:
+        # Ultimate fallback — just show empty list, dashboard NEVER crashes
+        top_products = []
+
+    # 10. Pending withdraw requests — SAFE
+    pending_withdraw_requests = WithdrawRequest.objects.filter(status='pending').values(
+        'id', 'amount', 'status', 'created_at'
+    )
+
+    # POST handling (keep your original)
+    if request.method == 'POST':
+        # ... your existing POST code here ...
+        return redirect('admin_dashboard')
+
+    context = {
+        'total_revenue': total_revenue,
+        'total_commission': total_commission,
+        'commission_percentage': commission_percentage,
+        'total_influencer_earnings': total_influencer_earnings,
+        'active_influencers': active_influencers,
+        'active_customers': active_customers,
+        'pending_influencer_approvals': pending_influencer_approvals,
+        'pending_influencer_approvals_count': pending_influencer_approvals.count(),
+        'pending_orders': pending_orders,
+        'monthly_revenue_labels': json.dumps(monthly_labels),
+        'monthly_revenue_values': json.dumps(monthly_values),
+        'top_influencers': top_influencers,
+        'top_products': top_products,
+        'pending_withdraw_requests': pending_withdraw_requests,
+    }
+
+    return render(request, 'admin_dashboard.html', context)
+
+# accounts/views.py
+# from django.shortcuts import render
+# from orders.models import Order
+
+def order_tracking(request):
+    order = None
+    searched = False
+
+    if request.GET.get('order_id'):
+        searched = True
+        try:
+            # FIXED: Use 'id' instead of 'order_id'
+            order = Order.objects.get(id=request.GET['order_id'])
+        except (Order.DoesNotExist, ValueError):
+            order = None
+
+    return render(request, 'order_tracking.html', {
+        'order': order,
+        'searched': searched
+    })
