@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influencer Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'accounts/css/register.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="{% static 'accounts/images/Lumoskart.png' %}" alt="Company Logo">
+                <span class="company-name">Lumoskart</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="#" class="nav-link"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#" class="nav-link"><i class="fas fa-briefcase"></i> Services</a>
+                <a href="#" class="nav-link"><i class="fas fa-phone"></i> Contact</a>
+                <a href="#" class="nav-link active"><i class="fas fa-user-plus"></i> Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="hero-text">
+            <h1>Join Our <span class="highlight">Community</span></h1>
+            <p>Create an account and start your journey with us today.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Register as Influencer</h2>
+                <p>Fill in your details to create your account</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+            </form>
+
+            <div class="login-link">
+                Already have an account? <a href="{%url 'login'%}">Sign in</a>
+            </div>
+
+            </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Lumoskart. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Help Center</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
