@@ -28,70 +28,197 @@
             min-height: 100vh;
         }
 
-        /* Navbar Styling */
+        /* Enhanced Navbar with Modern Interactive Elements */
         .navbar {
-            background: #0a0a0a !important;
+            background: linear-gradient(135deg, #0e0e0e 0%, #2a2a2a 100%);
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            padding: 1rem 0;
-            border-bottom: 1px solid #3a3a3a;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             position: sticky;
             top: 0;
             z-index: 1000;
+            transition: all 0.3s ease;
         }
 
-        .navbar-brand {
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .logo-img {
+            height: 40px;
             transition: transform 0.3s ease;
         }
 
-        .navbar-brand:hover {
-            transform: translateX(5px);
+        .logo-img:hover {
+            transform: scale(1.1);
         }
 
-        .navbar-brand img {
-<!--            filter: brightness(0) invert(1);-->
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links li {
+            position: relative;
         }
 
         .nav-link {
-            color: #e5e5e5 !important;
-            font-weight: 500;
-            padding: 0.7rem 1.5rem !important;
-            border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin: 0 0.25rem;
-            font-size: 0.95rem;
-            letter-spacing: 0.3px;
+            color: #b3b3b3 !important;
+            font-size: 18px;
             position: relative;
+            padding: 0.5rem 1rem;
+            margin: 0 8px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 6px;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .nav-link::before {
             content: '';
             position: absolute;
-            bottom: 0;
+            top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
-            background: #ffffff;
-            transform: translateX(-100%);
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scaleX(0);
+            transform-origin: right;
             transition: transform 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: #ffffff !important;
-            background-color: #1a1a1a;
+            z-index: -1;
+            border-radius: 6px;
         }
 
         .nav-link:hover::before {
-            transform: translateX(0);
+            transform: scaleX(1);
+            transform-origin: left;
         }
 
-        .nav-item.active .nav-link {
-            color: #ffffff !important;
-            background-color: #1a1a1a;
+        .nav-link:hover {
+            color: #00c7f7 !important;
+            transform: translateY(-2px);
         }
 
-        .nav-item.active .nav-link::before {
-            transform: translateX(0);
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            background: none;
+            border: none;
+            color: #b3b3b3;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.5rem 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .dropdown-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00c7f7;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #ffffff;
+            min-width: 150px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            display: none;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #000000;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+            z-index: 1002;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: #b3b3b3;
+            transition: all 0.3s;
+            border-radius: 3px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Mobile Navigation Overlay */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         /* Dropdown Menu Styling */
@@ -789,6 +916,45 @@
         transition: none;
     }
 }
+
+/* Mobile Menu Styles */
+@media (max-width: 992px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 70%;
+        max-width: 300px;
+        background: #181818;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 80px 2rem 2rem 2rem;
+        transition: right 0.3s ease;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+        overflow-y: auto;
+    }
+
+    .nav-links.active {
+        right: 0;
+    }
+
+    .nav-links li {
+        margin: 0 0 1.5rem 0;
+        width: 100%;
+    }
+
+    .nav-link {
+        font-size: 1.1rem;
+        display: block;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+}
         /* Video Tab Styling */
         .video-tab {
             background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
@@ -821,53 +987,46 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'influencer_dashboard' %}">
-            <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="" height="50" class="d-inline-block align-middle mr-2">
-        </a>
+<!-- Overlay for mobile menu -->
+<div class="nav-overlay" id="navOverlay"></div>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="logo">
+            <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" class="logo-img">
+        </div>
+
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'influencer_dashboard' %}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'influencer_product_list' %}">Products</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'influencer_sold_products' %}">Orders</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-                </li>
-            </ul>
-
-            <!-- User Info and Logout Button -->
-            <div class="navbar-nav ml-auto">
-                <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user-circle mr-1"></i> {{ request.user.full_name|default:request.user.username }}
+        <ul class="nav-links" id="navLinks">
+            <li><a href="{% url 'influencer_dashboard' %}" class="nav-link">Dashboard</a></li>
+            <li><a href="{% url 'influencer_product_list' %}" class="nav-link">Products</a></li>
+            <li><a href="{% url 'influencer_sold_products' %}" class="nav-link">Orders</a></li>
+            <li><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
+            <li><a href="#" class="nav-link">My order</a></li>
+            <li><a href="#" class="nav-link">My cart</a></li>
+            <li><a href="#" class="nav-link">My wishlist</a></li>
+            <li><a href="{% url 'register_influencer' %}" class="nav-link">Sign up as an influencer</a></li>
+            <li><a href="#" class="nav-link">All Categories</a></li>
+            <li><a href="#" class="nav-link">Help centre</a></li>
+            <li class="dropdown">
+                <button class="dropdown-toggle" onclick="toggleDropdown(event)">
+                    <i class="fas fa-user-circle mr-1"></i> {{ request.user.full_name|default:request.user.username }} ▼
+                </button>
+                <div class="dropdown-menu" id="accountDropdown">
+                    <a href="{% url 'profile' %}">
+                        <i class="fas fa-id-card mr-2"></i> My Profile
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="{% url 'profile' %}">
-                            <i class="fas fa-id-card mr-2"></i> My Profile
-                        </a>
-
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'logout' %}">
-                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                        </a>
-                    </div>
+                    <a href="{% url 'logout' %}">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </a>
                 </div>
-            </div>
-        </div>
+            </li>
+        </ul>
     </div>
 </nav>
 
