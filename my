@@ -2916,7 +2916,7 @@
         border-color: var(--color-primary);
     }
 
-  
+
     .instagram-reels-widget {
         background: #000;
         border-radius: 20px;
@@ -3477,7 +3477,8 @@
                             class="fas fa-home me-2"></i>Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}"><i
                             class="fas fa-info-circle me-2"></i>About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-headset me-2"></i>Support</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}"><i class="fas fa-headset me-2"></i>Support</a></li>
+
                 <!-- Language Selection in Mobile Menu -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="mobileLanguageDropdown" role="button"
@@ -3552,6 +3553,7 @@
         </div>
 
         <!-- Featured Influencers -->
+
         <section class="artist-section">
             <div class="section-title-bar mb-4">
                 <h2> Influencers</h2>
@@ -3803,10 +3805,11 @@
                     </a>
                     {% else %}
                     <div class="reel-add-to-cart-bar disabled" style="opacity: 0.5; cursor: not-allowed;">
-                        <a href="javascript:void(0);" class="video-shorts-action-btn video-shorts-buy"
-                            id="video-shorts-buy-btn">
-                            <i class="fas fa-shopping-cart"></i> Buy Now
-                        </a>
+                         <a href="javascript:void(0);"
+                                                class="video-shorts-action-btn video-shorts-buy"
+                                                id="video-shorts-buy-btn">
+                                                <i class="fas fa-shopping-cart"></i> Buy Now
+                                            </a>
                     </div>
                     {% endif %}
                     {% endwith %}
