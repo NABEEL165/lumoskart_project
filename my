@@ -1597,6 +1597,48 @@
         overflow: hidden;
     }
 
+    .influencers-swiper {
+        padding: 20px 0;
+    }
+
+    .influencers-swiper .swiper-slide {
+        display: flex;
+        justify-content: center;
+    }
+
+    .influencers-swiper .swiper-wrapper {
+        padding: 10px 0;
+    }
+
+    .swiper-button-next.influencers-next,
+    .swiper-button-prev.influencers-prev {
+        color: var(--color-primary);
+        background: rgba(255, 255, 255, 0.8);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-top: -20px;
+    }
+
+    .swiper-button-next.influencers-next:hover,
+    .swiper-button-prev.influencers-prev:hover {
+        background: white;
+    }
+
+    .swiper-pagination.influencers-pagination {
+        bottom: 0 !important;
+    }
+
+    .swiper-pagination-bullet {
+        background: var(--color-primary);
+        opacity: 0.5;
+    }
+
+    .swiper-pagination-bullet-active {
+        opacity: 1;
+        background: var(--color-primary);
+    }
+
     .influencers-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -1605,15 +1647,19 @@
     }
 
     .influencer-card {
-        min-width: 220px;
+        min-width: 160px;
+        width: 160px;
         background-color: #1c1c1c;
         border-radius: 8px;
-        padding: 20px;
+        padding: 15px 10px;
         text-align: center;
         transition: all 0.4s ease-in-out;
         cursor: pointer;
         transform: scale(1) translateY(0px);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .influencer-card:hover {
@@ -1623,8 +1669,8 @@
     }
 
     .influencer-img {
-        width: 180px;
-        height: 180px;
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
         background-color: #252525;
         margin: 0 auto;
@@ -1632,7 +1678,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 24px;
+        margin-bottom: 12px;
         transition: transform 0.4s ease-in-out;
         border: 3px solid rgba(255, 255, 255, 0.1);
     }
@@ -1653,14 +1699,18 @@
     .product-title {
         font-weight: 600;
         margin-bottom: 5px;
-        font-size: 1.2rem;
+        font-size: 1rem;
         color: var(--heading-color);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .product-count,
     .product-brand {
         color: var(--text-color);
-        font-size: 1.2rem;
+        font-size: 0.9rem;
+        margin-top: 5px;
     }
 
     .products-grid {
@@ -2916,7 +2966,7 @@
         border-color: var(--color-primary);
     }
 
-
+  
     .instagram-reels-widget {
         background: #000;
         border-radius: 20px;
@@ -3477,8 +3527,7 @@
                             class="fas fa-home me-2"></i>Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}"><i
                             class="fas fa-info-circle me-2"></i>About</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}"><i class="fas fa-headset me-2"></i>Support</a></li>
-
+                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}"><i class="fas fa-headset me-2"></i>Support</a></li>
                 <!-- Language Selection in Mobile Menu -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="mobileLanguageDropdown" role="button"
@@ -3502,11 +3551,11 @@
                         up as an Influencer</a>
                     <ul class="nav flex-column ms-4">
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-crown me-2"></i>Premium</a>
+                            <a class="nav-link" href="{% url 'register_influencer' %}"><i class="fas fa-crown me-2"></i>Premium</a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
                 </li>
 
             </ul>
@@ -3553,33 +3602,40 @@
         </div>
 
         <!-- Featured Influencers -->
-
         <section class="artist-section">
             <div class="section-title-bar mb-4">
                 <h2> Influencers</h2>
                 <a href="{% url 'influencer_list' %}" class="view-all-btn">Show all</a>
             </div>
             <div class="influencers-section">
-                <div class="influencers-grid horizontal">
-                    {% for influencer in influencers %}
-                    {% if influencer.is_active and influencer.influencer_profile %}
-                    <a href="{% url 'view_influencer_detail' influencer.id %}" class="influencer-card horizontal">
-                        <div class="influencer-img">
-                            {% if influencer.influencer_profile.photo %}
-                            <img src="{{ influencer.influencer_profile.photo.url }}" alt="{{ influencer.username }}">
-                            {% else %}
-                            <img src="{% static 'images/default_profile.png' %}" alt="Default profile">
-                            {% endif %}
+                <div class="swiper influencers-swiper">
+                    <div class="swiper-wrapper">
+                        {% for influencer in influencers %}
+                        {% if influencer.is_active and influencer.influencer_profile %}
+                        <div class="swiper-slide">
+                            <a href="{% url 'view_influencer_detail' influencer.id %}" class="influencer-card">
+                                <div class="influencer-img">
+                                    {% if influencer.influencer_profile.photo %}
+                                    <img src="{{ influencer.influencer_profile.photo.url }}" alt="{{ influencer.username }}">
+                                    {% else %}
+                                    <img src="{% static 'images/default_profile.png' %}" alt="Default profile">
+                                    {% endif %}
+                                </div>
+                                <h3 class="influencer-name">{{ influencer.get_full_name|default:influencer.username }}</h3>
+                                <p class="product-count">{{ influencer.products.count }} Products</p>
+                            </a>
                         </div>
-                        <h3 class="influencer-name">{{ influencer.get_full_name|default:influencer.username }}</h3>
-                        <p class="product-count">{{ influencer.products.count }} Products</p>
-                    </a>
-                    {% endif %}
-                    {% empty %}
-                    <div class="empty-state">
-                        <p>No influencers registered yet.</p>
+                        {% endif %}
+                        {% empty %}
+                        <div class="swiper-slide">
+                            <div class="empty-state">
+                                <p>No influencers registered yet.</p>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
+                    <!-- Swiper pagination -->
+                    <div class="swiper-pagination influencers-pagination"></div>
                 </div>
             </div>
         </section>
@@ -3805,11 +3861,10 @@
                     </a>
                     {% else %}
                     <div class="reel-add-to-cart-bar disabled" style="opacity: 0.5; cursor: not-allowed;">
-                         <a href="javascript:void(0);"
-                                                class="video-shorts-action-btn video-shorts-buy"
-                                                id="video-shorts-buy-btn">
-                                                <i class="fas fa-shopping-cart"></i> Buy Now
-                                            </a>
+                        <a href="javascript:void(0);" class="video-shorts-action-btn video-shorts-buy"
+                            id="video-shorts-buy-btn">
+                            <i class="fas fa-shopping-cart"></i> Buy Now
+                        </a>
                     </div>
                     {% endif %}
                     {% endwith %}
@@ -3932,9 +3987,9 @@
                     <div class="footer-column">
                         <h3>Connect With Us</h3>
                         <ul class="footer-links">
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">FAQs</a></li>
-                            <li><a href="#">Support Center</a></li>
+                            <li><a href="{% url 'support' %}">Contact Us</a></li>
+                            <li><a href="{% url 'support' %}">FAQs</a></li>
+                            <li><a href="{% url 'support' %}">Support Center</a></li>
                         </ul>
                         <div class="social-links">
                             <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -3970,6 +4025,8 @@
         <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
         <script src="{% static 'js/main.js' %}"></script>
         <script>
@@ -4776,59 +4833,53 @@
                 });
             }
 
-            // Horizontal Swipe Functionality for Influencer Cards
-            const influencersGrid = document.querySelector('.influencers-grid.horizontal');
-
-            if (influencersGrid) {
-                let isDown = false;
-                let startX;
-                let scrollLeft;
-
-                influencersGrid.addEventListener('mousedown', (e) => {
-                    isDown = true;
-                    startX = e.pageX - influencersGrid.offsetLeft;
-                    scrollLeft = influencersGrid.scrollLeft;
-                });
-
-                influencersGrid.addEventListener('mouseleave', () => {
-                    isDown = false;
-                });
-
-                influencersGrid.addEventListener('mouseup', () => {
-                    isDown = false;
-                });
-
-                influencersGrid.addEventListener('mousemove', (e) => {
-                    if (!isDown) return;
-                    e.preventDefault();
-                    const x = e.pageX - influencersGrid.offsetLeft;
-                    const walk = (x - startX) * 2; //scroll-fast
-                    influencersGrid.scrollLeft = scrollLeft - walk;
-                });
-
-                // Touch events for mobile devices
-                influencersGrid.addEventListener('touchstart', (e) => {
-                    isDown = true;
-                    startX = e.touches[0].pageX - influencersGrid.offsetLeft;
-                    scrollLeft = influencersGrid.scrollLeft;
-                });
-
-                influencersGrid.addEventListener('touchend', () => {
-                    isDown = false;
-                });
-
-                influencersGrid.addEventListener('touchcancel', () => {
-                    isDown = false;
-                });
-
-                influencersGrid.addEventListener('touchmove', (e) => {
-                    if (!isDown) return;
-                    e.preventDefault();
-                    const x = e.touches[0].pageX - influencersGrid.offsetLeft;
-                    const walk = (x - startX) * 2; //scroll-fast
-                    influencersGrid.scrollLeft = scrollLeft - walk;
-                });
-            }
+            // Initialize Swiper for influencers section
+            const influencersSwiper = new Swiper('.influencers-swiper', {
+                slidesPerView: 'auto',
+                spaceBetween: 20,
+                centeredSlides: false,
+                loop: true,  // Enable looping
+                autoplay: {
+                    delay: 3000,  // 3 seconds between slides
+                    disableOnInteraction: false,  // Keep autoplay after user interaction
+                },
+                pagination: {
+                    el: '.influencers-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    320: {
+                        slidesPerView: 1.5,
+                        spaceBetween: 10
+                    },
+                    480: {
+                        slidesPerView: 2,
+                        spaceBetween: 15
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 20
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 20
+                    },
+                    1200: {
+                        slidesPerView: 5,
+                        spaceBetween: 20
+                    }
+                },
+                // Enable mousewheel control
+                mousewheel: {
+                    invert: false,
+                    forceToAxis: true
+                },
+                // Enable keyboard control
+                keyboard: {
+                    enabled: true,
+                    onlyInViewport: true
+                }
+            });
 
         </script>
 </body>
