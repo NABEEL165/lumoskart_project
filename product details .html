@@ -268,17 +268,35 @@
             text-align: center;
         }
 
-        .btn-success {
+        .btn-success, .btn-primary {
             background-color: var(--dark);
             color: var(--light);
             border: 2px solid var(--dark);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-align: center;
         }
 
-        .btn-success:hover {
+        .btn-success:hover, .btn-primary:hover {
             background-color: var(--light);
             color: var(--dark);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: 2px solid #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border: 2px solid #0056b3;
         }
 
         /* Reviews Section */
@@ -598,6 +616,37 @@
                     <img src="{{ product.image.url }}" alt="{{ product.name }}">
                 </div>
                 {% endif %}
+
+  {% if product.videos.count > 0 %}
+<div class="product-videos mt-4">
+    <h4 class="mb-3">Product Videos</h4>
+    <div class="row">
+        {% for video in product.videos.all %}
+            {% if video.is_active %}
+            <div class="col-md-6 mb-3">
+                <div class="video-thumbnail"
+                     style="cursor:pointer"
+                     onclick="playVideo('{{ video.video_file.url }}')">
+
+                    {% if video.thumbnail %}
+                        <img src="{{ video.thumbnail.url }}"
+                             class="img-fluid rounded"
+                             style="width:100%;height:200px;object-fit:cover;">
+                    {% else %}
+                        <div class="bg-dark text-white d-flex align-items-center justify-content-center"
+                             style="height:200px;">
+                            ▶ Play Video
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
                 <div class="product-info">
                     <h2 class="product-title">{{ product.name }}</h2>
                     <p class="product-description">{{ product.description }}</p>
@@ -605,7 +654,14 @@
                         <div class="price">₹{{ product.price }}</div>
                         <div class="stock">{% if product.stock > 0 %}In Stock: {{ product.stock }}{% else %}Out of Stock{% endif %}</div>
                     </div>
-                    <a href="{% url 'add_review' product.id %}" class="btn btn-success">Write a Review</a>
+                    <div class="product-actions mt-3">
+                        <p class="mb-2"><strong>Influencer:</strong> {{ product.influencer.get_full_name|default:product.influencer.username }}</p>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary">Add to Cart</button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                    <a href="{% url 'add_review' product.id %}" class="btn btn-success mt-3">Write a Review</a>
                 </div>
             </div>
         </div>
@@ -682,6 +738,60 @@
                 document.querySelector('.hamburger').classList.remove('active');
             }
         });
+
+        // Play video function
+        function playVideo(videoUrl) {
+            // Create modal for video playback
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+            modal.style.display = 'flex';
+            modal.style.justifyContent = 'center';
+            modal.style.alignItems = 'center';
+            modal.style.zIndex = '10000';
+
+            const videoContainer = document.createElement('div');
+            videoContainer.style.position = 'relative';
+            videoContainer.style.maxWidth = '90%';
+            videoContainer.style.maxHeight = '90%';
+
+            const video = document.createElement('video');
+            video.src = videoUrl;
+            video.controls = true;
+            video.autoplay = true;
+            video.style.maxWidth = '100%';
+            video.style.maxHeight = '100%';
+
+            const closeButton = document.createElement('button');
+            closeButton.innerHTML = '&times;';
+            closeButton.style.position = 'absolute';
+            closeButton.style.top = '-40px';
+            closeButton.style.right = '0';
+            closeButton.style.background = 'none';
+            closeButton.style.border = 'none';
+            closeButton.style.color = 'white';
+            closeButton.style.fontSize = '40px';
+            closeButton.style.cursor = 'pointer';
+            closeButton.onclick = function() {
+                document.body.removeChild(modal);
+            };
+
+            videoContainer.appendChild(video);
+            videoContainer.appendChild(closeButton);
+            modal.appendChild(videoContainer);
+            document.body.appendChild(modal);
+
+            // Close modal when clicking outside the video
+            modal.onclick = function(event) {
+                if (event.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            };
+        }
     </script>
 </body>
 </html>
