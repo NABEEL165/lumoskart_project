@@ -184,3 +184,43 @@ class Video(models.Model):
 
     def __str__(self):
         return f"Reel by {self.influencer.username}"
+
+
+class InfluencerApplication(models.Model):
+    CATEGORY_CHOICES = [
+        ('fashion', 'Fashion'),
+        ('tech', 'Tech'),
+        ('gaming', 'Gaming'),
+        ('art', 'Art'),
+        ('food', 'Food & Cooking'),
+        ('fitness', 'Fitness'),
+        ('travel', 'Travel'),
+        ('beauty', 'Beauty'),
+        ('education', 'Education'),
+        ('lifestyle', 'Lifestyle'),
+        ('music', 'Music'),
+        ('sports', 'Sports'),
+        ('other', 'Other'),
+    ]
+
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='influencer_application')
+    instagram_handle = models.CharField(max_length=100, blank=True, null=True, help_text="Instagram username (without @)")
+    youtube_channel = models.CharField(max_length=200, blank=True, null=True, help_text="YouTube channel URL")
+    tiktok_handle = models.CharField(max_length=100, blank=True, null=True, help_text="TikTok username (without @)")
+    other_social = models.CharField(max_length=200, blank=True, null=True, help_text="Other social media handles")
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='other')
+    portfolio_links = models.TextField(blank=True, null=True, help_text="Links to portfolio, previous work, etc. (one per line)")
+    video_upload = models.FileField(upload_to='influencer_applications/', blank=True, null=True, help_text="Upload a sample video")
+    bio = models.TextField(max_length=500, blank=True, null=True, help_text="Tell us about yourself and your content")
+    followers_count = models.PositiveIntegerField(default=0, help_text="Approximate number of followers")
+
+    # Admin approval fields
+    is_approved = models.BooleanField(default=False)
+    admin_notes = models.TextField(blank=True, null=True)
+    reviewed_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='reviewed_applications')
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username} - Influencer Application ({'Approved' if self.is_approved else 'Pending'})"
