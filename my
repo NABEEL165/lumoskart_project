@@ -3655,6 +3655,7 @@
             </div>
             <div class="products-grid">
                 {% for product in category_products %}
+                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
                 <div class="product-card" data-product-id="{{ product.id }}"
                     data-category-id="{{ product.category.id|default:'0' }}">
                     <div class="product-img-wrapper">
@@ -3721,6 +3722,7 @@
                         </div>
                     </div>
                 </div>
+                </a>
                 {% endfor %}
             </div>
         </section>
@@ -3733,6 +3735,7 @@
             </div>
             <div class="products-grid">
                 {% for product in products %}
+                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
                 <div class="product-card" data-product-id="{{ product.id }}"
                     data-category-id="{{ product.category.id|default:'0' }}">
                     <div class="product-img-wrapper">
@@ -3789,6 +3792,7 @@
                         </div>
                     </div>
                 </div>
+                </a>
                 {% empty %}
                 <div class="empty-state">
                     <p>No products available.</p>
