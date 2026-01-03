@@ -12,8 +12,6 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import  Q, Sum, F
-from django.utils.translation import gettext as _  # For translations
-from django.utils import translation  # For language switching
 # from django.utils.timezone import now
 from .forms import InfluencerRegisterForm, CustomerRegisterForm, InfluencerProfileForm,VideoUploadForm,VideoEditForm
 from .models import CustomUser, InfluencerProfile, InfluencerVideo, WithdrawRequest, Order, OrderItem, InfluencerApplication
@@ -32,14 +30,6 @@ import json
 
 
 def home_view(request):
-    # Handle language switching
-    lang = request.GET.get('lang')
-    if lang:
-        if lang in ['en', 'ar']:
-            # Set the language for this session
-            translation.activate(lang)
-            request.session[translation.LANGUAGE_SESSION_KEY] = lang
-
     categories = Category.objects.all()
     influencers = CustomUser.objects.filter(user_type='influencer')
     products = Product.objects.select_related('category', 'influencer')[:12]
@@ -331,24 +321,9 @@ def about_us(request):
     return render(request, 'about_us.html')
 
 
-def support(request):
-    return render(request, 'support.html')
-
-
 def view_influencer_detail(request, influencer_id):
     influencer = get_object_or_404(CustomUser, id=influencer_id, user_type='influencer', is_active=True)
-    
-    # Get profile and application objects
-    try:
-        profile = influencer.influencer_profile
-    except InfluencerProfile.DoesNotExist:
-        profile = None
-    
-    try:
-        application = influencer.influencer_application
-    except InfluencerApplication.DoesNotExist:
-        application = None
-        
+    profile = getattr(influencer, 'influencer_profile', None)
     category_name = request.GET.get('category', 'All')
     categories = Category.objects.all()
 
@@ -363,7 +338,6 @@ def view_influencer_detail(request, influencer_id):
     return render(request, 'influencer_detail.html', {
         'influencer': influencer,
         'profile': profile,
-        'application': application,
         'categories': categories,
         'selected_category': category_name,
         'products': products,
@@ -582,11 +556,6 @@ def admin_dashboard(request):
     rejected_influencers = CustomUser.objects.filter(user_type='influencer', is_active=False)
     pending_applications = InfluencerApplication.objects.filter(is_approved=False)
     approved_applications = InfluencerApplication.objects.filter(is_approved=True)
-    
-    # User data for dashboard
-    all_customers = CustomUser.objects.filter(user_type='customer').order_by('-date_joined')[:10]
-    pending_applications_count = pending_applications.count()
-    approved_applications_count = approved_applications.count()
 
     # 7. Monthly revenue – last 12 months
     monthly_data = Order.objects.filter(
@@ -741,8 +710,8 @@ def admin_dashboard(request):
         'total_commission': total_commission,
         'commission_percentage': commission_percentage,
         'total_influencer_earnings': total_influencer_earnings,
-        'active_influencers': active_influencers.count(),
-        'active_customers': active_customers.count(),
+        'active_influencers': active_influencers,
+        'active_customers': active_customers,
         'pending_influencer_approvals': pending_influencer_approvals,
         'pending_influencer_approvals_count': pending_influencer_approvals.count(),
         'pending_orders': pending_orders,
@@ -756,9 +725,6 @@ def admin_dashboard(request):
         'rejected_influencers': rejected_influencers,
         'pending_applications': pending_applications,
         'approved_applications': approved_applications,
-        'all_customers': all_customers,
-        'pending_applications_count': pending_applications_count,
-        'approved_applications_count': approved_applications_count,
     }
 
     return render(request, 'admin_dashboard.html', context)
@@ -872,17 +838,8 @@ def view_influencer_details(request, user_id):
         return redirect('home')
 
     influencer = get_object_or_404(CustomUser, id=user_id, user_type='influencer')
-    
-    # Get profile and application objects
-    try:
-        profile = influencer.influencer_profile
-    except InfluencerProfile.DoesNotExist:
-        profile = None
-    
-    try:
-        application = influencer.influencer_application
-    except InfluencerApplication.DoesNotExist:
-        application = None
+    profile = getattr(influencer, 'influencer_profile', None)
+    application = getattr(influencer, 'influencer_application', None)
 
     # Get influencer's products and videos
     products = Product.objects.filter(influencer=influencer)
@@ -1011,3 +968,20 @@ def influencer_application(request):
 
 def influencer_application_success(request):
     return render(request, 'influencer_application_success.html')
+
+
+
+def support(request):
+    return render(request, 'support.html')
+
+
+
+
+
+
+
+
+
+
+
+
