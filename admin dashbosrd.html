@@ -1,0 +1,782 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LumosKart</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" type="image/x-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            overflow-x: hidden;
+        }
+        
+        .admin-container {
+            padding: 2rem 1rem;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .dashboard-card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.15);
+        }
+        
+        .metric-card.revenue {
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+        
+        .metric-card.commission {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .metric-card.earnings {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+        
+        .metric-card.users {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .section-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .section-header h3 {
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+        
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-approved {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-active {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-inactive {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .action-btn {
+            margin: 0.25rem;
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .action-btn i {
+            margin-right: 0.25rem;
+        }
+        
+        .table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+            padding: 1rem;
+        }
+        
+        .table td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .text-truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+        }
+        
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .navbar {
+            background: white !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: #4f46e5 !important;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            color: #64748b !important;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: #4f46e5 !important;
+        }
+        
+        .navbar-logo {
+            max-height: 40px;
+        }
+        
+        .sidebar {
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            padding-top: 80px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem 1rem;
+        }
+        
+        .sidebar .nav-link {
+            padding: 0.75rem 1.5rem;
+            color: #64748b;
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar .nav-link:hover {
+            background-color: #f1f5f9;
+            color: #4f46e5;
+        }
+        
+        .sidebar .nav-link.active {
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            border-left: 4px solid #4f46e5;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding-top: 20px;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .metric-value {
+                font-size: 1.5rem;
+            }
+            
+            .dashboard-card {
+                padding: 1rem;
+            }
+            
+            .action-btn {
+                margin: 0.25rem 0.125rem;
+                padding: 0.4rem 0.75rem;
+                font-size: 0.8rem;
+            }
+            
+            .table th, .table td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.85rem;
+            }
+            
+            .metric-card {
+                padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .metric-value {
+                font-size: 1.25rem;
+            }
+            
+            .metric-label {
+                font-size: 0.75rem;
+            }
+            
+            .section-header h3 {
+                font-size: 1.25rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .action-btn {
+                padding: 0.35rem 0.65rem;
+                font-size: 0.75rem;
+            }
+            
+            .d-flex.flex-wrap {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                margin: 0.25rem 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container-fluid">
+            <div class="navbar-brand d-flex align-items-center">
+                <img src="{% static 'accounts/images/Lumoskart.png' %}" alt="Company Logo" class="navbar-logo" style="max-height: 40px;">
+                <span class="company-name ms-2 fw-bold text-primary">Lumoskart Admin</span>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="{% url 'admin_dashboard' %}" class="nav-link fw-medium"><i class="fas fa-tachometer-alt me-1"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_influencers' %}" class="nav-link fw-medium"><i class="fas fa-users me-1"></i> Manage Influencers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'home' %}" class="nav-link fw-medium"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'logout' %}" class="nav-link fw-medium"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-none d-md-block sidebar">
+                <div class="position-sticky pt-3">
+                    <h5 class="text-center mb-4 fw-bold text-primary">Admin Panel</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'admin_dashboard' %}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_influencers' %}">
+                                <i class="fas fa-users me-2"></i>
+                                Manage Influencers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-shopping-cart me-2"></i>
+                                Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-box me-2"></i>
+                                Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-dollar-sign me-2"></i>
+                                Transactions
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-10 ms-sm-auto px-md-4 main-content">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+                    <div>
+                        <h1 class="mb-2 fw-bold text-dark">Admin Dashboard</h1>
+                        <p class="text-muted mb-0">Welcome to your admin dashboard. Here's an overview of your platform.</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-primary">
+                            <i class="fas fa-download me-2"></i>Export Data
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>New Report
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Key Metrics Row -->
+                <div class="row mb-5">
+                    <div class="col-12 col-md-6 col-xl-3 mb-4">
+                        <div class="metric-card revenue">
+                            <span class="metric-value">₹{{ total_revenue|floatformat:2 }}</span>
+                            <span class="metric-label">Total Revenue</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-xl-3 mb-4">
+                        <div class="metric-card commission">
+                            <span class="metric-value">₹{{ total_commission|floatformat:2 }} ({{ commission_percentage|floatformat:2 }}%)</span>
+                            <span class="metric-label">LumosKart Commission</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-xl-3 mb-4">
+                        <div class="metric-card earnings">
+                            <span class="metric-value">₹{{ total_influencer_earnings|floatformat:2 }}</span>
+                            <span class="metric-label">Influencer Earnings</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-xl-3 mb-4">
+                        <div class="metric-card users">
+                            <span class="metric-value">{{ active_influencers }} / {{ active_customers }}</span>
+                            <span class="metric-label">Active Influencers / Customers</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Items Row -->
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-4 mb-4">
+                        <div class="dashboard-card">
+                            <div class="p-4">
+                                <h5 class="mb-4 fw-bold text-dark">Pending Influencer Approvals ({{ pending_influencer_approvals_count }})</h5>
+                                {% if pending_influencer_approvals %}
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Email</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for user in pending_influencer_approvals %}
+                                            <tr>
+                                                <td class="text-truncate" style="max-width: 100px;">{{ user.username }}</td>
+                                                <td class="text-truncate" style="max-width: 120px;">{{ user.email }}</td>
+                                                <td>
+                                                    <form method="post" class="d-inline">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                                                        <input type="hidden" name="action" value="approve_influencer">
+                                                        <button type="submit" class="btn btn-success action-btn" title="Approve Influencer">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    </form>
+                                                    <form method="post" class="d-inline">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                                                        <input type="hidden" name="action" value="deny_influencer">
+                                                        <button type="submit" class="btn btn-danger action-btn" title="Deny Influencer">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </form>
+                                                    <a href="{% url 'view_influencer_details' user.id %}" class="btn btn-primary action-btn" title="View Details">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <p class="text-muted mb-0">No pending approvals</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4 mb-4">
+                        <div class="dashboard-card p-4">
+                            <h5 class="mb-4 fw-bold text-dark">Pending Orders ({{ pending_orders }})</h5>
+                            <p class="text-muted mb-3">There are {{ pending_orders }} orders awaiting processing.</p>
+                            <a href="#" class="btn btn-primary">View All Orders</a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4 mb-4">
+                        <div class="dashboard-card">
+                            <div class="p-4">
+                                <h5 class="mb-4 fw-bold text-dark">Pending Withdraw Requests</h5>
+                                {% if pending_withdraw_requests %}
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Influencer</th>
+                                                <th>Amount</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for request in pending_withdraw_requests %}
+                                            <tr>
+                                                <td class="text-truncate" style="max-width: 100px;">{{ request.influencer.username }}</td>
+                                                <td>₹{{ request.amount }}</td>
+                                                <td>
+                                                    <form method="post" class="d-inline">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="request_id" value="{{ request.id }}">
+                                                        <input type="hidden" name="action" value="approve_withdraw">
+                                                        <button type="submit" class="btn btn-success action-btn">Approve</button>
+                                                    </form>
+                                                    <button type="button" class="btn btn-danger action-btn" data-bs-toggle="modal" data-bs-target="#denyModal{{ request.id }}">Deny</button>
+                                                    
+                                                    <!-- Deny Modal -->
+                                                    <div class="modal fade" id="denyModal{{ request.id }}" tabindex="-1" aria-labelledby="denyModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title fw-bold" id="denyModalLabel">Deny Withdraw Request</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <form method="post">
+                                                                    {% csrf_token %}
+                                                                    <div class="modal-body">
+                                                                        <input type="hidden" name="request_id" value="{{ request.id }}">
+                                                                        <input type="hidden" name="action" value="deny_withdraw">
+                                                                        <div class="mb-3">
+                                                                            <label for="reason" class="form-label fw-medium">Reason for denial:</label>
+                                                                            <textarea class="form-control" id="reason" name="reason" rows="3"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                        <button type="submit" class="btn btn-danger">Deny Request</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <p class="text-muted mb-0">No pending withdraw requests</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Top Performers Row -->
+                <div class="row">
+                    <div class="col-12 col-lg-6 mb-4">
+                        <div class="dashboard-card p-4">
+                            <h5 class="mb-4 fw-bold text-dark">Monthly Revenue</h5>
+                            <div class="chart-container">
+                                <canvas id="revenueChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 mb-4">
+                        <div class="dashboard-card p-4">
+                            <h5 class="mb-4 fw-bold text-dark">Top Performing Influencers</h5>
+                            {% if top_influencers %}
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Influencer</th>
+                                            <th>Earnings</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for influencer in top_influencers %}
+                                        <tr>
+                                            <td class="text-truncate" style="max-width: 100px;">{{ influencer.user.username }}</td>
+                                            <td>₹{{ influencer.total_earnings|floatformat:2 }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <p class="text-muted mb-0">No data available</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 mb-4">
+                        <div class="dashboard-card p-4">
+                            <h5 class="mb-4 fw-bold text-dark">Top Selling Products</h5>
+                            {% if top_products %}
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Sold</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in top_products %}
+                                        <tr>
+                                            <td class="text-truncate" style="max-width: 100px;">{{ product.name }}</td>
+                                            <td>{{ product.total_sold }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <p class="text-muted mb-0">No data available</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- All Influencers Management Section -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <div class="dashboard-card">
+                            <div class="p-4">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+                                    <h5 class="mb-0 fw-bold text-dark">All Influencers ({{ all_influencers.count }})</h5>
+                                    <a href="{% url 'manage_influencers' %}" class="btn btn-primary">Manage All Influencers</a>
+                                </div>
+                                {% if all_influencers %}
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Email</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for influencer in all_influencers|slice:":5" %}
+                                            <tr>
+                                                <td class="text-truncate" style="max-width: 150px;">{{ influencer.username }}</td>
+                                                <td class="text-truncate" style="max-width: 150px;">{{ influencer.email }}</td>
+                                                <td>
+                                                    {% if influencer.is_active %}
+                                                        <span class="status-badge status-active">Active</span>
+                                                    {% else %}
+                                                        <span class="status-badge status-inactive">Inactive</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-2">
+                                                        <a href="{% url 'view_influencer_details' influencer.id %}" class="btn btn-primary action-btn" title="View Details">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                        <a href="{% url 'toggle_influencer_status' influencer.id %}" class="btn btn-{{ influencer.is_active|yesno:'warning,success' }} action-btn" title="{{ influencer.is_active|yesno:'Disable,Enable' }}">
+                                                            <i class="fas fa-{{ influencer.is_active|yesno:'ban,check' }}"></i>
+                                                        </a>
+                                                        <a href="{% url 'delete_influencer' influencer.id %}" class="btn btn-danger action-btn" title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <p class="text-muted mb-0">No influencers registered yet.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <div class="dashboard-card p-4">
+                            <h5 class="mb-4 fw-bold text-dark">Quick Actions</h5>
+                            <div class="d-flex flex-wrap gap-3">
+                                <a href="{% url 'manage_influencers' %}" class="btn btn-outline-primary">Manage Influencers</a>
+                                <a href="{% url 'manage_influencers' %}" class="btn btn-outline-success">View All Influencers</a>
+                                <a href="#" class="btn btn-outline-secondary">Analytics Reports</a>
+                                <a href="#" class="btn btn-outline-info">User Management</a>
+                                <a href="#" class="btn btn-outline-warning">System Settings</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Render the revenue chart
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('revenueChart').getContext('2d');
+            // Parse the JSON data from Django template
+            var labels = JSON.parse('{{ monthly_revenue_labels|escapejs }}');
+            var data = JSON.parse('{{ monthly_revenue_values|escapejs }}');
+            
+            var revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Monthly Revenue (₹)',
+                        data: data,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₹' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
