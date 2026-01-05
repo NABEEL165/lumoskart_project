@@ -980,7 +980,19 @@ def support(request):
 
 
 
+@login_required
+def manage_users(request):
+    if not request.user.is_staff:
+        return redirect('home')
 
+    # Get all users (customers)
+    users = CustomUser.objects.filter(user_type='customer')
+
+    context = {
+        'users': users,
+    }
+
+    return render(request, 'manage_users.html', context)
 
 
 
