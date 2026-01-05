@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <link rel="stylesheet" href="whatsapp-widget.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -196,7 +197,7 @@
             transform: translateY(-2px);
         }
 
-        
+
 /* Amazon-Style Cart Icon - NO Round Background (Like Real Amazon Header) */
 .cart-link {
     position: relative;
@@ -343,37 +344,100 @@
         }
 
         /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            z-index: 1060;
-            background: none;
-            border: none;
-            padding: 8px;
-        }
+        /*.hamburger {*/
+        /*    display: none;*/
+        /*    flex-direction: column;*/
+        /*    cursor: pointer;*/
+        /*    z-index: 1060;*/
+        /*    background: none;*/
+        /*    border: none;*/
+        /*    padding: 8px;*/
+        /*}*/
 
-        .hamburger span {
-            width: 28px;
-            height: 3px;
-            background-color: #fff;
-            margin: 4px 0;
-            transition: all 0.3s ease;
-            border-radius: 3px;
-        }
+        /*.hamburger span {*/
+        /*    width: 28px;*/
+        /*    height: 3px;*/
+        /*    background-color: #00c7f7;*/
+        /*    margin: 4px 0;*/
+        /*    transition: all 0.3s ease;*/
+        /*    border-radius: 3px;*/
+        /*}*/
 
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(9px, 9px);
-        }
+        /*.hamburger.active span:nth-child(1) {*/
+        /*    transform: rotate(45deg) translate(9px, 9px);*/
+        /*}*/
 
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
+        /*.hamburger.active span:nth-child(2) {*/
+        /*    opacity: 0;*/
+        /*}*/
 
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(9px, -9px);
-        }
+        /*.hamburger.active span:nth-child(3) {*/
+        /*    transform: rotate(-45deg) translate(9px, -9px);*/
+        /*}*/
+/* Enhanced Hamburger Menu - Primary Teal Glow */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    z-index: 1060;
+    background: transparent;
+    border: none;
+    padding: 10px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
 
+.hamburger span {
+    width: 30px;
+    height: 4px;
+    background: #00c7f7; /* Primary teal */
+    margin: 4px 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(0, 199, 247, 0.6); /* Soft glow */
+}
+
+.hamburger:hover span {
+    background: #009fd9;
+    box-shadow: 0 0 16px rgba(0, 199, 247, 0.9); /* Stronger glow on hover */
+    transform: scaleX(1.1);
+}
+
+.hamburger.active span {
+    background: #00c7f7;
+    box-shadow: 0 0 20px rgba(0, 199, 247, 1); /* Intense glow when open */
+}
+
+/* Animation when menu opens */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(10px, 10px);
+}
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(20px);
+}
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(10px, -10px);
+}
+
+/* Mobile visibility */
+@media (max-width: 991px) { /* Matches Bootstrap lg breakpoint */
+    .hamburger {
+        display: flex;
+    }
+}
+
+/* Extra small phones - slightly smaller */
+@media (max-width: 480px) {
+    .hamburger {
+        padding: 8px;
+    }
+    .hamburger span {
+        width: 26px;
+        height: 3.5px;
+        margin: 3.5px 0;
+    }
+}
         /* Mobile Navigation Overlay */
         .nav-overlay {
             position: fixed;
@@ -412,7 +476,7 @@
         }
 
         .search-select {
-            background: ;
+            background: #333;
             border: none;
             padding: 0 10px;
             font-size: 14px;
@@ -1633,7 +1697,9 @@
     color: #fff;
 }
 
+
     </style>
+
 </head>
 
 <body>
@@ -1665,18 +1731,16 @@
 
     <div class="content-wrapper">
 
-        <nav class="navbar">
-            <div class="navbar-container">
-
-                <div class="navbar-brand">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid navbar-container">
+                <div class="navbar-brand d-flex align-items-center">
                     <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" class="logo-img">
                     <span class="brand-text"></span>
                 </div>
 
-
-                <div class="navbar-nav">
-
-                    <div class="amazon-search-container">
+                <!-- Desktop Navigation (Hidden on mobile) -->
+                <div class="d-none d-lg-flex align-items-center">
+                    <div class="amazon-search-container me-3">
                         <form action="{% url 'search' %}" method="get" class="amazon-search-form">
                             <input type="hidden" name="page" value="customer_dashboard">
                             <select class="search-select">
@@ -1690,39 +1754,25 @@
                             </button>
                         </form>
                     </div>
-
-
-                    <div class="mobile-search-toggle" id="mobileSearchToggle">
-                        🔍
-                    </div>
-
-                    <ul class="nav-links" id="navLinks">
+                    <ul class="nav-links d-flex gap-3">
                         <li><a href="{% url 'home' %}" class="nav-link">
                             <span>Home</span>
                         </a></li>
                         <li><a href="{% url 'about_us' %}" class="nav-link">
                             <span>About</span>
                         </a></li>
-                        <li><a href="{% url 'about_us' %}" class="nav-link">
+                        <li><a href="{% url 'support' %}" class="nav-link">
                             <span>Support</span>
                         </a></li>
                         <li><a href="{% url 'logout' %}" class="nav-link">
                             <span>Logout</span>
                         </a></li>
                     </ul>
-
-
-                    <a href="{% url 'view_cart' %}" class="cart-link" title="Shopping Cart">
+                    <a href="{% url 'view_cart' %}" class="cart-link me-3" title="Shopping Cart">
                         <span class="cart-icon">🛒</span>
                         <span class="cart-badge">{{ cart_item_count }}</span>
                     </a>
-
-
-
-
-<!-- PROFILE - ONLY NAME, FULLY RESPONSIVE, ALWAYS VISIBLE -->
                     <a href="{% url 'profile' %}" class="profile-link flex items-center gap-3 text-white hover:opacity-90 transition">
-                        <!-- ONLY NAME - Always visible, responsive, never hidden -->
                         <span class="font-semibold truncate max-w-28 text-sm
                                      sm:text-base
                                      md:text-lg
@@ -1731,18 +1781,88 @@
                             {{ request.user.get_full_name|default:request.user.username }}
                         </span>
                     </a>
+                </div>
 
-                <!-- Hamburger Menu -->
-                <button class="hamburger" id="hamburger" aria-label="Menu">
-                    <span>
-
-                    </span>
-                    <span></span>
-                    <span></span>
-                </button>
-
+                <!-- Mobile menu button with cart and search icons (Only visible on mobile) -->
+                <div class="d-lg-none d-flex align-items-center">
+                    <a href="{% url 'view_cart' %}" class="cart-link me-2" title="Shopping Cart" style="text-decoration: none;">
+                        <span class="cart-icon">🛒</span>
+                        <span class="cart-badge">{{ cart_item_count }}</span>
+                    </a>
+                    <button class="btn btn-outline-light ms-2 me-2" data-bs-toggle="offcanvas" data-bs-target="#searchOffcanvas" aria-controls="searchOffcanvas">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <button class="navbar-toggler ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
+                        <span class="navbar-toggler-icon text-light"></span>
+                    </button>
+                </div>
             </div>
         </nav>
+
+        <!-- Off-canvas Search for Mobile/Tablet -->
+        <div class="offcanvas offcanvas-top" tabindex="-1" id="searchOffcanvas" aria-labelledby="searchOffcanvasLabel">
+            <div class="offcanvas-header" style="background-color: #0e0e0e; border-bottom: 1px solid #333;">
+                <h5 class="offcanvas-title text-white" id="searchOffcanvasLabel">Search</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" style="background-color: #0e0e0e;">
+                <form action="{% url 'search' %}" method="get" class="d-flex">
+                    <input type="hidden" name="page" value="customer_dashboard">
+                    <div class="input-group">
+                        <select class="form-select" name="category">
+                            <option value="all">All</option>
+                            <option value="products">Products</option>
+                            <option value="influencers">Influencers</option>
+                        </select>
+                        <input type="text" name="q" class="form-control" placeholder="Search for products, influencers..." value="{{ query|default:'' }}">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Off-canvas Menu for Mobile/Tablet -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
+            <div class="offcanvas-header" style="background-color: #0e0e0e; border-bottom: 1px solid #333;">
+                <h5 class="offcanvas-title text-white" id="navbarOffcanvasLabel">
+                    <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="40" class="d-inline-block align-middle me-2">
+                    
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" style="background-color: #0e0e0e; color: white;">
+                <ul class="navbar-nav">
+                    <li class="nav-item mb-3">
+                        <a class="nav-link text-white" href="{% url 'home' %}"><i class="bi bi-house-door me-2"></i>Home</a>
+                    </li>
+                    <li class="nav-item mb-3">
+                        <a class="nav-link text-white" href="{% url 'about_us' %}"><i class="bi bi-info-circle me-2"></i>About</a>
+                    </li>
+                    <li class="nav-item mb-3">
+                        <a class="nav-link text-white" href="{% url 'support' %}"><i class="bi bi-headset me-2"></i>Support</a>
+                    </li>
+                    <li class="nav-item mb-3">
+                        <a class="nav-link text-white" href="{% url 'view_cart' %}"><i class="bi bi-cart me-2"></i>Cart 
+                            {% if cart_item_count > 0 %}
+                                <span class="badge bg-danger">{{ cart_item_count }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li class="nav-item mb-3">
+                        <a class="nav-link text-white" href="{% url 'profile' %}"><i class="bi bi-person me-2"></i>Profile</a>
+                    </li>
+                    <li class="nav-item mb-3">
+                        <a class="nav-link text-white" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+                    </li>
+                </ul>
+                
+                <!-- User Info in Mobile Menu -->
+                <div class="mt-4 pt-4 border-top border-secondary">
+                    <p class="text-white mb-1">Welcome,</p>
+                    <p class="text-light mb-0 fw-bold">{{ request.user.get_full_name|default:request.user.username }}</p>
+                </div>
+            </div>
+        </div>
 
         <!-- Enhanced Hero Carousel - Optimized -->
         <div class="carousel-container">
@@ -1993,114 +2113,6 @@
             }
         }
 
-        // Mobile Menu & Search Handler
-        document.addEventListener("DOMContentLoaded", function () {
-            const hamburger = document.getElementById('hamburger');
-            const navLinks = document.getElementById('navLinks');
-            const navOverlay = document.getElementById('navOverlay');
-            const mobileSearchToggle = document.getElementById('mobileSearchToggle');
-            const mobileSearchForm = document.getElementById('mobileSearchForm');
-
-            if (!hamburger || !navLinks || !navOverlay) return;
-
-            // --- Toggle menu ---
-            function openMenu() {
-                hamburger.classList.add('active');
-                navLinks.classList.add('active');
-                navOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                if (mobileSearchForm) mobileSearchForm.classList.remove('active');
-            }
-
-            function closeMenu() {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-                navOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            function toggleMenu() {
-                if (navLinks.classList.contains('active')) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            }
-
-            // --- Event Listeners ---
-            hamburger.addEventListener('click', toggleMenu);
-
-            // Close menu when clicking overlay
-            navOverlay.addEventListener('click', function(e) {
-                if (navLinks.classList.contains('active')) {
-                    closeMenu();
-                }
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                const clickedInsideMenu = navLinks.contains(e.target);
-                const clickedHamburger = hamburger.contains(e.target);
-                const clickedInsideSearch = mobileSearchForm && mobileSearchForm.contains(e.target);
-
-                // Close menu if clicked outside menu and hamburger
-                if (!clickedInsideMenu && !clickedHamburger && navLinks.classList.contains('active')) {
-                    closeMenu();
-                }
-
-                // Close search if clicked outside search form
-                if (mobileSearchForm && !clickedInsideSearch && mobileSearchForm.classList.contains('active')) {
-                    mobileSearchForm.classList.remove('active');
-                }
-            });
-
-            // Close menu when a nav link is clicked
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function () {
-                    if (navLinks.classList.contains('active')) {
-                        closeMenu();
-                    }
-                });
-            });
-
-            // --- Mobile Search Toggle ---
-            if (mobileSearchToggle) {
-                mobileSearchToggle.addEventListener('click', function (e) {
-                    e.stopPropagation(); // Prevent event bubbling
-                    if (mobileSearchForm) {
-                        mobileSearchForm.classList.toggle('active');
-                        if (mobileSearchForm.classList.contains('active')) {
-                            const searchInput = mobileSearchForm.querySelector('input[type="text"]');
-                            if (searchInput) {
-                                searchInput.focus();
-                                // Close menu if it's open
-                                if (navLinks.classList.contains('active')) {
-                                    closeMenu();
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Close mobile search when clicking outside
-            document.addEventListener('click', function(e) {
-                const isClickInsideMobileSearch = mobileSearchForm && mobileSearchForm.contains(e.target);
-                const isClickOnSearchToggle = mobileSearchToggle && mobileSearchToggle.contains(e.target);
-
-                if (mobileSearchForm && !isClickInsideMobileSearch && !isClickOnSearchToggle &&
-                    mobileSearchForm.classList.contains('active')) {
-                    mobileSearchForm.classList.remove('active');
-                }
-            });
-
-            // --- Handle Resize ---
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 768) {
-                    closeMenu();
-                    if (mobileSearchForm) mobileSearchForm.classList.remove('active');
-                }
-            });
 
             // ===============================
             // 🎬 Product Reels Functionality
@@ -2290,8 +2302,8 @@
                     alert('Share functionality would open here for product ID: ' + productId);
                 }
             });
-        });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
