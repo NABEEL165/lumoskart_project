@@ -2289,6 +2289,17 @@
                         <li><a href="{% url 'support' %}" class="nav-link">
                             <span>Support</span>
                         </a></li>
+                        <li class="dropdown">
+                            <button class="btn btn-outline-light dropdown-toggle" type="button" id="languageDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-globe me-1"></i> <span id="currentLanguage">English</span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                                <li><a class="dropdown-item lang-option" href="#" data-lang="en">English</a></li>
+                                <li><a class="dropdown-item lang-option" href="#" data-lang="ar">Arabic</a></li>
+                                <li><a class="dropdown-item lang-option" href="#" data-lang="hi">Hindi</a></li>
+                            </ul>
+                        </li>
                         <li><a href="{% url 'logout' %}" class="nav-link">
                             <span>Logout</span>
                         </a></li>
@@ -2339,7 +2350,7 @@
                             <option value="products">Products</option>
                             <option value="influencers">Influencers</option>
                         </select>
-                        <input type="text" name="q" class="form-control" placeholder="Search for products, influencers..." value="{{ query|default:'' }}">
+                        <input type="text" name="q" class="form-control" placeholder="Search for products, influencers..." data-placeholder-en="Search for products, influencers..." data-placeholder-ar="ابحث عن المنتجات، المؤثرين..." data-placeholder-hi="उत्पादों, प्रभावकों के लिए खोजें..." value="{{ query|default:'' }}">
                         <button class="btn btn-primary" type="submit">Search</button>
                     </div>
                 </form>
@@ -2366,6 +2377,17 @@
                     <li class="nav-item mb-3">
                         <a class="nav-link text-white" href="{% url 'support' %}"><i class="bi bi-headset me-2"></i>Support</a>
                     </li>
+                    <li class="nav-item dropdown mb-3">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="mobileLanguageDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-globe me-2"></i> <span id="mobileCurrentLanguage">English</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="mobileLanguageDropdown">
+                            <li><a class="dropdown-item lang-option" href="#" data-lang="en">English</a></li>
+                            <li><a class="dropdown-item lang-option" href="#" data-lang="ar">Arabic</a></li>
+                            <li><a class="dropdown-item lang-option" href="#" data-lang="hi">Hindi</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item mb-3">
                         <a class="nav-link text-white" href="{% url 'view_cart' %}"><i class="bi bi-cart me-2"></i>Cart 
                             {% if cart_item_count > 0 %}
@@ -2383,7 +2405,7 @@
                 
                 <!-- User Info in Mobile Menu -->
                 <div class="mt-4 pt-4 border-top border-secondary">
-                    <p class="text-white mb-1">Welcome,</p>
+                    <p class="text-white mb-1" data-en="Welcome," data-ar="مرحبا،" data-hi="स्वागत है,">Welcome,</p>
                     <p class="text-light mb-0 fw-bold">{{ request.user.get_full_name|default:request.user.username }}</p>
                 </div>
             </div>
@@ -2431,9 +2453,9 @@
         <div class="section-container">
             <div class="section-header">
                 <h2 class="section-title">
-                    🌟 Top Influencers
+                    <span data-en="🌟 Top Influencers" data-ar="🌟 المؤثرون الأعلى" data-hi="🌟 शीर्ष प्रभावक">🌟 Top Influencers</span>
                 </h2>
-                <p class="section-description">Discover products curated by our most trusted influencers and content creators who bring you the latest trends and highest quality items.</p>
+                <p class="section-description" data-en="Discover products curated by our most trusted influencers and content creators who bring you the latest trends and highest quality items." data-ar="اكتشف المنتجات التي يختارها مؤثرونا الموثوقون وصناع المحتوى الذين ي bringing لك أحدث الاتجاهات وأعلى جودة." data-hi="हमारे सबसे भरोसेमंद प्रभावकों और सामग्री निर्माताओं द्वारा चुने गए उत्पादों की खोज करें जो आपको नवीनतम रुझान और उच्चतम गुणवत्ता वाले वस्तुएं लाते हैं।">Discover products curated by our most trusted influencers and content creators who bring you the latest trends and highest quality items.</p>
             </div>
             <div class="grid-container">
                 {% for profile in influencers %}
@@ -2446,13 +2468,13 @@
                     <h5 class="influencer-name">{{ profile.user.get_full_name|default:profile.user.username }}</h5>
                     <p class="influencer-bio">{{ profile.bio|truncatewords:12 }}</p>
                     <a href="{% url 'view_influencer_products' profile.user.id %}" class="view-products-btn">
-                        View Products
+                        <span data-en="View Products" data-ar="عرض المنتجات" data-hi="उत्पाद देखें">View Products</span>
                     </a>
                 </div>
                 {% empty %}
                 <div class="empty-state">
                     <div class="empty-icon">🔍</div>
-                    <p class="empty-text">No influencers available right now. Check back soon for amazing content!</p>
+                    <p class="empty-text" data-en="No influencers available right now. Check back soon for amazing content!" data-ar="لا توجد مؤثرون متاحون الآن. تحقق مرة أخرى قريباً من المحتوى المذهل!" data-hi="अभी कोई प्रभावक उपलब्ध नहीं है। शानदार सामग्री के लिए जल्द ही वापस आएँ!">No influencers available right now. Check back soon for amazing content!</p>
                 </div>
                 {% endfor %}
             </div>
@@ -2462,9 +2484,9 @@
         <div class="section-container">
             <div class="section-header">
                 <h2 class="section-title">
-                    🛒 Featured Products
+                    <span data-en="🛒 Featured Products" data-ar="🛒 المنتجات المميزة" data-hi="🛒 विशेष रूप से प्रदर्शित उत्पाद">🛒 Featured Products</span>
                 </h2>
-                <p class="section-description">Browse our complete collection of premium products from various categories, all recommended by trusted influencers and brands.</p>
+                <p class="section-description" data-en="Browse our complete collection of premium products from various categories, all recommended by trusted influencers and brands." data-ar="تصفح مجموعتنا الكاملة من المنتجات المتميزة من فئات مختلفة، كلها موصى بها من قبل المؤثرين والعلامات التجارية الموثوقة." data-hi="विभिन्न श्रेणियों से प्रीमियम उत्पादों के हमारे पूर्ण संग्रह को ब्राउज़ करें, जिन्हें भरोसेमंद प्रभावकों और ब्रांडों द्वारा अनुशंसित किया गया है।">Browse our complete collection of premium products from various categories, all recommended by trusted influencers and brands.</p>
             </div>
             <div class="grid-container">
                 {% for product in products %}
@@ -2485,7 +2507,7 @@
                 {% empty %}
                 <div class="empty-state">
                     <div class="empty-icon">📦</div>
-                    <p class="empty-text">No products available yet. Stay tuned for amazing deals!</p>
+                    <p class="empty-text" data-en="No products available yet. Stay tuned for amazing deals!" data-ar="لا توجد منتجات متاحة بعد. تابع معنا للحصول على عروض مذهلة!" data-hi="अभी तक कोई उत्पाद उपलब्ध नहीं है। शानदार सौदों के लिए बने रहें!">No products available yet. Stay tuned for amazing deals!</p>
                 </div>
                 {% endfor %}
             </div>
@@ -2497,9 +2519,9 @@
         <div class="section-container">
             <div class="section-header">
                 <h2 class="section-title">
-                    🎥 Trending Reels
+                    <span data-en="🎥 Trending Reels" data-ar="🎥 مقاطع الفيديو الرائجة" data-hi="🎥 ट्रेंडिंग रील्स">🎥 Trending Reels</span>
                 </h2>
-                <p class="section-description">Watch engaging videos from our top influencers</p>
+                <p class="section-description" data-en="Watch engaging videos from our top influencers" data-ar="شاهد مقاطع الفيديو الممتعة من مؤثرينا الأعلى" data-hi="हमारे शीर्ष प्रभावकों से आकर्षक वीडियो देखें">Watch engaging videos from our top influencers</p>
             </div>
             
             <div class="reels-grid">
@@ -2564,7 +2586,7 @@
                     {% if product %}
                     <a href="{% url 'product_detail' product.id %}"
                         class="reel-add-to-cart-bar buy-now-btn" onclick="event.stopPropagation();">
-                        Buy Now <i class="fas fa-caret-down"></i>
+                        <span data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">Buy Now</span> <i class="fas fa-caret-down"></i>
                     </a>
                     {% else %}
                     <div class="reel-add-to-cart-bar disabled" style="opacity: 0.5; cursor: not-allowed;">
@@ -2607,12 +2629,12 @@
                                 </a>
                                 <a href="javascript:void(0);"
                                     class="video-shorts-action-btn video-shorts-share">
-                                    <i class="fas fa-share"></i> Share
+                                    <i class="fas fa-share"></i> <span data-en="Share" data-ar="مشاركة" data-hi="साझा करें">Share</span>
                                 </a>
                                 <a href="javascript:void(0);"
                                     class="video-shorts-action-btn video-shorts-buy"
                                     id="video-shorts-buy-btn">
-                                    <i class="fas fa-shopping-cart"></i> Buy Now
+                                    <i class="fas fa-shopping-cart"></i> <span data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">Buy Now</span>
                                 </a>
                             </div>
                         </div>
@@ -2632,7 +2654,7 @@
                 <div class="footer-grid">
                     <!-- About Us -->
                     <div class="footer-column">
-                        <h3>About Us</h3>
+                        <h3 data-en="About Us" data-ar="من نحن" data-hi="हमारे बारे में">About Us</h3>
                         <ul class="footer-links">
                             <li><a href="{% url 'about_us' %}">Our Story</a></li>
                             <li><a href="#">Careers</a></li>
@@ -2643,7 +2665,7 @@
 
                     <!-- Terms & Conditions -->
                     <div class="footer-column">
-                        <h3>Terms & Conditions</h3>
+                        <h3 data-en="Terms & Conditions" data-ar="الشروط والأحكام" data-hi="नियम एवं शर्तें">Terms & Conditions</h3>
                         <ul class="footer-links">
                             <li><a href="#">Terms of Service</a></li>
                             <li><a href="#">Privacy Policy</a></li>
@@ -2654,7 +2676,7 @@
 
                     <!-- Connect With Us -->
                     <div class="footer-column">
-                        <h3>Connect With Us</h3>
+                        <h3 data-en="Connect With Us" data-ar="تواصل معنا" data-hi="हमसे संपर्क करें">Connect With Us</h3>
                         <ul class="footer-links">
                             <li><a href="#">Contact Us</a></li>
                             <li><a href="#">FAQs</a></li>
@@ -2671,7 +2693,7 @@
 
                     <!-- Let Us Help You -->
                     <div class="footer-column">
-                        <h3>Let Us Help You</h3>
+                        <h3 data-en="Let Us Help You" data-ar="دعنا نساعدك" data-hi="हम आपकी सहायता करें">Let Us Help You</h3>
                         <ul class="footer-links">
                             <li><a href="#">Customer Service</a></li>
                             <li><a href="#">Track Your Order</a></li>
@@ -3227,6 +3249,155 @@
 
                     // In a real implementation, this would open a share modal
                     alert('Share functionality would open here for video ID: ' + videoId);
+                }
+            });
+            
+            // Handle language selection for entire website
+            const languageItems = document.querySelectorAll('.lang-option');
+            languageItems.forEach(item => {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const selectedLang = this.getAttribute('data-lang');
+                    
+                    // Store selected language in localStorage for entire website
+                    localStorage.setItem('preferredLanguage', selectedLang);
+                    
+                    // Reload the page to apply language changes
+                    window.location.reload();
+                });
+            });
+            
+            // Function to apply language translations
+            function applyLanguage(langCode) {
+                // Define translation objects
+                const translations = {
+                    'en': {
+                        'home': 'Home',
+                        'about': 'About',
+                        'support': 'Support',
+                        'logout': 'Logout',
+                        'searchPlaceholder': 'Who\'s your favorite influencer',
+                        'viewAll': 'View All',
+                        'topInfluencers': '🌟 Top Influencers',
+                        'influencerBio': 'Discover products curated by our most trusted influencers and content creators who bring you the latest trends and highest quality items.',
+                        'featuredProducts': '🛒 Featured Products',
+                        'productPage': 'Browse our complete collection of premium products from various categories, all recommended by trusted influencers and brands.',
+                        'trendingReels': '🎥 Trending Reels',
+                        'watchVideos': 'Watch engaging videos from our top influencers',
+                        'noReels': 'No Reels Yet',
+                        'firstPost': 'Be the first influencer to post!',
+                        'buyNow': 'Buy Now',
+                        'noProducts': 'No products available yet. Stay tuned for amazing deals!',
+                        'noInfluencers': 'No influencers available right now. Check back soon for amazing content!'
+                    },
+                    'ar': {
+                        'home': 'الرئيسية',
+                        'about': 'من نحن',
+                        'support': 'الدعم',
+                        'logout': 'تسجيل الخروج',
+                        'searchPlaceholder': 'من هو مؤثرك المفضل',
+                        'viewAll': 'عرض الكل',
+                        'topInfluencers': '🌟 المؤثرون الأعلى',
+                        'influencerBio': 'اكتشف المنتجات التي يختارها مؤثرونا الموثوقون وصناع المحتوى الذين ي bringing لك أحدث الاتجاهات وأعلى جودة.',
+                        'featuredProducts': '🛒 المنتجات المميزة',
+                        'productPage': 'تصفح مجموعتنا الكاملة من المنتجات المتميزة من فئات مختلفة، كلها موصى بها من قبل المؤثرين والعلامات التجارية الموثوقة.',
+                        'trendingReels': '🎥 مقاطع الفيديو الرائجة',
+                        'watchVideos': 'شاهد مقاطع الفيديو الممتعة من مؤثرينا الأعلى',
+                        'noReels': 'لا توجد مقاطع فيديو بعد',
+                        'firstPost': 'كن أول مؤثر ينشر!',
+                        'buyNow': 'اشتري الآن',
+                        'noProducts': 'لا توجد منتجات متاحة بعد. تابع معنا للحصول على عروض مذهلة!',
+                        'noInfluencers': 'لا توجد مؤثرون متاحون الآن. تحقق مرة أخرى قريباً من المحتوى المذهل!'
+                    },
+                    'hi': {
+                        'home': 'होम',
+                        'about': 'हमारे बारे में',
+                        'support': 'सहायता',
+                        'logout': 'लॉग आउट',
+                        'searchPlaceholder': 'आपका पसंतीदा प्रभावक कौन है',
+                        'viewAll': 'सभी देखें',
+                        'topInfluencers': '🌟 शीर्ष प्रभावक',
+                        'influencerBio': 'हमारे सबसे भरोसेमंद प्रभावकों और सामग्री निर्माताओं द्वारा चुने गए उत्पादों की खोज करें जो आपको नवीनतम रुझान और उच्चतम गुणवत्ता वाले वस्तुएं लाते हैं।',
+                        'featuredProducts': '🛒 विशेष रूप से प्रदर्शित उत्पाद',
+                        'productPage': 'विभिन्न श्रेणियों से प्रीमियम उत्पादों के हमारे पूर्ण संग्रह को ब्राउज़ करें, जिन्हें भरोसेमंद प्रभावकों और ब्रांडों द्वारा अनुशंसित किया गया है।',
+                        'trendingReels': '🎥 ट्रेंडिंग रील्स',
+                        'watchVideos': 'हमारे शीर्ष प्रभावकों से आकर्षक वीडियो देखें',
+                        'noReels': 'अभी तक कोई रील्स नहीं',
+                        'firstPost': 'पोस्ट करने वाले पहले प्रभावक बनें!',
+                        'buyNow': 'अभी खरीदें',
+                        'noProducts': 'अभी तक कोई उत्पाद उपलब्ध नहीं है। शानदार सौदों के लिए बने रहें!',
+                        'noInfluencers': 'अभी कोई प्रभावक उपलब्ध नहीं है। शानदार सामग्री के लिए जल्द ही वापस आएँ!'
+                    }
+                };
+                
+                const lang = translations[langCode] || translations['en'];
+                
+                // Update text content based on language
+                document.querySelectorAll('[data-en]').forEach(element => {
+                    const enText = element.getAttribute('data-en');
+                    const arText = element.getAttribute('data-ar');
+                    const hiText = element.getAttribute('data-hi');
+                    
+                    if (langCode === 'ar' && arText) {
+                        element.textContent = arText;
+                    } else if (langCode === 'hi' && hiText) {
+                        element.textContent = hiText;
+                    } else if (langCode === 'en' && enText) {
+                        element.textContent = enText;
+                    }
+                });
+                
+                // Update placeholder text
+                document.querySelectorAll('[data-placeholder-en]').forEach(element => {
+                    const enPlaceholder = element.getAttribute('data-placeholder-en');
+                    const arPlaceholder = element.getAttribute('data-placeholder-ar');
+                    const hiPlaceholder = element.getAttribute('data-placeholder-hi');
+                    
+                    if (langCode === 'ar' && arPlaceholder) {
+                        element.placeholder = arPlaceholder;
+                    } else if (langCode === 'hi' && hiPlaceholder) {
+                        element.placeholder = hiPlaceholder;
+                    } else if (langCode === 'en' && enPlaceholder) {
+                        element.placeholder = enPlaceholder;
+                    }
+                });
+                
+                // Update title attributes
+                document.querySelectorAll('[data-title-en]').forEach(element => {
+                    const enTitle = element.getAttribute('data-title-en');
+                    const arTitle = element.getAttribute('data-title-ar');
+                    const hiTitle = element.getAttribute('data-title-hi');
+                    
+                    if (langCode === 'ar' && arTitle) {
+                        element.title = arTitle;
+                    } else if (langCode === 'hi' && hiTitle) {
+                        element.title = hiTitle;
+                    } else if (langCode === 'en' && enTitle) {
+                        element.title = enTitle;
+                    }
+                });
+            }
+            
+            // Initialize language on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                // Get language from localStorage for entire website or default to 'en'
+                const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+                applyLanguage(savedLang);
+                
+                // Update language selector display
+                const langDisplay = document.getElementById('currentLanguage');
+                const mobileLangDisplay = document.getElementById('mobileCurrentLanguage');
+                
+                if (langDisplay) {
+                    if (savedLang === 'ar') langDisplay.textContent = 'العربية';
+                    else if (savedLang === 'hi') langDisplay.textContent = 'हिंदी';
+                    else langDisplay.textContent = 'English';
+                }
+                
+                if (mobileLangDisplay) {
+                    if (savedLang === 'ar') mobileLangDisplay.textContent = 'العربية';
+                    else if (savedLang === 'hi') mobileLangDisplay.textContent = 'हिंदी';
+                    else mobileLangDisplay.textContent = 'English';
                 }
             });
     </script>
