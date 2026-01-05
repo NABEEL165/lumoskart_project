@@ -3637,6 +3637,22 @@
                             <li><a class="dropdown-item lang-option" href="#" data-lang="hi">Hindi</a></li>
                         </ul>
                     </div>
+                    <!-- Currency Converter Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle me-2" type="button" id="currencyDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-exchange-alt me-1"></i> <span id="currentCurrency">INR (₹)</span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="INR" data-symbol="₹">India (INR)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="AED" data-symbol="د.إ">UAE (AED)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="SGD" data-symbol="$">Singapore (SGD)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="PHP" data-symbol="₱">Philippines (PHP)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="USD" data-symbol="$">USA (USD)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="EUR" data-symbol="€">Germany (EUR)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="IDR" data-symbol="Rp">Indonesia (IDR)</a></li>
+                        </ul>
+                    </div>
                     <a href="{% url 'register_customer' %}" class="btn btn-signup">Sign up</a>
                     <a href="{% url 'login' %}" class="btn btn-login">Log in</a>
                     <!--{% if user.is_staff %}-->
@@ -3846,9 +3862,9 @@
 
                         <div class="product-footer">
                             <div class="price-section">
-                                <span class="product-price">₹{{ product.price }}</span>
+                                <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{ product.price }}</span>
                                 {% if product.original_price %}
-                                <span class="original-price">₹{{ product.original_price }}</span>
+                                <span class="original-price" data-price="{{ product.original_price }}" data-currency="INR">₹{{ product.original_price }}</span>
                                 <span class="discount-badge">{% widthratio product.price product.original_price 100 %}%
                                     OFF</span>
                                 {% endif %}
@@ -3922,7 +3938,7 @@
                         {% endif %}
 
                         <div class="product-footer">
-                            <span class="product-price">₹{{ product.price }}</span>
+                            <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{ product.price }}</span>
                             <button class="heart-btn" aria-label="Add to wishlist">
                                 <i class="fas fa-heart"></i>
                             </button>
@@ -3986,8 +4002,8 @@
                             <div class="reel-product-info">
                                 <div class="reel-product-name">{{ product.name }}</div>
                                 <div class="reel-product-price-row">
-                                    <span class="reel-current-price">₹{{ product.price }}</span>
-                                    <span class="reel-original-price">₹{% widthratio product.price 4 10 %}</span>
+                                    <span class="reel-current-price" data-price="{{ product.price }}" data-currency="INR">₹{{ product.price }}</span>
+                                    <span class="reel-original-price" data-price="{% widthratio product.price 4 10 %}" data-currency="INR">₹{% widthratio product.price 4 10 %}</span>
                                 </div>
                             </div>
                         </div>
@@ -5212,6 +5228,132 @@
                 }
             });
 
+        </script>
+        <script>
+            // Currency Conversion Functionality
+            // Exchange rates (relative to INR)
+            const exchangeRates = {
+                'INR': 1,        // Indian Rupee
+                'AED': 0.31,     // UAE Dirham
+                'SGD': 0.017,    // Singapore Dollar
+                'PHP': 0.69,     // Philippine Peso
+                'USD': 0.012,    // US Dollar
+                'EUR': 0.011,    // Euro
+                'IDR': 183.33    // Indonesian Rupiah
+            };
+            
+            // Function to convert prices
+            function convertPrice(price, fromCurrency, toCurrency) {
+                if (fromCurrency === toCurrency) return price;
+                
+                // Convert to INR first, then to target currency
+                const inrValue = price / exchangeRates[fromCurrency];
+                const convertedValue = inrValue * exchangeRates[toCurrency];
+                return convertedValue;
+            }
+            
+            // Function to format currency with symbol
+            function formatCurrency(amount, currency) {
+                const symbols = {
+                    'INR': '₹',
+                    'AED': 'د.إ',
+                    'SGD': '$',
+                    'PHP': '₱',
+                    'USD': '$',
+                    'EUR': '€',
+                    'IDR': 'Rp'
+                };
+                
+                const symbol = symbols[currency] || '₹';
+                // Format with 2 decimal places for most currencies
+                if (currency === 'IDR') {
+                    // IDR typically doesn't use decimal places
+                    return `${symbol}${Math.round(amount).toLocaleString()}`;
+                } else {
+                    return `${symbol}${amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+                }
+            }
+            
+            // Function to update all prices on the page
+            function updatePrices(currency) {
+                // Update all elements with price data attribute
+                const priceElements = document.querySelectorAll('[data-price]');
+                priceElements.forEach(element => {
+                    const originalPrice = parseFloat(element.getAttribute('data-price'));
+                    const originalCurrency = element.getAttribute('data-currency') || 'INR';
+                    
+                    if (!isNaN(originalPrice)) {
+                        const convertedPrice = convertPrice(originalPrice, originalCurrency, currency);
+                        const formattedPrice = formatCurrency(convertedPrice, currency);
+                        element.textContent = formattedPrice;
+                        
+                        // Store the original price data to allow future conversions
+                        if (!element.hasAttribute('data-original-price')) {
+                            element.setAttribute('data-original-price', originalPrice);
+                            element.setAttribute('data-original-currency', originalCurrency);
+                        }
+                    }
+                });
+            }
+            
+            // Handle currency selection
+            const currencyItems = document.querySelectorAll('.currency-option');
+            currencyItems.forEach(item => {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const selectedCurrency = this.getAttribute('data-currency');
+                    const currencySymbol = this.getAttribute('data-symbol');
+                    
+                    // Store selected currency in localStorage
+                    localStorage.setItem('preferredCurrency', selectedCurrency);
+                    
+                    // Update language selector display
+                    const currencyDisplay = document.getElementById('currentCurrency');
+                    const mobileCurrencyDisplay = document.getElementById('mobileCurrentCurrency');
+                    
+                    if (currencyDisplay) {
+                        currencyDisplay.textContent = `${selectedCurrency} (${currencySymbol})`;
+                    }
+                    
+                    if (mobileCurrencyDisplay) {
+                        mobileCurrencyDisplay.textContent = `${selectedCurrency} (${currencySymbol})`;
+                    }
+                    
+                    // Update all prices on the page
+                    updatePrices(selectedCurrency);
+                });
+            });
+            
+            // Initialize currency on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                // Get currency from localStorage or default to 'INR'
+                const savedCurrency = localStorage.getItem('preferredCurrency') || 'INR';
+                
+                // Update currency selector display
+                const currencyDisplay = document.getElementById('currentCurrency');
+                const mobileCurrencyDisplay = document.getElementById('mobileCurrentCurrency');
+                
+                if (currencyDisplay) {
+                    const symbols = {
+                        'INR': '₹', 'AED': 'د.إ', 'SGD': '$', 'PHP': '₱',
+                        'USD': '$', 'EUR': '€', 'IDR': 'Rp'
+                    };
+                    const symbol = symbols[savedCurrency] || '₹';
+                    currencyDisplay.textContent = `${savedCurrency} (${symbol})`;
+                }
+                
+                if (mobileCurrencyDisplay) {
+                    const symbols = {
+                        'INR': '₹', 'AED': 'د.إ', 'SGD': '$', 'PHP': '₱',
+                        'USD': '$', 'EUR': '€', 'IDR': 'Rp'
+                    };
+                    const symbol = symbols[savedCurrency] || '₹';
+                    mobileCurrencyDisplay.textContent = `${savedCurrency} (${symbol})`;
+                }
+                
+                // Update all prices on the page
+                updatePrices(savedCurrency);
+            });
         </script>
 </body>
 
