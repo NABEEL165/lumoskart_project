@@ -3616,7 +3616,7 @@
                         <input type="hidden" name="page" value="home">
                         <span class="search-icon"><i class="fas fa-search"></i></span>
                         <input type="text" name="q" class="form-control search-bar"
-                            placeholder="Search influencers, products..." value="{{ request.GET.q|default:'' }}"
+                            placeholder="Search influencers, products..." data-placeholder-en="Search influencers, products..." data-placeholder-ar="ابحث عن المؤثرين، المنتجات..." data-placeholder-hi="प्रभावकों, उत्पादों को खोजें..." value="{{ request.GET.q|default:'' }}"
                             required>
                         {% if request.GET.q %}
                         <a href="{% url 'home' %}" class="btn btn-outline-light ms-2">Clear</a>
@@ -3634,6 +3634,7 @@
                         <ul class="dropdown-menu" aria-labelledby="languageDropdown">
                             <li><a class="dropdown-item lang-option" href="#" data-lang="en">English</a></li>
                             <li><a class="dropdown-item lang-option" href="#" data-lang="ar">Arabic</a></li>
+                            <li><a class="dropdown-item lang-option" href="#" data-lang="hi">Hindi</a></li>
                         </ul>
                     </div>
                     <a href="{% url 'register_customer' %}" class="btn btn-signup">Sign up</a>
@@ -3658,11 +3659,11 @@
         </div>
         <div class="offcanvas-body" style="background-color: #0f172a;">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}"><i
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}" data-en="Home" data-ar="الرئيسية" data-hi="होम"><i
                             class="fas fa-home me-2"></i>Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}"><i
+                <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}" data-en="About" data-ar="من نحن" data-hi="हमारे बारे में"><i
                             class="fas fa-info-circle me-2"></i>About</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}"><i class="fas fa-headset me-2"></i>Support</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}" data-en="Support" data-ar="الدعم" data-hi="सहायता"><i class="fas fa-headset me-2"></i>Support</a></li>
                 <!-- Language Selection in Mobile Menu -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="mobileLanguageDropdown" role="button"
@@ -3672,6 +3673,7 @@
                     <ul class="dropdown-menu" aria-labelledby="mobileLanguageDropdown">
                         <li><a class="dropdown-item lang-option" href="#" data-lang="en">English</a></li>
                         <li><a class="dropdown-item lang-option" href="#" data-lang="ar">Arabic</a></li>
+                        <li><a class="dropdown-item lang-option" href="#" data-lang="hi">Hindi</a></li>
                     </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'register_customer' %}"><i
@@ -3690,7 +3692,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" data-en="Logout" data-ar="تسجيل الخروج" data-hi="लॉग आउट"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
                 </li>
 
             </ul>
@@ -3707,7 +3709,7 @@
             <form action="{% url 'search' %}" method="get" class="d-flex align-items-center w-100">
                 <input type="hidden" name="page" value="home">
                 <input type="text" name="q" class="form-control search-bar"
-                    placeholder="Search influencers or products..." value="{{ request.GET.q|default:'' }}" required>
+                    placeholder="Search influencers or products..." data-placeholder-en="Search influencers or products..." data-placeholder-ar="ابحث عن المؤثرين أو المنتجات..." data-placeholder-hi="प्रभावकों या उत्पादों को खोजें..." value="{{ request.GET.q|default:'' }}" required>
                 <button type="submit" class="btn btn-primary ms-2">
                     <i class="fas fa-search"></i>
                 </button>
@@ -3739,8 +3741,8 @@
         <!-- Featured Influencers -->
         <section class="artist-section">
             <div class="section-title-bar mb-4">
-                <h2> Influencers</h2>
-                <a href="{% url 'influencer_list' %}" class="view-all-btn">Show all</a>
+                <h2 data-en=" Influencers" data-ar=" المؤثرون" data-hi=" प्रभावक"> Influencers</h2>
+                <a href="{% url 'influencer_list' %}" class="view-all-btn" data-en="Show all" data-ar="عرض الكل" data-hi="सभी दिखाएं">Show all</a>
             </div>
             <div class="influencers-section">
                 <div class="swiper influencers-swiper">
@@ -3757,14 +3759,14 @@
                                     {% endif %}
                                 </div>
                                 <h3 class="influencer-name">{{ influencer.get_full_name|default:influencer.username }}</h3>
-                                <p class="product-count">{{ influencer.products.count }} Products</p>
+                                <p class="product-count">{{ influencer.products.count }} <span data-en="Products" data-ar="منتجات" data-hi="उत्पाद">Products</span></p>
                             </a>
                         </div>
                         {% endif %}
                         {% empty %}
                         <div class="swiper-slide">
                             <div class="empty-state">
-                                <p>No influencers registered yet.</p>
+                                <p data-en="No influencers registered yet." data-ar="لا توجد مؤثرون مسجلون بعد." data-hi="अभी तक कोई प्रभावक पंजीकृत नहीं है।">No influencers registered yet.</p>
                             </div>
                         </div>
                         {% endfor %}
@@ -3783,7 +3785,7 @@
             <div class="section-title-bar">
                 <div>
                     <h2>{{ category.name }}</h2>
-                    <p class="category-description">Explore our collection of {{ category.name|lower }}</p>
+                    <p class="category-description" data-en="Explore our collection of " data-ar="استكشف مجموعتنا من " data-hi="हमारे संग्रह का पता लगाएं ">Explore our collection of {{ category.name|lower }}</p>
                 </div>
                 <a href="{% url 'product_lists' %}?category={{ category.id }}" class="view-all-btn">View All {{
                     category.name }}</a>
@@ -3940,8 +3942,8 @@
         <!-- Instagram Reels Section -->
         <section class="video-shorts-section">
             <div class="section-header">
-                <h2 class="section-title">Videos</h2>
-                <p class="section-description">Watch engaging videos from our top influencers</p>
+                <h2 class="section-title" data-en="Videos" data-ar="فيديوهات" data-hi="वीडियो">Videos</h2>
+                <p class="section-description" data-en="Watch engaging videos from our top influencers" data-ar="شاهد مقاطع الفيديو الممتعة من مؤثرينا الأعلى" data-hi="हमारे शीर्ष प्रभावकों से आकर्षक वीडियो देखें">Watch engaging videos from our top influencers</p>
             </div>
 
             {% if reels_videos %}
@@ -3996,13 +3998,13 @@
                     {% if product %}
                     <a href="{% url 'view_influencer_products' product.influencer.id %}"
                         class="reel-add-to-cart-bar buy-now-btn">
-                        Buy Now <i class="fas fa-caret-down"></i>
+                        <span data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">Buy Now</span> <i class="fas fa-caret-down"></i>
                     </a>
                     {% else %}
                     <div class="reel-add-to-cart-bar disabled" style="opacity: 0.5; cursor: not-allowed;">
                         <a href="javascript:void(0);" class="video-shorts-action-btn video-shorts-buy"
                             id="video-shorts-buy-btn">
-                            <i class="fas fa-shopping-cart"></i> Buy Now
+                            <i class="fas fa-shopping-cart"></i> <span data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">Buy Now</span>
                         </a>
                     </div>
                     {% endif %}
@@ -4012,8 +4014,8 @@
             </div>
             {% else %}
             <div class="empty-state">
-                <h4>No Reels Yet</h4>
-                <p>Be the first influencer to post!</p>
+                <h4 data-en="No Reels Yet" data-ar="لا توجد مقاطع فيديو بعد" data-hi="अभी तक कोई रील्स नहीं">No Reels Yet</h4>
+                <p data-en="Be the first influencer to post!" data-ar="كن أول مؤثر ينشر!" data-hi="पोस्ट करने वाले पहले प्रभावक बनें!">Be the first influencer to post!</p>
             </div>
             {% endif %}
         </section>
@@ -4102,7 +4104,7 @@
                 <div class="footer-grid">
                     <!-- About Us -->
                     <div class="footer-column">
-                        <h3>About Us</h3>
+                        <h3 data-en="About Us" data-ar="من نحن" data-hi="हमारे बारे में">About Us</h3>
                         <ul class="footer-links">
                             <li><a href="{% url 'about_us' %}">Our Story</a></li>
                             <li><a href="#">Careers</a></li>
@@ -4113,7 +4115,7 @@
 
                     <!-- Terms & Conditions -->
                     <div class="footer-column">
-                        <h3>Terms & Conditions</h3>
+                        <h3 data-en="Terms & Conditions" data-ar="الشروط والأحكام" data-hi="नियम एवं शर्तें">Terms & Conditions</h3>
                         <ul class="footer-links">
                             <li><a href="#">Terms of Service</a></li>
                             <li><a href="#">Privacy Policy</a></li>
@@ -4124,7 +4126,7 @@
 
                     <!-- Connect With Us -->
                     <div class="footer-column">
-                        <h3>Connect With Us</h3>
+                        <h3 data-en="Connect With Us" data-ar="تواصل معنا" data-hi="हमसे संपर्क करें">Connect With Us</h3>
                         <ul class="footer-links">
                             <li><a href="{% url 'support' %}">Contact Us</a></li>
                             <li><a href="{% url 'support' %}">FAQs</a></li>
@@ -4140,7 +4142,7 @@
 
                     <!-- Let Us Help You -->
                     <div class="footer-column">
-                        <h3>Let Us Help You</h3>
+                        <h3 data-en="Let Us Help You" data-ar="دعنا نساعدك" data-hi="हम आपकी सहायता करें">Let Us Help You</h3>
                         <ul class="footer-links">
                             <li><a href="#">Customer Service</a></li>
                             <li><a href="#">Track Your Order</a></li>
@@ -4171,29 +4173,153 @@
         <script>
             // Handle Add to Cart and Buy Now buttons
             document.addEventListener('DOMContentLoaded', function () {
-                // Handle language selection
+                // Handle language selection for entire website
                 const languageItems = document.querySelectorAll('.lang-option');
                 languageItems.forEach(item => {
                     item.addEventListener('click', function (e) {
                         e.preventDefault();
                         const selectedLang = this.getAttribute('data-lang');
-                        const languageName = selectedLang === 'en' ? 'English' : 'Arabic';
-
-                        // Update the displayed language in both desktop and mobile
-                        document.getElementById('currentLanguage').textContent = languageName;
-                        document.getElementById('mobileCurrentLanguage').textContent = languageName;
-
-                        // Add visual feedback
-                        this.closest('.dropdown-menu').previousElementSibling.classList.add('btn-success');
-                        setTimeout(() => {
-                            this.closest('.dropdown-menu').previousElementSibling.classList.remove('btn-success');
-                        }, 1000);
-
-                        // In a real implementation, you would:
-                        // 1. Set a language cookie or session variable
-                        // 2. Redirect to the same page with the language parameter
-                        // 3. Or use AJAX to dynamically change the content
+                        
+                        // Store selected language in localStorage for entire website
+                        localStorage.setItem('preferredLanguage', selectedLang);
+                        
+                        // Reload the page to apply language changes
+                        window.location.reload();
                     });
+                });
+                
+                // Function to apply language translations
+                function applyLanguage(langCode) {
+                    // Define translation objects
+                    const translations = {
+                        'en': {
+                            'home': 'Home',
+                            'about': 'About',
+                            'support': 'Support',
+                            'logout': 'Logout',
+                            'searchPlaceholder': 'Who\'s your favorite influencer',
+                            'viewAll': 'View All',
+                            'topInfluencers': '🌟 Top Influencers',
+                            'influencerBio': 'Discover products curated by our most trusted influencers and content creators who bring you the latest trends and highest quality items.',
+                            'featuredProducts': '🛒 Featured Products',
+                            'productPage': 'Browse our complete collection of premium products from various categories, all recommended by trusted influencers and brands.',
+                            'trendingReels': '🎥 Trending Reels',
+                            'watchVideos': 'Watch engaging videos from our top influencers',
+                            'noReels': 'No Reels Yet',
+                            'firstPost': 'Be the first influencer to post!',
+                            'buyNow': 'Buy Now',
+                            'noProducts': 'No products available yet. Stay tuned for amazing deals!',
+                            'noInfluencers': 'No influencers available right now. Check back soon for amazing content!'
+                        },
+                        'ar': {
+                            'home': 'الرئيسية',
+                            'about': 'من نحن',
+                            'support': 'الدعم',
+                            'logout': 'تسجيل الخروج',
+                            'searchPlaceholder': 'من هو مؤثرك المفضل',
+                            'viewAll': 'عرض الكل',
+                            'topInfluencers': '🌟 المؤثرون الأعلى',
+                            'influencerBio': 'اكتشف المنتجات التي يختارها مؤثرونا الموثوقون وصناع المحتوى الذين ي bringing لك أحدث الاتجاهات وأعلى جودة.',
+                            'featuredProducts': '🛒 المنتجات المميزة',
+                            'productPage': 'تصفح مجموعتنا الكاملة من المنتجات المتميزة من فئات مختلفة، كلها موصى بها من قبل المؤثرين والعلامات التجارية الموثوقة.',
+                            'trendingReels': '🎥 مقاطع الفيديو الرائجة',
+                            'watchVideos': 'شاهد مقاطع الفيديو الممتعة من مؤثرينا الأعلى',
+                            'noReels': 'لا توجد مقاطع فيديو بعد',
+                            'firstPost': 'كن أول مؤثر ينشر!',
+                            'buyNow': 'اشتري الآن',
+                            'noProducts': 'لا توجد منتجات متاحة بعد. تابع معنا للحصول على عروض مذهلة!',
+                            'noInfluencers': 'لا توجد مؤثرون متاحون الآن. تحقق مرة أخرى قريباً من المحتوى المذهل!'
+                        },
+                        'hi': {
+                            'home': 'होम',
+                            'about': 'हमारे बारे में',
+                            'support': 'सहायता',
+                            'logout': 'लॉग आउट',
+                            'searchPlaceholder': 'आपका पसंतीदा प्रभावक कौन है',
+                            'viewAll': 'सभी देखें',
+                            'topInfluencers': '🌟 शीर्ष प्रभावक',
+                            'influencerBio': 'हमारे सबसे भरोसेमंद प्रभावकों और सामग्री निर्माताओं द्वारा चुने गए उत्पादों की खोज करें जो आपको नवीनतम रुझान और उच्चतम गुणवत्ता वाले वस्तुएं लाते हैं।',
+                            'featuredProducts': '🛒 विशेष रूप से प्रदर्शित उत्पाद',
+                            'productPage': 'विभिन्न श्रेणियों से प्रीमियम उत्पादों के हमारे पूर्ण संग्रह को ब्राउज़ करें, जिन्हें भरोसेमंद प्रभावकों और ब्रांडों द्वारा अनुशंसित किया गया है।',
+                            'trendingReels': '🎥 ट्रेंडिंग रील्स',
+                            'watchVideos': 'हमारे शीर्ष प्रभावकों से आकर्षक वीडियो देखें',
+                            'noReels': 'अभी तक कोई रील्स नहीं',
+                            'firstPost': 'पोस्ट करने वाले पहले प्रभावक बनें!',
+                            'buyNow': 'अभी खरीदें',
+                            'noProducts': 'अभी तक कोई उत्पाद उपलब्ध नहीं है। शानदार सौदों के लिए बने रहें!',
+                            'noInfluencers': 'अभी कोई प्रभावक उपलब्ध नहीं है। शानदार सामग्री के लिए जल्द ही वापस आएँ!'
+                        }
+                    };
+                    
+                    const lang = translations[langCode] || translations['en'];
+                    
+                    // Update text content based on language
+                    document.querySelectorAll('[data-en]').forEach(element => {
+                        const enText = element.getAttribute('data-en');
+                        const arText = element.getAttribute('data-ar');
+                        const hiText = element.getAttribute('data-hi');
+                        
+                        if (langCode === 'ar' && arText) {
+                            element.textContent = arText;
+                        } else if (langCode === 'hi' && hiText) {
+                            element.textContent = hiText;
+                        } else if (langCode === 'en' && enText) {
+                            element.textContent = enText;
+                        }
+                    });
+                    
+                    // Update placeholder text
+                    document.querySelectorAll('[data-placeholder-en]').forEach(element => {
+                        const enPlaceholder = element.getAttribute('data-placeholder-en');
+                        const arPlaceholder = element.getAttribute('data-placeholder-ar');
+                        const hiPlaceholder = element.getAttribute('data-placeholder-hi');
+                        
+                        if (langCode === 'ar' && arPlaceholder) {
+                            element.placeholder = arPlaceholder;
+                        } else if (langCode === 'hi' && hiPlaceholder) {
+                            element.placeholder = hiPlaceholder;
+                        } else if (langCode === 'en' && enPlaceholder) {
+                            element.placeholder = enPlaceholder;
+                        }
+                    });
+                    
+                    // Update title attributes
+                    document.querySelectorAll('[data-title-en]').forEach(element => {
+                        const enTitle = element.getAttribute('data-title-en');
+                        const arTitle = element.getAttribute('data-title-ar');
+                        const hiTitle = element.getAttribute('data-title-hi');
+                        
+                        if (langCode === 'ar' && arTitle) {
+                            element.title = arTitle;
+                        } else if (langCode === 'hi' && hiTitle) {
+                            element.title = hiTitle;
+                        } else if (langCode === 'en' && enTitle) {
+                            element.title = enTitle;
+                        }
+                    });
+                }
+                
+                // Initialize language on page load
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Get language from localStorage for entire website or default to 'en'
+                    const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+                    applyLanguage(savedLang);
+                    
+                    // Update language selector display
+                    const langDisplay = document.getElementById('currentLanguage');
+                    const mobileLangDisplay = document.getElementById('mobileCurrentLanguage');
+                    
+                    if (langDisplay) {
+                        if (savedLang === 'ar') langDisplay.textContent = 'العربية';
+                        else if (savedLang === 'hi') langDisplay.textContent = 'हिंदी';
+                        else langDisplay.textContent = 'English';
+                    }
+                    
+                    if (mobileLangDisplay) {
+                        if (savedLang === 'ar') mobileLangDisplay.textContent = 'العربية';
+                        else if (savedLang === 'hi') mobileLangDisplay.textContent = 'हिंदी';
+                        else mobileLangDisplay.textContent = 'English';
+                    }
                 });
 
                 // Handle all button clicks in a single event listener to avoid conflicts
