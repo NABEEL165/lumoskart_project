@@ -953,13 +953,21 @@
 
         .banner-card {
             background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+
             border-radius: 16px;
             padding: 3rem 2rem;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 30px rgba(129, 140, 248, 0.3);
         }
-
+.banner-card {
+    background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(129, 140, 248, 0.3);
+}
         .banner-card h2 {
             font-size: 2rem;
             color: white;
@@ -2966,7 +2974,7 @@
         border-color: var(--color-primary);
     }
 
-  
+
     .instagram-reels-widget {
         background: #000;
         border-radius: 20px;
