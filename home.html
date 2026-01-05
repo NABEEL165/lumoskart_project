@@ -1,7 +1,7 @@
-
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,27 +9,1286 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- Preconnect for Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <!-- Fonts -->
-    <link href="https://fonts.cdnfonts.com/css/universal-serif" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap 5 Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- Swiper.js CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" rel="stylesheet">
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
 
-    <!-- Custom CSS -->
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        .navbar {
+            background-color: #1e293b !important;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand img:hover {
+            transform: scale(1.05);
+        }
+
+        .search-container {
+            position: relative;
+            margin: 0 20px;
+        }
+
+        .search-bar {
+            background-color: #334155;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            padding-left: 45px;
+            color: #e2e8f0;
+            width: 100%;
+            max-width: 500px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            background-color: #475569;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+            color: #e2e8f0;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .nav-link {
+            color: #cbd5e1 !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin: 0 2px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #818cf8 !important;
+            background-color: rgba(129, 140, 248, 0.1);
+        }
+
+        .btn-signup {
+            color: #94a3b8 !important;
+            background-color: transparent;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-signup:hover {
+            color: #e2e8f0 !important;
+            background-color: #475569;
+        }
+
+        .btn-login {
+            background-color: black;
+            color: blue;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background-color: #6366f1;
+            transform: translateY(-2px);
+        }
+
+        .btn-open-app {
+            background-color: #10b981;
+            color: blue;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-open-app:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+
+        .main-content-area {
+            padding: 2rem 1rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        .section-title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .section-title-bar h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin: 0;
+        }
+
+        .view-all-btn {
+            background-color: transparent;
+            color: #818cf8;
+            border: 1px solid #818cf8;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .view-all-btn:hover {
+            background-color: #818cf8;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .influencers-section {
+            padding: 0 1rem;
+        }
+
+        .influencers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        /* Horizontal Scroll for Influencers */
+        .influencers-section {
+            overflow-x: auto;
+            padding: 1rem 0;
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .influencers-section::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, Opera */
+        }
+
+        .influencers-scroll-container {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        .influencers-grid.horizontal {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            gap: 1.5rem;
+            padding: 0;
+        }
+
+        .influencers-grid.horizontal::-webkit-scrollbar {
+            display: none;
+        }
+
+        .influencer-card.horizontal {
+            flex: 0 0 auto;
+            min-width: 180px;
+        }
+
+        .influencer-card {
+            background-color: #1e293b;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .influencer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background-color: #334155;
+        }
+
+        .influencer-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 1rem;
+            border: 3px solid #818cf8;
+            background-color: #334155;
+        }
+
+        .influencer-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .influencer-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-count {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 1rem 0;
+        }
+
+        .product-card {
+            background-color: #1e293b;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-img-wrapper {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .product-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-img-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .promoted-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: linear-gradient(135deg, #818cf8, #6366f1);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(129, 140, 248, 0.4);
+            text-align: center;
+        }
+
+        .product-details {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .heart-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: color 0.2s;
+        }
+
+        .heart-btn:hover,
+        .heart-btn.liked {
+            color: #f43f5e;
+        }
+
+        .instagram-reels-widget {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem 1rem;
+            border: 1px solid #334155;
+        }
+
+        .reels-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .reels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .reel-widget-card {
+            aspect-ratio: 9/16;
+            background: #334155;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* New Reel Card Styles based on image */
+        .reel-discount-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 6;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+        }
+
+        .reel-views-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .reel-product-overlay {
+            position: absolute;
+            bottom: 50px;
+            /* Space for Buy Now button */
+            left: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 5;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .reel-product-thumb {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            flex-shrink: 0;
+        }
+
+        .reel-product-info {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .reel-product-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+        }
+
+        .reel-product-price-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reel-current-price {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .reel-original-price {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: line-through;
+            font-size: 0.75rem;
+        }
+
+        .reel-add-to-cart-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 48px;
+            background: linear-gradient(135deg, #e11d48, #be123c);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            gap: 6px;
+            z-index: 6;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            width: 100%;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            box-shadow: 0 -2px 10px rgba(225, 29, 72, 0.3);
+        }
+
+        .reel-add-to-cart-bar:hover {
+            background: linear-gradient(135deg, #be123c, #9f1239);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 -4px 16px rgba(225, 29, 72, 0.5);
+        }
+
+        .reel-add-to-cart-bar i {
+            font-size: 0.9rem;
+        }
+
+        .reel-add-to-cart-bar.disabled {
+            background: #4b5563;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .reel-add-to-cart-bar.disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Video Shorts Player */
+        .video-shorts-player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+        }
+        
+        @media (max-width: 768px) {
+            .video-shorts-player {
+                background: #000;
+            }
+        }
+
+        .video-shorts-player.active {
+            display: flex;
+        }
+
+        .video-shorts-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .video-shorts-video-container {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0; /* Remove border radius for full screen mobile experience */
+            transition: all 0.3s ease;
+            max-height: 100vh;
+            aspect-ratio: 9/16; /* Maintain vertical/portrait aspect ratio */
+        }
+        
+        @media (max-width: 768px) {
+            .video-shorts-video-container {
+                max-height: 100vh;
+                border-radius: 0; /* Full screen on mobile */
+            }
+        }
+
+        .video-shorts-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 9/16; /* Vertical/portrait aspect ratio like Instagram Reels */
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Mobile-specific optimizations */
+        @media (max-width: 768px) {
+            .video-shorts-player {
+                background: #000;
+            }
+            
+            .video-shorts-content {
+                width: 100%;
+                height: 100vh;
+            }
+            
+            .video-shorts-video-container {
+                flex: 1;
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .video-shorts-video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                aspect-ratio: 9/16; /* Vertical/portrait aspect ratio like Instagram Reels */
+            }
+            
+            .video-shorts-overlay {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 15px;
+                background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+                color: white;
+            }
+            
+            .video-shorts-actions {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .video-shorts-action-btn {
+                flex-direction: row;
+                align-items: center;
+                gap: 5px;
+            }
+            
+            .video-shorts-pagination {
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+        
+        /* Desktop-specific optimizations */
+        @media (min-width: 769px) {
+            .video-shorts-player {
+                background: rgba(0, 0, 0, 0.95);
+            }
+            
+            .video-shorts-content {
+                max-width: 450px;
+                height: calc(100vh - 40px);
+                margin: 20px auto;
+                border-radius: 20px;
+                overflow: hidden;
+            }
+            
+            .video-shorts-video-container {
+                flex: 1;
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .video-shorts-video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                aspect-ratio: 9/16; /* Vertical/portrait aspect ratio like Instagram Reels */
+            }
+            
+            .video-shorts-actions {
+                flex-direction: row;
+                gap: 15px;
+                justify-content: center;
+            }
+            
+            .video-shorts-action-btn {
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
+            
+            .video-shorts-pagination {
+                position: absolute;
+                right: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        .video-shorts-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .video-shorts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(18, 18, 18, 0.7);
+            border-radius: 8px;
+            margin: 10px;
+            pointer-events: auto;
+        }
+
+        .video-shorts-header .video-shorts-close {
+            pointer-events: auto;
+        }
+
+        .video-shorts-product-info {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            margin: 10px;
+            pointer-events: auto;
+        }
+
+        .video-shorts-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            margin: 10px;
+            pointer-events: auto;
+        }
+
+        .video-shorts-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 20px;
+            margin: 10px;
+            pointer-events: auto;
+        }
+
+        .video-shorts-pagination-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .video-shorts-pagination-dot.active {
+            background: white;
+        }
+
+        .video-shorts-title {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .video-shorts-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .video-shorts-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .video-shorts-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .video-shorts-video-container {
+            width: 100%;
+            max-width: 400px;
+            height: 70vh;
+            position: relative;
+        }
+
+        .video-shorts-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-shorts-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+        }
+
+        .video-shorts-product-info {
+            margin-bottom: 15px;
+        }
+
+        .video-shorts-product-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .video-shorts-influencer {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .video-shorts-description {
+            color: #e3e3e3;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .video-shorts-products {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .product-tag {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .video-shorts-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .video-shorts-action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            min-width: 100px;
+            justify-content: center;
+        }
+
+        .video-shorts-action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Improve overlay layout for better button alignment */
+        .video-shorts-overlay {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 25px;
+            gap: 15px;
+        }
+
+        /* Better positioning for the action buttons container */
+        .video-shorts-actions {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Consistent button sizing */
+        .video-shorts-action-btn {
+            flex: 1;
+            min-width: auto;
+        }
+
+        /* Specific width for buttons to ensure proper alignment */
+        .video-shorts-like,
+        .video-shorts-share,
+        .video-shorts-buy {
+            flex: 1;
+            margin: 0 2px;
+        }
+
+        .video-shorts-pagination {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .video-shorts-pagination-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .video-shorts-pagination-dot.active {
+            background: white;
+            transform: scale(1.4);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Add hover effect for pagination dots */
+        .video-shorts-pagination-dot:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.2);
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-top: 2px solid #334155;
+            padding: 4rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #e2e8f0;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #818cf8, #6366f1);
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            display: block;
+            padding: 0.25rem 0;
+        }
+
+        .footer-links a:hover {
+            color: #818cf8;
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #334155;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: #818cf8;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 2rem;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .banner-section {
+            margin-bottom: 3rem;
+        }
+
+        .banner-card {
+            background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(129, 140, 248, 0.3);
+        }
+.banner-card {
+    background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(129, 140, 248, 0.3);
+}
+        .banner-card h2 {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .banner-card p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .whatsapp-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+        }
+
+        .whatsapp-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: whatsappPulse 2s infinite;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        .whatsapp-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+        }
+
+        @keyframes whatsappPulse {
+            0% {
+                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7);
+            }
+
+            100% {
+                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .search-results-feedback {
+            background-color: #1e293b;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #818cf8;
+        }
+
+        .search-results-feedback p {
+            margin: 0;
+            color: #e2e8f0;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 0;
+            }
+
+            .section-title-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .section-title-bar h2 {
+                font-size: 1.5rem;
+            }
+
+            .influencers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 1rem;
+            }
+
+            .influencer-img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .product-img-wrapper {
+                height: 250px;
+            }
+
+            .reels-grid {
+                gap: 12px;
+                padding: 10px 5px;
+            }
+
+            .reel-widget-card {
+                width: 160px;
+            }
+
+            .instagram-reels-widget {
+                margin: 2rem 0.5rem;
+                padding: 1.5rem;
+            }
+
+            .footer {
+                padding: 3rem 1rem 1.5rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .search-container {
+                margin: 0 10px;
+            }
+
+            .whatsapp-widget {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .influencers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .influencer-img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .influencer-name {
+                font-size: 0.95rem;
+            }
+
+            .product-count {
+                font-size: 0.8rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-img-wrapper {
+                height: 200px;
+            }
+
+            .product-title {
+                font-size: 1.1rem;
+            }
+
+            .product-price {
+                font-size: 1.3rem;
+            }
+
+            .reels-grid {
+                gap: 10px;
+                padding: 10px 5px;
+            }
+
+            .reel-widget-card {
+                width: 140px;
+            }
+
+            .navbar-brand img {
+                height: 40px;
+            }
+
+            .search-bar {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <style>
     :root {
@@ -63,7 +1322,12 @@
         text-decoration: none;
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
         margin-bottom: 1rem;
         font-weight: 600;
     }
@@ -99,12 +1363,14 @@
         top: 0;
         left: 0;
         z-index: 99;
-        height: 70px; /* Reduced for better mobile fit */
+        height: 70px;
+        /* Reduced for better mobile fit */
     }
 
     .navbar-brand img {
         width: 100%;
-        max-width: 180px; /* Base size for desktop */
+        max-width: 180px;
+        /* Base size for desktop */
         height: auto;
         transition: transform 0.3s ease;
     }
@@ -191,7 +1457,9 @@
         width: 100%;
     }
 
-    .btn-signup, .btn-login, .btn-open-app {
+    .btn-signup,
+    .btn-login,
+    .btn-open-app {
         font-size: 18px;
         padding: 6px 12px;
         transition: all 0.3s ease;
@@ -208,13 +1476,15 @@
         transform: scale(1.05);
     }
 
-    .btn-login, .btn-open-app {
+    .btn-login,
+    .btn-open-app {
         background-color: #fff;
         color: #000;
         border-radius: 20px;
     }
 
-    .btn-login:hover, .btn-open-app:hover {
+    .btn-login:hover,
+    .btn-open-app:hover {
         background-color: #f0f0f0;
         transform: scale(1.05);
     }
@@ -251,7 +1521,8 @@
 
     .offcanvas-title img {
         width: 100%;
-        max-width: 140px; /* Adjusted for off-canvas */
+        max-width: 140px;
+        /* Adjusted for off-canvas */
         height: auto;
     }
 
@@ -461,6 +1732,48 @@
         overflow: hidden;
     }
 
+    .influencers-swiper {
+        padding: 20px 0;
+    }
+
+    .influencers-swiper .swiper-slide {
+        display: flex;
+        justify-content: center;
+    }
+
+    .influencers-swiper .swiper-wrapper {
+        padding: 10px 0;
+    }
+
+    .swiper-button-next.influencers-next,
+    .swiper-button-prev.influencers-prev {
+        color: var(--color-primary);
+        background: rgba(255, 255, 255, 0.8);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-top: -20px;
+    }
+
+    .swiper-button-next.influencers-next:hover,
+    .swiper-button-prev.influencers-prev:hover {
+        background: white;
+    }
+
+    .swiper-pagination.influencers-pagination {
+        bottom: 0 !important;
+    }
+
+    .swiper-pagination-bullet {
+        background: var(--color-primary);
+        opacity: 0.5;
+    }
+
+    .swiper-pagination-bullet-active {
+        opacity: 1;
+        background: var(--color-primary);
+    }
+
     .influencers-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -469,15 +1782,19 @@
     }
 
     .influencer-card {
-        min-width: 220px;
+        min-width: 160px;
+        width: 160px;
         background-color: #1c1c1c;
         border-radius: 8px;
-        padding: 20px;
+        padding: 15px 10px;
         text-align: center;
         transition: all 0.4s ease-in-out;
         cursor: pointer;
         transform: scale(1) translateY(0px);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .influencer-card:hover {
@@ -487,8 +1804,8 @@
     }
 
     .influencer-img {
-        width: 180px;
-        height: 180px;
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
         background-color: #252525;
         margin: 0 auto;
@@ -496,7 +1813,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 24px;
+        margin-bottom: 12px;
         transition: transform 0.4s ease-in-out;
         border: 3px solid rgba(255, 255, 255, 0.1);
     }
@@ -513,16 +1830,22 @@
         object-position: center;
     }
 
-    .influencer-name, .product-title {
+    .influencer-name,
+    .product-title {
         font-weight: 600;
         margin-bottom: 5px;
-        font-size: 1.2rem;
+        font-size: 1rem;
         color: var(--heading-color);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
-    .product-count, .product-brand {
+    .product-count,
+    .product-brand {
         color: var(--text-color);
-        font-size: 1.2rem;
+        font-size: 0.9rem;
+        margin-top: 5px;
     }
 
     .products-grid {
@@ -557,9 +1880,9 @@
     }
 
     .product-img img {
-        height: 40vh;
-        object-fit: cover;
         width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .product-details {
@@ -569,6 +1892,9 @@
     .product-influencer {
         font-size: 0.85rem;
         color: #bbb;
+        margin: 8px 0;
+        font-style: italic;
+        display: block;
     }
 
     .product-price {
@@ -679,9 +2005,11 @@
         0% {
             box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
         }
+
         50% {
             box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7);
         }
+
         100% {
             box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
         }
@@ -1182,13 +2510,16 @@
             bottom: 20px;
             right: 20px;
         }
+
         .whatsapp-button {
             width: 50px;
             height: 50px;
         }
+
         .whatsapp-button i {
             font-size: 28px;
         }
+
         .whatsapp-tooltip {
             display: none;
         }
@@ -1215,10 +2546,12 @@
             bottom: 15px;
             right: 15px;
         }
+
         .whatsapp-button {
             width: 45px;
             height: 45px;
         }
+
         .whatsapp-button i {
             font-size: 24px;
         }
@@ -1263,8 +2596,10 @@
             height: 100%;
             max-height: 100%;
         }
+
         .navbar-brand img {
-            max-width: 200px; /* Larger logo for wide screens */
+            max-width: 200px;
+            /* Larger logo for wide screens */
         }
     }
 
@@ -1272,6 +2607,7 @@
         .sidebar-panel {
             max-width: 250px;
         }
+
         .navbar-brand img {
             max-width: 160px;
         }
@@ -1281,6 +2617,7 @@
         .mobile-view {
             display: none !important;
         }
+
         .desktop-view {
             display: flex !important;
         }
@@ -1290,68 +2627,89 @@
         .desktop-view {
             display: none !important;
         }
+
         .mobile-view {
             display: flex !important;
         }
+
         .navbar {
             padding: 10px 15px;
             height: auto;
             min-height: 60px;
         }
+
         .navbar-brand img {
-            max-width: 140px; /* Adjusted for tablets */
+            max-width: 140px;
+            /* Adjusted for tablets */
         }
+
         .btn-open-app {
             font-size: 14px;
             padding: 8px 16px;
         }
+
         .search-container {
             margin: 0;
         }
-        .swiper-button-prev, .swiper-button-next {
+
+        .swiper-button-prev,
+        .swiper-button-next {
             width: 30px;
             height: 30px;
         }
-        .swiper-button-prev::after, .swiper-button-next::after {
+
+        .swiper-button-prev::after,
+        .swiper-button-next::after {
             font-size: 1rem;
         }
+
         .swiper-button-prev {
             left: 2px;
         }
+
         .swiper-button-next {
             right: 2px;
         }
+
         .layout-wrapper {
             flex-direction: column;
             max-height: 100%;
             gap: 10px;
         }
+
         .sidebar-panel {
             order: 2;
             max-width: 100%;
         }
+
         .main-content-area {
             order: 1;
             padding: 1rem;
             max-height: 100%;
         }
+
         .influencers-grid {
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 15px;
         }
+
         .products-grid {
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 15px;
         }
+
         .product-img img {
             height: 35vh;
         }
+
         .product-title {
             font-size: 1.4rem;
         }
+
         .product-influencer {
             font-size: 0.9rem;
         }
+
         .product-price {
             font-size: 1.5rem;
         }
@@ -1361,135 +2719,176 @@
         body {
             font-size: 12px;
         }
+
         .navbar {
             padding: 8px 10px;
         }
+
         .navbar-brand img {
-            max-width: 120px; /* Smaller logo for mobile */
+            max-width: 120px;
+            /* Smaller logo for mobile */
         }
+
         .section-title-bar h2 {
             font-size: 1.3rem;
         }
+
         .section-title-bar a {
             font-size: 0.9rem;
         }
+
         .influencer-card {
             min-width: 120px;
             padding: 15px;
         }
+
         .influencer-img {
             width: 100px;
             height: 100px;
         }
+
         .influencer-name {
             font-size: 1rem;
         }
+
         .product-count {
             font-size: 0.85rem;
         }
+
         .products-grid {
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 15px;
         }
+
         .product-img img {
             height: 30vh;
         }
+
         .add-to-cart {
             width: 40px;
             height: 40px;
         }
+
         .add-to-cart i {
             font-size: 22px;
         }
+
         .sidebar-title {
             font-size: 1.4rem;
         }
+
         .sidebar-section p {
             font-size: 1rem;
         }
+
         .sidebar-section button {
             font-size: 0.9rem;
             padding: 0.8rem;
         }
+
         .footer-links li a {
             font-size: 14px;
         }
+
         .whatsapp-widget {
             bottom: 20px;
             right: 20px;
         }
+
         .whatsapp-button {
             width: 55px;
             height: 55px;
         }
+
         .whatsapp-button i {
             font-size: 28px;
         }
+
         .whatsapp-tooltip {
             display: none;
         }
+
         .offcanvas-title img {
-            max-width: 120px; /* Adjusted for mobile off-canvas */
+            max-width: 120px;
+            /* Adjusted for mobile off-canvas */
         }
     }
 
     @media (max-width: 480px) {
         .navbar-brand img {
-            max-width: 100px; /* Smallest size for very small screens */
+            max-width: 100px;
+            /* Smallest size for very small screens */
         }
+
         .btn-open-app {
             font-size: 12px;
             padding: 6px 12px;
         }
+
         .influencers-grid {
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 10px;
         }
+
         .influencer-card {
             padding: 10px;
         }
+
         .influencer-img {
             width: 80px;
             height: 80px;
         }
+
         .influencer-name {
             font-size: 0.9rem;
         }
+
         .product-count {
             font-size: 0.75rem;
         }
+
         .products-grid {
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 10px;
         }
+
         .product-img img {
             height: 25vh;
         }
+
         .product-details {
             padding: 10px;
         }
+
         .product-title {
             font-size: 1.1rem;
         }
+
         .product-influencer {
             font-size: 0.75rem;
         }
+
         .product-price {
             font-size: 1.2rem;
         }
+
         .add-to-cart {
             width: 35px;
             height: 35px;
         }
+
         .add-to-cart i {
             font-size: 18px;
         }
+
         .section-title-bar h2 {
             font-size: 1.1rem;
         }
+
         .section-title-bar a {
             font-size: 0.8rem;
         }
+
         .offcanvas-title img {
             max-width: 100px;
         }
@@ -1532,6 +2931,7 @@
     .influencers-swiper .swiper-slide {
         padding: 0 5px;
     }
+
     .products-swiper .swiper-slide {
         padding: 0 5px;
     }
@@ -1541,23 +2941,31 @@
         width: 10px;
         background-color: #363636;
     }
+
     ::-webkit-scrollbar-thumb {
         background-color: #121212;
         border-radius: 7px;
         border: 7px solid #333333;
     }
+
     ::-webkit-scrollbar-track {
         background-color: #272727;
         border-radius: 7px;
     }
 
     /* Modern Button Effects */
-    .btn-signup, .btn-login, .btn-open-app, .view-all-btn {
+    .btn-signup,
+    .btn-login,
+    .btn-open-app,
+    .view-all-btn {
         position: relative;
         overflow: hidden;
     }
 
-    .btn-signup::before, .btn-login::before, .btn-open-app::before, .view-all-btn::before {
+    .btn-signup::before,
+    .btn-login::befor,
+    .btn-open-app::before,
+    .view-all-btn::before {
         content: '';
         position: absolute;
         top: 0;
@@ -1568,7 +2976,10 @@
         transition: 0.5s;
     }
 
-    .btn-signup:hover::before, .btn-login:hover::before, .btn-open-app:hover::before, .view-all-btn:hover::before {
+    .btn-signup:hover::before,
+    .btn-login:hover::before,
+    .btn-open-app:hover::before,
+    .view-all-btn:hover::before {
         left: 100%;
     }
 
@@ -1614,7 +3025,8 @@
 
     /* Admin Dashboard Button */
     .btn-admin {
-        background-color: #dc3545; /* Red color for admin */
+        background-color: #dc3545;
+        /* Red color for admin */
         color: white;
         border: none;
         padding: 8px 16px;
@@ -1624,160 +3036,610 @@
     }
 
     .btn-admin:hover {
-        background-color: #c82333; /* Darker red on hover */
+        background-color: #c82333;
+        /* Darker red on hover */
         color: white;
     }
 
+    /* Banner Styles */
+    .banner-section {
+        margin-bottom: 30px;
+    }
+
+    .banner-card {
+        background: linear-gradient(135deg, #1f1f1f 0%, #252525 100%);
+        border-radius: 16px;
+        padding: 40px 20px;
+        text-align: center;
+        border: 1px solid #333;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .banner-card h2 {
+        font-size: 1.8rem;
+        color: #fff;
+        margin-bottom: 10px;
+    }
+
+    .banner-card p {
+        font-size: 1rem;
+        color: #bbb;
+    }
+
+    /* Category A/B Pills */
+    .categories-scroll-section {
+        margin-bottom: 30px;
+    }
+
+    .categories-scroll {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        scrollbar-width: none;
+    }
+
+    .categories-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-pill {
+        padding: 8px 20px;
+        background-color: #1f1f1f;
+        border: 1px solid #333;
+        border-radius: 20px;
+        color: #ccc;
+        white-space: nowrap;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .category-pill:hover,
+    .category-pill.active {
+        background-color: var(--color-primary);
+        color: #000;
+        border-color: var(--color-primary);
+    }
 
 
+    .instagram-reels-widget {
+        background: #000;
+        border-radius: 20px;
+        padding: 30px 20px;
+        margin: 40px 10px;
+    }
 
+    /* Video Shorts Section Improvements */
+    .video-shorts-section {
+        position: relative;
+        padding: 20px 0;
+    }
 
+    .video-shorts-section .section-header {
+        margin-bottom: 25px;
+        padding: 0 10px;
+    }
 
-/*.reels-section {*/
-/*    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);*/
-/*    padding: 50px 20px;*/
-/*    border-radius: 25px;*/
-/*    margin: 30px 10px;*/
-/*}*/
-/*.reels-container {*/
-/*    display: flex;*/
-/*    overflow-x: auto;*/
-/*    gap: 20px;*/
-/*    padding: 15px;*/
-/*    scroll-snap-type: x mandatory;*/
-/*}*/
-/*.reel-card {*/
-/*    min-width: 320px;*/
-/*    background: black;*/
-/*    border-radius: 20px;*/
-/*    overflow: hidden;*/
-/*    box-shadow: 0 15px 30px rgba(0,0,0,0.5);*/
-/*}*/
-/*.reel-video {*/
-/*    width: 100%;*/
-/*    height: 520px;*/
-/*    object-fit: cover;*/
-/*}*/
-/*.reel-info {*/
-/*    padding: 15px;*/
-/*    color: white;*/
-/*}*/
-/*.tagged-products {*/
-/*    margin-top: 10px;*/
-/*}*/
-/*.reels-container::-webkit-scrollbar { display: none; }*/
+    .video-shorts-section .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #e3e3e3;
+        margin-bottom: 8px;
+    }
 
+    .video-shorts-section .section-description {
+        color: #b3b3b3;
+        font-size: 1rem;
+        margin: 0;
+    }
 
+    /* Horizontal Scrolling Container */
+    .reels-grid {
+        display: flex;
+        gap: 16px;
+        padding: 15px 10px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #333 #111;
+    }
 
-.instagram-reels-widget {
-    background: #000;
-    border-radius: 20px;
-    padding: 30px 20px;
-    margin: 40px 10px;
-}
+    /* Custom Scrollbar for Reels Grid */
+    .reels-grid::-webkit-scrollbar {
+        height: 8px;
+    }
 
-.reels-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
-    padding: 10px 5px;
-}
+    .reels-grid::-webkit-scrollbar-track {
+        background: #111;
+        border-radius: 10px;
+        margin: 0 10px;
+    }
 
-.reel-widget-card {
-    aspect-ratio: 9/16;
-    background: #111;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+    .reels-grid::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 10px;
+        transition: background 0.3s ease;
+    }
 
-.reel-widget-card:hover {
-    transform: scale(1.05);
-    z-index: 10;
-}
+    .reels-grid::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
 
-.reel-widget-card video {
-    border-radius: 12px;
-}
+    /* Reel Card Improvements */
+    .reel-widget-card {
+        position: relative;
+        flex: 0 0 auto;
+        width: 200px;
+        aspect-ratio: 9/16;
+        background: #1a1a1a;
+        border-radius: 16px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
 
-.play-icon-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.5);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(10px);
-}
+    .reel-widget-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        z-index: 10;
+    }
 
-.reel-overlay-gradient {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    background: linear-gradient(transparent, rgba(0,0,0,0.8));
-    pointer-events: none;
-}
+    .reel-widget-card video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 16px;
+    }
 
-.reel-info-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 2;
+    .play-icon-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .reel-overlay-gradient {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 120px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        pointer-events: none;
+    }
+
+    .reel-info-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+    }
+
+    .reel-action-buttons {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 3;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 20px;
+        padding: 8px;
+    }
+
+    .reel-action-buttons .btn {
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        color: #333;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0 2px;
+    }
+
+    .reel-action-buttons .btn:hover {
+        background: white;
+        transform: scale(1.1);
+    }
+
+    .reel-action-buttons .btn i {
+        font-size: 14px;
+    }
+
+    .artist-section {
+        padding: 20px 0;
+    }
+
+    .section-title-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .section-title-bar h2 {
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .view-all-btn {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .products-grid-container {
+        overflow-x: auto;
+        /* Allows horizontal scroll on very small screens if needed */
+    }
+
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 24px;
+        padding: 0 10px;
+    }
+
+    .product-card {
+        background: #fff;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease;
+        aspect-ratio: 9/16;
+    }
+
+    .product-card:hover {
+        transform: scale(1.02);
+    }
+
+    .product-img-wrapper {
+        position: relative;
+        height: 100%;
+        /* Tall image like reels */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f5f5f5;
+        padding: 8px;
+    }
+
+    .product-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 4px;
+    }
+
+    .promoted-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 6px 12px;
+        border-radius: 30px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .product-details {
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        color: white;
+    }
+
+    .product-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: white;
+        margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .rating .star {
+        font-size: 14px;
+        color: #ddd;
+    }
+
+    .rating .star.filled {
+        color: #ffc107;
+    }
+
+    .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 4px;
+    }
+
+    .product-price {
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .heart-btn {
+        background: none;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        color: #ccc;
+        transition: color 0.2s;
+    }
+
+    .heart-btn:hover,
+    .heart-btn.liked {
+        color: #e91e63;
+    }
+
+    /* Category Section Styles */
+    .category-section {
+        margin-bottom: 50px;
+        padding: 30px 0;
+        border-bottom: 1px solid #2a2a2a;
+    }
+
+    .category-section:last-of-type {
+        border-bottom: none;
+    }
+
+    .category-description {
+        color: #b3b3b3;
+        font-size: 0.95rem;
+        margin-top: 5px;
+        margin-bottom: 0;
+    }
+
+    /* Category Badge */
+    .category-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 5px 12px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        z-index: 3;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Product Description */
+    .product-description {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.85rem;
+        line-height: 1.4;
+        margin: 8px 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    /* Size Information */
+    .product-size-info {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.85rem;
+        margin: 6px 0;
+        padding: 4px 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        width: fit-content;
+    }
+
+    .product-size-info i {
+        font-size: 0.9rem;
+        color: #10b981;
+    }
+
+    /* Enhanced Rating Display */
+    .rating {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin: 6px 0;
+    }
+
+    .rating-count {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.8rem;
+        margin-left: 4px;
+    }
+
+    /* Enhanced Price Section */
+    .price-section {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .original-price {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.85rem;
+        text-decoration: line-through;
+    }
+
+    .discount-badge {
+        background: #10b981;
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+
+    /* Improved Product Footer */
+    .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        }
+
+        .product-img-wrapper {
+            height: 320px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .products-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .product-img-wrapper {
+            height: 200px;
+        }
+
+        .product-title {
+            font-size: 14px;
+        }
+
+        .product-price {
+            font-size: 16px;
+        }
+
+        /* Mobile Navbar Styles */
+        .navbar {
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-brand img {
+            height: 35px;
+        }
+
+        .search-container {
+            margin: 0 10px;
+            flex: 1;
+            max-width: none;
+        }
+
+        .search-bar {
+            max-width: none;
+            font-size: 14px;
+            padding: 10px 15px;
+            padding-left: 40px;
+        }
+
+        .nav-item {
+            margin: 0 5px;
+        }
+
+        .nav-link {
+            padding: 0.5rem 0.75rem !important;
+            font-size: 14px;
+        }
+
+        .btn-login,
+        .btn-signup,
+        .btn-open-app {
+            padding: 0.4rem 1rem;
+            font-size: 14px;
+        }
+    }
+    a {
+    color: var(--color-primary);  /* This is #00c7f7 (blue) */
+    text-decoration: none;
 }
 </style>
+
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a href="{% url 'home' %}" class="navbar-brand">
-                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="50" class="d-inline-block align-middle mr-2">
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="50"
+                    class="d-inline-block align-middle">
             </a>
 
             <div class="mobile-view d-flex align-items-center justify-content-end">
-                <a href="{% url 'login' %}" class="btn btn-open-app mx-auto">Login</a>
-                <button class="btn btn-search" data-bs-toggle="offcanvas" data-bs-target="#searchOffcanvas" aria-controls="searchOffcanvas">
-                    <i class="bi bi-search"></i>
+                <button class="btn btn-outline-light ms-2" data-bs-toggle="offcanvas" data-bs-target="#searchOffcanvas"
+                    aria-controls="searchOffcanvas">
+                    <i class="fas fa-search"></i>
                 </button>
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
-                    <span class="navbar-toggler-icon"></span>
+                <a href="{% url 'login' %}" class="btn btn-open-app mx-auto">Login</a>
+                <button class="navbar-toggler ms-2" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
+                    <span class="navbar-toggler-icon text-light"></span>
                 </button>
             </div>
 
             <div class="desktop-view collapse navbar-collapse" id="navbarNav">
                 <div class="search-container">
-                    <form action="{% url 'search' %}" method="get" class="d-flex align-items-center" style="gap: 10px;">
+                    <form action="{% url 'search' %}" method="get" class="d-flex align-items-center">
                         <input type="hidden" name="page" value="home">
-                        <button type="submit" style="border-radius: 20px; background: none; border: none; padding: 8px; cursor: pointer;">
-                            <i class="bi bi-search" style="font-size: 20px; color: #6c757d;"></i>
-                        </button>
-                        <input type="text" name="q" class="form-control search-bar" placeholder="Who’s your favorite influencer" value="{{ request.GET.q|default:'' }}" required>
+                        <span class="search-icon"><i class="fas fa-search"></i></span>
+                        <input type="text" name="q" class="form-control search-bar"
+                            placeholder="Search influencers, products..." value="{{ request.GET.q|default:'' }}"
+                            required>
                         {% if request.GET.q %}
-                            <a href="{% url 'home' %}" class="btn btn-outline-secondary" style="border-radius: 20px;">Clear</a>
+                        <a href="{% url 'home' %}" class="btn btn-outline-light ms-2">Clear</a>
                         {% endif %}
                     </form>
                 </div>
 
                 <!-- Navigation Links - With Language Selection -->
-                <div class="ms-auto d-flex align-items-center">
-                    <div class="dropdown me-3">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-globe"></i> <span id="currentLanguage">English</span>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="languageDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-globe me-1"></i> <span id="currentLanguage">English</span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="languageDropdown">
                             <li><a class="dropdown-item lang-option" href="#" data-lang="en">English</a></li>
                             <li><a class="dropdown-item lang-option" href="#" data-lang="ar">Arabic</a></li>
                         </ul>
                     </div>
-                    <a href="{% url 'register_customer' %}" class="btn btn-signup me-2">Sign up</a>
+                    <a href="{% url 'register_customer' %}" class="btn btn-signup">Sign up</a>
                     <a href="{% url 'login' %}" class="btn btn-login">Log in</a>
                     <!--{% if user.is_staff %}-->
-                    <!--<a href="{% url 'admin_dashboard' %}" class="btn btn-admin ms-2">Admin Dashboard</a>-->
+                    <!--<a href="{% url 'admin_dashboard' %}" class="btn btn-outline-light ms-2">Admin</a>-->
                     <!--{% endif %}-->
                 </div>
             </div>
@@ -1786,566 +3648,1445 @@
 
     <!-- Off-canvas Menu for Mobile/Tablet -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
-        <div class="offcanvas-header">
+        <div class="offcanvas-header" style="background-color: #1e293b;">
             <h5 class="offcanvas-title" id="navbarOffcanvasLabel">
-                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="50" class="d-inline-block align-middle mr-2">
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="50"
+                    class="d-inline-block align-middle">
             </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body">
+        <div class="offcanvas-body" style="background-color: #0f172a;">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'order_tracking' %}">Order Tracking</a></li>
-                <!-- Moved Premium option here as a sub-section under Sign Up -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register_influencer' %}">Sign up as an Influencer</a>
-                    <ul class="nav flex-column ms-4">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Premium</a>
-                        </li>
-                    </ul>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}"><i
+                            class="fas fa-home me-2"></i>Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}"><i
+                            class="fas fa-info-circle me-2"></i>About</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}"><i class="fas fa-headset me-2"></i>Support</a></li>
                 <!-- Language Selection in Mobile Menu -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="mobileLanguageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-globe"></i> <span id="mobileCurrentLanguage">English</span>
+                    <a class="nav-link dropdown-toggle" href="#" id="mobileLanguageDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-globe me-2"></i> <span id="mobileCurrentLanguage">English</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="mobileLanguageDropdown">
                         <li><a class="dropdown-item lang-option" href="#" data-lang="en">English</a></li>
                         <li><a class="dropdown-item lang-option" href="#" data-lang="ar">Arabic</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'register_customer' %}">Sign up</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log in</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register_customer' %}"><i
+                            class="fas fa-user me-2"></i>Sign up</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}"><i
+                            class="fas fa-sign-in-alt me-2"></i>Log in</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'order_tracking' %}"><i
+                            class="fas fa-box me-2"></i>Order Tracking</a></li>
+                <!-- Moved Premium option here as a sub-section under Sign Up -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register_influencer' %}"><i class="fas fa-user-plus me-2"></i>Sign
+                        up as an Influencer</a>
+                    <ul class="nav flex-column ms-4">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register_influencer' %}"><i class="fas fa-crown me-2"></i>Premium</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                </li>
 
             </ul>
         </div>
     </div>
 
     <div class="offcanvas offcanvas-start" tabindex="-1" id="searchOffcanvas" aria-labelledby="searchOffcanvasLabel">
-        <div class="offcanvas-header">
+        <div class="offcanvas-header" style="background-color: #1e293b;">
             <h5 class="offcanvas-title" id="searchOffcanvasLabel">Search</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body">
-            <form action="{% url 'search' %}" method="get" class="d-flex align-items-center w-100" style="gap: 10px;">
+        <div class="offcanvas-body" style="background-color: #0f172a;">
+            <form action="{% url 'search' %}" method="get" class="d-flex align-items-center w-100">
                 <input type="hidden" name="page" value="home">
-                <input
-                    type="text"
-                    name="q"
-                    class="form-control search-bar"
-                    placeholder="Search influencers or products..."
-                    value="{{ request.GET.q|default:'' }}"
-                    style="border-radius: 20px; padding: 8px 15px;"
-                    required
-                >
-                <button
-                    type="submit"
-                    class="btn"
-                    style="border-radius: 50%; background: none; border: none; padding: 6px;"
-                >
-                    <i class="bi bi-search" style="font-size: 20px; color: #6c757d;"></i>
+                <input type="text" name="q" class="form-control search-bar"
+                    placeholder="Search influencers or products..." value="{{ request.GET.q|default:'' }}" required>
+                <button type="submit" class="btn btn-primary ms-2">
+                    <i class="fas fa-search"></i>
                 </button>
             </form>
         </div>
     </div>
 
     <!-- Main Content -->
-    <div class="layout-wrapper">
-        <!-- Main Content -->
-        <main class="main-content-area">
-            <!-- Search Results Feedback -->
-            {% if request.GET.q %}
-                <div class="search-results-feedback mb-4">
-                    <p>Showing results for "{{ request.GET.q }}": {{ products|length }} products, {{ influencers|length }} influencers</p>
-                    {% if not products and not influencers %}
-                        <p>No results found. Try a different search term.</p>
-                    {% endif %}
-                </div>
+    <main class="main-content-area">
+        <!-- Search Results Feedback -->
+        {% if request.GET.q %}
+        <div class="search-results-feedback mb-4">
+            <p>Showing results for "{{ request.GET.q }}": {{ products|length }} products, {{ influencers|length }}
+                influencers</p>
+            {% if not products and not influencers %}
+            <p>No results found. Try a different search term.</p>
             {% endif %}
-
-            <!-- Featured Influencers -->
-            <section class="artist-section">
-                <div class="section-title-bar mb-4">
-                    <h2>Featured Influencers</h2>
-                    <a href="{% url 'influencer_list' %}" class="view-all-btn">Show all</a>
-                </div>
-                <div class="influencers-section">
-                    <div class="swiper influencers-swiper">
-                        <div class="swiper-wrapper">
-                            {% for influencer in influencers %}
-                                {% if influencer.is_active and influencer.influencer_profile %}
-                                    <div class="swiper-slide">
-                                        <a href="{% url 'view_influencer_detail' influencer.id %}" class="influencer-card">
-                                            <div class="influencer-img">
-                                                {% if influencer.influencer_profile.photo %}
-                                                    <img src="{{ influencer.influencer_profile.photo.url }}" alt="{{ influencer.username }}">
-                                                {% else %}
-                                                    <img src="{% static 'images/default_profile.png' %}" alt="Default profile">
-                                                {% endif %}
-                                            </div>
-                                            <h3 class="influencer-name">{{ influencer.get_full_name|default:influencer.username }}</h3>
-                                            <p class="product-count">{{ influencer.products.count }} Products</p>
-                                        </a>
-                                    </div>
-                                {% endif %}
-                            {% empty %}
-                                <div class="empty-state">
-                                    <p>No influencers registered yet.</p>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div>
-                    </div>
-                </div>
-            </section>
-
-
-<!-- TRUE INSTAGRAM REELS WIDGET — EXACT COPY OF INSTAGRAM 2025 -->
-<div class="instagram-reels-widget my-5">
-    <div class="reels-header text-center mb-4">
-        <h2 class="text-white fw-bold">Reels</h2>
-    </div>
-
-    {% if reels_videos %}
-    <div class="reels-grid">
-        {% for video in reels_videos %}
-        <div class="reel-widget-card position-relative overflow-hidden rounded-3 shadow-lg">
-            <!-- Video Thumbnail + Play Icon -->
-            <a href="{{ video.video_file.url }}" class="text-decoration-none" data-fancybox="reels">
-                <video class="w-100 h-100 object-fit-cover" muted preload="metadata">
-                    <source src="{{ video.video_file.url }}#t=0.1" type="video/mp4">
-                </video>
-
-                <!-- Play Icon Overlay -->
-                <div class="play-icon-overlay">
-                    <i class="bi bi-play-fill fs-1"></i>
-                </div>
-
-                <!-- Bottom Gradient + Info -->
-                <div class="reel-overlay-gradient"></div>
-                <div class="reel-info-overlay p-3">
-                    <div class="d-flex align-items-center text-white">
-                        <strong>@{{ video.influencer.username }}</strong>
-                    </div>
-                    <p class="text-white small mb-1">{{ video.title|truncatechars:50 }}</p>
-
-                    <!-- Likes & Views -->
-                    <div class="d-flex gap-3 text-white small">
-                        <span><i class="bi bi-heart-fill"></i> {{ video.likes|default:0 }}</span>
-                        <span><i class="bi bi-eye-fill"></i> {{ video.views|default:0 }}</span>
-                    </div>
-
-                    <!-- Tagged Products Count -->
-                    {% if video.products.exists %}
-                    <div class="mt-2">
-                        <span class="badge bg-white text-dark rounded-pill px-3 py-1">
-                            <i class="bi bi-bag"></i> {{ video.products.count }} Product{{ video.products.count|pluralize }}
-                        </span>
-                    </div>
-                    {% endif %}
-                </div>
-            </a>
         </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="text-center py-5">
-        <h4 class="text-white">No Reels Yet</h4>
-        <p class="text-white-50">Be the first influencer to post!</p>
-    </div>
-    {% endif %}
-</div>
+        {% endif %}
 
+        <!-- Banner Section -->
+        <div class="banner-section">
+            <div class="banner-card">
+                <h2>Discover Amazing Products</h2>
+                <p>Browse through our curated selection of products promoted by top influencers</p>
+            </div>
+        </div>
 
-
-
-
-
-
-            <!-- Top Selling Products -->
-            <section class="artist-section">
-                <div class="section-title-bar">
-                    <h2>Top Selling Products</h2>
-                    <a href="{% url 'product_lists' %}" class="view-all-btn">View More</a>
+        <!-- Featured Influencers -->
+        <section class="artist-section">
+            <div class="section-title-bar mb-4">
+                <h2> Influencers</h2>
+                <a href="{% url 'influencer_list' %}" class="view-all-btn">Show all</a>
+            </div>
+            <div class="influencers-section">
+                <div class="swiper influencers-swiper">
+                    <div class="swiper-wrapper">
+                        {% for influencer in influencers %}
+                        {% if influencer.is_active and influencer.influencer_profile %}
+                        <div class="swiper-slide">
+                            <a href="{% url 'view_influencer_detail' influencer.id %}" class="influencer-card">
+                                <div class="influencer-img">
+                                    {% if influencer.influencer_profile.photo %}
+                                    <img src="{{ influencer.influencer_profile.photo.url }}" alt="{{ influencer.username }}">
+                                    {% else %}
+                                    <img src="{% static 'images/default_profile.png' %}" alt="Default profile">
+                                    {% endif %}
+                                </div>
+                                <h3 class="influencer-name">{{ influencer.get_full_name|default:influencer.username }}</h3>
+                                <p class="product-count">{{ influencer.products.count }} Products</p>
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% empty %}
+                        <div class="swiper-slide">
+                            <div class="empty-state">
+                                <p>No influencers registered yet.</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Swiper pagination -->
+                    <div class="swiper-pagination influencers-pagination"></div>
                 </div>
-                <div class="products-section">
-                    <div class="swiper products-swiper">
-                        <div class="swiper-wrapper">
-                            {% for product in products %}
-                                <div class="swiper-slide">
-                                    <div class="product-card" data-product-id="{{ product.id }}" data-category-id="{{ product.category.id|default:'0' }}">
-                                        <div class="product-img">
-                                            {% if product.image %}
-                                                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="height: 40vh;">
-                                            {% else %}
-                                                <img src="{% static 'images/product-placeholder.jpg' %}" alt="Product Image">
-                                            {% endif %}
-                                        </div>
-                                        <div class="product-details">
-                                            <h3 class="product-title">{{ product.name }}</h3>
-                                            <p class="product-influencer">by {{ product.influencer.get_full_name|default:product.influencer.username }}</p>
-                                            <div class="product-footer">
-                                                <span class="product-price">₹{{ product.price }}</span>
-                                                <div>
-                                                    <button class="add-to-cart me-2" data-product-id="{{ product.id }}">
-                                                        <i class="bi bi-bag-plus"></i>
-                                                    </button>
-                                                    <button class="buy-now" data-product-id="{{ product.id }}">
-                                                        <i class="bi bi-bag-check"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% empty %}
-                                <div class="empty-state">
-                                    <p>No products available.</p>
-                                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Products by Category (Amazon/Flipkart Style) -->
+        {% for category, category_products in products_by_category.items %}
+        <section class="artist-section category-section">
+            <div class="section-title-bar">
+                <div>
+                    <h2>{{ category.name }}</h2>
+                    <p class="category-description">Explore our collection of {{ category.name|lower }}</p>
+                </div>
+                <a href="{% url 'product_lists' %}?category={{ category.id }}" class="view-all-btn">View All {{
+                    category.name }}</a>
+            </div>
+            <div class="products-grid">
+                {% for product in category_products %}
+                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
+                <div class="product-card" data-product-id="{{ product.id }}"
+                    data-category-id="{{ product.category.id|default:'0' }}">
+                    <div class="product-img-wrapper">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="{% static 'images/product-placeholder.jpg' %}" alt="Product Image">
+                        {% endif %}
+
+                        <!-- Category Badge -->
+                        <div class="category-badge">{{ product.category.name }}</div>
+
+                        {% if product.influencer %}
+                        <div class="promoted-badge">{{ product.influencer.username|upper }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="product-details">
+                        <h3 class="product-title">{{ product.name }}</h3>
+
+                        <!-- Influencer Name -->
+                        {% if product.influencer %}
+                        <p class="product-influencer">{{ product.influencer.username }}</p>
+                        {% endif %}
+
+                        <!-- Product Description -->
+                        {% if product.description %}
+                        <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                        {% endif %}
+
+                        <!-- Size Information -->
+                        {% if product.size %}
+                        <div class="product-size-info">
+                            <i class="fas fa-ruler-combined"></i>
+                            <span>Size: {{ product.size }}</span>
+                        </div>
+                        {% endif %}
+
+                        <!-- Optional rating -->
+                        {% if product.rating %}
+                        <div class="rating">
+                            {% for i in "12345" %}
+                            {% if forloop.counter <= product.rating %} <span class="star filled">★</span>
+                                {% else %}
+                                <span class="star">☆</span>
+                                {% endif %}
+                                {% endfor %}
+                                <span class="rating-count">({{ product.rating }})</span>
+                        </div>
+                        {% endif %}
+
+                        <div class="product-footer">
+                            <div class="price-section">
+                                <span class="product-price">₹{{ product.price }}</span>
+                                {% if product.original_price %}
+                                <span class="original-price">₹{{ product.original_price }}</span>
+                                <span class="discount-badge">{% widthratio product.price product.original_price 100 %}%
+                                    OFF</span>
+                                {% endif %}
+                            </div>
+                            <button class="heart-btn" aria-label="Add to wishlist">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% empty %}
+        <!-- Fallback: Show all products if no categories exist -->
+        <section class="artist-section">
+            <div class="section-title-bar">
+                <h2> Products</h2>
+                <a href="{% url 'product_lists' %}" class="view-all-btn">View More</a>
+            </div>
+            <div class="products-grid">
+                {% for product in products %}
+                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
+                <div class="product-card" data-product-id="{{ product.id }}"
+                    data-category-id="{{ product.category.id|default:'0' }}">
+                    <div class="product-img-wrapper">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="{% static 'images/product-placeholder.jpg' %}" alt="Product Image">
+                        {% endif %}
+
+                        {% if product.category %}
+                        <div class="category-badge">{{ product.category.name }}</div>
+                        {% endif %}
+
+                        {% if product.influencer %}
+                        <div class="promoted-badge">{{ product.influencer.username|upper }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="product-details">
+                        <h3 class="product-title">{{ product.name }}</h3>
+
+                        <!-- Influencer Name -->
+                        {% if product.influencer %}
+                        <p class="product-influencer">{{ product.influencer.username }}</p>
+                        {% endif %}
+
+                        {% if product.description %}
+                        <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                        {% endif %}
+
+                        {% if product.size %}
+                        <div class="product-size-info">
+                            <i class="fas fa-ruler-combined"></i>
+                            <span>Size: {{ product.size }}</span>
+                        </div>
+                        {% endif %}
+
+                        {% if product.rating %}
+                        <div class="rating">
+                            {% for i in "12345" %}
+                            {% if forloop.counter <= product.rating %} <span class="star filled">★</span>
+                                {% else %}
+                                <span class="star">☆</span>
+                                {% endif %}
                                 {% endfor %}
                         </div>
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div>
+                        {% endif %}
+
+                        <div class="product-footer">
+                            <span class="product-price">₹{{ product.price }}</span>
+                            <button class="heart-btn" aria-label="Add to wishlist">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </section>
-
-
-
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-grid">
-                <!-- About Us -->
-                <div class="footer-column">
-                    <h3>About Us</h3>
-                    <ul class="footer-links">
-                        <li><a href="{% url 'about_us' %}">Our Story</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Press</a></li>
-                        <li><a href="#">Blog</a></li>
-                    </ul>
+                </a>
+                {% empty %}
+                <div class="empty-state">
+                    <p>No products available.</p>
                 </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endfor %}
 
-                <!-- Terms & Conditions -->
-                <div class="footer-column">
-                    <h3>Terms & Conditions</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Return Policy</a></li>
-                        <li><a href="#">Shipping Policy</a></li>
-                    </ul>
-                </div>
-
-                <!-- Connect With Us -->
-                <div class="footer-column">
-                    <h3>Connect With Us</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">FAQs</a></li>
-                        <li><a href="#">Support Center</a></li>
-                    </ul>
-                    <div class="social-links">
-                        <a href="#" class="social-link" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
-                        <a href="#" class="social-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="social-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                    </div>
-                </div>
-
-                <!-- Let Us Help You -->
-                <div class="footer-column">
-                    <h3>Let Us Help You</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Customer Service</a></li>
-                        <li><a href="#">Track Your Order</a></li>
-                        <li><a href="#">Returns & Exchanges</a></li>
-                        <li><a href="#">Payment Options</a></li>
-                    </ul>
-                </div>
+        <!-- Instagram Reels Section -->
+        <section class="video-shorts-section">
+            <div class="section-header">
+                <h2 class="section-title">Videos</h2>
+                <p class="section-description">Watch engaging videos from our top influencers</p>
             </div>
 
-            <div class="footer-bottom">
-                <p>&copy; 2025 Lumoskart. All rights reserved.</p>
+            {% if reels_videos %}
+            <div class="reels-grid">
+                {% for video in reels_videos %}
+                <div class="reel-widget-card position-relative overflow-hidden" data-video-id="{{ video.id }}"
+                    data-video-index="{{ forloop.counter0 }}">
+                    {% with product=video.products.first %}
+                    <!-- Badges -->
+                    <div class="reel-discount-badge">60%</div>
+                    <div class="reel-views-badge">
+                        <i class="fas fa-eye"></i> {{ video.views|default:0 }}
+                    </div>
+
+                    <!-- Video Background -->
+                    <a href="javascript:void(0);" class="text-decoration-none video-shorts-item"
+                        data-video-url="{{ video.video_file.url }}" data-video-title="{{ video.title }}"
+                        data-video-influencer="{{ video.influencer.username }}"
+                        data-video-influencer-id="{{ video.influencer.id }}"
+                        data-video-likes="{{ video.likes|default:0 }}" data-video-views="{{ video.views|default:0 }}"
+                        data-video-products='{% for prod in video.products.all %}{"id": {{ prod.id }}, "name": "{{ prod.name }}", "price": {{ prod.price }}, "image": "{{ prod.image.url|default:"" }}", "influencer_id": {{ video.influencer.id }}}{% if not forloop.last %},{% endif %}{% endfor %}'>
+                        <video class="w-100 h-100 object-fit-cover" muted autoplay loop playsinline preload="metadata">
+                            <source src="{{ video.video_file.url }}#t=0.1" type="video/mp4">
+                        </video>
+
+                        <!-- Bottom Gradient for contrast -->
+                        <div class="reel-overlay-gradient"></div>
+
+                        {% if product %}
+                        <!-- Product Overlay -->
+                        <div class="reel-product-overlay">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" class="reel-product-thumb" alt="{{ product.name }}">
+                            {% else %}
+                            <div
+                                class="reel-product-thumb d-flex align-items-center justify-content-center bg-secondary">
+                                <i class="fas fa-image text-white-50"></i>
+                            </div>
+                            {% endif %}
+                            <div class="reel-product-info">
+                                <div class="reel-product-name">{{ product.name }}</div>
+                                <div class="reel-product-price-row">
+                                    <span class="reel-current-price">₹{{ product.price }}</span>
+                                    <span class="reel-original-price">₹{% widthratio product.price 4 10 %}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </a>
+
+                    <!-- Add to Cart / Buy Now Bar -->
+                    {% if product %}
+                    <a href="{% url 'view_influencer_products' product.influencer.id %}"
+                        class="reel-add-to-cart-bar buy-now-btn">
+                        Buy Now <i class="fas fa-caret-down"></i>
+                    </a>
+                    {% else %}
+                    <div class="reel-add-to-cart-bar disabled" style="opacity: 0.5; cursor: not-allowed;">
+                        <a href="javascript:void(0);" class="video-shorts-action-btn video-shorts-buy"
+                            id="video-shorts-buy-btn">
+                            <i class="fas fa-shopping-cart"></i> Buy Now
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <h4>No Reels Yet</h4>
+                <p>Be the first influencer to post!</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Video Shorts Player Modal -->
+        <div class="video-shorts-player">
+            <div class="video-shorts-content">
+                <div class="video-shorts-video-container">
+                    <video class="video-shorts-video" muted playsinline controls></video>
+                    <div class="video-shorts-overlay">
+                        <div class="video-shorts-header">
+                            <div class="video-shorts-title"></div>
+                            <button class="video-shorts-close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="video-shorts-player">
+                            <div class="video-shorts-content">
+                                <div class="video-shorts-video-container">
+                                    <video class="video-shorts-video" muted playsinline controls></video>
+                                    <div class="video-shorts-overlay">
+                                        <div class="video-shorts-header">
+                                            <div class="video-shorts-title"></div>
+                                            <button class="video-shorts-close">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <div class="video-shorts-product-info">
+                                            <h3 class="video-shorts-product-name"></h3>
+                                            <p class="video-shorts-influencer"></p>
+                                            <p class="video-shorts-description"></p>
+                                        </div>
+                                        <div class="video-shorts-products"></div>
+                                        <div class="video-shorts-actions">
+                                            <a href="javascript:void(0);"
+                                                class="video-shorts-action-btn video-shorts-like">
+                                                <i class="fas fa-heart"></i> <span class="like-count"></span>
+                                            </a>
+                                            <a href="javascript:void(0);"
+                                                class="video-shorts-action-btn video-shorts-share">
+                                                <i class="fas fa-share"></i> Share
+                                            </a>
+                                            <a href="javascript:void(0);"
+                                                class="video-shorts-action-btn video-shorts-buy"
+                                                id="video-shorts-buy-btn">
+                                                <i class="fas fa-shopping-cart"></i> Buy Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="video-shorts-pagination">
+                                        <div class="video-shorts-pagination-dot active"></div>
+                                        <div class="video-shorts-pagination-dot"></div>
+                                        <div class="video-shorts-pagination-dot"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="video-shorts-product-info">
+                            <h3 class="video-shorts-product-name"></h3>
+                            <p class="video-shorts-influencer"></p>
+                            <p class="video-shorts-description"></p>
+                        </div>
+                        <div class="video-shorts-products"></div>
+                    </div>
+                    <div class="video-shorts-pagination">
+                        <div class="video-shorts-pagination-dot active"></div>
+                        <div class="video-shorts-pagination-dot"></div>
+                        <div class="video-shorts-pagination-dot"></div>
+                    </div>
+                </div>
             </div>
         </div>
-    </footer>
 
-    <div class="whatsapp-widget">
-        <div class="whatsapp-tooltip">Chat with us on WhatsApp</div>
+
+
+
+
+
+
+
+
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <!-- About Us -->
+                    <div class="footer-column">
+                        <h3>About Us</h3>
+                        <ul class="footer-links">
+                            <li><a href="{% url 'about_us' %}">Our Story</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Press</a></li>
+                            <li><a href="#">Blog</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Terms & Conditions -->
+                    <div class="footer-column">
+                        <h3>Terms & Conditions</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Return Policy</a></li>
+                            <li><a href="#">Shipping Policy</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Connect With Us -->
+                    <div class="footer-column">
+                        <h3>Connect With Us</h3>
+                        <ul class="footer-links">
+                            <li><a href="{% url 'support' %}">Contact Us</a></li>
+                            <li><a href="{% url 'support' %}">FAQs</a></li>
+                            <li><a href="{% url 'support' %}">Support Center</a></li>
+                        </ul>
+                        <div class="social-links">
+                            <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Let Us Help You -->
+                    <div class="footer-column">
+                        <h3>Let Us Help You</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Customer Service</a></li>
+                            <li><a href="#">Track Your Order</a></li>
+                            <li><a href="#">Returns & Exchanges</a></li>
+                            <li><a href="#">Payment Options</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Lumoskart. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+
         <a href="https://api.whatsapp.com/send?phone=918075909735&text=Hello!%20I'm%20interested%20in%20your%20products"
-           target="_blank"
-           class="whatsapp-button"
-           aria-label="Chat with us on WhatsApp">
-            <i class="bi bi-whatsapp"></i>
+            target="_blank" class="whatsapp-widget" aria-label="Chat with us on WhatsApp">
+            <i class="fab fa-whatsapp"></i>
         </a>
-    </div>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-    <script>
-        // Handle Add to Cart and Buy Now buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            // Influencers Swiper
-            const influencersSwiper = new Swiper(".influencers-swiper", {
-                slidesPerView: 2,
-                spaceBetween: 10,
-                navigation: {
-                    nextEl: ".influencers-swiper .swiper-button-next",
-                    prevEl: ".influencers-swiper .swiper-button-prev",
-                },
-                loop: false,
-                watchOverflow: true,
-                grabCursor: true,
-                centeredSlides: false,
-                breakpoints: {
-                    320: { slidesPerView: 1.5, spaceBetween: 10 },
-                    480: { slidesPerView: 2.5, spaceBetween: 12 },
-                    640: { slidesPerView: 3, spaceBetween: 15 },
-                    768: { slidesPerView: 3.5, spaceBetween: 18 },
-                    992: { slidesPerView: 4, spaceBetween: 20 },
-                    1200: { slidesPerView: 5, spaceBetween: 20 },
-                    1400: { slidesPerView: 6, spaceBetween: 20 }
-                }
-            });
+        <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
-            // Products Swiper
-            const productsSwiper = new Swiper(".products-swiper", {
-                slidesPerView: 1,
-                spaceBetween: 12,
-                navigation: {
-                    nextEl: ".products-swiper .swiper-button-next",
-                    prevEl: ".products-swiper .swiper-button-prev",
-                },
-                loop: false,
-                watchOverflow: true,
-                grabCursor: true,
-                centeredSlides: false,
-                breakpoints: {
-                    320: { slidesPerView: 1, spaceBetween: 10 },
-                    480: { slidesPerView: 1.2, spaceBetween: 15 },
-                    640: { slidesPerView: 1.5, spaceBetween: 18 },
-                    768: { slidesPerView: 2, spaceBetween: 20 },
-                    992: { slidesPerView: 2.5, spaceBetween: 20 },
-                    1200: { slidesPerView: 3, spaceBetween: 20 }
-                }
-            });
-
-            // Handle language selection
-            const languageItems = document.querySelectorAll('.lang-option');
-            languageItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const selectedLang = this.getAttribute('data-lang');
-                    const languageName = selectedLang === 'en' ? 'English' : 'Arabic';
-
-                    // Update the displayed language in both desktop and mobile
-                    document.getElementById('currentLanguage').textContent = languageName;
-                    document.getElementById('mobileCurrentLanguage').textContent = languageName;
-
-                    // Add visual feedback
-                    this.closest('.dropdown-menu').previousElementSibling.classList.add('btn-success');
-                    setTimeout(() => {
-                        this.closest('.dropdown-menu').previousElementSibling.classList.remove('btn-success');
-                    }, 1000);
-
-                    // In a real implementation, you would:
-                    // 1. Set a language cookie or session variable
-                    // 2. Redirect to the same page with the language parameter
-                    // 3. Or use AJAX to dynamically change the content
-                });
-            });
-
-            // Handle button clicks
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.add-to-cart')) {
-                    // Redirect to login page when Add to Cart is clicked
-                    window.location.href = '{% url "login" %}';
-                }
-
-                if (e.target.closest('.buy-now')) {
-                    // Redirect to login page when Buy Now is clicked
-                    window.location.href = '{% url "login" %}';
-                }
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const whatsappButton = document.getElementById('whatsapp-button');
-            let isClickAllowed = true;
-            const cooldownTime = 2000; // 2 seconds cooldown
-
-            whatsappButton.addEventListener('click', function(event) {
-                if (!isClickAllowed) {
-                    event.preventDefault(); // Prevent multiple rapid clicks
-                    return;
-                }
-
-                isClickAllowed = false;
-                setTimeout(function() {
-                    isClickAllowed = true; // Re-enable clicks after cooldown
-                }, cooldownTime);
-
-                // Optional: Log click for debugging
-                console.log('WhatsApp button clicked');
-            });
-        });
-
-        // Ensure search forms work correctly
-        document.addEventListener('DOMContentLoaded', function() {
-            // Desktop search form submission
-            const desktopSearchForm = document.querySelector('.desktop-view .search-container form');
-            if (desktopSearchForm) {
-                desktopSearchForm.addEventListener('submit', function(e) {
-                    const searchInput = this.querySelector('input[name="q"]');
-                    if (searchInput && searchInput.value.trim() === '') {
+        <script src="{% static 'js/main.js' %}"></script>
+        <script>
+            // Handle Add to Cart and Buy Now buttons
+            document.addEventListener('DOMContentLoaded', function () {
+                // Handle language selection
+                const languageItems = document.querySelectorAll('.lang-option');
+                languageItems.forEach(item => {
+                    item.addEventListener('click', function (e) {
                         e.preventDefault();
-                        searchInput.focus();
-                        return false;
-                    }
-                });
-            }
+                        const selectedLang = this.getAttribute('data-lang');
+                        const languageName = selectedLang === 'en' ? 'English' : 'Arabic';
 
-            // Mobile search form submission
-            const mobileSearchForm = document.querySelector('#searchOffcanvas form');
-            if (mobileSearchForm) {
-                mobileSearchForm.addEventListener('submit', function(e) {
-                    const searchInput = this.querySelector('input[name="q"]');
-                    if (searchInput && searchInput.value.trim() === '') {
-                        e.preventDefault();
-                        searchInput.focus();
-                        return false;
-                    }
-                });
-            }
+                        // Update the displayed language in both desktop and mobile
+                        document.getElementById('currentLanguage').textContent = languageName;
+                        document.getElementById('mobileCurrentLanguage').textContent = languageName;
 
-            // Handle Enter key in search inputs
-            const searchInputs = document.querySelectorAll('input[name="q"]');
-            searchInputs.forEach(input => {
-                input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        const form = this.closest('form');
-                        if (form && this.value.trim() !== '') {
-                            form.submit();
-                        } else if (this.value.trim() === '') {
-                            e.preventDefault();
-                            this.focus();
+                        // Add visual feedback
+                        this.closest('.dropdown-menu').previousElementSibling.classList.add('btn-success');
+                        setTimeout(() => {
+                            this.closest('.dropdown-menu').previousElementSibling.classList.remove('btn-success');
+                        }, 1000);
+
+                        // In a real implementation, you would:
+                        // 1. Set a language cookie or session variable
+                        // 2. Redirect to the same page with the language parameter
+                        // 3. Or use AJAX to dynamically change the content
+                    });
+                });
+
+                // Handle all button clicks in a single event listener to avoid conflicts
+                document.addEventListener('click', function (e) {
+                    // Handle Buy Now button on video card first
+                    const buyNowBtn = e.target.closest('.buy-now-btn');
+                    if (buyNowBtn && !buyNowBtn.classList.contains('disabled')) {
+                        // Check if the button already has a URL (updated for influencer products page)
+                        if (buyNowBtn.getAttribute('href') && !buyNowBtn.getAttribute('href').startsWith('javascript:')) {
+                            // Button has a URL, let it navigate normally
+                            return;
                         }
+
+                        e.preventDefault();
+
+                        // Get the video item that contains this button
+                        const videoCard = buyNowBtn.closest('.reel-widget-card');
+                        if (videoCard) {
+                            const videoItem = videoCard.querySelector('.video-shorts-item');
+                            if (!videoItem) {
+                                alert('Video item not found');
+                                return;
+                            }
+                            const productsData = videoItem.getAttribute('data-video-products');
+
+                            try {
+                                const products = JSON.parse(productsData);
+                                if (products.length > 0) {
+                                    if (products.length === 1) {
+                                        // If only one product, go directly to buy now page
+                                        const productId = products[0].id;
+                                        window.location.href = `/orders/buy-now/${productId}/`;
+                                    } else {
+                                        // If multiple products, show selection modal
+                                        showProductSelectionModal(products);
+                                    }
+                                } else {
+                                    alert('No products available for purchase in this video');
+                                }
+                            } catch (e) {
+                                console.error('Error processing products:', e);
+                                alert('Error processing products. Please try again.');
+                            }
+                        }
+                        return; // Exit to prevent other handlers
+                    }
+
+                    // Handle Share button on video card
+                    if (e.target.closest('.share-btn')) {
+                        e.preventDefault();
+
+                        // Get the video item that contains this button
+                        const videoCard = e.target.closest('.reel-widget-card');
+                        if (videoCard) {
+                            const videoItem = videoCard.querySelector('.video-shorts-item');
+                            if (!videoItem) {
+                                alert('Video item not found');
+                                return;
+                            }
+                            const videoTitle = videoItem.getAttribute('data-video-title');
+                            const videoUrl = videoItem.getAttribute('data-video-url');
+
+                            // In a real implementation, you would implement sharing functionality
+                            // For now, just show an alert
+                            if (navigator.share) {
+                                // Web Share API is supported
+                                navigator.share({
+                                    title: videoTitle,
+                                    text: 'Check out this video!',
+                                    url: window.location.href
+                                }).catch(console.error);
+                            } else {
+                                // Fallback: copy link to clipboard
+                                navigator.clipboard.writeText(window.location.href)
+                                    .then(() => {
+                                        alert('Video link copied to clipboard!');
+                                    })
+                                    .catch(err => {
+                                        console.error('Failed to copy link: ', err);
+                                        alert('Could not copy link. Please try again.');
+                                    });
+                            }
+                        }
+                        return; // Exit to prevent other handlers
+                    }
+
+                    // Handle non-video add-to-cart clicks
+                    if (e.target.closest('.add-to-cart') && !e.target.closest('.reel-widget-card')) {
+                        // Redirect to login page when Add to Cart is clicked
+                        window.location.href = '{% url "login" %}';
+                    }
+
+                    // Handle non-video buy-now clicks
+                    if (e.target.closest('.buy-now') && !e.target.closest('.reel-widget-card') && !e.target.closest('.video-shorts-action-btn')) {
+                        // Redirect to login page when Buy Now is clicked (not from video cards)
+                        window.location.href = '{% url "login" %}';
                     }
                 });
-            });
-        });
 
-        // ===============================
-        // 🎥 Product Reels Functionality
-        // ===============================
-        document.addEventListener('DOMContentLoaded', function() {
-            const videoShortsWrapper = document.querySelector('.video-shorts-swiper');
-            const videoCount = document.getElementById('video-count');
+                const whatsappButton = document.getElementById('whatsapp-button');
+                let isClickAllowed = true;
+                const cooldownTime = 2000; // 2 seconds cooldown
 
-            console.log('Video Reels Section:', videoShortsWrapper ? 'Found' : 'Not Found');
-            console.log('Video Count:', videoCount ? videoCount.textContent : 'Unknown');
+                whatsappButton.addEventListener('click', function (event) {
+                    if (!isClickAllowed) {
+                        event.preventDefault(); // Prevent multiple rapid clicks
+                        return;
+                    }
 
-            if (videoShortsWrapper) {
-                // Check if there are any slides
-                const slides = videoShortsWrapper.querySelectorAll('.swiper-slide');
-                console.log('Number of video slides:', slides.length);
+                    isClickAllowed = false;
+                    setTimeout(function () {
+                        isClickAllowed = true; // Re-enable clicks after cooldown
+                    }, cooldownTime);
 
-                if (slides.length > 0) {
-                    const videoShortsSwiper = new Swiper('.video-shorts-swiper', {
-                        direction: 'vertical',
-                        slidesPerView: 1,
-                        spaceBetween: 24,
-                        mousewheel: true,
-                        pagination: {
-                            el: '#videoShortsPagination',
-                            clickable: true,
-                            bulletClass: 'video-shorts-pagination-dot',
-                            bulletActiveClass: 'active',
-                        },
-                        on: {
-                            slideChange: function () {
-                                // Update pagination dots
-                                const dots = document.querySelectorAll('#videoShortsPagination .video-shorts-pagination-dot');
-                                dots.forEach((dot, index) => {
-                                    if (index === this.activeIndex) {
-                                        dot.classList.add('active');
-                                    } else {
-                                        dot.classList.remove('active');
-                                    }
-                                });
+                    // Optional: Log click for debugging
+                    console.log('WhatsApp button clicked');
+                });
+
+                // Ensure search forms work correctly
+                // Desktop search form submission
+                const desktopSearchForm = document.querySelector('.desktop-view .search-container form');
+                if (desktopSearchForm) {
+                    desktopSearchForm.addEventListener('submit', function (e) {
+                        const searchInput = this.querySelector('input[name="q"]');
+                        if (searchInput && searchInput.value.trim() === '') {
+                            e.preventDefault();
+                            searchInput.focus();
+                            return false;
+                        }
+                    });
+                }
+
+                // Mobile search form submission
+                const mobileSearchForm = document.querySelector('#searchOffcanvas form');
+                if (mobileSearchForm) {
+                    mobileSearchForm.addEventListener('submit', function (e) {
+                        const searchInput = this.querySelector('input[name="q"]');
+                        if (searchInput && searchInput.value.trim() === '') {
+                            e.preventDefault();
+                            searchInput.focus();
+                            return false;
+                        }
+                    });
+                }
+
+                // Handle Enter key in search inputs
+                const searchInputs = document.querySelectorAll('input[name="q"]');
+                searchInputs.forEach(input => {
+                    input.addEventListener('keypress', function (e) {
+                        if (e.key === 'Enter') {
+                            const form = this.closest('form');
+                            if (form && this.value.trim() !== '') {
+                                form.submit();
+                            } else if (this.value.trim() === '') {
+                                e.preventDefault();
+                                this.focus();
                             }
                         }
                     });
+                });
 
-                    // Set fallback poster for videos
-                    document.querySelectorAll('.video-shorts-video').forEach(video => {
-                        video.addEventListener('error', function() {
-                            console.error('Video load error:', this.src);
-                            this.poster = '{% static "images/video-placeholder.jpg" %}';
-                        });
-                    });
+                // Video Shorts Player Functionality - Enhanced for Instagram/Facebook-like experience
+                const videoItems = document.querySelectorAll('.video-shorts-item');
+                const videoPlayer = document.querySelector('.video-shorts-player');
+                const videoElement = document.querySelector('.video-shorts-video');
+                const videoTitle = document.querySelector('.video-shorts-title');
+                const influencerName = document.querySelector('.video-shorts-influencer');
+                const videoProducts = document.querySelector('.video-shorts-products');
+                const likeCount = document.querySelector('.like-count');
+                const videoCloseBtn = document.querySelector('.video-shorts-close');
 
-                    const getVideos = () => Array.from(document.querySelectorAll('.video-shorts-video'));
+                // Store all video items and current index
+                let allVideoItems = Array.from(videoItems);
+                let currentIndex = 0;
 
-                    const pauseAllVideos = () => {
-                        getVideos().forEach(video => {
-                            video.pause();
-                            video.currentTime = 0;
-                        });
-                    };
+                // Open video player when clicking on a video thumbnail
+                videoItems.forEach((item, index) => {
+                    item.addEventListener('click', function (e) {
+                        e.preventDefault();
 
-                    const playActiveVideo = () => {
-                        const activeSlide = videoShortsWrapper.querySelector('.swiper-slide-active video');
-                        if (!activeSlide) return;
-                        const playPromise = activeSlide.play();
-                        if (playPromise !== undefined) {
-                            playPromise.catch(() => {
-                                // Autoplay may require user interaction; ignore errors.
+                        currentIndex = allVideoItems.indexOf(item);
+
+                        loadVideo(currentIndex);
+
+                        // Show player and play video
+                        videoPlayer.classList.add('active');
+                        document.body.style.overflow = 'hidden'; // Prevent background scroll
+
+                        // Play the video after a short delay to ensure source is loaded
+                        setTimeout(() => {
+                            videoElement.play().catch(e => {
+                                console.log('Auto-play prevented:', e);
+                                // If autoplay with sound fails, try with muted
+                                videoElement.muted = true;
+                                videoElement.play().catch(err => console.log('Muted play also failed:', err));
                             });
-                        }
-                    };
-
-                    playActiveVideo();
-
-                    videoShortsSwiper.on('slideChangeTransitionStart', pauseAllVideos);
-                    videoShortsSwiper.on('slideChangeTransitionEnd', playActiveVideo);
-
-                    getVideos().forEach(video => {
-                        video.addEventListener('play', () => {
-                            getVideos()
-                                .filter(other => other !== video)
-                                .forEach(other => other.pause());
-                        });
+                        }, 100);
                     });
-                } else {
-                    console.log('No video slides found - showing empty state');
-                }
-            } else {
-                console.log('Video shorts wrapper not found');
-            }
+                });
 
-            // Handle "Add to Cart" actions from reels
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.video-shorts-action-btn[data-product-id]')) {
-                    const button = e.target.closest('.video-shorts-action-btn');
-                    const productId = button.getAttribute('data-product-id');
-                    alert('Product added to cart! Product ID: ' + productId);
+                function loadVideo(index) {
+                    if (index < 0 || index >= allVideoItems.length) return;
+
+                    const item = allVideoItems[index];
+                    const videoUrl = item.getAttribute('data-video-url');
+                    const title = item.getAttribute('data-video-title');
+                    const influencer = item.getAttribute('data-video-influencer');
+                    const likes = item.getAttribute('data-video-likes');
+                    const productsData = item.getAttribute('data-video-products');
+
+                    // Set video source and play
+                    videoElement.src = videoUrl;
+                    videoElement.muted = false; // Enable sound
+                    videoTitle.textContent = title;
+                    influencerName.textContent = '@' + influencer;
+                    likeCount.textContent = likes;
+
+                    // Parse and display products if available
+                    try {
+                        const products = JSON.parse(productsData);
+                        videoProducts.innerHTML = '';
+                        if (products.length > 0) {
+                            products.forEach(product => {
+                                const productEl = document.createElement('div');
+                                productEl.className = 'product-tag';
+                                productEl.textContent = product.name;
+                                videoProducts.appendChild(productEl);
+                            });
+                        } else {
+                            videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
+                        }
+                    } catch (e) {
+                        videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
+                    }
+
+                    // Update pagination dots
+                    updatePagination();
+                }
+
+                function updatePagination() {
+                    const paginationDots = document.querySelector('.video-shorts-pagination');
+                    if (paginationDots) {
+                        paginationDots.innerHTML = '';
+                        allVideoItems.forEach((_, i) => {
+                            const dot = document.createElement('div');
+                            dot.className = 'video-shorts-pagination-dot';
+                            if (i === currentIndex) {
+                                dot.classList.add('active');
+                            }
+                            paginationDots.appendChild(dot);
+                        });
+                    }
+                }
+
+                // Navigation between videos
+                function goToNextVideo() {
+                    if (currentIndex < allVideoItems.length - 1) {
+                        currentIndex++;
+                        loadVideo(currentIndex);
+                        videoElement.play().catch(e => {
+                            console.log('Auto-play prevented:', e);
+                            // If autoplay with sound fails, try with muted
+                            videoElement.muted = true;
+                            videoElement.play().catch(err => console.log('Muted play also failed:', err));
+                        });
+                    }
+                }
+
+                function goToPrevVideo() {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        loadVideo(currentIndex);
+                        videoElement.play().catch(e => {
+                            console.log('Auto-play prevented:', e);
+                            // If autoplay with sound fails, try with muted
+                            videoElement.muted = true;
+                            videoElement.play().catch(err => console.log('Muted play also failed:', err));
+                        });
+                    }
+                }
+
+                // Enhanced swipe functionality for video navigation with vertical swipe support
+                let touchStartX = 0;
+                let touchStartY = 0;
+                let touchEndX = 0;
+                let touchEndY = 0;
+
+                videoElement.addEventListener('touchstart', function (e) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                    e.preventDefault(); // Prevent default to avoid scrolling
+                }, { passive: false });
+                
+                videoElement.addEventListener('touchend', function (e) {
+                    touchEndX = e.changedTouches[0].clientX;
+                    touchEndY = e.changedTouches[0].clientY;
+                    handleSwipe();
+                    e.preventDefault();
+                }, { passive: false });
+                            
+                // Also handle touchmove to prevent scrolling during swipe
+                videoElement.addEventListener('touchmove', function (e) {
+                    e.preventDefault();
+                }, { passive: false });
+
+                function handleSwipe() {
+                    const swipeThreshold = 50;
+                    const verticalSwipeThreshold = 30; // Lower threshold for vertical swipes
+
+                    const diffX = touchStartX - touchEndX;
+                    const diffY = touchStartY - touchEndY;
+
+                    // Check if it's more of a vertical swipe than horizontal
+                    if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > verticalSwipeThreshold) {
+                        if (diffY > 0) {
+                            // Swipe up - go to next video
+                            goToNextVideo();
+                        } else {
+                            // Swipe down - go to previous video
+                            goToPrevVideo();
+                        }
+                    } else if (Math.abs(diffX) > swipeThreshold) {
+                        if (diffX > 0) {
+                            // Swipe left - go to next video
+                            goToNextVideo();
+                        } else {
+                            // Swipe right - go to previous video
+                            goToPrevVideo();
+                        }
+                    }
+                }
+
+                // Keyboard navigation
+                document.addEventListener('keydown', function (e) {
+                    if (videoPlayer.classList.contains('active')) {
+                        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                            goToNextVideo();
+                        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                            goToPrevVideo();
+                        } else if (e.key === 'Escape') {
+                            videoPlayer.classList.remove('active');
+                            videoElement.pause();
+                            document.body.style.overflow = 'auto'; // Re-enable background scroll
+                        } else if (e.key === ' ') { // Spacebar to play/pause
+                            e.preventDefault();
+                            if (videoElement.paused) {
+                                videoElement.play();
+                            } else {
+                                videoElement.pause();
+                            }
+                        }
+                    }
+                });
+
+                // Mouse wheel for navigation - now supports both vertical and horizontal
+                videoElement.addEventListener('wheel', function (e) {
+                    if (videoPlayer.classList.contains('active')) {
+                        // Check if shift key is pressed to differentiate horizontal/vertical scrolling
+                        if (e.shiftKey) {
+                            // Horizontal scroll with shift + wheel
+                            if (e.deltaX > 0) {
+                                goToNextVideo();
+                            } else {
+                                goToPrevVideo();
+                            }
+                        } else {
+                            // Vertical scroll with just wheel
+                            if (e.deltaY > 0) {
+                                // Scroll down - next video
+                                goToNextVideo();
+                            } else {
+                                // Scroll up - previous video
+                                goToPrevVideo();
+                            }
+                        }
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+
+                // Close video player
+                videoCloseBtn.addEventListener('click', function () {
+                    videoPlayer.classList.remove('active');
+                    videoElement.pause();
+                    document.body.style.overflow = 'auto'; // Re-enable background scroll
+                });
+
+                // Close when clicking outside video area
+                videoPlayer.addEventListener('click', function (e) {
+                    if (e.target === videoPlayer) {
+                        videoPlayer.classList.remove('active');
+                        videoElement.pause();
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+                
+                // Handle video click to pause/play in the modal player
+                videoElement.addEventListener('click', function(e) {
+                    if (videoPlayer.classList.contains('active') && !e.target.closest('.video-shorts-action-btn, .video-shorts-close, .video-shorts-products, .video-shorts-header')) {
+                        if (videoElement.paused) {
+                            videoElement.play();
+                        } else {
+                            videoElement.pause();
+                        }
+                    }
+                });
+
+                // Handle Buy Now button in video player
+                document.addEventListener('click', function (e) {
+                    if (e.target.closest('#video-shorts-buy-btn')) {
+                        e.preventDefault();
+
+                        // Get the current video item's product data
+                        const currentVideoItem = allVideoItems[currentIndex];
+                        if (currentVideoItem) {
+                            const productsData = currentVideoItem.getAttribute('data-video-products');
+                            try {
+                                const products = JSON.parse(productsData);
+                                if (products.length > 0) {
+                                    // Get the first product for now (you can modify this to handle multiple products)
+                                    const productId = products[0].id;
+
+                                    // Redirect to buy now page
+                                    window.location.href = `/orders/buy-now/${productId}/`;
+                                } else {
+                                    alert('No products available for purchase in this video');
+                                }
+                            } catch (e) {
+                                alert('Error processing products');
+                            }
+                        }
+                    }
+                });
+
+                // Horizontal Swipe Functionality for Influencer Cards
+                const influencersGrid = document.querySelector('.influencers-grid.horizontal');
+
+                if (influencersGrid) {
+                    let isDown = false;
+                    let startX;
+                    let scrollLeft;
+
+                    influencersGrid.addEventListener('mousedown', (e) => {
+                        isDown = true;
+                        startX = e.pageX - influencersGrid.offsetLeft;
+                        scrollLeft = influencersGrid.scrollLeft;
+                    });
+
+                    influencersGrid.addEventListener('mouseleave', () => {
+                        isDown = false;
+                    });
+
+                    influencersGrid.addEventListener('mouseup', () => {
+                        isDown = false;
+                    });
+
+                    influencersGrid.addEventListener('mousemove', (e) => {
+                        if (!isDown) return;
+                        e.preventDefault();
+                        const x = e.pageX - influencersGrid.offsetLeft;
+                        const walk = (x - startX) * 2; //scroll-fast
+                        influencersGrid.scrollLeft = scrollLeft - walk;
+                    });
+
+                    // Touch events for mobile devices
+                    influencersGrid.addEventListener('touchstart', (e) => {
+                        isDown = true;
+                        startX = e.touches[0].pageX - influencersGrid.offsetLeft;
+                        scrollLeft = influencersGrid.scrollLeft;
+                    });
+
+                    influencersGrid.addEventListener('touchend', () => {
+                        isDown = false;
+                    });
+
+                    influencersGrid.addEventListener('touchcancel', () => {
+                        isDown = false;
+                    });
+
+                    influencersGrid.addEventListener('touchmove', (e) => {
+                        if (!isDown) return;
+                        e.preventDefault();
+                        const x = e.touches[0].pageX - influencersGrid.offsetLeft;
+                        const walk = (x - startX) * 2; //scroll-fast
+                        influencersGrid.scrollLeft = scrollLeft - walk;
+                    });
                 }
             });
-        });
-    </script>
+
+            // Video Shorts Player Functionality - Enhanced for Instagram/Facebook-like experience
+            const videoItems = document.querySelectorAll('.video-shorts-item');
+            const videoPlayer = document.querySelector('.video-shorts-player');
+            const videoElement = document.querySelector('.video-shorts-video');
+            const videoTitle = document.querySelector('.video-shorts-title');
+            const influencerName = document.querySelector('.video-shorts-influencer');
+            const videoProducts = document.querySelector('.video-shorts-products');
+            const likeCount = document.querySelector('.like-count');
+            const videoCloseBtn = document.querySelector('.video-shorts-close');
+
+            // Store all video items and current index
+            let allVideoItems = Array.from(videoItems);
+            let currentIndex = 0;
+
+            // Open video player when clicking on a video thumbnail
+            videoItems.forEach((item, index) => {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    currentIndex = allVideoItems.indexOf(item);
+
+                    loadVideo(currentIndex);
+
+                    // Show player and play video
+                    videoPlayer.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Prevent background scroll
+
+                    // Play the video after a short delay to ensure source is loaded
+                    setTimeout(() => {
+                        videoElement.play().catch(e => {
+                            console.log('Auto-play prevented:', e);
+                            // If autoplay with sound fails, try with muted
+                            videoElement.muted = true;
+                            videoElement.play().catch(err => console.log('Muted play also failed:', err));
+                        });
+                    }, 100);
+                });
+            });
+
+            function loadVideo(index) {
+                if (index < 0 || index >= allVideoItems.length) return;
+
+                const item = allVideoItems[index];
+                const videoUrl = item.getAttribute('data-video-url');
+                const title = item.getAttribute('data-video-title');
+                const influencer = item.getAttribute('data-video-influencer');
+                const likes = item.getAttribute('data-video-likes');
+                const productsData = item.getAttribute('data-video-products');
+
+                // Set video source and play
+                videoElement.src = videoUrl;
+                videoElement.muted = false; // Enable sound
+                videoTitle.textContent = title;
+                influencerName.textContent = '@' + influencer;
+                likeCount.textContent = likes;
+
+                // Parse and display products if available
+                try {
+                    const products = JSON.parse(productsData);
+                    videoProducts.innerHTML = '';
+                    if (products.length > 0) {
+                        products.forEach(product => {
+                            const productEl = document.createElement('div');
+                            productEl.className = 'product-tag';
+                            productEl.textContent = product.name;
+                            videoProducts.appendChild(productEl);
+                        });
+                    } else {
+                        videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
+                    }
+                } catch (e) {
+                    videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
+                }
+
+                // Update pagination dots
+                updatePagination();
+            }
+
+            function updatePagination() {
+                const paginationDots = document.querySelector('.video-shorts-pagination');
+                if (paginationDots) {
+                    paginationDots.innerHTML = '';
+                    allVideoItems.forEach((_, i) => {
+                        const dot = document.createElement('div');
+                        dot.className = 'video-shorts-pagination-dot';
+                        if (i === currentIndex) {
+                            dot.classList.add('active');
+                        }
+                        // Add click event to pagination dots
+                        dot.addEventListener('click', function () {
+                            currentIndex = i;
+                            loadVideo(currentIndex);
+                            videoElement.play().catch(e => {
+                                console.log('Auto-play prevented:', e);
+                                // If autoplay with sound fails, try with muted
+                                videoElement.muted = true;
+                                videoElement.play().catch(err => console.log('Muted play also failed:', err));
+                            });
+                        });
+                        paginationDots.appendChild(dot);
+                    });
+                }
+            }
+
+            // Navigation between videos
+            function goToNextVideo() {
+                if (currentIndex < allVideoItems.length - 1) {
+                    currentIndex++;
+                    loadVideo(currentIndex);
+                    videoElement.play().catch(e => {
+                        console.log('Auto-play prevented:', e);
+                        // If autoplay with sound fails, try with muted
+                        videoElement.muted = true;
+                        videoElement.play().catch(err => console.log('Muted play also failed:', err));
+                    });
+                }
+            }
+
+            function goToPrevVideo() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    loadVideo(currentIndex);
+                    videoElement.play().catch(e => {
+                        console.log('Auto-play prevented:', e);
+                        // If autoplay with sound fails, try with muted
+                        videoElement.muted = true;
+                        videoElement.play().catch(err => console.log('Muted play also failed:', err));
+                    });
+                }
+            }
+
+            // Enhanced swipe functionality for video navigation with vertical swipe support
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchEndX = 0;
+            let touchEndY = 0;
+
+            videoElement.addEventListener('touchstart', function (e) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                e.preventDefault(); // Prevent default to avoid scrolling
+            }, { passive: false });
+
+            videoElement.addEventListener('touchend', function (e) {
+                touchEndX = e.changedTouches[0].clientX;
+                touchEndY = e.changedTouches[0].clientY;
+                handleSwipe();
+                e.preventDefault();
+            }, { passive: false });
+            
+            // Also handle touchmove to prevent scrolling during swipe
+            videoElement.addEventListener('touchmove', function (e) {
+                e.preventDefault();
+            }, { passive: false });
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const verticalSwipeThreshold = 30; // Lower threshold for vertical swipes
+
+                const diffX = touchStartX - touchEndX;
+                const diffY = touchStartY - touchEndY;
+
+                // Check if it's more of a vertical swipe than horizontal
+                if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > verticalSwipeThreshold) {
+                    if (diffY > 0) {
+                        // Swipe up - go to next video
+                        goToNextVideo();
+                    } else {
+                        // Swipe down - go to previous video
+                        goToPrevVideo();
+                    }
+                } else if (Math.abs(diffX) > swipeThreshold) {
+                    if (diffX > 0) {
+                        // Swipe left - go to next video
+                        goToNextVideo();
+                    } else {
+                        // Swipe right - go to previous video
+                        goToPrevVideo();
+                    }
+                }
+            }
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function (e) {
+                if (videoPlayer.classList.contains('active')) {
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        goToNextVideo();
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        goToPrevVideo();
+                    } else if (e.key === 'Escape') {
+                        videoPlayer.classList.remove('active');
+                        videoElement.pause();
+                        document.body.style.overflow = 'auto'; // Re-enable background scroll
+                    } else if (e.key === ' ') { // Spacebar to play/pause
+                        e.preventDefault();
+                        if (videoElement.paused) {
+                            videoElement.play();
+                        } else {
+                            videoElement.pause();
+                        }
+                    }
+                }
+            });
+
+            // Mouse wheel for navigation - now supports smooth scrolling
+            videoElement.addEventListener('wheel', function (e) {
+                if (videoPlayer.classList.contains('active')) {
+                    // Check if shift key is pressed to differentiate horizontal/vertical scrolling
+                    if (e.shiftKey) {
+                        // Horizontal scroll with shift + wheel
+                        if (e.deltaX > 0) {
+                            goToNextVideo();
+                        } else {
+                            goToPrevVideo();
+                        }
+                    } else {
+                        // Vertical scroll with just wheel
+                        if (e.deltaY > 0) {
+                            // Scroll down - next video
+                            goToNextVideo();
+                        } else {
+                            // Scroll up - previous video
+                            goToPrevVideo();
+                        }
+                    }
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            // Add smooth transition effect for video changes
+            videoElement.addEventListener('loadstart', function () {
+                videoElement.style.opacity = '0.5';
+            });
+
+            videoElement.addEventListener('canplay', function () {
+                videoElement.style.transition = 'opacity 0.3s ease';
+                videoElement.style.opacity = '1';
+            });
+
+            // Close video player
+            videoCloseBtn.addEventListener('click', function () {
+                videoPlayer.classList.remove('active');
+                videoElement.pause();
+                document.body.style.overflow = 'auto'; // Re-enable background scroll
+            });
+
+            // Close when clicking outside video area
+            videoPlayer.addEventListener('click', function (e) {
+                if (e.target === videoPlayer) {
+                    videoPlayer.classList.remove('active');
+                    videoElement.pause();
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Handle Buy Now button in video player
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('#video-shorts-buy-btn')) {
+                    e.preventDefault();
+
+                    // Get the current video item's product data
+                    const currentVideoItem = allVideoItems[currentIndex];
+                    if (currentVideoItem) {
+                        const productsData = currentVideoItem.getAttribute('data-video-products');
+
+                        // Get influencer ID from the video element
+                        let influencerId = currentVideoItem.getAttribute('data-video-influencer-id');
+
+                        if (influencerId) {
+                            // Redirect to influencer products page
+                            window.location.href = `/products/influencer/${influencerId}/products/`;
+                        } else {
+                            // Fallback to the original behavior if we can't get influencer ID
+                            try {
+                                const products = JSON.parse(productsData);
+                                if (products.length > 0) {
+                                    // Get the first product for now (you can modify this to handle multiple products)
+                                    const productId = products[0].id;
+
+                                    // Redirect to buy now page
+                                    window.location.href = `/orders/buy-now/${productId}/`;
+                                } else {
+                                    alert('No products available for purchase in this video');
+                                }
+                            } catch (e) {
+                                alert('Error processing products');
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Function to show product selection modal when multiple products exist
+            function showProductSelectionModal(products) {
+                // Create modal HTML
+                let modalHtml = '<div id="productSelectionModal" class="product-selection-modal">';
+                modalHtml += '<div class="product-selection-content">';
+                modalHtml += '<div class="product-selection-header">';
+                modalHtml += '<h3>Select Product to Purchase</h3>';
+                modalHtml += '<span class="product-selection-close">&times;</span>';
+                modalHtml += '</div>';
+                modalHtml += '<div class="product-selection-body">';
+
+                // Add products to modal
+                products.forEach(function (product) {
+                    modalHtml += '<div class="product-selection-item" data-product-id="' + product.id + '">';
+                    modalHtml += '<div class="product-selection-info">';
+                    modalHtml += '<h4>' + product.name + '</h4>';
+                    modalHtml += '<p>₹' + product.price + '</p>';
+                    modalHtml += '</div>';
+                    modalHtml += '<button class="btn btn-primary select-product-btn">Select</button>';
+                    modalHtml += '</div>';
+                });
+
+                modalHtml += '</div>';
+                modalHtml += '</div>';
+                modalHtml += '</div>';
+
+                // Add modal to page
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+                // Add modal styles if not already present
+                if (!document.querySelector('#productSelectionModalStyles')) {
+                    const modalStyles = document.createElement('style');
+                    modalStyles.id = 'productSelectionModalStyles';
+                    modalStyles.textContent = ".product-selection-modal {\n                        display: none;\n                        position: fixed;\n                        z-index: 10000;\n                        left: 0;\n                        top: 0;\n                        width: 100%;\n                        height: 100%;\n                        background-color: rgba(0,0,0,0.5);\n                    }\n                    .product-selection-content {\n                        background-color: #fefefe;\n                        margin: 15% auto;\n                        padding: 20px;\n                        border: none;\n                        border-radius: 10px;\n                        width: 80%;\n                        max-width: 500px;\n                        position: relative;\n                    }\n                    .product-selection-header {\n                        display: flex;\n                        justify-content: space-between;\n                        align-items: center;\n                        margin-bottom: 20px;\n                        padding-bottom: 10px;\n                        border-bottom: 1px solid #eee;\n                    }\n                    .product-selection-close {\n                        font-size: 28px;\n                        font-weight: bold;\n                        cursor: pointer;\n                    }\n                    .product-selection-body {\n                        max-height: 400px;\n                        overflow-y: auto;\n                    }\n                    .product-selection-item {\n                        display: flex;\n                        justify-content: space-between;\n                        align-items: center;\n                        padding: 15px;\n                        border: 1px solid #eee;\n                        border-radius: 5px;\n                        margin-bottom: 10px;\n                    }\n                    .product-selection-info h4 {\n                        margin: 0 0 5px 0;\n                        font-size: 16px;\n                    }\n                    .product-selection-info p {\n                        margin: 0;\n                        color: #007bff;\n                        font-weight: bold;\n                    }\n                    .select-product-btn {\n                        background-color: #007bff;\n                        color: white;\n                        border: none;\n                        padding: 8px 16px;\n                        border-radius: 5px;\n                        cursor: pointer;\n                    }\n                    .select-product-btn:hover {\n                        background-color: #0056b3;\n                    }";
+                    document.head.appendChild(modalStyles);
+                }
+
+                // Show modal
+                const modal = document.getElementById('productSelectionModal');
+                modal.style.display = 'block';
+
+                // Close modal when clicking the X
+                modal.querySelector('.product-selection-close').addEventListener('click', function () {
+                    modal.remove();
+                });
+
+                // Close modal when clicking outside the content
+                window.addEventListener('click', function (event) {
+                    if (event.target === modal) {
+                        modal.remove();
+                    }
+                });
+
+                // Handle product selection
+                const productItems = modal.querySelectorAll('.product-selection-item');
+                productItems.forEach(function (item) {
+                    item.querySelector('.select-product-btn').addEventListener('click', function () {
+                        const productId = item.getAttribute('data-product-id');
+                        // Redirect to buy now page
+                        window.location.href = `/orders/buy-now/${productId}/`;
+                    });
+                });
+            }
+
+            // Initialize Swiper for influencers section
+            const influencersSwiper = new Swiper('.influencers-swiper', {
+                slidesPerView: 'auto',
+                spaceBetween: 20,
+                centeredSlides: false,
+                loop: true,  // Enable looping
+                autoplay: {
+                    delay: 3000,  // 3 seconds between slides
+                    disableOnInteraction: false,  // Keep autoplay after user interaction
+                },
+                pagination: {
+                    el: '.influencers-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    320: {
+                        slidesPerView: 1.5,
+                        spaceBetween: 10
+                    },
+                    480: {
+                        slidesPerView: 2,
+                        spaceBetween: 15
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 20
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 20
+                    },
+                    1200: {
+                        slidesPerView: 5,
+                        spaceBetween: 20
+                    }
+                },
+                // Enable mousewheel control
+                mousewheel: {
+                    invert: false,
+                    forceToAxis: true
+                },
+                // Enable keyboard control
+                keyboard: {
+                    enabled: true,
+                    onlyInViewport: true
+                }
+            });
+
+        </script>
 </body>
 
 </html>
