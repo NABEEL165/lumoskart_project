@@ -3827,7 +3827,7 @@
             </div>
             <div class="products-grid">
                 {% for product in category_products %}
-                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
+                <a href="{% if product.influencer %}{% url 'view_influencer_products' product.influencer.id %}{% else %}{% url 'product_detail' product.id %}{% endif %}" class="text-decoration-none">
                 <div class="product-card" data-product-id="{{ product.id }}"
                     data-category-id="{{ product.category.id|default:'0' }}">
                     <div class="product-img-wrapper">
@@ -3907,7 +3907,7 @@
             </div>
             <div class="products-grid">
                 {% for product in products %}
-                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
+                <a href="{% if product.influencer %}{% url 'view_influencer_products' product.influencer.id %}{% else %}{% url 'product_detail' product.id %}{% endif %}" class="text-decoration-none">
                 <div class="product-card" data-product-id="{{ product.id }}"
                     data-category-id="{{ product.category.id|default:'0' }}">
                     <div class="product-img-wrapper">
@@ -4029,7 +4029,7 @@
                         {% endif %}
                     </a>
 
-                    
+                    <!-- Add to Cart / Buy Now Bar -->
                     {% if product %}
                     <a href="javascript:void(0);" class="reel-add-to-cart-bar buy-now-btn">
                         <span data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">Buy Now</span> <i class="fas fa-caret-down"></i>
@@ -4053,7 +4053,6 @@
             </div>
             {% endif %}
         </section>
- 
 
         <!-- Video Shorts Player Modal -->
         <div class="video-shorts-player">
