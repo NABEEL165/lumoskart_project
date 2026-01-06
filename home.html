@@ -50,9 +50,6 @@
 
         .navbar-brand img {
             height: 40px;
-            width: 40px;
-            border-radius: 50%;
-            object-fit: cover;
             transition: transform 0.3s ease;
         }
 
@@ -559,17 +556,11 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh;
+            height: 100%;
             background: rgba(0, 0, 0, 0.9);
             z-index: 9999;
             display: none;
             flex-direction: column;
-        }
-
-        @media (max-width: 768px) {
-            .video-shorts-player {
-                background: #000;
-            }
         }
 
         .video-shorts-player.active {
@@ -587,140 +578,19 @@
 
         .video-shorts-video-container {
             width: 100%;
-            max-width: 100%;
+            max-width: 500px;
             height: 100%;
             position: relative;
             overflow: hidden;
-            border-radius: 0; /* Remove border radius for full screen mobile experience */
+            border-radius: 15px;
             transition: all 0.3s ease;
-            max-height: 100vh;
-            aspect-ratio: 9/16; /* Maintain vertical/portrait aspect ratio */
-        }
-
-        @media (max-width: 768px) {
-            .video-shorts-video-container {
-                max-height: 100vh;
-                border-radius: 0; /* Full screen on mobile */
-            }
         }
 
         .video-shorts-video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            aspect-ratio: 9/16; /* Vertical/portrait aspect ratio like Instagram Reels */
             transition: opacity 0.3s ease;
-        }
-
-        /* Mobile-specific optimizations */
-        @media (max-width: 768px) {
-            .video-shorts-player {
-                background: #000;
-            }
-
-            .video-shorts-content {
-                width: 100%;
-                height: 100vh;
-            }
-
-            .video-shorts-video-container {
-                flex: 1;
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .video-shorts-video {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                aspect-ratio: 9/16; /* Vertical/portrait aspect ratio like Instagram Reels */
-            }
-
-            .video-shorts-overlay {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                padding: 15px;
-                background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-                color: white;
-            }
-
-            .video-shorts-actions {
-                flex-direction: column;
-                gap: 10px;
-                align-items: flex-start;
-            }
-
-            .video-shorts-action-btn {
-                flex-direction: row;
-                align-items: center;
-                gap: 5px;
-            }
-
-            .video-shorts-pagination {
-                position: absolute;
-                right: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-            }
-        }
-
-        /* Desktop-specific optimizations */
-        @media (min-width: 769px) {
-            .video-shorts-player {
-                background: rgba(0, 0, 0, 0.95);
-            }
-
-            .video-shorts-content {
-                max-width: 450px;
-                height: calc(100vh - 40px);
-                margin: 20px auto;
-                border-radius: 20px;
-                overflow: hidden;
-            }
-
-            .video-shorts-video-container {
-                flex: 1;
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .video-shorts-video {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                aspect-ratio: 9/16; /* Vertical/portrait aspect ratio like Instagram Reels */
-            }
-
-            .video-shorts-actions {
-                flex-direction: row;
-                gap: 15px;
-                justify-content: center;
-            }
-
-            .video-shorts-action-btn {
-                flex-direction: column;
-                align-items: center;
-                gap: 5px;
-            }
-
-            .video-shorts-pagination {
-                position: absolute;
-                right: 20px;
-                top: 50%;
-                transform: translateY(-50%);
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
         }
 
         .video-shorts-overlay {
@@ -3591,13 +3461,18 @@
     color: var(--color-primary);  /* This is #00c7f7 (blue) */
     text-decoration: none;
 }
+
+    /* Language Translation Styles */
+    .nav-text, .btn-text {
+        display: inline;
+    }
 </style>
 
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a href="{% url 'home' %}" class="navbar-brand">
-                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-06 at 12.18.37 PM.jpeg' %}" alt="Lumoskart Logo" height="40"
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="50"
                     class="d-inline-block align-middle">
             </a>
 
@@ -3619,10 +3494,10 @@
                         <input type="hidden" name="page" value="home">
                         <span class="search-icon"><i class="fas fa-search"></i></span>
                         <input type="text" name="q" class="form-control search-bar"
-                            placeholder="Search influencers, products..." data-placeholder-en="Search influencers, products..." data-placeholder-ar="ابحث عن المؤثرين، المنتجات..." data-placeholder-hi="प्रभावकों, उत्पादों को खोजें..." value="{{ request.GET.q|default:'' }}"
+                            placeholder="Search influencers, products..." data-placeholder-en="Search influencers, products..." data-placeholder-ar="ابحث عن المؤثرين أو المنتجات..." data-placeholder-hi="प्रभावकों या उत्पादों को खोजें..." value="{{ request.GET.q|default:'' }}"
                             required>
                         {% if request.GET.q %}
-                        <a href="{% url 'home' %}" class="btn btn-outline-light ms-2">Clear</a>
+                        <a href="{% url 'home' %}" class="btn btn-outline-light ms-2" data-en="Clear" data-ar="مسح" data-hi="साफ़ करें">Clear</a>
                         {% endif %}
                     </form>
                 </div>
@@ -3656,8 +3531,8 @@
                             <li><a class="dropdown-item currency-option" href="#" data-currency="IDR" data-symbol="Rp">Indonesia (IDR)</a></li>
                         </ul>
                     </div>
-                    <a href="{% url 'register_customer' %}" class="btn btn-signup" data-en="Sign up" data-ar="اشتراك" data-hi="साइन अप करें">Sign up</a>
-                    <a href="{% url 'login' %}" class="btn btn-login" data-en="Log in" data-ar="تسجيل الدخول" data-hi="लॉग इन करें">Log in</a>
+                    <a href="{% url 'register_customer' %}" class="btn btn-signup" data-en="Sign up" data-ar="اشتراك" data-hi="साइन अप करें"><span class="btn-text">Sign up</span></a>
+                    <a href="{% url 'login' %}" class="btn btn-login" data-en="Log in" data-ar="تسجيل الدخول" data-hi="लॉग इन करें"><span class="btn-text">Log in</span></a>
                     <!--{% if user.is_staff %}-->
                     <!--<a href="{% url 'admin_dashboard' %}" class="btn btn-outline-light ms-2">Admin</a>-->
                     <!--{% endif %}-->
@@ -3665,12 +3540,11 @@
             </div>
         </div>
     </nav>
-
-    <!-- Off-canvas Menu for Mobile/Tablet -->
+  <!-- Off-canvas Menu for Mobile/Tablet -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
         <div class="offcanvas-header" style="background-color: #1e293b;">
             <h5 class="offcanvas-title" id="navbarOffcanvasLabel">
-                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-06 at 12.18.37 PM.jpeg' %}" alt="Lumoskart Logo" height="40"
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="40"
                     class="d-inline-block align-middle">
             </h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
@@ -3679,10 +3553,10 @@
         <div class="offcanvas-body" style="background-color: #0f172a;">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="{% url 'home' %}" data-en="Home" data-ar="الرئيسية" data-hi="होम"><i
-                            class="fas fa-home me-2"></i>Home</a></li>
+                            class="fas fa-home me-2"></i><span class="nav-text">Home</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}" data-en="About" data-ar="من نحن" data-hi="हमारे बारे में"><i
-                            class="fas fa-info-circle me-2"></i>About</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}" data-en="Support" data-ar="الدعم" data-hi="सहायता"><i class="fas fa-headset me-2"></i>Support</a></li>
+                            class="fas fa-info-circle me-2"></i><span class="nav-text">About</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}" data-en="Support" data-ar="الدعم" data-hi="सहायता"><i class="fas fa-headset me-2"></i><span class="nav-text">Support</span></a></li>
                 <!-- Language Selection in Mobile Menu -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="mobileLanguageDropdown" role="button"
@@ -3695,39 +3569,39 @@
                         <li><a class="dropdown-item lang-option" href="#" data-lang="hi">Hindi</a></li>
                     </ul>
                 </li>
-                <!-- Currency Converter Dropdown -->
-                    <div class="dropdown">
-                        <button class="btn btn-outline-light dropdown-toggle me-2" type="button" id="currencyDropdown"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-exchange-alt me-1"></i> <span id="currentCurrency">INR (₹)</span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="INR" data-symbol="₹">India (INR)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="AED" data-symbol="د.إ">UAE (AED)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="SGD" data-symbol="$">Singapore (SGD)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="PHP" data-symbol="₱">Philippines (PHP)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="USD" data-symbol="$">USA (USD)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="EUR" data-symbol="€">Germany (EUR)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="IDR" data-symbol="Rp">Indonesia (IDR)</a></li>
-                        </ul>
-                    </div>
+                <!-- Currency Converter in Mobile Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="mobileCurrencyDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-exchange-alt me-2"></i> <span id="mobileCurrentCurrency">INR (₹)</span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="mobileCurrencyDropdown">
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="INR" data-symbol="₹">India (INR)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="AED" data-symbol="د.إ">UAE (AED)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="SGD" data-symbol="$">Singapore (SGD)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="PHP" data-symbol="₱">Philippines (PHP)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="USD" data-symbol="$">USA (USD)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="EUR" data-symbol="€">Germany (EUR)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="IDR" data-symbol="Rp">Indonesia (IDR)</a></li>
+                    </ul>
+                </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'register_customer' %}" data-en="Sign up" data-ar="اشتراك" data-hi="साइन अप करें"><i
-                            class="fas fa-user me-2"></i>Sign up</a></li>
+                            class="fas fa-user me-2"></i><span class="nav-text">Sign up</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'login' %}" data-en="Log in" data-ar="تسجيل الدخول" data-hi="लॉग इन करें"><i
-                            class="fas fa-sign-in-alt me-2"></i>Log in</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'order_tracking' %}"><i
-                            class="fas fa-box me-2"></i>Order Tracking</a></li>
+                            class="fas fa-sign-in-alt me-2"></i><span class="nav-text">Log in</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'order_tracking' %}" data-en="Order Tracking" data-ar="تتبع الطلب" data-hi="ऑर्डर ट्रैकिंग"><i
+                            class="fas fa-box me-2"></i><span class="nav-text">Order Tracking</span></a></li>
                 <!-- Moved Premium option here as a sub-section under Sign Up -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Sign up as an Influencer" data-ar="التسجيل كمؤثر" data-hi="एक प्रभावक के रूप में साइन अप करें"><i class="fas fa-user-plus me-2"></i>Sign
-                        up as an Influencer</a>
+                    <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Sign up as an Influencer" data-ar="التسجيل كمؤثر" data-hi="एक प्रभावक के रूप में साइन अप करें"><i class="fas fa-user-plus me-2"></i><span class="nav-text">Sign
+                        up as an Influencer</span></a>
                     <ul class="nav flex-column ms-4">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Premium" data-ar="مميز" data-hi="प्रीमियम"><i class="fas fa-crown me-2"></i>Premium</a>
+                            <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Premium" data-ar="مميز" data-hi="प्रीमियम"><i class="fas fa-crown me-2"></i><span class="nav-text">Premium</span></a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" data-en="Logout" data-ar="تسجيل الخروج" data-hi="लॉग आउट"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" data-en="Logout" data-ar="تسجيل الخروج" data-hi="लॉग आउट"><i class="fas fa-sign-out-alt me-2"></i><span class="nav-text">Logout</span></a>
                 </li>
 
             </ul>
@@ -3757,10 +3631,10 @@
         <!-- Search Results Feedback -->
         {% if request.GET.q %}
         <div class="search-results-feedback mb-4">
-            <p>Showing results for "{{ request.GET.q }}": {{ products|length }} products, {{ influencers|length }}
+            <p data-en="Showing results for \"{{ request.GET.q }}\": {{ products|length }} products, {{ influencers|length }} influencers" data-ar="عرض النتائج لـ \"{{ request.GET.q }}\": {{ products|length }} منتجات، {{ influencers|length }} مؤثرون" data-hi="\"{{ request.GET.q }}\" के लिए परिणाम दिखा रहा है: {{ products|length }} उत्पाद, {{ influencers|length }} प्रभावक">Showing results for "{{ request.GET.q }}": {{ products|length }} products, {{ influencers|length }}
                 influencers</p>
             {% if not products and not influencers %}
-            <p>No results found. Try a different search term.</p>
+            <p data-en="No results found. Try a different search term." data-ar="لا توجد نتائج. حاول مصطلح بحث مختلف." data-hi="कोई परिणाम नहीं मिला। कोई अलग खोज शब्द आज़माएं।">No results found. Try a different search term.</p>
             {% endif %}
         </div>
         {% endif %}
@@ -3768,8 +3642,8 @@
         <!-- Banner Section -->
         <div class="banner-section">
             <div class="banner-card">
-                <h2>Discover Amazing Products</h2>
-                <p>Browse through our curated selection of products promoted by top influencers</p>
+                <h2 data-en="Discover Amazing Products" data-ar="اكتشف منتجات رائعة" data-hi="शानदार उत्पाद खोजें">Discover Amazing Products</h2>
+                <p data-en="Browse through our curated selection of products promoted by top influencers" data-ar="تصفح اختيارنا المنسق من المنتجات المقدمة من المؤثرين الرائدين" data-hi="शीर्ष प्रभावकों द्वारा संसोर्ट किए गए उत्पादों के हमारे चयनित संग्रह को ब्राउज़ करें">Browse through our curated selection of products promoted by top influencers</p>
             </div>
         </div>
 
@@ -3794,14 +3668,14 @@
                                     {% endif %}
                                 </div>
                                 <h3 class="influencer-name">{{ influencer.get_full_name|default:influencer.username }}</h3>
-                                <p class="product-count">{{ influencer.products.count }} <span data-en="Products" data-ar="منتجات" data-hi="उत्पाद">Products</span></p>
+                                <p class="product-count">{{ influencer.products.count }} Products</p>
                             </a>
                         </div>
                         {% endif %}
                         {% empty %}
                         <div class="swiper-slide">
                             <div class="empty-state">
-                                <p data-en="No influencers registered yet." data-ar="لا توجد مؤثرون مسجلون بعد." data-hi="अभी तक कोई प्रभावक पंजीकृत नहीं है।">No influencers registered yet.</p>
+                                <p data-en="No influencers registered yet." data-ar="لا يوجد مؤثرون مسجلون بعد." data-hi="अभी तक कोई प्रभावक पंजीकृत नहीं है।">No influencers registered yet.</p>
                             </div>
                         </div>
                         {% endfor %}
@@ -3820,14 +3694,14 @@
             <div class="section-title-bar">
                 <div>
                     <h2>{{ category.name }}</h2>
-                    <p class="category-description" data-en="Explore our collection of " data-ar="استكشف مجموعتنا من " data-hi="हमारे संग्रह का पता लगाएं ">Explore our collection of {{ category.name|lower }}</p>
+                    <p class="category-description" data-en="Explore our collection of {{ category.name|lower }}" data-ar="استكشف مجموعتنا من {{ category.name|lower }}" data-hi="{{ category.name|lower }} के हमारे संग्रह का पता लगाएं">Explore our collection of {{ category.name|lower }}</p>
                 </div>
-                <a href="{% url 'product_lists' %}?category={{ category.id }}" class="view-all-btn" data-en="View All" data-ar="عرض الكل" data-hi="सभी देखें">View All {{
+                <a href="{% url 'product_lists' %}?category={{ category.id }}" class="view-all-btn" data-en="View All {{ category.name }}" data-ar="عرض الكل {{ category.name }}" data-hi="सभी {{ category.name }} देखें">View All {{
                     category.name }}</a>
             </div>
             <div class="products-grid">
                 {% for product in category_products %}
-                <a href="{% if product.influencer %}{% url 'view_influencer_products' product.influencer.id %}{% else %}{% url 'product_detail' product.id %}{% endif %}" class="text-decoration-none">
+                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
                 <div class="product-card" data-product-id="{{ product.id }}"
                     data-category-id="{{ product.category.id|default:'0' }}">
                     <div class="product-img-wrapper">
@@ -3888,7 +3762,7 @@
                                     OFF</span>
                                 {% endif %}
                             </div>
-                            <button class="heart-btn" aria-label="Add to wishlist">
+                            <button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist" data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">
                                 <i class="fas fa-heart"></i>
                             </button>
                         </div>
@@ -3907,7 +3781,7 @@
             </div>
             <div class="products-grid">
                 {% for product in products %}
-                <a href="{% if product.influencer %}{% url 'view_influencer_products' product.influencer.id %}{% else %}{% url 'product_detail' product.id %}{% endif %}" class="text-decoration-none">
+                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
                 <div class="product-card" data-product-id="{{ product.id }}"
                     data-category-id="{{ product.category.id|default:'0' }}">
                     <div class="product-img-wrapper">
@@ -3958,7 +3832,7 @@
 
                         <div class="product-footer">
                             <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{ product.price }}</span>
-                            <button class="heart-btn" aria-label="Add to wishlist">
+                            <button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist" data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">
                                 <i class="fas fa-heart"></i>
                             </button>
                         </div>
@@ -3967,7 +3841,7 @@
                 </a>
                 {% empty %}
                 <div class="empty-state">
-                    <p>No products available.</p>
+                    <p data-en="No products available." data-ar="لا توجد منتجات متاحة." data-hi="कोई उत्पाद उपलब्ध नहीं है।">No products available.</p>
                 </div>
                 {% endfor %}
             </div>
@@ -3999,7 +3873,7 @@
                         data-video-influencer="{{ video.influencer.username }}"
                         data-video-influencer-id="{{ video.influencer.id }}"
                         data-video-likes="{{ video.likes|default:0 }}" data-video-views="{{ video.views|default:0 }}"
-                        data-video-products='{% for prod in video.products.all %}{"id": {{ prod.id }}, "name": "{{ prod.name }}", "price": {{ prod.price }}, "image": "{{ prod.image.url|default:"" }}", "influencer_id": {{ video.influencer.id }}}{% if not forloop.last %},{% endif %}{% endfor %}'>
+                        data-video-products='{% for prod in video.products.all %}{"id": {{ prod.id }}, "name": "{{ prod.name }}", "price": {{ prod.price }}, "currency": "INR", "image": "{{ prod.image.url|default:"" }}", "influencer_id": {{ video.influencer.id }}}{% if not forloop.last %},{% endif %}{% endfor %}'>
                         <video class="w-100 h-100 object-fit-cover" muted autoplay loop playsinline preload="metadata">
                             <source src="{{ video.video_file.url }}#t=0.1" type="video/mp4">
                         </video>
@@ -4031,14 +3905,15 @@
 
                     <!-- Add to Cart / Buy Now Bar -->
                     {% if product %}
-                    <a href="javascript:void(0);" class="reel-add-to-cart-bar buy-now-btn">
-                        <span data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">Buy Now</span> <i class="fas fa-caret-down"></i>
+                    <a href="{% url 'view_influencer_products' product.influencer.id %}"
+                        class="reel-add-to-cart-bar buy-now-btn" data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">
+                        <span class="btn-text">Buy Now</span> <i class="fas fa-caret-down"></i>
                     </a>
                     {% else %}
                     <div class="reel-add-to-cart-bar disabled" style="opacity: 0.5; cursor: not-allowed;">
                         <a href="javascript:void(0);" class="video-shorts-action-btn video-shorts-buy"
-                            id="video-shorts-buy-btn">
-                            <i class="fas fa-shopping-cart"></i> <span data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">Buy Now</span>
+                            id="video-shorts-buy-btn" data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">
+                            <i class="fas fa-shopping-cart"></i> <span class="btn-text">Buy Now</span>
                         </a>
                     </div>
                     {% endif %}
@@ -4048,7 +3923,7 @@
             </div>
             {% else %}
             <div class="empty-state">
-                <h4 data-en="No Reels Yet" data-ar="لا توجد مقاطع فيديو بعد" data-hi="अभी तक कोई रील्स नहीं">No Reels Yet</h4>
+                <h4 data-en="No Reels Yet" data-ar="لا توجد مقاطع بعد" data-hi="अभी तक कोई रील्स नहीं">No Reels Yet</h4>
                 <p data-en="Be the first influencer to post!" data-ar="كن أول مؤثر ينشر!" data-hi="पोस्ट करने वाले पहले प्रभावक बनें!">Be the first influencer to post!</p>
             </div>
             {% endif %}
@@ -4140,10 +4015,10 @@
                     <div class="footer-column">
                         <h3 data-en="About Us" data-ar="من نحن" data-hi="हमारे बारे में">About Us</h3>
                         <ul class="footer-links">
-                            <li><a href="{% url 'about_us' %}">Our Story</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">Press</a></li>
-                            <li><a href="#">Blog</a></li>
+                            <li><a href="{% url 'about_us' %}" data-en="Our Story" data-ar="قصتنا" data-hi="हमारी कहानी">Our Story</a></li>
+                            <li><a href="#" data-en="Careers" data-ar="الوظائف" data-hi="करियर">Careers</a></li>
+                            <li><a href="#" data-en="Press" data-ar="الصحافة" data-hi="प्रेस">Press</a></li>
+                            <li><a href="#" data-en="Blog" data-ar="المدونة" data-hi="ब्लॉग">Blog</a></li>
                         </ul>
                     </div>
 
@@ -4151,10 +4026,10 @@
                     <div class="footer-column">
                         <h3 data-en="Terms & Conditions" data-ar="الشروط والأحكام" data-hi="नियम एवं शर्तें">Terms & Conditions</h3>
                         <ul class="footer-links">
-                            <li><a href="#">Terms of Service</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Return Policy</a></li>
-                            <li><a href="#">Shipping Policy</a></li>
+                            <li><a href="#" data-en="Terms of Service" data-ar="شروط الخدمة" data-hi="सेवा की शर्तें">Terms of Service</a></li>
+                            <li><a href="#" data-en="Privacy Policy" data-ar="سياسة الخصوصية" data-hi="गोपनीयता नीति">Privacy Policy</a></li>
+                            <li><a href="#" data-en="Return Policy" data-ar="سياسة الإرجاع" data-hi="वापसी नीति">Return Policy</a></li>
+                            <li><a href="#" data-en="Shipping Policy" data-ar="سياسة الشحن" data-hi="शिपिंग नीति">Shipping Policy</a></li>
                         </ul>
                     </div>
 
@@ -4162,26 +4037,26 @@
                     <div class="footer-column">
                         <h3 data-en="Connect With Us" data-ar="تواصل معنا" data-hi="हमसे संपर्क करें">Connect With Us</h3>
                         <ul class="footer-links">
-                            <li><a href="{% url 'support' %}">Contact Us</a></li>
-                            <li><a href="{% url 'support' %}">FAQs</a></li>
-                            <li><a href="{% url 'support' %}">Support Center</a></li>
+                            <li><a href="{% url 'support' %}" data-en="Contact Us" data-ar="اتصل بنا" data-hi="हमसे संपर्क करें">Contact Us</a></li>
+                            <li><a href="{% url 'support' %}" data-en="FAQs" data-ar="الأسئلة الشائعة" data-hi="पूछे जाने वाले प्रश्न">FAQs</a></li>
+                            <li><a href="{% url 'support' %}" data-en="Support Center" data-ar="مركز الدعم" data-hi="सहायता केंद्र">Support Center</a></li>
                         </ul>
                         <div class="social-links">
-                            <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-link" aria-label="Facebook" data-en="Facebook" data-ar="فيسبوك" data-hi="फेसबुक"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link" aria-label="Twitter" data-en="Twitter" data-ar="تويتر" data-hi="ट्विटर"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link" aria-label="Instagram" data-en="Instagram" data-ar="إنستغرام" data-hi="इंस्टाग्राम"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link" aria-label="LinkedIn" data-en="LinkedIn" data-ar="لينكدإن" data-hi="लिंक्डइन"><i class="fab fa-linkedin-in"></i></a>
                         </div>
                     </div>
 
                     <!-- Let Us Help You -->
                     <div class="footer-column">
-                        <h3 data-en="Let Us Help You" data-ar="دعنا نساعدك" data-hi="हम आपकी सहायता करें">Let Us Help You</h3>
+                        <h3 data-en="Let Us Help You" data-ar="دعنا نساعدك" data-hi="हम आपकी मदद करें">Let Us Help You</h3>
                         <ul class="footer-links">
-                            <li><a href="#">Customer Service</a></li>
-                            <li><a href="#">Track Your Order</a></li>
-                            <li><a href="#">Returns & Exchanges</a></li>
-                            <li><a href="#">Payment Options</a></li>
+                            <li><a href="#" data-en="Customer Service" data-ar="خدمة العملاء" data-hi="ग्राहक सेवा">Customer Service</a></li>
+                            <li><a href="#" data-en="Track Your Order" data-ar="تتبع طلبك" data-hi="अपना ऑर्डर ट्रैक करें">Track Your Order</a></li>
+                            <li><a href="#" data-en="Returns & Exchanges" data-ar="الإرجاع والاستبدال" data-hi="वापसी और आदान-प्रदान">Returns & Exchanges</a></li>
+                            <li><a href="#" data-en="Payment Options" data-ar="خيارات الدفع" data-hi="भुगतान विकल्प">Payment Options</a></li>
                         </ul>
                     </div>
                 </div>
@@ -4193,7 +4068,7 @@
         </footer>
 
         <a href="https://api.whatsapp.com/send?phone=918075909735&text=Hello!%20I'm%20interested%20in%20your%20products"
-            target="_blank" class="whatsapp-widget" aria-label="Chat with us on WhatsApp">
+            target="_blank" class="whatsapp-widget" aria-label="Chat with us on WhatsApp" data-en="Chat with us on WhatsApp" data-ar="الدردشة معنا على واتساب" data-hi="हमसे व्हाट्सएप पर बात करें">
             <i class="fab fa-whatsapp"></i>
         </a>
 
@@ -4207,37 +4082,21 @@
         <script>
             // Handle Add to Cart and Buy Now buttons
             document.addEventListener('DOMContentLoaded', function () {
-                // Handle language selection for entire website
+                // Handle language selection
                 const languageItems = document.querySelectorAll('.lang-option');
                 languageItems.forEach(item => {
                     item.addEventListener('click', function (e) {
                         e.preventDefault();
                         const selectedLang = this.getAttribute('data-lang');
-
+                        
                         // Store selected language in localStorage for entire website
                         localStorage.setItem('preferredLanguage', selectedLang);
-
-                        // Apply language changes without reloading
-                        applyLanguage(selectedLang);
-
-                        // Update language selector displays
-                        const langDisplay = document.getElementById('currentLanguage');
-                        const mobileLangDisplay = document.getElementById('mobileCurrentLanguage');
-
-                        if (langDisplay) {
-                            if (selectedLang === 'ar') langDisplay.textContent = 'العربية';
-                            else if (selectedLang === 'hi') langDisplay.textContent = 'हिंदी';
-                            else langDisplay.textContent = 'English';
-                        }
-
-                        if (mobileLangDisplay) {
-                            if (selectedLang === 'ar') mobileLangDisplay.textContent = 'العربية';
-                            else if (selectedLang === 'hi') mobileLangDisplay.textContent = 'हिंदी';
-                            else mobileLangDisplay.textContent = 'English';
-                        }
+                        
+                        // Reload the page to apply language changes
+                        window.location.reload();
                     });
                 });
-
+                
                 // Function to apply language translations
                 function applyLanguage(langCode) {
                     // Define translation objects
@@ -4247,83 +4106,125 @@
                             'about': 'About',
                             'support': 'Support',
                             'logout': 'Logout',
-                            'searchPlaceholder': 'Who\'s your favorite influencer',
+                            'login': 'Log in',
+                            'signup': 'Sign up',
+                            'influencerSignup': 'Sign up as an Influencer',
+                            'premium': 'Premium',
+                            'orderTracking': 'Order Tracking',
+                            'searchPlaceholder': 'Search influencers, products...',
+                            'clear': 'Clear',
                             'viewAll': 'View All',
-                            'topInfluencers': '🌟 Top Influencers',
-                            'influencerBio': 'Discover products curated by our most trusted influencers and content creators who bring you the latest trends and highest quality items.',
-                            'featuredProducts': '🛒 Featured Products',
-                            'productPage': 'Browse our complete collection of premium products from various categories, all recommended by trusted influencers and brands.',
-                            'trendingReels': '🎥 Trending Reels',
-                            'watchVideos': 'Watch engaging videos from our top influencers',
+                            'showAll': 'Show all',
+                            'products': 'Products',
+                            'influencers': 'Influencers',
+                            'videos': 'Videos',
+                            'noProducts': 'No products available.',
+                            'noInfluencers': 'No influencers registered yet.',
                             'noReels': 'No Reels Yet',
                             'firstPost': 'Be the first influencer to post!',
                             'buyNow': 'Buy Now',
-                            'noProducts': 'No products available yet. Stay tuned for amazing deals!',
-                            'noInfluencers': 'No influencers available right now. Check back soon for amazing content!'
+                            'addToWishlist': 'Add to wishlist',
+                            'resultsFor': 'Showing results for',
+                            'noResults': 'No results found. Try a different search term.',
+                            'discoverProducts': 'Discover Amazing Products',
+                            'browseProducts': 'Browse through our curated selection of products promoted by top influencers'
                         },
                         'ar': {
                             'home': 'الرئيسية',
                             'about': 'من نحن',
                             'support': 'الدعم',
                             'logout': 'تسجيل الخروج',
-                            'searchPlaceholder': 'من هو مؤثرك المفضل',
+                            'login': 'تسجيل الدخول',
+                            'signup': 'اشتراك',
+                            'influencerSignup': 'التسجيل كمؤثر',
+                            'premium': 'مميز',
+                            'orderTracking': 'تتبع الطلب',
+                            'searchPlaceholder': 'ابحث عن المؤثرين أو المنتجات...',
+                            'clear': 'مسح',
                             'viewAll': 'عرض الكل',
-                            'topInfluencers': '🌟 المؤثرون الأعلى',
-                            'influencerBio': 'اكتشف المنتجات التي يختارها مؤثرونا الموثوقون وصناع المحتوى الذين ي bringing لك أحدث الاتجاهات وأعلى جودة.',
-                            'featuredProducts': '🛒 المنتجات المميزة',
-                            'productPage': 'تصفح مجموعتنا الكاملة من المنتجات المتميزة من فئات مختلفة، كلها موصى بها من قبل المؤثرين والعلامات التجارية الموثوقة.',
-                            'trendingReels': '🎥 مقاطع الفيديو الرائجة',
-                            'watchVideos': 'شاهد مقاطع الفيديو الممتعة من مؤثرينا الأعلى',
-                            'noReels': 'لا توجد مقاطع فيديو بعد',
+                            'showAll': 'عرض الكل',
+                            'products': 'المنتجات',
+                            'influencers': 'المؤثرون',
+                            'videos': 'فيديوهات',
+                            'noProducts': 'لا توجد منتجات متاحة.',
+                            'noInfluencers': 'لا يوجد مؤثرون مسجلون بعد.',
+                            'noReels': 'لا توجد مقاطع بعد',
                             'firstPost': 'كن أول مؤثر ينشر!',
                             'buyNow': 'اشتري الآن',
-                            'noProducts': 'لا توجد منتجات متاحة بعد. تابع معنا للحصول على عروض مذهلة!',
-                            'noInfluencers': 'لا توجد مؤثرون متاحون الآن. تحقق مرة أخرى قريباً من المحتوى المذهل!'
+                            'addToWishlist': 'أضف إلى قائمة الأمنيات',
+                            'resultsFor': 'عرض النتائج لـ',
+                            'noResults': 'لا توجد نتائج. حاول مصطلح بحث مختلف.',
+                            'discoverProducts': 'اكتشف منتجات رائعة',
+                            'browseProducts': 'تصفح اختيارنا المنسق من المنتجات المقدمة من المؤثرين الرائدين'
                         },
                         'hi': {
                             'home': 'होम',
                             'about': 'हमारे बारे में',
                             'support': 'सहायता',
                             'logout': 'लॉग आउट',
-                            'searchPlaceholder': 'आपका पसंतीदा प्रभावक कौन है',
+                            'login': 'लॉग इन करें',
+                            'signup': 'साइन अप करें',
+                            'influencerSignup': 'एक प्रभावक के रूप में साइन अप करें',
+                            'premium': 'प्रीमियम',
+                            'orderTracking': 'ऑर्डर ट्रैकिंग',
+                            'searchPlaceholder': 'प्रभावकों या उत्पादों को खोजें...',
+                            'clear': 'साफ़ करें',
                             'viewAll': 'सभी देखें',
-                            'topInfluencers': '🌟 शीर्ष प्रभावक',
-                            'influencerBio': 'हमारे सबसे भरोसेमंद प्रभावकों और सामग्री निर्माताओं द्वारा चुने गए उत्पादों की खोज करें जो आपको नवीनतम रुझान और उच्चतम गुणवत्ता वाले वस्तुएं लाते हैं।',
-                            'featuredProducts': '🛒 विशेष रूप से प्रदर्शित उत्पाद',
-                            'productPage': 'विभिन्न श्रेणियों से प्रीमियम उत्पादों के हमारे पूर्ण संग्रह को ब्राउज़ करें, जिन्हें भरोसेमंद प्रभावकों और ब्रांडों द्वारा अनुशंसित किया गया है।',
-                            'trendingReels': '🎥 ट्रेंडिंग रील्स',
-                            'watchVideos': 'हमारे शीर्ष प्रभावकों से आकर्षक वीडियो देखें',
+                            'showAll': 'सभी दिखाएं',
+                            'products': 'उत्पाद',
+                            'influencers': 'प्रभावक',
+                            'videos': 'वीडियो',
+                            'noProducts': 'कोई उत्पाद उपलब्ध नहीं है।',
+                            'noInfluencers': 'अभी तक कोई प्रभावक पंजीकृत नहीं है।',
                             'noReels': 'अभी तक कोई रील्स नहीं',
                             'firstPost': 'पोस्ट करने वाले पहले प्रभावक बनें!',
                             'buyNow': 'अभी खरीदें',
-                            'noProducts': 'अभी तक कोई उत्पाद उपलब्ध नहीं है। शानदार सौदों के लिए बने रहें!',
-                            'noInfluencers': 'अभी कोई प्रभावक उपलब्ध नहीं है। शानदार सामग्री के लिए जल्द ही वापस आएँ!'
+                            'addToWishlist': 'इच्छा सूची में जोड़ें',
+                            'resultsFor': 'के लिए परिणाम दिखा रहा है',
+                            'noResults': 'कोई परिणाम नहीं मिला। कोई अलग खोज शब्द आज़माएं।',
+                            'discoverProducts': 'शानदार उत्पाद खोजें',
+                            'browseProducts': 'शीर्ष प्रभावकों द्वारा संसोर्ट किए गए उत्पादों के हमारे चयनित संग्रह को ब्राउज़ करें'
                         }
                     };
-
+                    
                     const lang = translations[langCode] || translations['en'];
-
+                    
                     // Update text content based on language
                     document.querySelectorAll('[data-en]').forEach(element => {
                         const enText = element.getAttribute('data-en');
                         const arText = element.getAttribute('data-ar');
                         const hiText = element.getAttribute('data-hi');
-
+                        
+                        // Check if element has a span child with nav-text or btn-text class
+                        const spanElement = element.querySelector('.nav-text, .btn-text');
+                        
                         if (langCode === 'ar' && arText) {
-                            element.textContent = arText;
+                            if (spanElement) {
+                                spanElement.textContent = arText;
+                            } else {
+                                element.textContent = arText;
+                            }
                         } else if (langCode === 'hi' && hiText) {
-                            element.textContent = hiText;
+                            if (spanElement) {
+                                spanElement.textContent = hiText;
+                            } else {
+                                element.textContent = hiText;
+                            }
                         } else if (langCode === 'en' && enText) {
-                            element.textContent = enText;
+                            if (spanElement) {
+                                spanElement.textContent = enText;
+                            } else {
+                                element.textContent = enText;
+                            }
                         }
                     });
-
+                    
                     // Update placeholder text
                     document.querySelectorAll('[data-placeholder-en]').forEach(element => {
                         const enPlaceholder = element.getAttribute('data-placeholder-en');
                         const arPlaceholder = element.getAttribute('data-placeholder-ar');
                         const hiPlaceholder = element.getAttribute('data-placeholder-hi');
-
+                        
                         if (langCode === 'ar' && arPlaceholder) {
                             element.placeholder = arPlaceholder;
                         } else if (langCode === 'hi' && hiPlaceholder) {
@@ -4332,13 +4233,13 @@
                             element.placeholder = enPlaceholder;
                         }
                     });
-
+                    
                     // Update title attributes
                     document.querySelectorAll('[data-title-en]').forEach(element => {
                         const enTitle = element.getAttribute('data-title-en');
                         const arTitle = element.getAttribute('data-title-ar');
                         const hiTitle = element.getAttribute('data-title-hi');
-
+                        
                         if (langCode === 'ar' && arTitle) {
                             element.title = arTitle;
                         } else if (langCode === 'hi' && hiTitle) {
@@ -4347,46 +4248,27 @@
                             element.title = enTitle;
                         }
                     });
-
-                    // Update language selector display
-                    const langDisplay = document.getElementById('currentLanguage');
-                    const mobileLangDisplay = document.getElementById('mobileCurrentLanguage');
-
-                    if (langDisplay) {
-                        if (langCode === 'ar') langDisplay.textContent = 'العربية';
-                        else if (langCode === 'hi') langDisplay.textContent = 'हिंदी';
-                        else langDisplay.textContent = 'English';
-                    }
-
-                    if (mobileLangDisplay) {
-                        if (langCode === 'ar') mobileLangDisplay.textContent = 'العربية';
-                        else if (langCode === 'hi') mobileLangDisplay.textContent = 'हिंदी';
-                        else mobileLangDisplay.textContent = 'English';
-                    }
                 }
-
-                // Initialize language on page load
-                document.addEventListener('DOMContentLoaded', function() {
-                    // Get language from localStorage for entire website or default to 'en'
-                    const savedLang = localStorage.getItem('preferredLanguage') || 'en';
-                    applyLanguage(savedLang);
-
-                    // Update language selector display
-                    const langDisplay = document.getElementById('currentLanguage');
-                    const mobileLangDisplay = document.getElementById('mobileCurrentLanguage');
-
-                    if (langDisplay) {
-                        if (savedLang === 'ar') langDisplay.textContent = 'العربية';
-                        else if (savedLang === 'hi') langDisplay.textContent = 'हिंदी';
-                        else langDisplay.textContent = 'English';
-                    }
-
-                    if (mobileLangDisplay) {
-                        if (savedLang === 'ar') mobileLangDisplay.textContent = 'العربية';
-                        else if (savedLang === 'hi') mobileLangDisplay.textContent = 'हिंदी';
-                        else mobileLangDisplay.textContent = 'English';
-                    }
-                });
+                
+                // Get language from localStorage for entire website or default to 'en'
+                const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+                applyLanguage(savedLang);
+                
+                // Update language selector display
+                const langDisplay = document.getElementById('currentLanguage');
+                const mobileLangDisplay = document.getElementById('mobileCurrentLanguage');
+                
+                if (langDisplay) {
+                    if (savedLang === 'ar') langDisplay.textContent = 'العربية';
+                    else if (savedLang === 'hi') langDisplay.textContent = 'हिंदी';
+                    else langDisplay.textContent = 'English';
+                }
+                
+                if (mobileLangDisplay) {
+                    if (savedLang === 'ar') mobileLangDisplay.textContent = 'العربية';
+                    else if (savedLang === 'hi') mobileLangDisplay.textContent = 'हिंदी';
+                    else mobileLangDisplay.textContent = 'English';
+                }
 
                 // Handle all button clicks in a single event listener to avoid conflicts
                 document.addEventListener('click', function (e) {
@@ -4485,69 +4367,6 @@
                     }
                 });
 
-                // Handle video clicks separately to ensure they work properly
-                document.addEventListener('click', function (e) {
-                    // Handle video clicks on video-shorts-item
-                    const videoItem = e.target.closest('.video-shorts-item');
-                    if (videoItem) {
-                        e.preventDefault();
-                        
-                        // Get the video details from data attributes
-                        const videoUrl = videoItem.getAttribute('data-video-url');
-                        const title = videoItem.getAttribute('data-video-title');
-                        const influencer = videoItem.getAttribute('data-video-influencer');
-                        const likes = videoItem.getAttribute('data-video-likes');
-                        const views = videoItem.getAttribute('data-video-views');
-                        const productsData = videoItem.getAttribute('data-video-products');
-                        
-                        // Set up the video player with this video's data
-                        const videoElement = document.querySelector('.video-shorts-video');
-                        const videoTitle = document.querySelector('.video-shorts-title');
-                        const influencerName = document.querySelector('.video-shorts-influencer');
-                        const likeCount = document.querySelector('.like-count');
-                        const videoProducts = document.querySelector('.video-shorts-products');
-                        const videoPlayer = document.querySelector('.video-shorts-player');
-                        
-                        // Set video source and details
-                        videoElement.src = videoUrl;
-                        videoTitle.textContent = title;
-                        influencerName.textContent = '@' + influencer;
-                        likeCount.textContent = likes;
-                        
-                        // Parse and display products if available
-                        try {
-                            const products = JSON.parse(productsData);
-                            videoProducts.innerHTML = '';
-                            if (products.length > 0) {
-                                products.forEach(product => {
-                                    const productEl = document.createElement('div');
-                                    productEl.className = 'product-tag';
-                                    productEl.textContent = product.name;
-                                    videoProducts.appendChild(productEl);
-                                });
-                            } else {
-                                videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
-                            }
-                        } catch (e) {
-                            videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
-                        }
-                        
-                        // Show player and play video
-                        videoPlayer.classList.add('active');
-                        document.body.style.overflow = 'hidden'; // Prevent background scroll
-                        
-                        // Play the video after a short delay to ensure source is loaded
-                        setTimeout(() => {
-                            videoElement.play().catch(e => {
-                                console.log('Auto-play prevented:', e);
-                                // If autoplay with sound fails, try with muted
-                                videoElement.muted = true;
-                                videoElement.play().catch(err => console.log('Muted play also failed:', err));
-                            });
-                        }, 100);
-                    }
-                });
-
                 const whatsappButton = document.getElementById('whatsapp-button');
                 let isClickAllowed = true;
                 const cooldownTime = 2000; // 2 seconds cooldown
@@ -4639,12 +4458,7 @@
 
                         // Play the video after a short delay to ensure source is loaded
                         setTimeout(() => {
-                            videoElement.play().catch(e => {
-                                console.log('Auto-play prevented:', e);
-                                // If autoplay with sound fails, try with muted
-                                videoElement.muted = true;
-                                videoElement.play().catch(err => console.log('Muted play also failed:', err));
-                            });
+                            videoElement.play().catch(e => console.log('Auto-play prevented:', e));
                         }, 100);
                     });
                 });
@@ -4661,7 +4475,6 @@
 
                     // Set video source and play
                     videoElement.src = videoUrl;
-                    videoElement.muted = false; // Enable sound
                     videoTitle.textContent = title;
                     influencerName.textContent = '@' + influencer;
                     likeCount.textContent = likes;
@@ -4698,16 +4511,6 @@
                             if (i === currentIndex) {
                                 dot.classList.add('active');
                             }
-                            // Add click event to pagination dots to navigate videos
-                            dot.addEventListener('click', function() {
-                                currentIndex = i;
-                                loadVideo(currentIndex);
-                                videoElement.play().catch(e => {
-                                    console.log('Auto-play prevented:', e);
-                                    videoElement.muted = true;
-                                    videoElement.play().catch(err => console.log('Muted play also failed:', err));
-                                });
-                            });
                             paginationDots.appendChild(dot);
                         });
                     }
@@ -4718,12 +4521,7 @@
                     if (currentIndex < allVideoItems.length - 1) {
                         currentIndex++;
                         loadVideo(currentIndex);
-                        videoElement.play().catch(e => {
-                            console.log('Auto-play prevented:', e);
-                            // If autoplay with sound fails, try with muted
-                            videoElement.muted = true;
-                            videoElement.play().catch(err => console.log('Muted play also failed:', err));
-                        });
+                        videoElement.play().catch(e => console.log('Auto-play prevented:', e));
                     }
                 }
 
@@ -4731,12 +4529,7 @@
                     if (currentIndex > 0) {
                         currentIndex--;
                         loadVideo(currentIndex);
-                        videoElement.play().catch(e => {
-                            console.log('Auto-play prevented:', e);
-                            // If autoplay with sound fails, try with muted
-                            videoElement.muted = true;
-                            videoElement.play().catch(err => console.log('Muted play also failed:', err));
-                        });
+                        videoElement.play().catch(e => console.log('Auto-play prevented:', e));
                     }
                 }
 
@@ -4747,22 +4540,15 @@
                 let touchEndY = 0;
 
                 videoElement.addEventListener('touchstart', function (e) {
-                    touchStartX = e.touches[0].clientX;
-                    touchStartY = e.touches[0].clientY;
-                    e.preventDefault(); // Prevent default to avoid scrolling
-                }, { passive: false });
+                    touchStartX = e.changedTouches[0].screenX;
+                    touchStartY = e.changedTouches[0].screenY;
+                }, { passive: true });
 
                 videoElement.addEventListener('touchend', function (e) {
-                    touchEndX = e.changedTouches[0].clientX;
-                    touchEndY = e.changedTouches[0].clientY;
+                    touchEndX = e.changedTouches[0].screenX;
+                    touchEndY = e.changedTouches[0].screenY;
                     handleSwipe();
-                    e.preventDefault();
-                }, { passive: false });
-
-                // Also handle touchmove to prevent scrolling during swipe
-                videoElement.addEventListener('touchmove', function (e) {
-                    e.preventDefault();
-                }, { passive: false });
+                }, { passive: true });
 
                 function handleSwipe() {
                     const swipeThreshold = 50;
@@ -4815,27 +4601,25 @@
 
                 // Mouse wheel for navigation - now supports both vertical and horizontal
                 videoElement.addEventListener('wheel', function (e) {
-                    if (videoPlayer.classList.contains('active')) {
-                        // Check if shift key is pressed to differentiate horizontal/vertical scrolling
-                        if (e.shiftKey) {
-                            // Horizontal scroll with shift + wheel
-                            if (e.deltaX > 0) {
-                                goToNextVideo();
-                            } else {
-                                goToPrevVideo();
-                            }
+                    // Check if shift key is pressed to differentiate horizontal/vertical scrolling
+                    if (e.shiftKey) {
+                        // Horizontal scroll with shift + wheel
+                        if (e.deltaX > 0) {
+                            goToNextVideo();
                         } else {
-                            // Vertical scroll with just wheel
-                            if (e.deltaY > 0) {
-                                // Scroll down - next video
-                                goToNextVideo();
-                            } else {
-                                // Scroll up - previous video
-                                goToPrevVideo();
-                            }
+                            goToPrevVideo();
                         }
-                        e.preventDefault();
+                    } else {
+                        // Vertical scroll with just wheel
+                        if (e.deltaY > 0) {
+                            // Scroll down - next video
+                            goToNextVideo();
+                        } else {
+                            // Scroll up - previous video
+                            goToPrevVideo();
+                        }
                     }
+                    e.preventDefault();
                 }, { passive: false });
 
                 // Close video player
@@ -4854,20 +4638,9 @@
                     }
                 });
 
-                // Handle video click to pause/play in the modal player
-                videoElement.addEventListener('click', function(e) {
-                    if (videoPlayer.classList.contains('active') && !e.target.closest('.video-shorts-action-btn, .video-shorts-close, .video-shorts-products, .video-shorts-header')) {
-                        if (videoElement.paused) {
-                            videoElement.play();
-                        } else {
-                            videoElement.pause();
-                        }
-                    }
-                });
-
                 // Handle Buy Now button in video player
                 document.addEventListener('click', function (e) {
-                    if (e.target.closest('#video-shorts-buy-btn') || e.target.closest('.video-shorts-buy')) {
+                    if (e.target.closest('#video-shorts-buy-btn')) {
                         e.preventDefault();
 
                         // Get the current video item's product data
@@ -4886,7 +4659,6 @@
                                     alert('No products available for purchase in this video');
                                 }
                             } catch (e) {
-                                console.error('Error processing products:', e);
                                 alert('Error processing products');
                             }
                         }
@@ -4948,7 +4720,267 @@
                 }
             });
 
+            // Video Shorts Player Functionality - Enhanced for Instagram/Facebook-like experience
+            const videoItems = document.querySelectorAll('.video-shorts-item');
+            const videoPlayer = document.querySelector('.video-shorts-player');
+            const videoElement = document.querySelector('.video-shorts-video');
+            const videoTitle = document.querySelector('.video-shorts-title');
+            const influencerName = document.querySelector('.video-shorts-influencer');
+            const videoProducts = document.querySelector('.video-shorts-products');
+            const likeCount = document.querySelector('.like-count');
+            const videoCloseBtn = document.querySelector('.video-shorts-close');
 
+            // Store all video items and current index
+            let allVideoItems = Array.from(videoItems);
+            let currentIndex = 0;
+
+            // Open video player when clicking on a video thumbnail
+            videoItems.forEach((item, index) => {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    currentIndex = allVideoItems.indexOf(item);
+
+                    loadVideo(currentIndex);
+
+                    // Show player and play video
+                    videoPlayer.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Prevent background scroll
+
+                    // Play the video after a short delay to ensure source is loaded
+                    setTimeout(() => {
+                        videoElement.play().catch(e => console.log('Auto-play prevented:', e));
+                    }, 100);
+                });
+            });
+
+            function loadVideo(index) {
+                if (index < 0 || index >= allVideoItems.length) return;
+
+                const item = allVideoItems[index];
+                const videoUrl = item.getAttribute('data-video-url');
+                const title = item.getAttribute('data-video-title');
+                const influencer = item.getAttribute('data-video-influencer');
+                const likes = item.getAttribute('data-video-likes');
+                const productsData = item.getAttribute('data-video-products');
+
+                // Set video source and play
+                videoElement.src = videoUrl;
+                videoTitle.textContent = title;
+                influencerName.textContent = '@' + influencer;
+                likeCount.textContent = likes;
+
+                // Parse and display products if available
+                try {
+                    const products = JSON.parse(productsData);
+                    videoProducts.innerHTML = '';
+                    if (products.length > 0) {
+                        products.forEach(product => {
+                            const productEl = document.createElement('div');
+                            productEl.className = 'product-tag';
+                            productEl.textContent = product.name;
+                            videoProducts.appendChild(productEl);
+                        });
+                    } else {
+                        videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
+                    }
+                } catch (e) {
+                    videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
+                }
+
+                // Update pagination dots
+                updatePagination();
+            }
+
+            function updatePagination() {
+                const paginationDots = document.querySelector('.video-shorts-pagination');
+                if (paginationDots) {
+                    paginationDots.innerHTML = '';
+                    allVideoItems.forEach((_, i) => {
+                        const dot = document.createElement('div');
+                        dot.className = 'video-shorts-pagination-dot';
+                        if (i === currentIndex) {
+                            dot.classList.add('active');
+                        }
+                        // Add click event to pagination dots
+                        dot.addEventListener('click', function () {
+                            currentIndex = i;
+                            loadVideo(currentIndex);
+                            videoElement.play().catch(e => console.log('Auto-play prevented:', e));
+                        });
+                        paginationDots.appendChild(dot);
+                    });
+                }
+            }
+
+            // Navigation between videos
+            function goToNextVideo() {
+                if (currentIndex < allVideoItems.length - 1) {
+                    currentIndex++;
+                    loadVideo(currentIndex);
+                    videoElement.play().catch(e => console.log('Auto-play prevented:', e));
+                }
+            }
+
+            function goToPrevVideo() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    loadVideo(currentIndex);
+                    videoElement.play().catch(e => console.log('Auto-play prevented:', e));
+                }
+            }
+
+            // Enhanced swipe functionality for video navigation with vertical swipe support
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchEndX = 0;
+            let touchEndY = 0;
+
+            videoElement.addEventListener('touchstart', function (e) {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            videoElement.addEventListener('touchend', function (e) {
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const verticalSwipeThreshold = 30; // Lower threshold for vertical swipes
+
+                const diffX = touchStartX - touchEndX;
+                const diffY = touchStartY - touchEndY;
+
+                // Check if it's more of a vertical swipe than horizontal
+                if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > verticalSwipeThreshold) {
+                    if (diffY > 0) {
+                        // Swipe up - go to next video
+                        goToNextVideo();
+                    } else {
+                        // Swipe down - go to previous video
+                        goToPrevVideo();
+                    }
+                } else if (Math.abs(diffX) > swipeThreshold) {
+                    if (diffX > 0) {
+                        // Swipe left - go to next video
+                        goToNextVideo();
+                    } else {
+                        // Swipe right - go to previous video
+                        goToPrevVideo();
+                    }
+                }
+            }
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function (e) {
+                if (videoPlayer.classList.contains('active')) {
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        goToNextVideo();
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        goToPrevVideo();
+                    } else if (e.key === 'Escape') {
+                        videoPlayer.classList.remove('active');
+                        videoElement.pause();
+                        document.body.style.overflow = 'auto'; // Re-enable background scroll
+                    } else if (e.key === ' ') { // Spacebar to play/pause
+                        e.preventDefault();
+                        if (videoElement.paused) {
+                            videoElement.play();
+                        } else {
+                            videoElement.pause();
+                        }
+                    }
+                }
+            });
+
+            // Mouse wheel for navigation - now supports smooth scrolling
+            videoElement.addEventListener('wheel', function (e) {
+                // Check if shift key is pressed to differentiate horizontal/vertical scrolling
+                if (e.shiftKey) {
+                    // Horizontal scroll with shift + wheel
+                    if (e.deltaX > 0) {
+                        goToNextVideo();
+                    } else {
+                        goToPrevVideo();
+                    }
+                } else {
+                    // Vertical scroll with just wheel
+                    if (e.deltaY > 0) {
+                        // Scroll down - next video
+                        goToNextVideo();
+                    } else {
+                        // Scroll up - previous video
+                        goToPrevVideo();
+                    }
+                }
+                e.preventDefault();
+            }, { passive: false });
+
+            // Add smooth transition effect for video changes
+            videoElement.addEventListener('loadstart', function () {
+                videoElement.style.opacity = '0.5';
+            });
+
+            videoElement.addEventListener('canplay', function () {
+                videoElement.style.transition = 'opacity 0.3s ease';
+                videoElement.style.opacity = '1';
+            });
+
+            // Close video player
+            videoCloseBtn.addEventListener('click', function () {
+                videoPlayer.classList.remove('active');
+                videoElement.pause();
+                document.body.style.overflow = 'auto'; // Re-enable background scroll
+            });
+
+            // Close when clicking outside video area
+            videoPlayer.addEventListener('click', function (e) {
+                if (e.target === videoPlayer) {
+                    videoPlayer.classList.remove('active');
+                    videoElement.pause();
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Handle Buy Now button in video player
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('#video-shorts-buy-btn')) {
+                    e.preventDefault();
+
+                    // Get the current video item's product data
+                    const currentVideoItem = allVideoItems[currentIndex];
+                    if (currentVideoItem) {
+                        const productsData = currentVideoItem.getAttribute('data-video-products');
+
+                        // Get influencer ID from the video element
+                        let influencerId = currentVideoItem.getAttribute('data-video-influencer-id');
+
+                        if (influencerId) {
+                            // Redirect to influencer products page
+                            window.location.href = `/products/influencer/${influencerId}/products/`;
+                        } else {
+                            // Fallback to the original behavior if we can't get influencer ID
+                            try {
+                                const products = JSON.parse(productsData);
+                                if (products.length > 0) {
+                                    // Get the first product for now (you can modify this to handle multiple products)
+                                    const productId = products[0].id;
+
+                                    // Redirect to buy now page
+                                    window.location.href = `/orders/buy-now/${productId}/`;
+                                } else {
+                                    alert('No products available for purchase in this video');
+                                }
+                            } catch (e) {
+                                alert('Error processing products');
+                            }
+                        }
+                    }
+                }
+            });
 
             // Function to show product selection modal when multiple products exist
             function showProductSelectionModal(products) {
@@ -4966,7 +4998,7 @@
                     modalHtml += '<div class="product-selection-item" data-product-id="' + product.id + '">';
                     modalHtml += '<div class="product-selection-info">';
                     modalHtml += '<h4>' + product.name + '</h4>';
-                    modalHtml += '<p>₹' + product.price + '</p>';
+                    modalHtml += '<p class="product-modal-price" data-price="' + product.price + '" data-currency="' + (product.currency || 'INR') + '">₹' + product.price + '</p>';
                     modalHtml += '</div>';
                     modalHtml += '<button class="btn btn-primary select-product-btn">Select</button>';
                     modalHtml += '</div>';
@@ -5062,9 +5094,8 @@
                 }
             });
 
-        </script>
-        <script>
-            // Currency Conversion Functionality
+
+ // Currency Conversion Functionality
             // Exchange rates (relative to INR)
             const exchangeRates = {
                 'INR': 1,        // Indian Rupee
