@@ -4029,10 +4029,9 @@
                         {% endif %}
                     </a>
 
-                    <!-- Add to Cart / Buy Now Bar -->
+                    
                     {% if product %}
-                    <a href="{% url 'view_influencer_products' product.influencer.id %}"
-                        class="reel-add-to-cart-bar buy-now-btn">
+                    <a href="javascript:void(0);" class="reel-add-to-cart-bar buy-now-btn">
                         <span data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">Buy Now</span> <i class="fas fa-caret-down"></i>
                     </a>
                     {% else %}
@@ -4054,6 +4053,7 @@
             </div>
             {% endif %}
         </section>
+ 
 
         <!-- Video Shorts Player Modal -->
         <div class="video-shorts-player">
@@ -4486,6 +4486,69 @@
                     }
                 });
 
+                // Handle video clicks separately to ensure they work properly
+                document.addEventListener('click', function (e) {
+                    // Handle video clicks on video-shorts-item
+                    const videoItem = e.target.closest('.video-shorts-item');
+                    if (videoItem) {
+                        e.preventDefault();
+                        
+                        // Get the video details from data attributes
+                        const videoUrl = videoItem.getAttribute('data-video-url');
+                        const title = videoItem.getAttribute('data-video-title');
+                        const influencer = videoItem.getAttribute('data-video-influencer');
+                        const likes = videoItem.getAttribute('data-video-likes');
+                        const views = videoItem.getAttribute('data-video-views');
+                        const productsData = videoItem.getAttribute('data-video-products');
+                        
+                        // Set up the video player with this video's data
+                        const videoElement = document.querySelector('.video-shorts-video');
+                        const videoTitle = document.querySelector('.video-shorts-title');
+                        const influencerName = document.querySelector('.video-shorts-influencer');
+                        const likeCount = document.querySelector('.like-count');
+                        const videoProducts = document.querySelector('.video-shorts-products');
+                        const videoPlayer = document.querySelector('.video-shorts-player');
+                        
+                        // Set video source and details
+                        videoElement.src = videoUrl;
+                        videoTitle.textContent = title;
+                        influencerName.textContent = '@' + influencer;
+                        likeCount.textContent = likes;
+                        
+                        // Parse and display products if available
+                        try {
+                            const products = JSON.parse(productsData);
+                            videoProducts.innerHTML = '';
+                            if (products.length > 0) {
+                                products.forEach(product => {
+                                    const productEl = document.createElement('div');
+                                    productEl.className = 'product-tag';
+                                    productEl.textContent = product.name;
+                                    videoProducts.appendChild(productEl);
+                                });
+                            } else {
+                                videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
+                            }
+                        } catch (e) {
+                            videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
+                        }
+                        
+                        // Show player and play video
+                        videoPlayer.classList.add('active');
+                        document.body.style.overflow = 'hidden'; // Prevent background scroll
+                        
+                        // Play the video after a short delay to ensure source is loaded
+                        setTimeout(() => {
+                            videoElement.play().catch(e => {
+                                console.log('Auto-play prevented:', e);
+                                // If autoplay with sound fails, try with muted
+                                videoElement.muted = true;
+                                videoElement.play().catch(err => console.log('Muted play also failed:', err));
+                            });
+                        }, 100);
+                    }
+                });
+
                 const whatsappButton = document.getElementById('whatsapp-button');
                 let isClickAllowed = true;
                 const cooldownTime = 2000; // 2 seconds cooldown
@@ -4636,6 +4699,16 @@
                             if (i === currentIndex) {
                                 dot.classList.add('active');
                             }
+                            // Add click event to pagination dots to navigate videos
+                            dot.addEventListener('click', function() {
+                                currentIndex = i;
+                                loadVideo(currentIndex);
+                                videoElement.play().catch(e => {
+                                    console.log('Auto-play prevented:', e);
+                                    videoElement.muted = true;
+                                    videoElement.play().catch(err => console.log('Muted play also failed:', err));
+                                });
+                            });
                             paginationDots.appendChild(dot);
                         });
                     }
@@ -4795,7 +4868,7 @@
 
                 // Handle Buy Now button in video player
                 document.addEventListener('click', function (e) {
-                    if (e.target.closest('#video-shorts-buy-btn')) {
+                    if (e.target.closest('#video-shorts-buy-btn') || e.target.closest('.video-shorts-buy')) {
                         e.preventDefault();
 
                         // Get the current video item's product data
@@ -4814,6 +4887,7 @@
                                     alert('No products available for purchase in this video');
                                 }
                             } catch (e) {
+                                console.error('Error processing products:', e);
                                 alert('Error processing products');
                             }
                         }
