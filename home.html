@@ -562,7 +562,7 @@
             display: none;
             flex-direction: column;
         }
-        
+
         @media (max-width: 768px) {
             .video-shorts-player {
                 background: #000;
@@ -593,7 +593,7 @@
             max-height: 100vh;
             aspect-ratio: 9/16; /* Maintain vertical/portrait aspect ratio */
         }
-        
+
         @media (max-width: 768px) {
             .video-shorts-video-container {
                 max-height: 100vh;
@@ -608,18 +608,18 @@
             aspect-ratio: 9/16; /* Vertical/portrait aspect ratio like Instagram Reels */
             transition: opacity 0.3s ease;
         }
-        
+
         /* Mobile-specific optimizations */
         @media (max-width: 768px) {
             .video-shorts-player {
                 background: #000;
             }
-            
+
             .video-shorts-content {
                 width: 100%;
                 height: 100vh;
             }
-            
+
             .video-shorts-video-container {
                 flex: 1;
                 position: relative;
@@ -627,14 +627,14 @@
                 align-items: center;
                 justify-content: center;
             }
-            
+
             .video-shorts-video {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
                 aspect-ratio: 9/16; /* Vertical/portrait aspect ratio like Instagram Reels */
             }
-            
+
             .video-shorts-overlay {
                 position: absolute;
                 bottom: 0;
@@ -644,19 +644,19 @@
                 background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
                 color: white;
             }
-            
+
             .video-shorts-actions {
                 flex-direction: column;
                 gap: 10px;
                 align-items: flex-start;
             }
-            
+
             .video-shorts-action-btn {
                 flex-direction: row;
                 align-items: center;
                 gap: 5px;
             }
-            
+
             .video-shorts-pagination {
                 position: absolute;
                 right: 15px;
@@ -667,13 +667,13 @@
                 gap: 8px;
             }
         }
-        
+
         /* Desktop-specific optimizations */
         @media (min-width: 769px) {
             .video-shorts-player {
                 background: rgba(0, 0, 0, 0.95);
             }
-            
+
             .video-shorts-content {
                 max-width: 450px;
                 height: calc(100vh - 40px);
@@ -681,7 +681,7 @@
                 border-radius: 20px;
                 overflow: hidden;
             }
-            
+
             .video-shorts-video-container {
                 flex: 1;
                 position: relative;
@@ -689,26 +689,26 @@
                 align-items: center;
                 justify-content: center;
             }
-            
+
             .video-shorts-video {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
                 aspect-ratio: 9/16; /* Vertical/portrait aspect ratio like Instagram Reels */
             }
-            
+
             .video-shorts-actions {
                 flex-direction: row;
                 gap: 15px;
                 justify-content: center;
             }
-            
+
             .video-shorts-action-btn {
                 flex-direction: column;
                 align-items: center;
                 gap: 5px;
             }
-            
+
             .video-shorts-pagination {
                 position: absolute;
                 right: 20px;
@@ -3653,8 +3653,8 @@
                             <li><a class="dropdown-item currency-option" href="#" data-currency="IDR" data-symbol="Rp">Indonesia (IDR)</a></li>
                         </ul>
                     </div>
-                    <a href="{% url 'register_customer' %}" class="btn btn-signup">Sign up</a>
-                    <a href="{% url 'login' %}" class="btn btn-login">Log in</a>
+                    <a href="{% url 'register_customer' %}" class="btn btn-signup" data-en="Sign up" data-ar="اشتراك" data-hi="साइन अप करें">Sign up</a>
+                    <a href="{% url 'login' %}" class="btn btn-login" data-en="Log in" data-ar="تسجيل الدخول" data-hi="लॉग इन करें">Log in</a>
                     <!--{% if user.is_staff %}-->
                     <!--<a href="{% url 'admin_dashboard' %}" class="btn btn-outline-light ms-2">Admin</a>-->
                     <!--{% endif %}-->
@@ -3692,19 +3692,35 @@
                         <li><a class="dropdown-item lang-option" href="#" data-lang="hi">Hindi</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'register_customer' %}"><i
+                <!-- Currency Converter Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle me-2" type="button" id="currencyDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-exchange-alt me-1"></i> <span id="currentCurrency">INR (₹)</span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="INR" data-symbol="₹">India (INR)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="AED" data-symbol="د.إ">UAE (AED)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="SGD" data-symbol="$">Singapore (SGD)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="PHP" data-symbol="₱">Philippines (PHP)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="USD" data-symbol="$">USA (USD)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="EUR" data-symbol="€">Germany (EUR)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="IDR" data-symbol="Rp">Indonesia (IDR)</a></li>
+                        </ul>
+                    </div>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register_customer' %}" data-en="Sign up" data-ar="اشتراك" data-hi="साइन अप करें"><i
                             class="fas fa-user me-2"></i>Sign up</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}"><i
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}" data-en="Log in" data-ar="تسجيل الدخول" data-hi="लॉग इन करें"><i
                             class="fas fa-sign-in-alt me-2"></i>Log in</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'order_tracking' %}"><i
                             class="fas fa-box me-2"></i>Order Tracking</a></li>
                 <!-- Moved Premium option here as a sub-section under Sign Up -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register_influencer' %}"><i class="fas fa-user-plus me-2"></i>Sign
+                    <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Sign up as an Influencer" data-ar="التسجيل كمؤثر" data-hi="एक प्रभावक के रूप में साइन अप करें"><i class="fas fa-user-plus me-2"></i>Sign
                         up as an Influencer</a>
                     <ul class="nav flex-column ms-4">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register_influencer' %}"><i class="fas fa-crown me-2"></i>Premium</a>
+                            <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Premium" data-ar="مميز" data-hi="प्रीमियम"><i class="fas fa-crown me-2"></i>Premium</a>
                         </li>
                     </ul>
                 </li>
@@ -3757,7 +3773,7 @@
         <!-- Featured Influencers -->
         <section class="artist-section">
             <div class="section-title-bar mb-4">
-                <h2 data-en=" Influencers" data-ar=" المؤثرون" data-hi=" प्रभावक"> Influencers</h2>
+                <h2 data-en="Influencers" data-ar="المؤثرون" data-hi="प्रभावक"> Influencers</h2>
                 <a href="{% url 'influencer_list' %}" class="view-all-btn" data-en="Show all" data-ar="عرض الكل" data-hi="सभी दिखाएं">Show all</a>
             </div>
             <div class="influencers-section">
@@ -3803,7 +3819,7 @@
                     <h2>{{ category.name }}</h2>
                     <p class="category-description" data-en="Explore our collection of " data-ar="استكشف مجموعتنا من " data-hi="हमारे संग्रह का पता लगाएं ">Explore our collection of {{ category.name|lower }}</p>
                 </div>
-                <a href="{% url 'product_lists' %}?category={{ category.id }}" class="view-all-btn">View All {{
+                <a href="{% url 'product_lists' %}?category={{ category.id }}" class="view-all-btn" data-en="View All" data-ar="عرض الكل" data-hi="सभी देखें">View All {{
                     category.name }}</a>
             </div>
             <div class="products-grid">
@@ -3883,8 +3899,8 @@
         <!-- Fallback: Show all products if no categories exist -->
         <section class="artist-section">
             <div class="section-title-bar">
-                <h2> Products</h2>
-                <a href="{% url 'product_lists' %}" class="view-all-btn">View More</a>
+                <h2 data-en="Products" data-ar="المنتجات" data-hi="उत्पाद"> Products</h2>
+                <a href="{% url 'product_lists' %}" class="view-all-btn" data-en="View More" data-ar="عرض المزيد" data-hi="और देखें">View More</a>
             </div>
             <div class="products-grid">
                 {% for product in products %}
@@ -4195,15 +4211,31 @@
                     item.addEventListener('click', function (e) {
                         e.preventDefault();
                         const selectedLang = this.getAttribute('data-lang');
-                        
+
                         // Store selected language in localStorage for entire website
                         localStorage.setItem('preferredLanguage', selectedLang);
-                        
-                        // Reload the page to apply language changes
-                        window.location.reload();
+
+                        // Apply language changes without reloading
+                        applyLanguage(selectedLang);
+
+                        // Update language selector displays
+                        const langDisplay = document.getElementById('currentLanguage');
+                        const mobileLangDisplay = document.getElementById('mobileCurrentLanguage');
+
+                        if (langDisplay) {
+                            if (selectedLang === 'ar') langDisplay.textContent = 'العربية';
+                            else if (selectedLang === 'hi') langDisplay.textContent = 'हिंदी';
+                            else langDisplay.textContent = 'English';
+                        }
+
+                        if (mobileLangDisplay) {
+                            if (selectedLang === 'ar') mobileLangDisplay.textContent = 'العربية';
+                            else if (selectedLang === 'hi') mobileLangDisplay.textContent = 'हिंदी';
+                            else mobileLangDisplay.textContent = 'English';
+                        }
                     });
                 });
-                
+
                 // Function to apply language translations
                 function applyLanguage(langCode) {
                     // Define translation objects
@@ -4266,15 +4298,15 @@
                             'noInfluencers': 'अभी कोई प्रभावक उपलब्ध नहीं है। शानदार सामग्री के लिए जल्द ही वापस आएँ!'
                         }
                     };
-                    
+
                     const lang = translations[langCode] || translations['en'];
-                    
+
                     // Update text content based on language
                     document.querySelectorAll('[data-en]').forEach(element => {
                         const enText = element.getAttribute('data-en');
                         const arText = element.getAttribute('data-ar');
                         const hiText = element.getAttribute('data-hi');
-                        
+
                         if (langCode === 'ar' && arText) {
                             element.textContent = arText;
                         } else if (langCode === 'hi' && hiText) {
@@ -4283,13 +4315,13 @@
                             element.textContent = enText;
                         }
                     });
-                    
+
                     // Update placeholder text
                     document.querySelectorAll('[data-placeholder-en]').forEach(element => {
                         const enPlaceholder = element.getAttribute('data-placeholder-en');
                         const arPlaceholder = element.getAttribute('data-placeholder-ar');
                         const hiPlaceholder = element.getAttribute('data-placeholder-hi');
-                        
+
                         if (langCode === 'ar' && arPlaceholder) {
                             element.placeholder = arPlaceholder;
                         } else if (langCode === 'hi' && hiPlaceholder) {
@@ -4298,13 +4330,13 @@
                             element.placeholder = enPlaceholder;
                         }
                     });
-                    
+
                     // Update title attributes
                     document.querySelectorAll('[data-title-en]').forEach(element => {
                         const enTitle = element.getAttribute('data-title-en');
                         const arTitle = element.getAttribute('data-title-ar');
                         const hiTitle = element.getAttribute('data-title-hi');
-                        
+
                         if (langCode === 'ar' && arTitle) {
                             element.title = arTitle;
                         } else if (langCode === 'hi' && hiTitle) {
@@ -4313,24 +4345,40 @@
                             element.title = enTitle;
                         }
                     });
+
+                    // Update language selector display
+                    const langDisplay = document.getElementById('currentLanguage');
+                    const mobileLangDisplay = document.getElementById('mobileCurrentLanguage');
+
+                    if (langDisplay) {
+                        if (langCode === 'ar') langDisplay.textContent = 'العربية';
+                        else if (langCode === 'hi') langDisplay.textContent = 'हिंदी';
+                        else langDisplay.textContent = 'English';
+                    }
+
+                    if (mobileLangDisplay) {
+                        if (langCode === 'ar') mobileLangDisplay.textContent = 'العربية';
+                        else if (langCode === 'hi') mobileLangDisplay.textContent = 'हिंदी';
+                        else mobileLangDisplay.textContent = 'English';
+                    }
                 }
-                
+
                 // Initialize language on page load
                 document.addEventListener('DOMContentLoaded', function() {
                     // Get language from localStorage for entire website or default to 'en'
                     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
                     applyLanguage(savedLang);
-                    
+
                     // Update language selector display
                     const langDisplay = document.getElementById('currentLanguage');
                     const mobileLangDisplay = document.getElementById('mobileCurrentLanguage');
-                    
+
                     if (langDisplay) {
                         if (savedLang === 'ar') langDisplay.textContent = 'العربية';
                         else if (savedLang === 'hi') langDisplay.textContent = 'हिंदी';
                         else langDisplay.textContent = 'English';
                     }
-                    
+
                     if (mobileLangDisplay) {
                         if (savedLang === 'ar') mobileLangDisplay.textContent = 'العربية';
                         else if (savedLang === 'hi') mobileLangDisplay.textContent = 'हिंदी';
@@ -4628,14 +4676,14 @@
                     touchStartY = e.touches[0].clientY;
                     e.preventDefault(); // Prevent default to avoid scrolling
                 }, { passive: false });
-                
+
                 videoElement.addEventListener('touchend', function (e) {
                     touchEndX = e.changedTouches[0].clientX;
                     touchEndY = e.changedTouches[0].clientY;
                     handleSwipe();
                     e.preventDefault();
                 }, { passive: false });
-                            
+
                 // Also handle touchmove to prevent scrolling during swipe
                 videoElement.addEventListener('touchmove', function (e) {
                     e.preventDefault();
@@ -4730,7 +4778,7 @@
                         document.body.style.overflow = 'auto';
                     }
                 });
-                
+
                 // Handle video click to pause/play in the modal player
                 videoElement.addEventListener('click', function(e) {
                     if (videoPlayer.classList.contains('active') && !e.target.closest('.video-shorts-action-btn, .video-shorts-close, .video-shorts-products, .video-shorts-header')) {
@@ -4824,297 +4872,7 @@
                 }
             });
 
-            // Video Shorts Player Functionality - Enhanced for Instagram/Facebook-like experience
-            const videoItems = document.querySelectorAll('.video-shorts-item');
-            const videoPlayer = document.querySelector('.video-shorts-player');
-            const videoElement = document.querySelector('.video-shorts-video');
-            const videoTitle = document.querySelector('.video-shorts-title');
-            const influencerName = document.querySelector('.video-shorts-influencer');
-            const videoProducts = document.querySelector('.video-shorts-products');
-            const likeCount = document.querySelector('.like-count');
-            const videoCloseBtn = document.querySelector('.video-shorts-close');
 
-            // Store all video items and current index
-            let allVideoItems = Array.from(videoItems);
-            let currentIndex = 0;
-
-            // Open video player when clicking on a video thumbnail
-            videoItems.forEach((item, index) => {
-                item.addEventListener('click', function (e) {
-                    e.preventDefault();
-
-                    currentIndex = allVideoItems.indexOf(item);
-
-                    loadVideo(currentIndex);
-
-                    // Show player and play video
-                    videoPlayer.classList.add('active');
-                    document.body.style.overflow = 'hidden'; // Prevent background scroll
-
-                    // Play the video after a short delay to ensure source is loaded
-                    setTimeout(() => {
-                        videoElement.play().catch(e => {
-                            console.log('Auto-play prevented:', e);
-                            // If autoplay with sound fails, try with muted
-                            videoElement.muted = true;
-                            videoElement.play().catch(err => console.log('Muted play also failed:', err));
-                        });
-                    }, 100);
-                });
-            });
-
-            function loadVideo(index) {
-                if (index < 0 || index >= allVideoItems.length) return;
-
-                const item = allVideoItems[index];
-                const videoUrl = item.getAttribute('data-video-url');
-                const title = item.getAttribute('data-video-title');
-                const influencer = item.getAttribute('data-video-influencer');
-                const likes = item.getAttribute('data-video-likes');
-                const productsData = item.getAttribute('data-video-products');
-
-                // Set video source and play
-                videoElement.src = videoUrl;
-                videoElement.muted = false; // Enable sound
-                videoTitle.textContent = title;
-                influencerName.textContent = '@' + influencer;
-                likeCount.textContent = likes;
-
-                // Parse and display products if available
-                try {
-                    const products = JSON.parse(productsData);
-                    videoProducts.innerHTML = '';
-                    if (products.length > 0) {
-                        products.forEach(product => {
-                            const productEl = document.createElement('div');
-                            productEl.className = 'product-tag';
-                            productEl.textContent = product.name;
-                            videoProducts.appendChild(productEl);
-                        });
-                    } else {
-                        videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
-                    }
-                } catch (e) {
-                    videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
-                }
-
-                // Update pagination dots
-                updatePagination();
-            }
-
-            function updatePagination() {
-                const paginationDots = document.querySelector('.video-shorts-pagination');
-                if (paginationDots) {
-                    paginationDots.innerHTML = '';
-                    allVideoItems.forEach((_, i) => {
-                        const dot = document.createElement('div');
-                        dot.className = 'video-shorts-pagination-dot';
-                        if (i === currentIndex) {
-                            dot.classList.add('active');
-                        }
-                        // Add click event to pagination dots
-                        dot.addEventListener('click', function () {
-                            currentIndex = i;
-                            loadVideo(currentIndex);
-                            videoElement.play().catch(e => {
-                                console.log('Auto-play prevented:', e);
-                                // If autoplay with sound fails, try with muted
-                                videoElement.muted = true;
-                                videoElement.play().catch(err => console.log('Muted play also failed:', err));
-                            });
-                        });
-                        paginationDots.appendChild(dot);
-                    });
-                }
-            }
-
-            // Navigation between videos
-            function goToNextVideo() {
-                if (currentIndex < allVideoItems.length - 1) {
-                    currentIndex++;
-                    loadVideo(currentIndex);
-                    videoElement.play().catch(e => {
-                        console.log('Auto-play prevented:', e);
-                        // If autoplay with sound fails, try with muted
-                        videoElement.muted = true;
-                        videoElement.play().catch(err => console.log('Muted play also failed:', err));
-                    });
-                }
-            }
-
-            function goToPrevVideo() {
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    loadVideo(currentIndex);
-                    videoElement.play().catch(e => {
-                        console.log('Auto-play prevented:', e);
-                        // If autoplay with sound fails, try with muted
-                        videoElement.muted = true;
-                        videoElement.play().catch(err => console.log('Muted play also failed:', err));
-                    });
-                }
-            }
-
-            // Enhanced swipe functionality for video navigation with vertical swipe support
-            let touchStartX = 0;
-            let touchStartY = 0;
-            let touchEndX = 0;
-            let touchEndY = 0;
-
-            videoElement.addEventListener('touchstart', function (e) {
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-                e.preventDefault(); // Prevent default to avoid scrolling
-            }, { passive: false });
-
-            videoElement.addEventListener('touchend', function (e) {
-                touchEndX = e.changedTouches[0].clientX;
-                touchEndY = e.changedTouches[0].clientY;
-                handleSwipe();
-                e.preventDefault();
-            }, { passive: false });
-            
-            // Also handle touchmove to prevent scrolling during swipe
-            videoElement.addEventListener('touchmove', function (e) {
-                e.preventDefault();
-            }, { passive: false });
-
-            function handleSwipe() {
-                const swipeThreshold = 50;
-                const verticalSwipeThreshold = 30; // Lower threshold for vertical swipes
-
-                const diffX = touchStartX - touchEndX;
-                const diffY = touchStartY - touchEndY;
-
-                // Check if it's more of a vertical swipe than horizontal
-                if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > verticalSwipeThreshold) {
-                    if (diffY > 0) {
-                        // Swipe up - go to next video
-                        goToNextVideo();
-                    } else {
-                        // Swipe down - go to previous video
-                        goToPrevVideo();
-                    }
-                } else if (Math.abs(diffX) > swipeThreshold) {
-                    if (diffX > 0) {
-                        // Swipe left - go to next video
-                        goToNextVideo();
-                    } else {
-                        // Swipe right - go to previous video
-                        goToPrevVideo();
-                    }
-                }
-            }
-
-            // Keyboard navigation
-            document.addEventListener('keydown', function (e) {
-                if (videoPlayer.classList.contains('active')) {
-                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                        goToNextVideo();
-                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                        goToPrevVideo();
-                    } else if (e.key === 'Escape') {
-                        videoPlayer.classList.remove('active');
-                        videoElement.pause();
-                        document.body.style.overflow = 'auto'; // Re-enable background scroll
-                    } else if (e.key === ' ') { // Spacebar to play/pause
-                        e.preventDefault();
-                        if (videoElement.paused) {
-                            videoElement.play();
-                        } else {
-                            videoElement.pause();
-                        }
-                    }
-                }
-            });
-
-            // Mouse wheel for navigation - now supports smooth scrolling
-            videoElement.addEventListener('wheel', function (e) {
-                if (videoPlayer.classList.contains('active')) {
-                    // Check if shift key is pressed to differentiate horizontal/vertical scrolling
-                    if (e.shiftKey) {
-                        // Horizontal scroll with shift + wheel
-                        if (e.deltaX > 0) {
-                            goToNextVideo();
-                        } else {
-                            goToPrevVideo();
-                        }
-                    } else {
-                        // Vertical scroll with just wheel
-                        if (e.deltaY > 0) {
-                            // Scroll down - next video
-                            goToNextVideo();
-                        } else {
-                            // Scroll up - previous video
-                            goToPrevVideo();
-                        }
-                    }
-                    e.preventDefault();
-                }
-            }, { passive: false });
-
-            // Add smooth transition effect for video changes
-            videoElement.addEventListener('loadstart', function () {
-                videoElement.style.opacity = '0.5';
-            });
-
-            videoElement.addEventListener('canplay', function () {
-                videoElement.style.transition = 'opacity 0.3s ease';
-                videoElement.style.opacity = '1';
-            });
-
-            // Close video player
-            videoCloseBtn.addEventListener('click', function () {
-                videoPlayer.classList.remove('active');
-                videoElement.pause();
-                document.body.style.overflow = 'auto'; // Re-enable background scroll
-            });
-
-            // Close when clicking outside video area
-            videoPlayer.addEventListener('click', function (e) {
-                if (e.target === videoPlayer) {
-                    videoPlayer.classList.remove('active');
-                    videoElement.pause();
-                    document.body.style.overflow = 'auto';
-                }
-            });
-
-            // Handle Buy Now button in video player
-            document.addEventListener('click', function (e) {
-                if (e.target.closest('#video-shorts-buy-btn')) {
-                    e.preventDefault();
-
-                    // Get the current video item's product data
-                    const currentVideoItem = allVideoItems[currentIndex];
-                    if (currentVideoItem) {
-                        const productsData = currentVideoItem.getAttribute('data-video-products');
-
-                        // Get influencer ID from the video element
-                        let influencerId = currentVideoItem.getAttribute('data-video-influencer-id');
-
-                        if (influencerId) {
-                            // Redirect to influencer products page
-                            window.location.href = `/products/influencer/${influencerId}/products/`;
-                        } else {
-                            // Fallback to the original behavior if we can't get influencer ID
-                            try {
-                                const products = JSON.parse(productsData);
-                                if (products.length > 0) {
-                                    // Get the first product for now (you can modify this to handle multiple products)
-                                    const productId = products[0].id;
-
-                                    // Redirect to buy now page
-                                    window.location.href = `/orders/buy-now/${productId}/`;
-                                } else {
-                                    alert('No products available for purchase in this video');
-                                }
-                            } catch (e) {
-                                alert('Error processing products');
-                            }
-                        }
-                    }
-                }
-            });
 
             // Function to show product selection modal when multiple products exist
             function showProductSelectionModal(products) {
@@ -5241,17 +4999,17 @@
                 'EUR': 0.011,    // Euro
                 'IDR': 183.33    // Indonesian Rupiah
             };
-            
+
             // Function to convert prices
             function convertPrice(price, fromCurrency, toCurrency) {
                 if (fromCurrency === toCurrency) return price;
-                
+
                 // Convert to INR first, then to target currency
                 const inrValue = price / exchangeRates[fromCurrency];
                 const convertedValue = inrValue * exchangeRates[toCurrency];
                 return convertedValue;
             }
-            
+
             // Function to format currency with symbol
             function formatCurrency(amount, currency) {
                 const symbols = {
@@ -5263,7 +5021,7 @@
                     'EUR': '€',
                     'IDR': 'Rp'
                 };
-                
+
                 const symbol = symbols[currency] || '₹';
                 // Format with 2 decimal places for most currencies
                 if (currency === 'IDR') {
@@ -5273,7 +5031,7 @@
                     return `${symbol}${amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
                 }
             }
-            
+
             // Function to update all prices on the page
             function updatePrices(currency) {
                 // Update all elements with price data attribute
@@ -5281,12 +5039,12 @@
                 priceElements.forEach(element => {
                     const originalPrice = parseFloat(element.getAttribute('data-price'));
                     const originalCurrency = element.getAttribute('data-currency') || 'INR';
-                    
+
                     if (!isNaN(originalPrice)) {
                         const convertedPrice = convertPrice(originalPrice, originalCurrency, currency);
                         const formattedPrice = formatCurrency(convertedPrice, currency);
                         element.textContent = formattedPrice;
-                        
+
                         // Store the original price data to allow future conversions
                         if (!element.hasAttribute('data-original-price')) {
                             element.setAttribute('data-original-price', originalPrice);
@@ -5295,7 +5053,7 @@
                     }
                 });
             }
-            
+
             // Handle currency selection
             const currencyItems = document.querySelectorAll('.currency-option');
             currencyItems.forEach(item => {
@@ -5303,36 +5061,36 @@
                     e.preventDefault();
                     const selectedCurrency = this.getAttribute('data-currency');
                     const currencySymbol = this.getAttribute('data-symbol');
-                    
+
                     // Store selected currency in localStorage
                     localStorage.setItem('preferredCurrency', selectedCurrency);
-                    
+
                     // Update language selector display
                     const currencyDisplay = document.getElementById('currentCurrency');
                     const mobileCurrencyDisplay = document.getElementById('mobileCurrentCurrency');
-                    
+
                     if (currencyDisplay) {
                         currencyDisplay.textContent = `${selectedCurrency} (${currencySymbol})`;
                     }
-                    
+
                     if (mobileCurrencyDisplay) {
                         mobileCurrencyDisplay.textContent = `${selectedCurrency} (${currencySymbol})`;
                     }
-                    
+
                     // Update all prices on the page
                     updatePrices(selectedCurrency);
                 });
             });
-            
+
             // Initialize currency on page load
             document.addEventListener('DOMContentLoaded', function() {
                 // Get currency from localStorage or default to 'INR'
                 const savedCurrency = localStorage.getItem('preferredCurrency') || 'INR';
-                
+
                 // Update currency selector display
                 const currencyDisplay = document.getElementById('currentCurrency');
                 const mobileCurrencyDisplay = document.getElementById('mobileCurrentCurrency');
-                
+
                 if (currencyDisplay) {
                     const symbols = {
                         'INR': '₹', 'AED': 'د.إ', 'SGD': '$', 'PHP': '₱',
@@ -5341,7 +5099,7 @@
                     const symbol = symbols[savedCurrency] || '₹';
                     currencyDisplay.textContent = `${savedCurrency} (${symbol})`;
                 }
-                
+
                 if (mobileCurrencyDisplay) {
                     const symbols = {
                         'INR': '₹', 'AED': 'د.إ', 'SGD': '$', 'PHP': '₱',
@@ -5350,7 +5108,7 @@
                     const symbol = symbols[savedCurrency] || '₹';
                     mobileCurrencyDisplay.textContent = `${savedCurrency} (${symbol})`;
                 }
-                
+
                 // Update all prices on the page
                 updatePrices(savedCurrency);
             });
