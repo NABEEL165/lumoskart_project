@@ -12,11 +12,226 @@
     <link rel="stylesheet" href="whatsapp-widget.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <style>
+        /* Reset and base styles */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #0e0e0e 0%, #2a2a2a 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 1000;
+            padding-top: 80px;
+            transition: all 0.3s ease;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .sidebar .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            color: #b3b3b3;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 0 30px 30px 0;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            color: #b3b3b3;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 0 30px 30px 0;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00c7f7;
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(0, 199, 247, 0.1);
+            color: #00c7f7;
+        }
+
+        .sidebar-nav i {
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-nav .nav-text {
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .sidebar-nav a {
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .sidebar.collapsed .sidebar-nav i {
+            margin-right: 0;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: -40px;
+            background: #0a0a0a;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content.expanded {
+            margin-left: 70px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+            width: calc(100% - 250px);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content.expanded {
+            margin-left: 70px;
+            width: calc(100% - 70px);
+        }
+
+        @media (max-width: 992px) {
+            main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        /* Navbar adjustments for sidebar */
+        .navbar {
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+            height: 80px;
+        }
+
+        .navbar.expanded {
+            margin-left: 70px;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content, .navbar {
+                margin-left: 0;
+            }
+
+            .toggle-btn {
+                display: none;
+            }
+
+            .navbar {
+                margin-left: 0;
+            }
+        }
         /* Global Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            /* Smooth transitions for all elements */
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        /* Smooth scrolling for better UX */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Enhanced smoothness for all animations */
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
@@ -39,6 +254,9 @@
             top: 0;
             z-index: 1000;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            height: 80px;
         }
 
         .navbar-container {
@@ -48,12 +266,21 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 24px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .logo {
             display: flex;
             align-items: center;
             z-index: 1001;
+            height: 100%;
         }
 
         .logo-img {
@@ -70,10 +297,21 @@
             list-style: none;
             gap: 1.5rem;
             align-items: center;
+            margin: 0;
+            padding: 0;
+            height: 100%;
         }
 
         .nav-links li {
             position: relative;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding: 0;
+        }
+
+        .nav-links li:last-child {
+            margin-left: 1rem;
         }
 
         .nav-link {
@@ -271,6 +509,7 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
             position: relative;
             animation: fadeInUp 0.6s ease;
+            width: calc(100% - 2rem);
         }
 
         @keyframes fadeInUp {
@@ -300,23 +539,21 @@
             margin-bottom: 1rem;
             font-weight: 700;
             color: #0a0a0a;
-            display: flex;
-            justify-content: center;
             text-align: center;
             letter-spacing: 0.5px;
+            width: 100%;
         }
 
         .dashboard-container p {
             font-size: 1.05rem;
             color: #6a6a6a;
             margin-bottom: 2rem;
-            display: flex;
-            justify-content: center;
             text-align: center;
             line-height: 1.6;
+            width: 100%;
         }
 
-        .dashboard-container a {
+        .dashboard-container a, .dashboard-btn {
             display: inline-block;
             padding: 1rem 2rem;
             margin: 0.5rem;
@@ -331,6 +568,24 @@
             letter-spacing: 0.3px;
             position: relative;
             overflow: hidden;
+            flex: 1 1 calc(33.333% - 1rem);
+            min-width: 200px;
+            margin: 0.5rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dashboard-btn.video-tab {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
+            border-left: 3px solid #ff6b6b;
+        }
+
+        .dashboard-btn.video-tab:hover {
+            background: linear-gradient(135deg, #ee5a24, #ff6b6b) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(238, 90, 36, 0.3);
         }
 
         .dashboard-container a::before {
@@ -367,6 +622,9 @@
             height: 100%;
             position: relative;
             animation: fadeIn 0.6s ease backwards;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
 
         .card:nth-child(1) { animation-delay: 0.1s; }
@@ -402,6 +660,12 @@
 
         .card-body {
             padding: 2rem !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            text-align: center;
         }
 
         .card-title {
@@ -450,8 +714,7 @@
             color: #0a0a0a;
             font-size: 1.75rem;
             font-weight: 700;
-            display: flex;
-            justify-content: center;
+            text-align: center;
             margin: 2.5rem 0 1.5rem;
             letter-spacing: 0.5px;
         }
@@ -463,6 +726,7 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             border: 2px solid #e5e5e5;
             margin-top: 1.5rem;
+            overflow-x: auto;
         }
 
         .table-dark {
@@ -541,32 +805,33 @@
         }
 
         /* Mobile Responsive Styles */
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .navbar {
-                padding: 0.8rem 0;
+                margin-left: 0;
+                padding: 0.8rem 1rem;
             }
 
-            .navbar-brand img {
-                height: 35px;
+            .sidebar {
+                width: 250px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1050;
             }
 
-            .navbar-collapse {
-                background-color: #1a1a1a;
-                padding: 1rem;
-                border-radius: 12px;
-                margin-top: 0.5rem;
-                border: 1px solid #3a3a3a;
+            .sidebar.active {
+                transform: translateX(0);
             }
 
-            .nav-link {
-                padding: 0.8rem 1rem !important;
-                margin: 0.3rem 0;
-                font-size: 0.95rem;
+            .main-content, main {
+                margin-left: 0;
+                padding-left: 1rem;
+                padding-right: 1rem;
             }
 
             .dashboard-container {
-                margin: 1.5rem 1rem;
+                margin: 1.5rem 0;
                 padding: 1.5rem;
+                width: 100%;
             }
 
             .dashboard-container h2 {
@@ -579,16 +844,151 @@
                 margin-bottom: 1.5rem;
             }
 
-            .dashboard-container a {
-                padding: 0.9rem 1.5rem;
-                margin: 0.4rem;
-                font-size: 0.9rem;
-                width: calc(100% - 0.8rem);
+            @media (max-width: 992px) {
+                .navbar {
+                    margin-left: 0;
+                    padding: 0.8rem 1rem;
+                    height: auto;
+                    min-height: 70px;
+                }
+
+                .sidebar {
+                    width: 250px;
+                    transform: translateX(-100%);
+                    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    z-index: 1050;
+                    position: fixed;
+                    left: 0;
+                    top: 0;
+                    height: 100vh;
+                }
+
+                .sidebar.active {
+                    transform: translateX(0);
+                }
+
+                .main-content {
+                    margin-left: 0;
+                    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+
+                main {
+                    margin-left: 0;
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                    width: 100%;
+                }
+
+                .dashboard-container {
+                    margin: 1.5rem 0;
+                    padding: 1.5rem;
+                    width: 100%;
+                }
+
+                .dashboard-container h2 {
+                    font-size: 1.5rem;
+                    margin-bottom: 1rem;
+                }
+
+                .dashboard-container p {
+                    font-size: 0.95rem;
+                    margin-bottom: 1.5rem;
+                }
+
+                .d-flex.flex-wrap {
+                    display: flex !important;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+
+                .dashboard-container a, .dashboard-btn {
+                    flex: 1 1 calc(50% - 1rem);
+                    padding: 0.9rem 1.5rem;
+                    margin: 0.4rem;
+                    width: auto;
+                }
+
+                .col-md-4 {
+                    margin-bottom: 1rem;
+                }
+
+                .card-body {
+                    padding: 1.5rem !important;
+                }
+
+                .card-title {
+                    font-size: 2rem !important;
+                }
+
+                .card-text {
+                    font-size: 0.85rem;
+                }
+
+                .table-responsive {
+                    padding: 1rem;
+                    font-size: 0.85rem;
+                }
+
+                .table-dark td, .table-dark th {
+                    padding: 0.8rem 0.5rem;
+                    font-size: 0.8rem;
+                }
+
+                h3 {
+                    font-size: 1.3rem !important;
+                    margin: 2rem 0 1rem;
+                }
+
+                .section-divider {
+                    margin: 2rem 0;
+                }
+
+                .nav-links {
+                    position: fixed;
+                    top: 0;
+                    right: -100%;
+                    height: 100vh;
+                    width: 70%;
+                    max-width: 300px;
+                    background: #181818;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    padding: 80px 2rem 2rem 2rem;
+                    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+                    overflow-y: auto;
+                    z-index: 1051;
+                }
+
+                .nav-links.active {
+                    right: 0;
+                }
+
+                .nav-link {
+                    font-size: 1.1rem;
+                    display: block;
+                    padding: 0.5rem 0;
+                    border-bottom: 1px solid rgba(255,255,255,0.1);
+                }
+
+                /* Mobile sidebar styling */
+                .sidebar {
+                    transform: translateX(-100%);
+                }
+
+                .sidebar.active {
+                    transform: translateX(0);
+                }
             }
 
-            .d-flex.flex-wrap {
-                flex-direction: column;
-                align-items: stretch;
+            .dashboard-container a {
+                padding: 0.9rem 1.5rem;
+                margin: 0.4rem 0;
+                width: 100%;
+                text-align: center;
             }
 
             .col-md-4 {
@@ -622,19 +1022,86 @@
                 margin: 2rem 0 1rem;
             }
 
-            .footer {
-                font-size: 0.85rem;
-                padding: 1.5rem 1rem;
-            }
-
             .section-divider {
                 margin: 2rem 0;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 70%;
+                max-width: 300px;
+                background: #181818;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 80px 2rem 2rem 2rem;
+                transition: right 0.3s ease;
+                box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+                overflow-y: auto;
+                z-index: 1051;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-link {
+                font-size: 1.1rem;
+                display: block;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .dashboard-container {
+                padding: 1.25rem;
+            }
+
+            .dashboard-container h2 {
+                font-size: 1.4rem;
+            }
+
+            .dashboard-container p {
+                font-size: 0.9rem;
+            }
+
+            .dashboard-container a, .dashboard-btn {
+                flex: 1 1 100%;
+                margin: 0.5rem 0;
+                min-width: auto;
+            }
+
+            .card-title {
+                font-size: 1.8rem !important;
+            }
+
+            .card-text {
+                font-size: 0.8rem;
+            }
+
+            h3 {
+                font-size: 1.2rem !important;
+            }
+
+            .logo-img {
+                height: 35px;
             }
         }
 
         @media (max-width: 576px) {
+            .sidebar {
+                width: 200px;
+            }
+
             .dashboard-container {
-                padding: 1.25rem;
+                padding: 1rem;
             }
 
             .dashboard-container h2 {
@@ -642,32 +1109,35 @@
             }
 
             .dashboard-container p {
-                font-size: 0.9rem;
-            }
-
-            .dashboard-container a {
-                padding: 0.8rem 1.2rem;
                 font-size: 0.85rem;
             }
 
+            .dashboard-container a, .dashboard-btn {
+                padding: 0.8rem 1rem;
+                font-size: 0.85rem;
+                margin: 0.3rem 0;
+                flex: 1 1 100%;
+                min-width: auto;
+            }
+
             .card-title {
-                font-size: 1.75rem !important;
+                font-size: 1.6rem !important;
             }
 
             .card-text {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
 
             .table-dark td, .table-dark th {
                 font-size: 0.75rem;
-                padding: 0.7rem 0.4rem;
+                padding: 0.6rem 0.3rem;
             }
 
             h3 {
-                font-size: 1.2rem !important;
+                font-size: 1.1rem !important;
             }
 
-            .navbar-brand img {
+            .logo-img {
                 height: 30px;
             }
         }
@@ -684,7 +1154,7 @@
             }
 
             .dashboard-container p {
-                font-size: 1rem;
+                font-size: 1.0rem;
             }
 
             .card-title {
@@ -707,269 +1177,411 @@
         }
 
         /* WhatsApp Widget - Fully Responsive */
-.whatsapp-widget {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-}
-
-/* WhatsApp Button */
-.whatsapp-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: 50%;
-    box-shadow:
-        0 4px 12px rgba(37, 211, 102, 0.4),
-        0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none;
-    outline: none;
-}
-
-.whatsapp-button i.bi-whatsapp {
-    font-size: 28px;
-}
-
-/* Tooltip */
-.whatsapp-tooltip {
-    visibility: hidden;
-    opacity: 0;
-    background: linear-gradient(135deg, #333 0%, #555 100%);
-    color: white;
-    text-align: center;
-    padding: 10px 16px;
-    border-radius: 12px;
-    position: absolute;
-    bottom: 80px;
-    right: 0;
-    font-size: 14px;
-    font-weight: 500;
-    white-space: nowrap;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    transform: translateY(10px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1;
-}
-
-.whatsapp-tooltip::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    right: 20px;
-    border: 8px solid transparent;
-    border-top-color: #333;
-}
-
-/* Hover Effects */
-.whatsapp-widget:hover .whatsapp-button {
-    transform: scale(1.1) rotate(5deg);
-    box-shadow:
-        0 8px 25px rgba(37, 211, 102, 0.5),
-        0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.whatsapp-widget:hover .whatsapp-tooltip {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* RESPONSIVE BREAKPOINTS */
-
-/* Large Desktop (1440px+) */
-@media (min-width: 1440px) {
-    .whatsapp-widget {
-        bottom: 30px;
-        right: 30px;
-    }
-    .whatsapp-button {
-        width: 70px;
-        height: 70px;
-    }
-    .whatsapp-button i.bi-whatsapp {
-        font-size: 32px;
-    }
-}
-
-/* Desktop (1024px - 1439px) */
-@media (min-width: 1024px) and (max-width: 1439px) {
-    .whatsapp-widget {
-        bottom: 25px;
-        right: 25px;
-    }
-    .whatsapp-button {
-        width: 65px;
-        height: 65px;
-    }
-}
-
-/* Tablet Landscape (768px - 1023px) */
-@media (min-width: 768px) and (max-width: 1023px) {
-    .whatsapp-widget {
-        bottom: 20px;
-        right: 20px;
-    }
-    .whatsapp-button {
-        width: 60px;
-        height: 60px;
-    }
-}
-
-/* Tablet Portrait & Small Desktop (576px - 767px) */
-@media (min-width: 576px) and (max-width: 767px) {
-    .whatsapp-widget {
-        bottom: 15px;
-        right: 15px;
-    }
-    .whatsapp-button {
-        width: 55px;
-        height: 55px;
-    }
-    .whatsapp-button i.bi-whatsapp {
-        font-size: 26px;
-    }
-}
-
-/* Mobile Landscape (480px - 575px) */
-@media (min-width: 480px) and (max-width: 575px) and (orientation: landscape) {
-    .whatsapp-widget {
-        bottom: 10px;
-        right: 10px;
-    }
-    .whatsapp-button {
-        width: 50px;
-        height: 50px;
-    }
-    .whatsapp-button i.bi-whatsapp {
-        font-size: 24px;
-    }
-    .whatsapp-tooltip {
-        font-size: 13px;
-        padding: 8px 12px;
-        bottom: 70px;
-    }
-}
-
-/* Mobile Portrait (320px - 479px) */
-@media (max-width: 479px) {
-    .whatsapp-widget {
-        bottom: 10px;
-        right: 10px;
-    }
-    .whatsapp-button {
-        width: 52px;
-        height: 52px;
-    }
-    .whatsapp-button i.bi-whatsapp {
-        font-size: 24px;
-    }
-    .whatsapp-tooltip {
-        font-size: 12px;
-        padding: 8px 12px;
-        bottom: 70px;
-        right: -20px;
-    }
-}
-
-/* Very Small Mobile (< 320px) */
-@media (max-width: 319px) {
-    .whatsapp-widget {
-        bottom: 8px;
-        right: 8px;
-    }
-    .whatsapp-button {
-        width: 48px;
-        height: 48px;
-    }
-    .whatsapp-button i.bi-whatsapp {
-        font-size: 22px;
-    }
-    .whatsapp-tooltip {
-        font-size: 11px;
-        padding: 6px 10px;
-        bottom: 65px;
-    }
-}
-
-/* Touch Devices Optimization */
-@media (hover: none) and (pointer: coarse) {
-    .whatsapp-button {
-        min-width: 56px;
-        min-height: 56px;
-    }
-    .whatsapp-widget:active .whatsapp-button {
-        transform: scale(0.95);
-    }
-}
-
-/* Reduce Motion for Accessibility */
-@media (prefers-reduced-motion: reduce) {
-    .whatsapp-button,
-    .whatsapp-tooltip {
-        transition: none;
-    }
-}
-
-/* Mobile Menu Styles */
-@media (max-width: 992px) {
-    .hamburger {
-        display: flex;
-    }
-
-    .nav-links {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        height: 100vh;
-        width: 70%;
-        max-width: 300px;
-        background: #181818;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 80px 2rem 2rem 2rem;
-        transition: right 0.3s ease;
-        box-shadow: -2px 0 10px rgba(0,0,0,0.3);
-        overflow-y: auto;
-    }
-
-    .nav-links.active {
-        right: 0;
-    }
-
-    .nav-links li {
-        margin: 0 0 1.5rem 0;
-        width: 100%;
-    }
-
-    .nav-link {
-        font-size: 1.1rem;
-        display: block;
-        padding: 0.5rem 0;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-}
-        /* Video Tab Styling */
-        .video-tab {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
-            border-left: 3px solid #ff6b6b;
+        .whatsapp-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
         }
 
-        .video-tab:hover {
-            background: linear-gradient(135deg, #ee5a24, #ff6b6b) !important;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(238, 90, 36, 0.3);
+        /* WhatsApp Button */
+        .whatsapp-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50%;
+            box-shadow:
+                0 4px 12px rgba(37, 211, 102, 0.4),
+                0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            outline: none;
         }
 
+        .whatsapp-button i.bi-whatsapp {
+            font-size: 28px;
+        }
+
+        /* Tooltip */
+        .whatsapp-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            background: linear-gradient(135deg, #333 0%, #555 100%);
+            color: white;
+            text-align: center;
+            padding: 10px 16px;
+            border-radius: 12px;
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+
+        .whatsapp-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            right: 20px;
+            border: 8px solid transparent;
+            border-top-color: #333;
+        }
+
+        /* Hover Effects */
+        .whatsapp-widget:hover .whatsapp-button {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow:
+                0 8px 25px rgba(37, 211, 102, 0.5),
+                0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .whatsapp-widget:hover .whatsapp-tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE BREAKPOINTS */
+
+        /* Large Desktop (1440px+) */
+        @media (min-width: 1440px) {
+            .whatsapp-widget {
+                bottom: 30px;
+                right: 30px;
+            }
+            .whatsapp-button {
+                width: 70px;
+                height: 70px;
+            }
+            .whatsapp-button i.bi-whatsapp {
+                font-size: 32px;
+            }
+        }
+
+        /* Desktop (1024px - 1439px) */
+        @media (min-width: 1024px) and (max-width: 1439px) {
+            .whatsapp-widget {
+                bottom: 25px;
+                right: 25px;
+            }
+            .whatsapp-button {
+                width: 65px;
+                height: 65px;
+            }
+        }
+
+        /* Tablet Landscape (768px - 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .whatsapp-widget {
+                bottom: 20px;
+                right: 20px;
+            }
+            .whatsapp-button {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        /* Tablet Portrait & Small Desktop (576px - 767px) */
+        @media (min-width: 576px) and (max-width: 767px) {
+            .whatsapp-widget {
+                bottom: 15px;
+                right: 15px;
+            }
+            .whatsapp-button {
+                width: 55px;
+                height: 55px;
+            }
+            .whatsapp-button i.bi-whatsapp {
+                font-size: 26px;
+            }
+        }
+
+        /* Mobile Landscape (480px - 575px) */
+        @media (min-width: 480px) and (max-width: 575px) and (orientation: landscape) {
+            .whatsapp-widget {
+                bottom: 10px;
+                right: 10px;
+            }
+            .whatsapp-button {
+                width: 50px;
+                height: 50px;
+            }
+            .whatsapp-button i.bi-whatsapp {
+                font-size: 24px;
+            }
+            .whatsapp-tooltip {
+                font-size: 13px;
+                padding: 8px 12px;
+                bottom: 70px;
+            }
+        }
+
+        /* Mobile Portrait (320px - 479px) */
+        @media (max-width: 479px) {
+            .whatsapp-widget {
+                bottom: 10px;
+                right: 10px;
+            }
+            .whatsapp-button {
+                width: 52px;
+                height: 52px;
+            }
+            .whatsapp-button i.bi-whatsapp {
+                font-size: 24px;
+            }
+            .whatsapp-tooltip {
+                font-size: 12px;
+                padding: 8px 12px;
+                bottom: 70px;
+                right: -20px;
+            }
+        }
+
+        /* Very Small Mobile (< 320px) */
+        @media (max-width: 319px) {
+            .whatsapp-widget {
+                bottom: 8px;
+                right: 8px;
+            }
+            .whatsapp-button {
+                width: 48px;
+                height: 48px;
+            }
+            .whatsapp-button i.bi-whatsapp {
+                font-size: 22px;
+            }
+            .whatsapp-tooltip {
+                font-size: 11px;
+                padding: 6px 10px;
+                bottom: 65px;
+            }
+        }
+
+        /* Touch Devices Optimization */
+        @media (hover: none) and (pointer: coarse) {
+            .whatsapp-button {
+                min-width: 56px;
+                min-height: 56px;
+            }
+            .whatsapp-widget:active .whatsapp-button {
+                transform: scale(0.95);
+            }
+        }
+
+        /* Reduce Motion for Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .whatsapp-button,
+            .whatsapp-tooltip {
+                transition: none;
+            }
+        }
+
+        /* Mobile Menu Styles */
+        @media (max-width: 992px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 70%;
+                max-width: 300px;
+                background: #181818;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 80px 2rem 2rem 2rem;
+                transition: right 0.3s ease;
+                box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+                overflow-y: auto;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                margin: 0 0 1.5rem 0;
+                width: 100%;
+            }
+
+            .nav-link {
+                font-size: 1.1rem;
+                display: block;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+        }
+
+        /* Tablet adjustments */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .dashboard-container {
+                max-width: 95%;
+                padding: 2.5rem;
+            }
+
+            .dashboard-container h2 {
+                font-size: 1.75rem;
+            }
+
+            .dashboard-container p {
+                font-size: 1.0rem;
+            }
+
+            .card-title {
+                font-size: 2.25rem !important;
+            }
+
+            .dashboard-container a, .dashboard-btn {
+                flex: 1 1 calc(50% - 1rem);
+            }
+
+            .d-flex.flex-wrap {
+                justify-content: center;
+            }
+        }
+
+        /* Extra large screen adjustments */
+        @media (min-width: 1200px) {
+            .dashboard-container {
+                max-width: 100%;
+                padding: 3rem;
+            }
+
+            .row {
+                margin: 0 -15px;
+            }
+
+            .col-md-4 {
+                padding: 0 15px;
+            }
+        }
+
+        /* Small tablet adjustments */
+        @media (min-width: 576px) and (max-width: 768px) {
+            .dashboard-container {
+                padding: 1.5rem;
+            }
+
+            .dashboard-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-container p {
+                font-size: 0.95rem;
+            }
+
+            .dashboard-container a, .dashboard-btn {
+                flex: 1 1 100%;
+                margin: 0.5rem 0;
+            }
+
+            .card-title {
+                font-size: 1.8rem !important;
+            }
+
+            .d-flex.flex-wrap {
+                justify-content: center;
+            }
+        }
+
+        /* Extra small devices (phones, 320px and up) */
+        @media (max-width: 575.98px) {
+            .dashboard-container {
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+
+            .dashboard-container h2 {
+                font-size: 1.3rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .dashboard-container p {
+                font-size: 0.85rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .dashboard-container a, .dashboard-btn {
+                flex: 1 1 100%;
+                padding: 0.8rem 1rem;
+                margin: 0.3rem 0;
+                font-size: 0.85rem;
+            }
+
+            .card {
+                margin-bottom: 1rem;
+            }
+
+            .card-title {
+                font-size: 1.6rem !important;
+            }
+
+            .card-text {
+                font-size: 0.75rem;
+            }
+
+            h3 {
+                font-size: 1.1rem !important;
+                margin: 1.5rem 0 1rem;
+            }
+
+            .table-dark td, .table-dark th {
+                padding: 0.5rem 0.25rem;
+                font-size: 0.75rem;
+            }
+
+            .logo-img {
+                height: 30px;
+            }
+
+            .nav-link {
+                font-size: 1rem !important;
+                padding: 0.4rem 0 !important;
+            }
+        }
         /* Animation for video tabs */
         .video-tab {
             animation: pulse 2s infinite;
+        }
+
+        /* Additional alignment fixes */
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-divider {
+            width: 100%;
+            margin: 3rem 0;
+        }
+
+        .container-fluid.mt-4 {
+            width: 100%;
+        }
+
+        /* Table alignment */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .table {
+            min-width: 600px;
         }
 
         @keyframes pulse {
@@ -1002,18 +1614,14 @@
             <span></span>
         </button>
 
-        <ul class="nav-links" id="navLinks">
-            <li><a href="{% url 'influencer_dashboard' %}" class="nav-link">Dashboard</a></li>
-            <li><a href="{% url 'influencer_product_list' %}" class="nav-link">Products</a></li>
-            <li><a href="{% url 'influencer_sold_products' %}" class="nav-link">Orders</a></li>
-            <li><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
-            <li><a href="#" class="nav-link">My order</a></li>
-            <li><a href="#" class="nav-link">My cart</a></li>
-            <li><a href="#" class="nav-link">My wishlist</a></li>
-            <li><a href="{% url 'register_influencer' %}" class="nav-link">Sign up as an influencer</a></li>
-            <li><a href="#" class="nav-link">All Categories</a></li>
-            <li><a href="#" class="nav-link">Help centre</a></li>
-            <li class="dropdown">
+        <div class="navbar-right">
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{% url 'influencer_dashboard' %}" class="nav-link">Dashboard</a></li>
+                <li><a href="{% url 'influencer_product_list' %}" class="nav-link">Products</a></li>
+                <li><a href="{% url 'influencer_sold_products' %}" class="nav-link">Orders</a></li>
+                <li><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
+            </ul>
+            <div class="dropdown">
                 <button class="dropdown-toggle" onclick="toggleDropdown(event)">
                     <i class="fas fa-user-circle mr-1"></i> {{ request.user.full_name|default:request.user.username }} ▼
                 </button>
@@ -1025,113 +1633,167 @@
                         <i class="fas fa-sign-out-alt mr-2"></i> Logout
                     </a>
                 </div>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-<div class="dashboard-container">
-    <h2>Hello {{ request.user.full_name|default:request.user.username }}, Welcome Back!</h2>
-    <p>Manage your products, view sold items, and update your profile from this dashboard.</p>
-
-    <!-- Links to different sections -->
-    <div class="d-flex justify-content-between flex-wrap">
-        <a href="{% url 'influencer_product_list' %}">Manage My Products</a>
-        <a href="{% url 'profile' %}">My Profile</a>
-        <a href="{% url 'influencer_sold_products' %}">View Sold Products</a>
-        <a href="{% url 'manage_videos' %}" class="video-tab">Manage Videos</a>
-        <a href="{% url 'video_feed' %}" class="video-tab">Video Feed</a>
-        <a href="{% url 'upload_video' %}" class="video-tab">Upload Video</a>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <!-- Stats Cards Section -->
-    <div class="container-fluid mt-4">
-        <div class="row">
-            <!-- Stats Card 1 -->
-            <div class="col-md-4 mb-4">
-                <div class="card border-success">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">
-                            ${{ total_revenue|floatformat:2 }}
-                        </h5>
-                        <p class="card-text">Total Revenue</p>
-                        <div class="progress">
-                            <div class="progress-bar bg-success" role="progressbar"
-                                style="width: {{ total_revenue_change }}%;"
-                                aria-valuenow="{{ total_revenue_change }}" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stats Card 2 -->
-            <div class="col-md-4 mb-4">
-                <div class="card border-info">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">
-                            {{ total_orders }}
-                        </h5>
-                        <p class="card-text">Total Orders</p>
-                        <div class="progress">
-                            <div class="progress-bar bg-info" role="progressbar"
-                                style="width: {{ total_orders_change }}%;"
-                                aria-valuenow="{{ total_orders_change }}" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stats Card: Monthly Revenue -->
-            <div class="col-md-4 mb-4">
-                <div class="card border-warning">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">
-                            {{ monthly_revenue }}
-                        </h5>
-                        <p class="card-text">Monthly Revenue</p>
-                        <div class="progress">
-                            <div class="progress-bar bg-warning" role="progressbar"
-                                style="width: {{ revenue_change }}%;"
-                                aria-valuenow="{{ revenue_change }}" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
+</nav>
 
-    <h3>Top Performing Products</h3>
-    <div class="table-responsive mt-3">
-        <table class="table table-dark table-hover">
-            <thead>
-                <tr style="display:flex; justify-content:space-evenly;">
-                    <th scope="col">Product</th>
-                    <th scope="col">Sales</th>
-                    <th scope="col">Revenue</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product in top_products %}
-                    <tr>
-                        <td>{{ product.name }}</td>
-                        <td>{{ product.total_sales }}</td>
-                        <td>${{ product.total_revenue|floatformat:2 }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="position-sticky pt-3">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'influencer_dashboard' %}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Home / Overview</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'influencer_product_list' %}">
+                                <i class="fas fa-box"></i>
+                                <span>Products</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_videos' %}">
+                                <i class="fas fa-video"></i>
+                                <span>Videos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'influencer_sold_products' %}">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Orders</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'profile' %}">
+                                <i class="fas fa-user"></i>
+                                <span>Profile / Settings</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'influencer_earnings' %}">
+                                <i class="fas fa-wallet"></i>
+                                <span>Earnings / Withdrawals</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content area -->
+        <main class="main-content col-12 ms-sm-auto px-md-4">
+            <div class="dashboard-container">
+                <h2>Hello {{ request.user.full_name|default:request.user.username }}, Welcome Back!</h2>
+                <p>Manage your products, view sold items, and update your profile from this dashboard.</p>
+
+                <!-- Links to different sections -->
+                <div class="d-flex flex-wrap justify-content-center">
+                    <a href="{% url 'influencer_product_list' %}" class="dashboard-btn">Manage My Products</a>
+                    <a href="{% url 'profile' %}" class="dashboard-btn">My Profile</a>
+                    <a href="{% url 'influencer_sold_products' %}" class="dashboard-btn">View Sold Products</a>
+                    <a href="{% url 'manage_videos' %}" class="dashboard-btn video-tab">Manage Videos</a>
+                    <a href="{% url 'video_feed' %}" class="dashboard-btn video-tab">Video Feed</a>
+                    <a href="{% url 'upload_video' %}" class="dashboard-btn video-tab">Upload Video</a>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Stats Cards Section -->
+                <div class="container-fluid mt-4">
+                    <div class="row">
+                        <!-- Stats Card 1 -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card border-success">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">
+                                        ₹{{ total_revenue|floatformat:2 }}
+                                    </h5>
+                                    <p class="card-text">Total Revenue</p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar"
+                                            style="width: {{ total_revenue_change }}%;"
+                                            aria-valuenow="{{ total_revenue_change }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stats Card 2 -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card border-info">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">
+                                        {{ total_orders }}
+                                    </h5>
+                                    <p class="card-text">Total Orders</p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-info" role="progressbar"
+                                            style="width: {{ total_orders_change }}%;"
+                                            aria-valuenow="{{ total_orders_change }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stats Card: Monthly Revenue -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card border-warning">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">
+                                        ₹{{ monthly_revenue|floatformat:2 }}
+                                    </h5>
+                                    <p class="card-text">Monthly Revenue</p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-warning" role="progressbar"
+                                            style="width: {{ revenue_change }}%;"
+                                            aria-valuenow="{{ revenue_change }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Top Performing Products</h3>
+                <div class="table-responsive mt-3">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr style="display:flex; justify-content:space-evenly;">
+                                <th scope="col">Product</th>
+                                <th scope="col">Sales</th>
+                                <th scope="col">Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in top_products %}
+                                <tr>
+                                    <td>{{ product.name }}</td>
+                                    <td>{{ product.total_sales }}</td>
+                                    <td>₹{{ product.total_revenue|floatformat:2 }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-divider"></div>
+            </div>
+        </main>
     </div>
-
-    <div class="section-divider"></div>
 </div>
 
 <!-- Footer -->
 <div class="footer">
-    <p>Need help? <a href="#">Contact Support</a></p>
-</div>
+        <p>Need help? <a href="{% url 'support' %}">Contact Support</a></p>
 
+</div>
 
 <div class="whatsapp-widget">
     <div class="whatsapp-tooltip">Chat with us on WhatsApp</div>
@@ -1143,13 +1805,57 @@
     </a>
 </div>
 
-
-
-
 <!-- Bootstrap JS (with jQuery and Popper.js) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // Toggle sidebar on mobile
+    document.getElementById('hamburger').addEventListener('click', function() {
+        document.querySelector('.sidebar').classList.toggle('active');
+        this.classList.toggle('active');
+
+        // Also toggle overlay for mobile menu
+        const overlay = document.getElementById('navOverlay');
+        overlay.classList.toggle('active');
+    });
+
+    // Close sidebar when clicking on overlay
+    document.getElementById('navOverlay').addEventListener('click', function() {
+        document.querySelector('.sidebar').classList.remove('active');
+        document.getElementById('hamburger').classList.remove('active');
+        this.classList.remove('active');
+    });
+
+    // Function to toggle dropdown
+    function toggleDropdown(event) {
+        event.preventDefault();
+        const dropdown = document.getElementById('accountDropdown');
+        dropdown.classList.toggle('show');
+    }
+
+    // Close dropdown when clicking outside
+    window.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('accountDropdown');
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        if (!dropdown.contains(event.target) && !dropdownToggle.contains(event.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    // Add active class to current page link in sidebar
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentLocation = window.location.href;
+        const navLinks = document.querySelectorAll('.sidebar .nav-link');
+
+        navLinks.forEach(function(link) {
+            if (link.href === currentLocation) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
