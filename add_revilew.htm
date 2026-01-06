@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write a Review </title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #000000;
+            --secondary: #333333;
+            --accent: #666666;
+            --light: #f8f9fa;
+            --dark: #1e272e;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: var(--primary);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #cccccc;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
+
+        .review-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            margin: 0 0 1.5rem 0;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        /* Form Styles */
+        .review-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        /* Rating Field */
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background-color: white;
+        }
+
+        select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Custom Rating Stars */
+        .rating-stars {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+
+        .rating-stars input {
+            display: none;
+        }
+
+        .rating-stars label {
+            font-size: 1.5rem;
+            color: #ccc;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .rating-stars label:hover,
+        .rating-stars label:hover ~ label {
+            color: var(--primary);
+        }
+
+        .rating-stars input:checked ~ label {
+            color: var(--primary);
+        }
+
+        /* Comment Field */
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Image Upload */
+        .file-upload {
+            position: relative;
+        }
+
+        input[type="file"] {
+            padding: 0.75rem;
+            background-color: #f8f9fa;
+            border: 1px dashed #ddd;
+            border-radius: 6px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Back Link */
+        .back-link {
+            display: block;
+            margin-top: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link i {
+            margin-right: 0.3rem;
+        }
+
+        .back-link:hover {
+            color: var(--secondary);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.75rem 1rem;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                right: -100%;
+                top: 0;
+                flex-direction: column;
+                background-color: var(--primary);
+                width: 70%;
+                max-width: 300px;
+                height: 100vh;
+                padding: 80px 2rem 2rem;
+                transition: right 0.3s ease-in-out;
+                box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                margin: 0 0 1.5rem 0;
+            }
+
+            .nav-links a {
+                font-size: 1.1rem;
+                display: block;
+                padding: 0.5rem 0;
+            }
+
+            .logo-text {
+                font-size: 1.25rem;
+            }
+
+            .logo img {
+                height: 32px;
+            }
+
+            .container {
+                margin: 1rem auto;
+                padding: 0 0.75rem;
+            }
+
+            .review-container {
+                padding: 1.5rem;
+                border-radius: 6px;
+            }
+
+            .page-title {
+                font-size: 1.4rem;
+                margin-bottom: 1rem;
+            }
+
+            .mb-3 {
+                margin-bottom: 1.25rem;
+            }
+
+            .rating-stars label {
+                font-size: 1.25rem;
+                margin-right: 0.3rem;
+            }
+
+            textarea {
+                min-height: 120px;
+                font-size: 0.95rem;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 0.875rem 1.5rem;
+            }
+
+            .footer {
+                padding: 1.5rem 1rem;
+            }
+
+            .footer-content p {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0.5rem 0.75rem;
+            }
+
+            .nav-links {
+                width: 80%;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .logo img {
+                height: 28px;
+                margin-right: 8px;
+            }
+
+            .review-container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.2rem;
+            }
+
+            .form-label {
+                font-size: 0.95rem;
+            }
+
+            .rating-stars label {
+                font-size: 1.1rem;
+            }
+
+            input[type="file"] {
+                font-size: 0.85rem;
+                padding: 0.5rem;
+            }
+        }
+
+        /* Tablet Landscape */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                max-width: 700px;
+            }
+
+            .navbar-container {
+                padding: 0 1rem;
+            }
+        }
+
+        /* Large Desktop */
+        @media (min-width: 1200px) {
+            .navbar-container {
+                max-width: 1400px;
+            }
+
+            .container {
+                max-width: 900px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="GreenStore Logo">
+<!--                <span class="logo-text">Lumoskart</span>-->
+            </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <!--<li><a href="{%url 'home'%}">Home</a></li>-->
+                <li><a href="{%url 'wishlist'%}">Wishlist</a></li>
+                <li><a href="{%url 'customer_dashboard'%}">Dashboard</a></li>
+                <li><a href="{%url 'logout'%}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="review-container">
+            <h2 class="page-title">Write a Review for {{ product.name }}</h2>
+
+            <form method="post" enctype="multipart/form-data" class="review-form">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="id_rating" class="form-label">Rating</label>
+                    <div class="rating-stars">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5" class="fas fa-star"></label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4" class="fas fa-star"></label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3" class="fas fa-star"></label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2" class="fas fa-star"></label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1" class="fas fa-star"></label>
+                    </div>
+                    {{ form.rating }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_comment" class="form-label">Comment</label>
+                    {{ form.comment }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_image" class="form-label">Upload Image (optional)</label>
+                    <div class="file-upload">
+                        {{ form.image }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </form>
+
+            <a href="javascript:history.back()" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Product
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 GreenStore. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            const hamburger = document.querySelector('.hamburger');
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navbar = document.querySelector('.navbar');
+            const navLinks = document.querySelector('.nav-links');
+            const hamburger = document.querySelector('.hamburger');
+
+            if (!navbar.contains(event.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                const navLinks = document.querySelector('.nav-links');
+                const hamburger = document.querySelector('.hamburger');
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
