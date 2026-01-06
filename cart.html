@@ -20,20 +20,21 @@
             color: #fff;
         }
 
+        /* Enhanced Navbar with Modern Interactive Elements */
         .navbar {
-            background: #181818;
+            background: linear-gradient(135deg, #0e0e0e 0%, #2a2a2a 100%);
             backdrop-filter: blur(10px);
-            border-bottom: 2px solid #fff;
-            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(158, 158, 158, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
-
         .logo-container {
             display: flex;
             align-items: center;
@@ -600,9 +601,14 @@
         </button>
 
         <div class="nav-links" id="navLinks">
-            <!--<a href="{% url 'home' %}" class="nav-button">Home</a>-->
-            <a href="{%url 'about_us'%}" class="nav-button">About</a>
-            <a href="{% url 'customer_dashboard' %}" class="nav-button primary">Dashboard</a>
+            <a href="{% url 'home' %}" class="nav-button">Home</a>
+            <a href="#" class="nav-button">My order</a>
+            <a href="#" class="nav-button">My cart</a>
+            <a href="{%url 'wishlist'%}" class="nav-button">My wishlist</a>
+            <a href="{% url 'customer_dashboard' %}" class="nav-button primary">My account</a>
+            <a href="{% url 'register_influencer' %}" class="nav-button">Sign up as an influencer</a>
+            <a href="#" class="nav-button">All Categories</a>
+            <a href="#" class="nav-button">Help centre</a>
             <form method="post" action="{% url 'logout' %}" style="display: inline; width: 100%;">
                 {% csrf_token %}
                 <button type="submit" class="nav-button logout">Logout</button>
