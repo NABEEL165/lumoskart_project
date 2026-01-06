@@ -389,6 +389,68 @@
             color: #94a3b8;
             font-size: 0.9rem;
         }
+        
+        .banner-section {
+            margin-bottom: 3rem;
+        }
+        
+        .banner-card {
+            background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(129, 140, 248, 0.3);
+        }
+        
+        .banner-card h2 {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .banner-card p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Responsive adjustments for banner */
+        @media (max-width: 768px) {
+            .banner-section {
+                margin-bottom: 2rem;
+            }
+            
+            .banner-card {
+                padding: 2rem 1.5rem;
+                margin: 0 1rem;
+            }
+            
+            .banner-card h2 {
+                font-size: 1.5rem;
+            }
+            
+            .banner-card p {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .banner-section {
+                margin-bottom: 1.5rem;
+            }
+            
+            .banner-card {
+                padding: 1.5rem 1rem;
+            }
+            
+            .banner-card h2 {
+                font-size: 1.3rem;
+            }
+            
+            .banner-card p {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 
@@ -451,6 +513,14 @@
             </div>
         </div>
     </nav>
+
+    <!-- Banner Section -->
+    <div class="banner-section">
+        <div class="banner-card">
+            <h2>Discover Amazing Products</h2>
+            <p>Browse through our curated selection of products promoted by top influencers</p>
+        </div>
+    </div>
 
     <!-- Login Section -->
     <section class="login-section">
