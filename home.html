@@ -3092,6 +3092,33 @@
         pointer-events: none;
     }
 
+    .reel-video-info {
+        position: absolute;
+        bottom: 120px; /* Position above the product overlay */
+        left: 0;
+        right: 0;
+        z-index: 2;
+        padding: 15px;
+        color: white;
+    }
+
+    .reel-video-title {
+        color: white;
+        font-weight: 600;
+        margin: 0 0 5px 0;
+        font-size: 0.9rem;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .reel-video-influencer {
+        color: #ddd;
+        font-size: 0.8rem;
+        margin: 0;
+    }
+
     .reel-info-overlay {
         position: absolute;
         bottom: 0;
@@ -4072,6 +4099,12 @@
                         <!-- Bottom Gradient for contrast -->
                         <div class="reel-overlay-gradient"></div>
 
+                        <!-- Video Info (Influencer Name) -->
+                        <div class="reel-video-info">
+                            <h6 class="reel-video-title">{{ video.title|truncatewords:6 }}</h6>
+                            <p class="reel-video-influencer">@{{ video.influencer.username }}</p>
+                        </div>
+
                         {% if product %}
                         <!-- Product Overlay -->
                         <div class="reel-product-overlay">
@@ -4175,11 +4208,11 @@
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </div>
-                                        <div class="video-shorts-product-info">
-                                            <h3 class="video-shorts-product-name"></h3>
-                                            <p class="video-shorts-influencer"></p>
-                                            <p class="video-shorts-description"></p>
-                                        </div>
+                                        <!--<div class="video-shorts-product-info">-->
+                                        <!--    <h3 class="video-shorts-product-name"></h3>-->
+                                        <!--    <p class="video-shorts-influencer"></p>-->
+                                        <!--    <p class="video-shorts-description"></p>-->
+                                        <!--</div>-->
                                         <div class="video-shorts-products"></div>
                                         <div class="video-shorts-actions">
                                             <a href="javascript:void(0);"
