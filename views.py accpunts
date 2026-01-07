@@ -297,10 +297,14 @@ def customer_dashboard(request):
     products = Product.objects.filter(stock__gt=0).select_related('category', 'influencer')[:12]
     categories = Category.objects.all()
 
+    # FIXED: Add reels_videos to context like in home view
+    reels_videos = InfluencerVideo.objects.filter(is_active=True).order_by('-created_at')
+
     return render(request, 'customer_dashboard.html', {
         'influencers': influencers,
         'products': products,
         'categories': categories,
+        'reels_videos': reels_videos,
     })
 
 
@@ -997,3 +1001,93 @@ def manage_users(request):
 
 
 
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
+
+@csrf_exempt
+@login_required
+def increment_video_views(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            video_id = data.get('video_id')
+
+            if video_id:
+                video = get_object_or_404(InfluencerVideo, id=video_id)
+                video.views += 1
+                video.save()
+
+                return JsonResponse({'success': True, 'views': video.views})
+            else:
+                return JsonResponse({'success': False, 'error': 'Video ID not provided'})
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Invalid JSON'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    else:
+        return JsonResponse({'success': False, 'error': 'Method not allowed'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Import the VideoLike model
+from .models import VideoLike
+
+@csrf_exempt
+@login_required
+def toggle_video_like(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            video_id = data.get('video_id')
+
+            if video_id:
+                video = get_object_or_404(InfluencerVideo, id=video_id)
+
+                # Check if user has already liked this video
+                try:
+                    video_like = VideoLike.objects.get(user=request.user, video=video)
+                    # User already liked, so unlike it
+                    video_like.delete()
+                    video.likes = max(0, video.likes - 1)  # Ensure likes don't go below 0
+                    user_liked = False
+                except VideoLike.DoesNotExist:
+                    # User hasn't liked yet, so like it
+                    VideoLike.objects.create(user=request.user, video=video)
+                    video.likes += 1
+                    user_liked = True
+
+                video.save()
+
+                return JsonResponse({
+                    'success': True,
+                    'likes': video.likes,
+                    'user_liked': user_liked
+                })
+            else:
+                return JsonResponse({'success': False, 'error': 'Video ID not provided'})
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Invalid JSON'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    else:
+        return JsonResponse({'success': False, 'error': 'Method not allowed'})
