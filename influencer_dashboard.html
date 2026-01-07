@@ -1620,7 +1620,33 @@
                 <li><a href="{% url 'influencer_product_list' %}" class="nav-link">Products</a></li>
                 <li><a href="{% url 'influencer_sold_products' %}" class="nav-link">Orders</a></li>
                 <li><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
-            </ul>
+                <!-- Language Selection -->
+            <!--    <li class="dropdown">-->
+            <!--        <button class="dropdown-toggle" type="button" id="languageDropdown" aria-expanded="false">-->
+            <!--            <i class="fas fa-globe mr-1"></i> <span id="currentLanguage">English</span> ▼-->
+            <!--        </button>-->
+            <!--        <div class="dropdown-menu" aria-labelledby="languageDropdown">-->
+            <!--            <a class="dropdown-item lang-option" href="#" data-lang="en">English</a>-->
+            <!--            <a class="dropdown-item lang-option" href="#" data-lang="ar">Arabic</a>-->
+            <!--            <a class="dropdown-item lang-option" href="#" data-lang="hi">Hindi</a>-->
+            <!--        </div>-->
+            <!--    </li>-->
+                <!-- Currency Converter Dropdown -->
+            <!--    <li class="dropdown">-->
+            <!--        <button class="dropdown-toggle" type="button" id="currencyDropdown" aria-expanded="false">-->
+            <!--            <i class="fas fa-exchange-alt mr-1"></i> <span id="currentCurrency">INR (₹)</span> ▼-->
+            <!--        </button>-->
+            <!--        <div class="dropdown-menu" aria-labelledby="currencyDropdown">-->
+            <!--            <a class="dropdown-item currency-option" href="#" data-currency="INR" data-symbol="₹">India (INR)</a>-->
+            <!--            <a class="dropdown-item currency-option" href="#" data-currency="AED" data-symbol="د.إ">UAE (AED)</a>-->
+            <!--            <a class="dropdown-item currency-option" href="#" data-currency="SGD" data-symbol="$">Singapore (SGD)</a>-->
+            <!--            <a class="dropdown-item currency-option" href="#" data-currency="PHP" data-symbol="₱">Philippines (PHP)</a>-->
+            <!--            <a class="dropdown-item currency-option" href="#" data-currency="USD" data-symbol="$">USA (USD)</a>-->
+            <!--            <a class="dropdown-item currency-option" href="#" data-currency="EUR" data-symbol="€">Germany (EUR)</a>-->
+            <!--            <a class="dropdown-item currency-option" href="#" data-currency="IDR" data-symbol="Rp">Indonesia (IDR)</a>-->
+            <!--        </div>-->
+            <!--    </li>-->
+            <!--</ul>-->
             <div class="dropdown">
                 <button class="dropdown-toggle" onclick="toggleDropdown(event)">
                     <i class="fas fa-user-circle mr-1"></i> {{ request.user.full_name|default:request.user.username }} ▼
@@ -1712,7 +1738,7 @@
                         <div class="col-md-4 mb-4">
                             <div class="card border-success">
                                 <div class="card-body text-center">
-                                    <h5 class="card-title">
+                                    <h5 class="card-title" data-price="{{ total_revenue }}" data-currency="INR">
                                         ₹{{ total_revenue|floatformat:2 }}
                                     </h5>
                                     <p class="card-text">Total Revenue</p>
@@ -1746,7 +1772,7 @@
                         <div class="col-md-4 mb-4">
                             <div class="card border-warning">
                                 <div class="card-body text-center">
-                                    <h5 class="card-title">
+                                    <h5 class="card-title" data-price="{{ monthly_revenue }}" data-currency="INR">
                                         ₹{{ monthly_revenue|floatformat:2 }}
                                     </h5>
                                     <p class="card-text">Monthly Revenue</p>
@@ -1776,7 +1802,7 @@
                                 <tr>
                                     <td>{{ product.name }}</td>
                                     <td>{{ product.total_sales }}</td>
-                                    <td>₹{{ product.total_revenue|floatformat:2 }}</td>
+                                    <td><span data-price="{{ product.total_revenue }}" data-currency="INR">₹{{ product.total_revenue|floatformat:2 }}</span></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -1837,10 +1863,18 @@
 
     // Close dropdown when clicking outside
     window.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('accountDropdown');
-        const dropdownToggle = document.querySelector('.dropdown-toggle');
-        if (!dropdown.contains(event.target) && !dropdownToggle.contains(event.target)) {
-            dropdown.classList.remove('show');
+        const accountDropdown = document.getElementById('accountDropdown');
+        const languageDropdown = document.querySelector('#languageDropdown + .dropdown-menu');
+        const currencyDropdown = document.querySelector('#currencyDropdown + .dropdown-menu');
+        
+        if (!event.target.closest('#accountDropdown')) {
+            accountDropdown.classList.remove('show');
+        }
+        if (!event.target.closest('#languageDropdown')) {
+            languageDropdown.classList.remove('show');
+        }
+        if (!event.target.closest('#currencyDropdown')) {
+            currencyDropdown.classList.remove('show');
         }
     });
 
@@ -1854,6 +1888,205 @@
                 link.classList.add('active');
             }
         });
+    });
+    
+    // ===============================
+    // 🌐 Language Selection Functionality
+    // ===============================
+    
+    // Language translations
+    const translations = {
+        'en': {}, // English (default)
+        'ar': {}, // Arabic translations would go here
+        'hi': {}  // Hindi translations would go here
+    };
+    
+    // Apply language to page elements
+    function applyLanguage(langCode) {
+        const langTranslations = translations[langCode] || translations['en'];
+        
+        // Update text elements based on data attributes
+        document.querySelectorAll('[data-translate]').forEach(element => {
+            const key = element.getAttribute('data-translate');
+            if (langTranslations[key]) {
+                element.textContent = langTranslations[key];
+            }
+        });
+    }
+    
+    // Handle language selection
+    const languageItems = document.querySelectorAll('.lang-option');
+    languageItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const selectedLang = this.getAttribute('data-lang');
+            
+            // Store selected language in localStorage
+            localStorage.setItem('preferredLanguage', selectedLang);
+            
+            // Update language selector display
+            const langDisplay = document.getElementById('currentLanguage');
+            if (langDisplay) {
+                const langNames = {
+                    'en': 'English',
+                    'ar': 'Arabic', 
+                    'hi': 'Hindi'
+                };
+                langDisplay.textContent = langNames[selectedLang] || 'English';
+            }
+            
+            // Apply language
+            applyLanguage(selectedLang);
+        });
+    });
+    
+    // Add click handler for language dropdown toggle
+    const languageDropdownBtn = document.getElementById('languageDropdown');
+    if (languageDropdownBtn) {
+        languageDropdownBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const dropdownMenu = this.nextElementSibling;
+            dropdownMenu.classList.toggle('show');
+        });
+    }
+    
+    // Add click handler for currency dropdown toggle
+    const currencyDropdownBtn = document.getElementById('currencyDropdown');
+    if (currencyDropdownBtn) {
+        currencyDropdownBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const dropdownMenu = this.nextElementSibling;
+            dropdownMenu.classList.toggle('show');
+        });
+    }
+    
+
+    
+    // Initialize language on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get language from localStorage or default to 'en'
+        const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+        
+        // Update language selector display
+        const langDisplay = document.getElementById('currentLanguage');
+        if (langDisplay) {
+            const langNames = {
+                'en': 'English',
+                'ar': 'Arabic',
+                'hi': 'Hindi'
+            };
+            langDisplay.textContent = langNames[savedLang] || 'English';
+        }
+        
+        // Apply language
+        applyLanguage(savedLang);
+    });
+    
+    // ===============================
+    // 💰 Currency Conversion Functionality
+    // ===============================
+    
+    // Exchange rates (relative to INR)
+    const exchangeRates = {
+        'INR': 1,        // Indian Rupee
+        'AED': 0.31,     // UAE Dirham
+        'SGD': 0.017,    // Singapore Dollar
+        'PHP': 0.69,     // Philippine Peso
+        'USD': 0.012,    // US Dollar
+        'EUR': 0.011,    // Euro
+        'IDR': 183.33    // Indonesian Rupiah
+    };
+    
+    // Function to convert prices
+    function convertPrice(price, fromCurrency, toCurrency) {
+        if (fromCurrency === toCurrency) return price;
+        
+        // Convert to INR first, then to target currency
+        const inrValue = price / exchangeRates[fromCurrency];
+        const convertedValue = inrValue * exchangeRates[toCurrency];
+        return convertedValue;
+    }
+    
+    // Function to format currency with symbol
+    function formatCurrency(amount, currency) {
+        const symbols = {
+            'INR': '₹',
+            'AED': 'د.إ',
+            'SGD': '$',
+            'PHP': '₱',
+            'USD': '$',
+            'EUR': '€',
+            'IDR': 'Rp'
+        };
+        
+        const symbol = symbols[currency] || '₹';
+        return `${symbol}${amount.toFixed(2)}`;
+    }
+    
+    // Function to update all prices on the page
+    function updatePrices(toCurrency) {
+        // Update elements with price information
+        document.querySelectorAll('[data-price]').forEach(element => {
+            const originalPrice = element.getAttribute('data-price');
+            const originalCurrency = element.getAttribute('data-currency') || 'INR';
+            
+            if (originalPrice && !isNaN(originalPrice)) {
+                const convertedPrice = convertPrice(parseFloat(originalPrice), originalCurrency, toCurrency);
+                const formattedPrice = formatCurrency(convertedPrice, toCurrency);
+                
+                element.textContent = formattedPrice;
+                
+                // Store the original price data to allow future conversions
+                if (!element.hasAttribute('data-original-price')) {
+                    element.setAttribute('data-original-price', originalPrice);
+                    element.setAttribute('data-original-currency', originalCurrency);
+                }
+            }
+        });
+    }
+    
+    // Handle currency selection
+    const currencyItems = document.querySelectorAll('.currency-option');
+    currencyItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const selectedCurrency = this.getAttribute('data-currency');
+            const currencySymbol = this.getAttribute('data-symbol');
+            
+            // Store selected currency in localStorage
+            localStorage.setItem('preferredCurrency', selectedCurrency);
+            
+            // Update currency selector display
+            const currencyDisplay = document.getElementById('currentCurrency');
+            
+            if (currencyDisplay) {
+                currencyDisplay.textContent = `${selectedCurrency} (${currencySymbol})`;
+            }
+            
+            // Update all prices on the page
+            updatePrices(selectedCurrency);
+        });
+    });
+    
+    // Initialize currency on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get currency from localStorage or default to 'INR'
+        const savedCurrency = localStorage.getItem('preferredCurrency') || 'INR';
+        
+        // Update currency selector display
+        const currencyDisplay = document.getElementById('currentCurrency');
+        
+        if (currencyDisplay) {
+            const symbols = {
+                'INR': '₹', 'AED': 'د.إ', 'SGD': '$', 'PHP': '₱',
+                'USD': '$', 'EUR': '€', 'IDR': 'Rp'
+            };
+            const symbol = symbols[savedCurrency] || '₹';
+            currencyDisplay.textContent = `${savedCurrency} (${symbol})`;
+        }
+        
+        // Update all prices on the page
+        updatePrices(savedCurrency);
     });
 </script>
 
