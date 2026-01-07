@@ -3119,6 +3119,13 @@
         margin: 0;
     }
 
+    .reel-video-description {
+        color: #bbb;
+        font-size: 0.7rem;
+        margin: 3px 0 0 0;
+        line-height: 1.2;
+    }
+
     .reel-info-overlay {
         position: absolute;
         bottom: 0;
@@ -3690,8 +3697,8 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a href="{% url 'home' %}" class="navbar-brand">
-                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="50"
-                    class="d-inline-block align-middle">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-06 at 12.18.37 PM.jpeg' %}" alt="Lumoskart Logo"
+                    class="d-inline-block align-middle" style="max-height: 50px; width: auto;">
             </a>
 
             <div class="mobile-view d-flex align-items-center justify-content-end">
@@ -3762,8 +3769,8 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
         <div class="offcanvas-header" style="background-color: #1e293b;">
             <h5 class="offcanvas-title" id="navbarOffcanvasLabel">
-                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="40"
-                    class="d-inline-block align-middle">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-06 at 12.18.37 PM.jpeg' %}" alt="Lumoskart Logo"
+                    class="d-inline-block align-middle" style="max-height: 40px; width: auto;">
             </h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
                 aria-label="Close"></button>
@@ -4087,7 +4094,7 @@
 
                     <!-- Video Background -->
                     <a href="javascript:void(0);" class="text-decoration-none video-shorts-item"
-                        data-video-url="{{ video.video_file.url }}" data-video-title="{{ video.title }}"
+                        data-video-id="{{ video.id }}" data-video-url="{{ video.video_file.url }}" data-video-title="{{ video.title }}"
                         data-video-influencer="{{ video.influencer.username }}"
                         data-video-influencer-id="{{ video.influencer.id }}"
                         data-video-likes="{{ video.likes|default:0 }}" data-video-views="{{ video.views|default:0 }}"
@@ -4099,10 +4106,13 @@
                         <!-- Bottom Gradient for contrast -->
                         <div class="reel-overlay-gradient"></div>
 
-                        <!-- Video Info (Influencer Name) -->
+                        <!-- Video Info (Influencer Name and Bio) -->
                         <div class="reel-video-info">
                             <h6 class="reel-video-title">{{ video.title|truncatewords:6 }}</h6>
                             <p class="reel-video-influencer">@{{ video.influencer.username }}</p>
+                            {% if video.influencer.influencer_profile and video.influencer.influencer_profile.bio %}
+                            <p class="reel-video-description">{{ video.influencer.influencer_profile.bio|truncatewords:10 }}</p>
+                            {% endif %}
                         </div>
 
                         {% if product %}
@@ -4208,11 +4218,11 @@
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </div>
-                                        <!--<div class="video-shorts-product-info">-->
-                                        <!--    <h3 class="video-shorts-product-name"></h3>-->
-                                        <!--    <p class="video-shorts-influencer"></p>-->
-                                        <!--    <p class="video-shorts-description"></p>-->
-                                        <!--</div>-->
+                                        <div class="video-shorts-product-info">
+                                            <h3 class="video-shorts-product-name"></h3>
+                                            <p class="video-shorts-influencer"></p>
+                                            <p class="video-shorts-description"></p>
+                                        </div>
                                         <div class="video-shorts-products"></div>
                                         <div class="video-shorts-actions">
                                             <a href="javascript:void(0);"
@@ -4714,7 +4724,7 @@
 
                         // Play the video after a short delay to ensure source is loaded
                         setTimeout(() => {
-                            videoElement.muted = true; // Ensure video stays muted
+                            videoElement.muted = false; // Enable sound
                             videoElement.play().catch(e => console.log('Auto-play prevented:', e));
                         }, 100);
                     });
@@ -4732,7 +4742,7 @@
 
                     // Set video source and play
                     videoElement.src = videoUrl;
-                    videoElement.muted = true; // Ensure video stays muted
+                    videoElement.muted = false; // Enable sound
                     videoTitle.textContent = title;
                     influencerName.textContent = '@' + influencer;
                     likeCount.textContent = likes;
@@ -4779,6 +4789,7 @@
                     if (currentIndex < allVideoItems.length - 1) {
                         currentIndex++;
                         loadVideo(currentIndex);
+                        videoElement.muted = false; // Enable sound
                         videoElement.play().catch(e => console.log('Auto-play prevented:', e));
                     }
                 }
@@ -4787,6 +4798,7 @@
                     if (currentIndex > 0) {
                         currentIndex--;
                         loadVideo(currentIndex);
+                        videoElement.muted = false; // Enable sound
                         videoElement.play().catch(e => console.log('Auto-play prevented:', e));
                     }
                 }
@@ -5011,6 +5023,7 @@
 
                     // Play the video after a short delay to ensure source is loaded
                     setTimeout(() => {
+                        videoElement.muted = false; // Enable sound
                         videoElement.play().catch(e => console.log('Auto-play prevented:', e));
                     }, 100);
                 });
@@ -5026,6 +5039,7 @@
                 const likes = item.getAttribute('data-video-likes');
                 const views = item.getAttribute('data-video-views');
                 const productsData = item.getAttribute('data-video-products');
+                const videoId = item.getAttribute('data-video-id'); // Get video ID for tracking
 
                 // Set video source and play
                 videoElement.src = videoUrl;
@@ -5038,6 +5052,14 @@
                 // Add video description with views
                 if (videoDescription) {
                     videoDescription.textContent = `${likes} likes • ${views} views`;
+                }
+                
+                // Update like button state
+                updateLikeButtonState(videoId, likes);
+                
+                // Increment video view count
+                if (videoId) {
+                    incrementVideoView(videoId);
                 }
 
                 // Parse and display products if available
@@ -5074,6 +5096,56 @@
                 // Update pagination dots
                 updatePagination();
             }
+            
+            // Function to update like button state based on current video
+            function updateLikeButtonState(videoId, currentLikes) {
+                // Update the like count in the video player
+                if (likeCount) {
+                    likeCount.textContent = currentLikes;
+                }
+                
+                // Update the video description if it exists
+                if (videoDescription) {
+                    const views = getCurrentVideoViews();
+                    videoDescription.textContent = `${currentLikes} likes • ${views} views`;
+                }
+                
+                // Update the like button state in the video player
+                const likeButtons = document.querySelectorAll('.video-shorts-like');
+                likeButtons.forEach(button => {
+                    // For now, we'll assume the user hasn't liked the video initially
+                    // In a real implementation, we'd check if the user has already liked this video
+                    button.classList.remove('liked');
+                    button.innerHTML = '<i class="far fa-heart"></i> ' + currentLikes;
+                });
+                
+                // Update the like count in the main video card
+                const currentVideoItem = allVideoItems[currentIndex];
+                if (currentVideoItem) {
+                    // Update the like count in the data attribute
+                    currentVideoItem.setAttribute('data-video-likes', currentLikes);
+                    
+                    // Update the like count in the reel-action-buttons if it exists
+                    const likeButtonInCard = currentVideoItem.querySelector('.btn.like-btn');
+                    if (likeButtonInCard) {
+                        likeButtonInCard.querySelector('span').textContent = currentLikes;
+                        
+                        // For now, we'll assume the user hasn't liked the video initially
+                        // In a real implementation, we'd check if the user has already liked this video
+                        likeButtonInCard.classList.remove('liked');
+                        likeButtonInCard.querySelector('i').className = 'far fa-heart';
+                    }
+                }
+            }
+            
+            // Function to get current video views
+            function getCurrentVideoViews() {
+                const currentVideoItem = allVideoItems[currentIndex];
+                if (currentVideoItem) {
+                    return currentVideoItem.getAttribute('data-video-views') || '0';
+                }
+                return '0';
+            }
 
             function updatePagination() {
                 const paginationDots = document.querySelector('.video-shorts-pagination');
@@ -5089,12 +5161,179 @@
                         dot.addEventListener('click', function () {
                             currentIndex = i;
                             loadVideo(currentIndex);
-                            videoElement.muted = true; // Ensure video stays muted
+                            videoElement.muted = false; // Enable sound
                             videoElement.play().catch(e => console.log('Auto-play prevented:', e));
                         });
                         paginationDots.appendChild(dot);
                     });
                 }
+            }
+            
+            // Function to increment video view count
+            function incrementVideoView(videoId) {
+                fetch('/accounts/videos/increment-views/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken(),  // Django CSRF token from hidden input
+                    },
+                    body: JSON.stringify({
+                        'video_id': videoId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the view count display if needed
+                        console.log('View count updated successfully:', data.views);
+                        
+                        // Update the view count in the video player
+                        if (videoDescription) {
+                            const likes = likeCount.textContent || '0';
+                            videoDescription.textContent = `${likes} likes • ${data.views} views`;
+                        }
+                        
+                        // Update the view count in the main video card
+                        const currentVideoItem = allVideoItems[currentIndex];
+                        if (currentVideoItem) {
+                            // Update the view count in the data attribute
+                            currentVideoItem.setAttribute('data-video-views', data.views);
+                            
+                            // Update the view count in the reel-views-badge if it exists
+                            const viewBadge = currentVideoItem.querySelector('.reel-views-badge');
+                            if (viewBadge) {
+                                viewBadge.innerHTML = '<i class="fas fa-eye"></i> ' + data.views;
+                            }
+                        }
+                    } else {
+                        console.error('Failed to increment view:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error incrementing video view:', error);
+                });
+            }
+            
+            // Function to toggle video like
+            function toggleVideoLike(videoId) {
+                fetch('/accounts/videos/toggle-like/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken(),  // Django CSRF token from hidden input
+                    },
+                    body: JSON.stringify({
+                        'video_id': videoId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Like toggled successfully:', data.likes);
+                        
+                        // Update the like count in the video player
+                        if (likeCount) {
+                            likeCount.textContent = data.likes;
+                            
+                            // Update the video description if it exists
+                            if (videoDescription) {
+                                const views = getCurrentVideoViews();
+                                videoDescription.textContent = `${data.likes} likes • ${views} views`;
+                            }
+                        }
+                        
+                        // Update the like button state in the video player
+                        const likeButtons = document.querySelectorAll('.video-shorts-like');
+                        likeButtons.forEach(button => {
+                            if (data.user_liked) {
+                                button.classList.add('liked');
+                                button.innerHTML = '<i class="fas fa-heart"></i> ' + data.likes;
+                            } else {
+                                button.classList.remove('liked');
+                                button.innerHTML = '<i class="far fa-heart"></i> ' + data.likes;
+                            }
+                        });
+                        
+                        // Update the like count in the main video card
+                        const currentVideoItem = allVideoItems[currentIndex];
+                        if (currentVideoItem) {
+                            // Update the like count in the data attribute
+                            currentVideoItem.setAttribute('data-video-likes', data.likes);
+                            
+                            // Update the like count in the reel-action-buttons if it exists
+                            const likeButtonInCard = currentVideoItem.querySelector('.btn.like-btn');
+                            if (likeButtonInCard) {
+                                likeButtonInCard.querySelector('span').textContent = data.likes;
+                                
+                                if (data.user_liked) {
+                                    likeButtonInCard.classList.add('liked');
+                                    likeButtonInCard.querySelector('i').className = 'fas fa-heart';
+                                } else {
+                                    likeButtonInCard.classList.remove('liked');
+                                    likeButtonInCard.querySelector('i').className = 'far fa-heart';
+                                }
+                            }
+                        }
+                        
+                        // Update the like button state in the main video grid
+                        const currentVideoCard = document.querySelector(`.reel-widget-card[data-video-id="${videoId}"]`);
+                        if (currentVideoCard) {
+                            const gridLikeButton = currentVideoCard.querySelector('.btn.like-btn');
+                            if (gridLikeButton) {
+                                gridLikeButton.querySelector('span').textContent = data.likes;
+                                
+                                if (data.user_liked) {
+                                    gridLikeButton.classList.add('liked');
+                                    gridLikeButton.querySelector('i').className = 'fas fa-heart';
+                                } else {
+                                    gridLikeButton.classList.remove('liked');
+                                    gridLikeButton.querySelector('i').className = 'far fa-heart';
+                                }
+                            }
+                        }
+                    } else {
+                        console.error('Failed to toggle like:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error toggling video like:', error);
+                });
+            }
+            
+            // Helper function to get current video views
+            function getCurrentVideoViews() {
+                const currentVideoItem = allVideoItems[currentIndex];
+                if (currentVideoItem) {
+                    return currentVideoItem.getAttribute('data-video-views') || '0';
+                }
+                return '0';
+            }
+            
+            // Helper function to get CSRF token
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            
+            // Function to get CSRF token - try both cookie and hidden input
+            function getCSRFToken() {
+                const csrfTokenInput = document.querySelector('[name=csrfmiddlewaretoken]');
+                if (csrfTokenInput) {
+                    return csrfTokenInput.value;
+                }
+                
+                // Fallback to cookie
+                return getCookie('csrftoken');
             }
 
             // Navigation between videos
@@ -5102,7 +5341,7 @@
                 if (currentIndex < allVideoItems.length - 1) {
                     currentIndex++;
                     loadVideo(currentIndex);
-                    videoElement.muted = true; // Ensure video stays muted
+                    videoElement.muted = false; // Enable sound
                     videoElement.play().catch(e => console.log('Auto-play prevented:', e));
                 }
             }
@@ -5111,7 +5350,7 @@
                 if (currentIndex > 0) {
                     currentIndex--;
                     loadVideo(currentIndex);
-                    videoElement.muted = true; // Ensure video stays muted
+                    videoElement.muted = false; // Enable sound
                     videoElement.play().catch(e => console.log('Auto-play prevented:', e));
                 }
             }
@@ -5174,7 +5413,7 @@
                     } else if (e.key === ' ') { // Spacebar to play/pause
                         e.preventDefault();
                         if (videoElement.paused) {
-                            videoElement.muted = true; // Ensure video stays muted
+                            videoElement.muted = false; // Enable sound
                             videoElement.play();
                         } else {
                             videoElement.pause();
@@ -5274,18 +5513,22 @@
                 if (e.target.closest('.video-shorts-like')) {
                     e.preventDefault();
                     const likeBtn = e.target.closest('.video-shorts-like');
-                    likeBtn.classList.toggle('liked');
-                    const likeIcon = likeBtn.querySelector('i');
+                    const videoId = getVideoIdForCurrentIndex(); // Get video ID for current index
                     
-                    if (likeBtn.classList.contains('liked')) {
-                        likeIcon.classList.remove('fa-heart');
-                        likeIcon.classList.add('fa-heart', 'fas');
-                    } else {
-                        likeIcon.classList.remove('fa-heart', 'fas');
-                        likeIcon.classList.add('fa-heart');
+                    if (videoId) {
+                        toggleVideoLike(videoId);
                     }
                 }
             });
+            
+            // Helper function to get video ID for current index
+            function getVideoIdForCurrentIndex() {
+                const currentVideoItem = allVideoItems[currentIndex];
+                if (currentVideoItem) {
+                    return currentVideoItem.getAttribute('data-video-id');
+                }
+                return null;
+            }
 
             // Handle share button functionality
             document.addEventListener('click', function (e) {
@@ -5295,6 +5538,183 @@
                     alert('Video sharing would be implemented here');
                 }
             });
+            
+            // Handle like button in main video grid
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.reel-action-buttons .btn')) {
+                    e.preventDefault();
+                    const likeBtn = e.target.closest('.btn');
+                    
+                    // Check if this is a like button
+                    if (likeBtn.querySelector('i.fa-heart')) {
+                        const videoCard = likeBtn.closest('.reel-widget-card');
+                        if (videoCard) {
+                            const videoId = videoCard.getAttribute('data-video-id');
+                            if (videoId) {
+                                toggleVideoLike(videoId);
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Double tap to like functionality for video player
+            let tapCount = 0;
+            let tapTimer = 0;
+            
+            // Touch event listener for mobile devices
+            document.addEventListener('touchend', function(e) {
+                // Check if touch is on the video in the player
+                if (e.target.closest('.video-shorts-video') || e.target.closest('.video-shorts-video-container')) {
+                    const videoPlayer = document.querySelector('.video-shorts-video');
+                    if (videoPlayer) {
+                        // Check if the player is currently visible
+                        const player = document.querySelector('.video-shorts-player');
+                        if (player && getComputedStyle(player).display !== 'none' && player.style.display !== 'none') {
+                            tapCount++;
+                            
+                            if (tapCount === 1) {
+                                tapTimer = setTimeout(function() {
+                                    tapCount = 0; // Reset after 300ms if single tap
+                                }, 300);
+                            } else if (tapCount === 2) {
+                                clearTimeout(tapTimer);
+                                tapCount = 0;
+                                
+                                // Double tap detected - trigger like
+                                const videoId = getVideoIdForCurrentIndex();
+                                if (videoId) {
+                                    toggleVideoLike(videoId);
+                                    
+                                    // Show heart animation
+                                    showHeartAnimation(e.changedTouches[0]);
+                                    
+                                    // Prevent any default behavior that might pause the video
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    
+                                    // Ensure video keeps playing after double tap
+                                    setTimeout(() => {
+                                        if (videoPlayer.paused) {
+                                            videoPlayer.play().catch(e => console.log('Auto-play prevented:', e));
+                                        }
+                                    }, 100);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Click event listener for desktop devices
+            document.addEventListener('click', function(e) {
+                // Check if click is on the video in the player
+                if (e.target.closest('.video-shorts-video') || e.target.closest('.video-shorts-video-container')) {
+                    const videoPlayer = document.querySelector('.video-shorts-video');
+                    if (videoPlayer) {
+                        // Check if the player is currently visible
+                        const player = document.querySelector('.video-shorts-player');
+                        if (player && getComputedStyle(player).display !== 'none' && player.style.display !== 'none') {
+                            tapCount++;
+                            
+                            if (tapCount === 1) {
+                                tapTimer = setTimeout(function() {
+                                    tapCount = 0; // Reset after 300ms if single tap
+                                }, 300);
+                            } else if (tapCount === 2) {
+                                clearTimeout(tapTimer);
+                                tapCount = 0;
+                                
+                                // Double tap detected - trigger like
+                                const videoId = getVideoIdForCurrentIndex();
+                                if (videoId) {
+                                    toggleVideoLike(videoId);
+                                    
+                                    // Show heart animation
+                                    showHeartAnimation(e);
+                                    
+                                    // Prevent any default behavior that might pause the video
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    
+                                    // Ensure video keeps playing after double tap
+                                    setTimeout(() => {
+                                        if (videoPlayer.paused) {
+                                            videoPlayer.play().catch(e => console.log('Auto-play prevented:', e));
+                                        }
+                                    }, 100);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Function to show heart animation on double tap
+            function showHeartAnimation(event) {
+                // Remove any existing heart animations
+                const existingHearts = document.querySelectorAll('.heart-animation');
+                existingHearts.forEach(heart => heart.remove());
+                
+                // Create heart animation element
+                const heart = document.createElement('div');
+                heart.className = 'heart-animation';
+                heart.innerHTML = '<i class="fas fa-heart" style="color: #e11d48; font-size: 2rem;"></i>';
+                
+                // Position the heart at the tap location
+                const videoContainer = document.querySelector('.video-shorts-video-container');
+                if (videoContainer) {
+                    const rect = videoContainer.getBoundingClientRect();
+                    const x = event.clientX - rect.left;
+                    const y = event.clientY - rect.top;
+                    
+                    heart.style.position = 'absolute';
+                    heart.style.left = `${x}px`;
+                    heart.style.top = `${y}px`;
+                    heart.style.transform = 'translate(-50%, -50%)';
+                    heart.style.pointerEvents = 'none';
+                    heart.style.zIndex = '1000';
+                    
+                    // Add animation styles
+                    heart.style.animation = 'heartPulse 1.5s ease-out';
+                    
+                    // Make sure video container has relative positioning
+                    videoContainer.style.position = 'relative';
+                    
+                    // Add to video container
+                    videoContainer.appendChild(heart);
+                    
+                    // Remove after animation completes
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 1500);
+                }
+            }
+            
+            // Add CSS for heart animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes heartPulse {
+                    0% {
+                        transform: translate(-50%, -50%) scale(0.1);
+                        opacity: 1;
+                    }
+                    50% {
+                        transform: translate(-50%, -50%) scale(1.5);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translate(-50%, -50%) scale(2);
+                        opacity: 0;
+                    }
+                }
+                .heart-animation {
+                    position: absolute;
+                    pointer-events: none;
+                    z-index: 1000;
+                }
+            `;
+            document.head.appendChild(style);
 
             // Function to show product selection modal when multiple products exist
             function showProductSelectionModal(products) {
@@ -5533,7 +5953,18 @@
                 // Update all prices on the page
                 updatePrices(savedCurrency);
             });
+            // Ensure CSRF token is available
+            document.addEventListener('DOMContentLoaded', function() {
+                // Make sure the CSRF token is available for AJAX requests
+                if (document.querySelector('[name=csrfmiddlewaretoken]')) {
+                    // CSRF token already exists in the page
+                }
+            });
         </script>
+        
+        <!-- Hidden CSRF Token for AJAX requests -->
+        {% csrf_token %}
+        
 </body>
 
 </html>
