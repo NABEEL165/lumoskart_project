@@ -5161,6 +5161,84 @@
                 });
             }
             
+            // Function to toggle video like
+            function toggleVideoLike(videoId) {
+                fetch('/accounts/videos/toggle-like/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken(),  // Django CSRF token from hidden input
+                    },
+                    body: JSON.stringify({
+                        'video_id': videoId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Like toggled successfully:', data.likes);
+                        
+                        // Update the like count in the video player
+                        if (likeCount) {
+                            likeCount.textContent = data.likes;
+                            
+                            // Update the video description if it exists
+                            if (videoDescription) {
+                                const views = getCurrentVideoViews();
+                                videoDescription.textContent = `${data.likes} likes • ${views} views`;
+                            }
+                        }
+                        
+                        // Update the like button state in the video player
+                        const likeButton = document.querySelector('.video-shorts-like');
+                        if (likeButton) {
+                            if (data.user_liked) {
+                                likeButton.classList.add('liked');
+                                likeButton.innerHTML = '<i class="fas fa-heart"></i> ' + data.likes;
+                            } else {
+                                likeButton.classList.remove('liked');
+                                likeButton.innerHTML = '<i class="far fa-heart"></i> ' + data.likes;
+                            }
+                        }
+                        
+                        // Update the like count in the main video card
+                        const currentVideoItem = allVideoItems[currentIndex];
+                        if (currentVideoItem) {
+                            // Update the like count in the data attribute
+                            currentVideoItem.setAttribute('data-video-likes', data.likes);
+                            
+                            // Update the like count in the reel-action-buttons if it exists
+                            const likeButtonInCard = currentVideoItem.querySelector('.btn.like-btn');
+                            if (likeButtonInCard) {
+                                likeButtonInCard.querySelector('span').textContent = data.likes;
+                                
+                                if (data.user_liked) {
+                                    likeButtonInCard.classList.add('liked');
+                                    likeButtonInCard.querySelector('i').className = 'fas fa-heart';
+                                } else {
+                                    likeButtonInCard.classList.remove('liked');
+                                    likeButtonInCard.querySelector('i').className = 'far fa-heart';
+                                }
+                            }
+                        }
+                    } else {
+                        console.error('Failed to toggle like:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error toggling video like:', error);
+                });
+            }
+            
+            // Helper function to get current video views
+            function getCurrentVideoViews() {
+                const currentVideoItem = allVideoItems[currentIndex];
+                if (currentVideoItem) {
+                    return currentVideoItem.getAttribute('data-video-views') || '0';
+                }
+                return '0';
+            }
+            
             // Helper function to get CSRF token
             function getCookie(name) {
                 let cookieValue = null;
@@ -5365,18 +5443,22 @@
                 if (e.target.closest('.video-shorts-like')) {
                     e.preventDefault();
                     const likeBtn = e.target.closest('.video-shorts-like');
-                    likeBtn.classList.toggle('liked');
-                    const likeIcon = likeBtn.querySelector('i');
+                    const videoId = getVideoIdForCurrentIndex(); // Get video ID for current index
                     
-                    if (likeBtn.classList.contains('liked')) {
-                        likeIcon.classList.remove('fa-heart');
-                        likeIcon.classList.add('fa-heart', 'fas');
-                    } else {
-                        likeIcon.classList.remove('fa-heart', 'fas');
-                        likeIcon.classList.add('fa-heart');
+                    if (videoId) {
+                        toggleVideoLike(videoId);
                     }
                 }
             });
+            
+            // Helper function to get video ID for current index
+            function getVideoIdForCurrentIndex() {
+                const currentVideoItem = allVideoItems[currentIndex];
+                if (currentVideoItem) {
+                    return currentVideoItem.getAttribute('data-video-id');
+                }
+                return null;
+            }
 
             // Handle share button functionality
             document.addEventListener('click', function (e) {
@@ -5384,6 +5466,25 @@
                     e.preventDefault();
                     // In a real app, this would implement sharing functionality
                     alert('Video sharing would be implemented here');
+                }
+            });
+            
+            // Handle like button in main video grid
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.reel-action-buttons .btn')) {
+                    e.preventDefault();
+                    const likeBtn = e.target.closest('.btn');
+                    
+                    // Check if this is a like button
+                    if (likeBtn.querySelector('i.fa-heart')) {
+                        const videoCard = likeBtn.closest('.reel-widget-card');
+                        if (videoCard) {
+                            const videoId = videoCard.getAttribute('data-video-id');
+                            if (videoId) {
+                                toggleVideoLike(videoId);
+                            }
+                        }
+                    }
                 }
             });
 
