@@ -3697,8 +3697,8 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a href="{% url 'home' %}" class="navbar-brand">
-                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="50"
-                    class="d-inline-block align-middle">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-06 at 12.18.37 PM.jpeg' %}" alt="Lumoskart Logo"
+                    class="d-inline-block align-middle" style="max-height: 50px; width: auto;">
             </a>
 
             <div class="mobile-view d-flex align-items-center justify-content-end">
@@ -3769,8 +3769,8 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
         <div class="offcanvas-header" style="background-color: #1e293b;">
             <h5 class="offcanvas-title" id="navbarOffcanvasLabel">
-                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="40"
-                    class="d-inline-block align-middle">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-06 at 12.18.37 PM.jpeg' %}" alt="Lumoskart Logo"
+                    class="d-inline-block align-middle" style="max-height: 40px; width: auto;">
             </h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
                 aria-label="Close"></button>
@@ -4094,7 +4094,7 @@
 
                     <!-- Video Background -->
                     <a href="javascript:void(0);" class="text-decoration-none video-shorts-item"
-                        data-video-url="{{ video.video_file.url }}" data-video-title="{{ video.title }}"
+                        data-video-id="{{ video.id }}" data-video-url="{{ video.video_file.url }}" data-video-title="{{ video.title }}"
                         data-video-influencer="{{ video.influencer.username }}"
                         data-video-influencer-id="{{ video.influencer.id }}"
                         data-video-likes="{{ video.likes|default:0 }}" data-video-views="{{ video.views|default:0 }}"
@@ -5039,6 +5039,7 @@
                 const likes = item.getAttribute('data-video-likes');
                 const views = item.getAttribute('data-video-views');
                 const productsData = item.getAttribute('data-video-products');
+                const videoId = item.getAttribute('data-video-id'); // Get video ID for tracking
 
                 // Set video source and play
                 videoElement.src = videoUrl;
@@ -5051,6 +5052,11 @@
                 // Add video description with views
                 if (videoDescription) {
                     videoDescription.textContent = `${likes} likes • ${views} views`;
+                }
+                
+                // Increment video view count
+                if (videoId) {
+                    incrementVideoView(videoId);
                 }
 
                 // Parse and display products if available
@@ -5108,6 +5114,78 @@
                         paginationDots.appendChild(dot);
                     });
                 }
+            }
+            
+            // Function to increment video view count
+            function incrementVideoView(videoId) {
+                fetch('/accounts/videos/increment-views/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken(),  // Django CSRF token from hidden input
+                    },
+                    body: JSON.stringify({
+                        'video_id': videoId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the view count display if needed
+                        console.log('View count updated successfully:', data.views);
+                        
+                        // Update the view count in the video player
+                        if (videoDescription) {
+                            const likes = likeCount.textContent || '0';
+                            videoDescription.textContent = `${likes} likes • ${data.views} views`;
+                        }
+                        
+                        // Update the view count in the main video card
+                        const currentVideoItem = allVideoItems[currentIndex];
+                        if (currentVideoItem) {
+                            // Update the view count in the data attribute
+                            currentVideoItem.setAttribute('data-video-views', data.views);
+                            
+                            // Update the view count in the reel-views-badge if it exists
+                            const viewBadge = currentVideoItem.querySelector('.reel-views-badge');
+                            if (viewBadge) {
+                                viewBadge.innerHTML = '<i class="fas fa-eye"></i> ' + data.views;
+                            }
+                        }
+                    } else {
+                        console.error('Failed to increment view:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error incrementing video view:', error);
+                });
+            }
+            
+            // Helper function to get CSRF token
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            
+            // Function to get CSRF token - try both cookie and hidden input
+            function getCSRFToken() {
+                const csrfTokenInput = document.querySelector('[name=csrfmiddlewaretoken]');
+                if (csrfTokenInput) {
+                    return csrfTokenInput.value;
+                }
+                
+                // Fallback to cookie
+                return getCookie('csrftoken');
             }
 
             // Navigation between videos
@@ -5546,7 +5624,18 @@
                 // Update all prices on the page
                 updatePrices(savedCurrency);
             });
+            // Ensure CSRF token is available
+            document.addEventListener('DOMContentLoaded', function() {
+                // Make sure the CSRF token is available for AJAX requests
+                if (document.querySelector('[name=csrfmiddlewaretoken]')) {
+                    // CSRF token already exists in the page
+                }
+            });
         </script>
+        
+        <!-- Hidden CSRF Token for AJAX requests -->
+        {% csrf_token %}
+        
 </body>
 
 </html>
