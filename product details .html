@@ -21,13 +21,13 @@
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--secondary);
@@ -35,7 +35,7 @@
             line-height: 1.6;
             padding-top: 0;
         }
-        
+
         /* Navbar */
         .navbar {
             background: var(--light);
@@ -45,15 +45,15 @@
             top: 0;
             z-index: 1000;
         }
-        
+
         .navbar-brand img {
             height: 40px;
         }
-        
+
         .nav-item {
             margin: 0 0.5rem;
         }
-        
+
         .nav-link {
             color: var(--dark) !important;
             font-weight: 500;
@@ -61,12 +61,12 @@
             border-radius: 8px;
             transition: all 0.3s ease;
         }
-        
+
         .nav-link:hover {
             background-color: var(--light-gray);
             color: var(--primary) !important;
         }
-        
+
         .btn-account {
             background-color: var(--primary);
             color: white !important;
@@ -76,12 +76,12 @@
             font-weight: 500;
             transition: all 0.3s ease;
         }
-        
+
         .btn-account:hover {
             background-color: var(--primary-dark);
             transform: translateY(-2px);
         }
-        
+
         /* Product Container */
         .product-container {
             background: var(--light);
@@ -91,19 +91,19 @@
             margin: 2rem auto;
             max-width: 1200px;
         }
-        
+
         .product-header {
             display: flex;
             flex-wrap: wrap;
             gap: 2rem;
             padding: 2rem;
         }
-        
+
         .product-image-section {
             flex: 1;
             min-width: 300px;
         }
-        
+
         .product-image {
             width: 100%;
             height: 400px;
@@ -117,24 +117,24 @@
             box-shadow: var(--shadow);
             position: relative;
         }
-        
+
         .product-image img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
             transition: transform 0.3s ease;
         }
-        
+
         .product-image:hover img {
             transform: scale(1.05);
         }
-        
+
         .image-thumbnails {
             display: flex;
             gap: 0.5rem;
             justify-content: center;
         }
-        
+
         .thumbnail {
             width: 60px;
             height: 60px;
@@ -143,23 +143,23 @@
             border: 2px solid transparent;
             transition: all 0.3s ease;
         }
-        
+
         .thumbnail:hover, .thumbnail.active {
             border-color: var(--primary);
         }
-        
+
         .thumbnail img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 6px;
         }
-        
+
         .product-info-section {
             flex: 1;
             min-width: 300px;
         }
-        
+
         .product-category {
             color: var(--primary);
             font-weight: 600;
@@ -168,7 +168,7 @@
             letter-spacing: 0.5px;
             margin-bottom: 0.5rem;
         }
-        
+
         .product-title {
             font-size: 2rem;
             font-weight: 700;
@@ -176,50 +176,50 @@
             margin-bottom: 1rem;
             line-height: 1.2;
         }
-        
+
         .product-rating {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 1rem;
         }
-        
+
         .stars {
             color: #fbbf24;
         }
-        
+
         .rating-text {
             color: var(--gray);
             font-size: 0.875rem;
         }
-        
+
         .product-price {
             font-size: 2rem;
             font-weight: 700;
             color: var(--primary);
             margin: 1rem 0;
         }
-        
+
         .product-original-price {
             font-size: 1.25rem;
             color: var(--gray);
             text-decoration: line-through;
             margin-left: 0.5rem;
         }
-        
+
         .product-description {
             color: var(--gray);
             margin: 1.5rem 0;
             line-height: 1.8;
         }
-        
+
         .product-meta {
             display: flex;
             gap: 1rem;
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
-        
+
         .meta-item {
             background: var(--light-gray);
             padding: 0.5rem 1rem;
@@ -229,7 +229,7 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .influencer-info {
             display: flex;
             align-items: center;
@@ -239,7 +239,7 @@
             background: var(--light-gray);
             border-radius: 12px;
         }
-        
+
         .influencer-avatar {
             width: 50px;
             height: 50px;
@@ -251,26 +251,26 @@
             color: white;
             font-weight: bold;
         }
-        
+
         .influencer-details h4 {
             margin: 0;
             font-size: 1rem;
             font-weight: 600;
         }
-        
+
         .influencer-details p {
             margin: 0;
             font-size: 0.875rem;
             color: var(--gray);
         }
-        
+
         .product-actions {
             display: flex;
             gap: 1rem;
             margin: 2rem 0;
             flex-wrap: wrap;
         }
-        
+
         .btn-primary {
             background: var(--primary);
             border: none;
@@ -282,13 +282,13 @@
             flex: 1;
             min-width: 150px;
         }
-        
+
         .btn-primary:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
-        
+
         .btn-outline-primary {
             border: 2px solid var(--primary);
             color: var(--primary);
@@ -300,14 +300,14 @@
             flex: 1;
             min-width: 150px;
         }
-        
+
         .btn-outline-primary:hover {
             background: var(--primary);
             color: white;
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
-        
+
         /* Reviews Section */
         .reviews-section {
             background: var(--light);
@@ -317,51 +317,51 @@
             margin: 0 auto 2rem;
             max-width: 1200px;
         }
-        
+
         .section-title {
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
             color: var(--dark);
         }
-        
+
         .review-item {
             padding: 1.5rem 0;
             border-bottom: 1px solid var(--border);
         }
-        
+
         .review-item:last-child {
             border-bottom: none;
         }
-        
+
         .review-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 0.75rem;
         }
-        
+
         .reviewer-name {
             font-weight: 600;
             color: var(--dark);
         }
-        
+
         .review-date {
             color: var(--gray);
             font-size: 0.875rem;
         }
-        
+
         .review-content {
             margin: 1rem 0;
             color: var(--gray);
         }
-        
+
         .no-reviews {
             text-align: center;
             padding: 3rem;
             color: var(--gray);
         }
-        
+
         /* Footer */
         .footer {
             background: var(--dark);
@@ -369,105 +369,105 @@
             padding: 3rem 0 1rem;
             margin-top: 3rem;
         }
-        
+
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
         }
-        
+
         .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
         }
-        
+
         .footer-section h5 {
             color: white;
             margin-bottom: 1rem;
         }
-        
+
         .footer-links {
             list-style: none;
             padding: 0;
         }
-        
+
         .footer-links li {
             margin-bottom: 0.5rem;
         }
-        
+
         .footer-links a {
             color: #d1d5db;
             text-decoration: none;
             transition: color 0.3s ease;
         }
-        
+
         .footer-links a:hover {
             color: white;
         }
-        
+
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
             border-top: 1px solid #374151;
             color: #9ca3af;
         }
-        
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .product-header {
                 flex-direction: column;
                 padding: 1.5rem;
             }
-            
+
             .product-title {
                 font-size: 1.5rem;
             }
-            
+
             .product-price {
                 font-size: 1.5rem;
             }
-            
+
             .product-actions {
                 flex-direction: column;
             }
-            
+
             .btn-primary, .btn-outline-primary {
                 width: 100%;
             }
-            
+
             .product-image {
                 height: 300px;
             }
-            
+
             .nav-item {
                 margin: 0 0.25rem;
             }
-            
+
             .nav-link {
                 padding: 0.5rem !important;
                 font-size: 0.9rem;
             }
         }
-        
+
         @media (max-width: 480px) {
             .product-image {
                 height: 250px;
             }
-            
+
             .product-title {
                 font-size: 1.25rem;
             }
-            
+
             .section-title {
                 font-size: 1.25rem;
             }
-            
+
             .product-actions {
                 gap: 0.5rem;
             }
-            
+
             .btn-primary, .btn-outline-primary {
                 padding: 0.75rem 1rem;
                 font-size: 0.9rem;
@@ -482,35 +482,36 @@
             <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="40">
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home me-1"></i> Home</a>
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home me-1"></i> <span data-translate="home">Home</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'wishlist' %}"><i class="fas fa-heart me-1"></i> Wishlist</a>
+                        <a class="nav-link" href="{% url 'wishlist' %}"><i class="fas fa-heart me-1"></i> <span data-translate="wishlist">Wishlist</span></a>
                     </li>
                 </ul>
-                
+
                 <ul class="navbar-nav">
+                  
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-user me-1"></i> {{ user.username }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'customer_dashboard' %}">Dashboard</a></li>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{% url 'customer_dashboard' %}"><span data-translate="dashboard">Dashboard</span></a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}"><span data-translate="logout">Logout</span></a></li>
                             </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="btn btn-account" href="{% url 'login' %}">Login</a>
+                            <a class="btn btn-account" href="{% url 'login' %}"><span data-translate="login">Login</span></a>
                         </li>
                     {% endif %}
                 </ul>
@@ -531,7 +532,7 @@
                         </div>
                     {% endif %}
                 </div>
-                
+
                 {% if product.videos.count > 0 %}
                 <div class="product-videos mt-4">
                     <h5 class="mb-3">Product Videos</h5>
@@ -560,11 +561,11 @@
                 </div>
                 {% endif %}
             </div>
-            
+
             <div class="product-info-section">
                 <span class="product-category">{{ product.category.name }}</span>
                 <h1 class="product-title">{{ product.name }}</h1>
-                
+
                 <div class="product-rating">
                     <div class="stars">
                         {% for i in "12345" %}
@@ -577,20 +578,20 @@
                     </div>
                     <span class="rating-text">({{ product.reviews.count }} reviews)</span>
                 </div>
-                
+
                 <div class="product-price">
-                    ₹{{ product.price }}
+                    <span class="price-amount" data-price="{{ product.price }}" data-currency="INR">₹{{ product.price }}</span>
                     {% if product.original_price and product.original_price != product.price %}
-                        <span class="product-original-price">₹{{ product.original_price }}</span>
+                        <span class="product-original-price" data-price="{{ product.original_price }}" data-currency="INR">₹{{ product.original_price }}</span>
                     {% endif %}
                 </div>
-                
+
                 <p class="product-description">{{ product.description }}</p>
-                
+
                 <div class="product-meta">
                     <div class="meta-item">
                         <i class="fas fa-box"></i>
-                        <span>{% if product.stock > 0 %}In Stock: {{ product.stock }}{% else %}Out of Stock{% endif %}</span>
+                        <span>{% if product.stock > 0 %}<span data-translate="in_stock">In Stock</span>: {{ product.stock }}{% else %}<span data-translate="out_of_stock">Out of Stock</span>{% endif %}</span>
                     </div>
                     {% if product.size %}
                     <div class="meta-item">
@@ -605,7 +606,7 @@
                     </div>
                     {% endif %}
                 </div>
-                
+
                 {% if product.influencer %}
                 <div class="influencer-info">
                     <div class="influencer-avatar">
@@ -613,31 +614,31 @@
                     </div>
                     <div class="influencer-details">
                         <h4>{{ product.influencer.get_full_name|default:product.influencer.username }}</h4>
-                        <p>Promoted this product</p>
+                        <p><span data-translate="promoted_by">Promoted this product</span></p>
                     </div>
                 </div>
                 {% endif %}
-                
+
                 <div class="product-actions">
                     {% if user.is_authenticated %}
                         <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">
-                            <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                            <i class="fas fa-shopping-cart me-2"></i><span data-translate="add_to_cart">Add to Cart</span>
                         </a>
                         <a href="{% url 'buy_now' product.id %}" class="btn btn-outline-primary">
-                            <i class="fas fa-bolt me-2"></i>Buy Now
+                            <i class="fas fa-bolt me-2"></i><span data-translate="buy_now">Buy Now</span>
                         </a>
                     {% else %}
                         <a href="{% url 'login' %}" class="btn btn-primary" onclick="alert('Please log in to add items to your cart');">
-                            <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                            <i class="fas fa-shopping-cart me-2"></i><span data-translate="add_to_cart">Add to Cart</span>
                         </a>
                         <a href="{% url 'login' %}" class="btn btn-outline-primary" onclick="alert('Please log in to purchase this item');">
-                            <i class="fas fa-bolt me-2"></i>Buy Now
+                            <i class="fas fa-bolt me-2"></i><span data-translate="buy_now">Buy Now</span>
                         </a>
                     {% endif %}
                 </div>
-                
+
                 <a href="{% url 'add_review' product.id %}" class="btn btn-outline-primary w-100 mt-2">
-                    <i class="fas fa-star me-2"></i>Write a Review
+                    <i class="fas fa-star me-2"></i><span data-translate="write_review">Write a Review</span>
                 </a>
             </div>
         </div>
@@ -645,8 +646,8 @@
 
     <!-- Reviews Section -->
     <div class="reviews-section">
-        <h2 class="section-title">Customer Reviews</h2>
-        
+        <h2 class="section-title"><span data-translate="reviews">Customer Reviews</span></h2>
+
         {% if reviews %}
             {% for review in reviews %}
             <div class="review-item">
@@ -678,12 +679,12 @@
         {% else %}
             <div class="no-reviews">
                 <i class="fas fa-comment-slash fa-3x mb-3 text-muted"></i>
-                <p>No reviews yet. Be the first to review this product!</p>
+                <p><span data-translate="no_reviews_yet">No reviews yet. Be the first to review this product!</span></p>
             </div>
         {% endif %}
     </div>
 
-    
+
             <div class="footer-bottom">
                 <p>&copy; 2025 Lumoskart. All rights reserved.</p>
             </div>
@@ -704,21 +705,21 @@
             modal.style.width = '100%';
             modal.style.height = '100%';
             modal.style.zIndex = '1050';
-            
+
             const modalDialog = document.createElement('div');
             modalDialog.className = 'modal-dialog modal-xl';
             modalDialog.style.maxWidth = '90vw';
             modalDialog.style.margin = '2.5vh auto';
-            
+
             const modalContent = document.createElement('div');
             modalContent.className = 'modal-content';
             modalContent.style.backgroundColor = 'transparent';
             modalContent.style.border = 'none';
             modalContent.style.boxShadow = 'none';
-            
+
             const videoContainer = document.createElement('div');
             videoContainer.style.position = 'relative';
-            
+
             const video = document.createElement('video');
             video.src = videoUrl;
             video.controls = true;
@@ -726,7 +727,7 @@
             video.style.width = '100%';
             video.style.height = '80vh';
             video.style.objectFit = 'contain';
-            
+
             const closeBtn = document.createElement('button');
             closeBtn.innerHTML = '&times;';
             closeBtn.className = 'btn btn-dark';
@@ -743,7 +744,7 @@
             closeBtn.onclick = function() {
                 document.body.removeChild(modal);
             };
-            
+
             videoContainer.appendChild(video);
             videoContainer.appendChild(closeBtn);
             modalContent.appendChild(videoContainer);
@@ -751,7 +752,235 @@
             modal.appendChild(modalDialog);
             document.body.appendChild(modal);
         }
-        
+
+        // ===============================
+        // 🌐 Language Selection Functionality
+        // ===============================
+
+        // Handle language selection
+        const languageItems = document.querySelectorAll('.lang-option');
+        languageItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const selectedLang = this.getAttribute('data-lang');
+
+                // Store selected language in localStorage
+                localStorage.setItem('preferredLanguage', selectedLang);
+
+                // Update language selector display
+                const langDisplay = document.getElementById('currentLanguage');
+                if (langDisplay) {
+                    const langNames = {
+                        'en': 'English',
+                        'ar': 'Arabic',
+                        'hi': 'Hindi'
+                    };
+                    langDisplay.textContent = langNames[selectedLang] || 'English';
+                }
+
+                // Apply language changes
+                applyLanguage(selectedLang);
+            });
+        });
+
+        // Function to apply language translations
+        function applyLanguage(langCode) {
+            // Define translation objects
+            const translations = {
+                'en': {
+                    'home': 'Home',
+                    'wishlist': 'Wishlist',
+                    'dashboard': 'Dashboard',
+                    'logout': 'Logout',
+                    'login': 'Login',
+                    'add_to_cart': 'Add to Cart',
+                    'buy_now': 'Buy Now',
+                    'write_review': 'Write a Review',
+                    'reviews': 'Reviews',
+                    'in_stock': 'In Stock',
+                    'out_of_stock': 'Out of Stock',
+                    'promoted_by': 'Promoted this product',
+                    'no_reviews_yet': 'No reviews yet. Be the first to review this product!'
+                },
+                'ar': {
+                    'home': 'الرئيسية',
+                    'wishlist': 'قائمة الأمنيات',
+                    'dashboard': 'لوحة التحكم',
+                    'logout': 'تسجيل الخروج',
+                    'login': 'تسجيل الدخول',
+                    'add_to_cart': 'أضف إلى السلة',
+                    'buy_now': 'اشتر الآن',
+                    'write_review': 'اكتب مراجعة',
+                    'reviews': 'المراجعات',
+                    'in_stock': 'متوفر',
+                    'out_of_stock': 'غير متوفر',
+                    'promoted_by': 'تم الترويج لهذا المنتج',
+                    'no_reviews_yet': 'لا توجد مراجعات حتى الآن. كن أول من يراجع هذا المنتج!'
+                },
+                'hi': {
+                    'home': 'होम',
+                    'wishlist': 'इच्छा सूची',
+                    'dashboard': 'डैशबोर्ड',
+                    'logout': 'लॉग आउट',
+                    'login': 'लॉग इन',
+                    'add_to_cart': 'कार्ट में जोड़ें',
+                    'buy_now': 'अभी खरीदें',
+                    'write_review': 'समीक्षा लिखें',
+                    'reviews': 'समीक्षाएँ',
+                    'in_stock': 'स्टॉक में',
+                    'out_of_stock': 'स्टॉक में नहीं',
+                    'promoted_by': 'इस उत्पाद को प्रचारित किया',
+                    'no_reviews_yet': 'अभी तक कोई समीक्षा नहीं. इस उत्पाद की समीक्षा करने वाले पहले व्यक्ति बनें!'
+                }
+            };
+
+            // Get translations for selected language
+            const langTranslations = translations[langCode] || translations['en'];
+
+            // Update text elements based on data attributes
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (langTranslations[key]) {
+                    element.textContent = langTranslations[key];
+                }
+            });
+        }
+
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get language from localStorage or default to 'en'
+            const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+
+            // Update language selector display
+            const langDisplay = document.getElementById('currentLanguage');
+            if (langDisplay) {
+                const langNames = {
+                    'en': 'English',
+                    'ar': 'Arabic',
+                    'hi': 'Hindi'
+                };
+                langDisplay.textContent = langNames[savedLang] || 'English';
+            }
+
+            // Apply language
+            applyLanguage(savedLang);
+        });
+
+        // ===============================
+        // 💰 Currency Conversion Functionality
+        // ===============================
+
+        // Exchange rates (relative to INR)
+        const exchangeRates = {
+            'INR': 1,        // Indian Rupee
+            'AED': 0.31,     // UAE Dirham
+            'SGD': 0.017,    // Singapore Dollar
+            'PHP': 0.69,     // Philippine Peso
+            'USD': 0.012,    // US Dollar
+            'EUR': 0.011,    // Euro
+            'IDR': 183.33    // Indonesian Rupiah
+        };
+
+        // Function to convert prices
+        function convertPrice(price, fromCurrency, toCurrency) {
+            if (fromCurrency === toCurrency) return price;
+
+            // Convert to INR first, then to target currency
+            const inrValue = price / exchangeRates[fromCurrency];
+            const convertedValue = inrValue * exchangeRates[toCurrency];
+            return convertedValue;
+        }
+
+        // Function to format currency with symbol
+        function formatCurrency(amount, currency) {
+            const symbols = {
+                'INR': '₹',
+                'AED': 'د.إ',
+                'SGD': '$',
+                'PHP': '₱',
+                'USD': '$',
+                'EUR': '€',
+                'IDR': 'Rp'
+            };
+
+            // Format the amount based on currency
+            let formattedAmount;
+            if (['INR', 'USD', 'EUR', 'SGD'].includes(currency)) {
+                formattedAmount = amount.toFixed(2);
+            } else if (currency === 'PHP') {
+                formattedAmount = amount.toFixed(2);
+            } else if (currency === 'AED') {
+                formattedAmount = amount.toFixed(2);
+            } else if (currency === 'IDR') {
+                formattedAmount = Math.round(amount).toString();
+            } else {
+                formattedAmount = amount.toFixed(2);
+            }
+
+            return symbols[currency] + formattedAmount;
+        }
+
+        // Function to update all prices on the page
+        function updatePrices(targetCurrency) {
+            const priceElements = document.querySelectorAll('.price-amount');
+            priceElements.forEach(element => {
+                const originalPrice = parseFloat(element.getAttribute('data-price'));
+                const originalCurrency = element.getAttribute('data-currency');
+
+                if (!isNaN(originalPrice) && originalCurrency) {
+                    const convertedPrice = convertPrice(originalPrice, originalCurrency, targetCurrency);
+                    const formattedPrice = formatCurrency(convertedPrice, targetCurrency);
+
+                    element.textContent = formattedPrice;
+                    element.setAttribute('data-price', convertedPrice);
+                    element.setAttribute('data-currency', targetCurrency);
+                }
+            });
+        }
+
+        // Handle currency selection
+        const currencyItems = document.querySelectorAll('.currency-option');
+        currencyItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const selectedCurrency = this.getAttribute('data-currency');
+                const currencySymbol = this.getAttribute('data-symbol');
+
+                // Store selected currency in localStorage
+                localStorage.setItem('preferredCurrency', selectedCurrency);
+
+                // Update currency selector display
+                const currencyDisplay = document.getElementById('currentCurrency');
+
+                if (currencyDisplay) {
+                    currencyDisplay.textContent = `${selectedCurrency} (${currencySymbol})`;
+                }
+
+                // Update all prices on the page
+                updatePrices(selectedCurrency);
+            });
+        });
+
+        // Initialize currency on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get currency from localStorage or default to 'INR'
+            const savedCurrency = localStorage.getItem('preferredCurrency') || 'INR';
+
+            // Update currency selector display
+            const currencyDisplay = document.getElementById('currentCurrency');
+
+            if (currencyDisplay) {
+                const symbols = {
+                    'INR': '₹', 'AED': 'د.إ', 'SGD': '$', 'PHP': '₱',
+                    'USD': '$', 'EUR': '€', 'IDR': 'Rp'
+                };
+                const symbol = symbols[savedCurrency] || '₹';
+                currencyDisplay.textContent = `${savedCurrency} (${symbol})`;
+            }
+
+            // Update all prices on the page
+            updatePrices(savedCurrency);
+        });
 
     </script>
 </body>
