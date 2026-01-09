@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>User Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <link rel="stylesheet" href="whatsapp-widget.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -1011,6 +1012,21 @@
             color: white;
             font-weight: 800;
             font-size: 1.4rem;
+        }
+
+        .heart-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: color 0.2s;
+            margin-left: auto;
+        }
+
+        .heart-btn:hover,
+        .heart-btn.liked {
+            color: #f43f5e;
         }
 
         /* Empty State */
@@ -2451,6 +2467,11 @@
 .navbar-brand:hover {
     transform: translateY(-2px);
 }
+
+
+
+
+
     </style>
 
 </head>
@@ -2756,7 +2777,7 @@
                     Discover products curated by our most trusted influencers and content creators who bring you the
                     latest trends and highest quality items.</p>
             </div>
-            
+
             <!-- Swiper for Influencers -->
             <div class="swiper influencers-swiper">
                 <div class="swiper-wrapper">
@@ -2824,6 +2845,10 @@
                         <div class="product-footer">
                             <p class="product-price" data-price="{{ product.price }}" data-currency="USD">${{
                                 product.price }}</p>
+                            <button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"
+                                data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">
+                                <i class="fas fa-heart"></i>
+                            </button>
                         </div>
                     </div>
                 </a>
@@ -3918,6 +3943,9 @@
             // Update all prices on the page
             updatePrices(savedCurrency);
         });
+
+
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
