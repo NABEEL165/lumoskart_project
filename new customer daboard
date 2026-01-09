@@ -759,6 +759,12 @@
             align-items: start;
         }
 
+        /* Influencer Swiper Container */
+        .influencers-swiper .grid-container {
+            display: block;
+            margin-top: 0;
+        }
+
         @media (min-width: 640px) {
             .grid-container {
                 grid-template-columns: repeat(2, 1fr);
@@ -2246,7 +2252,7 @@
                 display: none;
             }
         }
-        
+
         /* Icon clarity enhancements */
         .video-shorts-close i,
         .video-shorts-like i,
@@ -2259,27 +2265,192 @@
             font-weight: 900 !important; /* For solid icons */
             filter: contrast(1.2) brightness(1.1);
         }
-        
+
         /* Specific styling for different icon types */
         .video-shorts-close i {
             font-size: 18px;
         }
-        
+
         .video-shorts-like i {
             font-size: 20px;
         }
-        
+
         .video-shorts-share i {
             font-size: 19px;
         }
-        
+
         .video-shorts-buy i {
             font-size: 19px;
         }
-        
-        .nav-arrow i {
-            font-size: 16px;
+
+       .navbar-brand:hover .brand-text {
+        color: #ffffff;
+        text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
+        /* Teal glow using your primary color */
+        transition: all 0.3s ease;
+    }
+
+    .navbar-brand:hover .logo-img {
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+
+    /* Mobile Navbar Optimization */
+    @media (max-width: 991px) {
+        .navbar-container {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            width: 100% !important;
+            padding: 0 5px !important;
         }
+
+        .navbar-brand {
+            margin-right: 0 !important;
+            gap: 10px !important;
+            flex-shrink: 0;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .logo-img {
+            max-height: 40px !important;
+            width: auto !important;
+            flex-shrink: 0;
+        }
+
+        .brand-text {
+            font-size: 1.4rem !important;
+            display: inline-block !important;
+            color: #ffffff !important;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            white-space: nowrap !important;
+        }
+
+        .mobile-view {
+            display: flex !important;
+            align-items: center !important;
+            gap: 5px !important;
+            flex-shrink: 0;
+        }
+
+        .desktop-view {
+            display: none !important;
+        }
+
+        .btn-open-app {
+            padding: 4px 12px !important;
+            font-size: 0.85rem !important;
+            height: fit-content;
+        }
+    }
+
+
+    /* Custom Toggler Icon and Buttons */
+    .navbar-toggler {
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        padding: 5px 8px !important;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        width: 1.25em !important;
+        height: 1.25em !important;
+    }
+
+    .mobile-view .btn-outline-light {
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff !important;
+    }
+
+    .mobile-view .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+/* Influencer Swiper Styles */
+.influencers-swiper {
+    width: 100%;
+    padding: 20px 0;
+}
+
+.influencers-swiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+}
+
+.influencers-swiper .swiper-wrapper {
+    padding: 10px 0;
+}
+
+
+.swiper-pagination.influencers-pagination {
+    bottom: 0 !important;
+}
+
+.swiper-pagination-bullet {
+    background: #00c7f7;
+    opacity: 0.5;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #00c7f7;
+}
+/* Logo + Brand Text Container */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Space between logo and text */
+    text-decoration: none !important;
+}
+
+/* Logo Image */
+.navbar-brand img,
+.logo-img {
+    height: 50px;
+    width: auto;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Hover effect on logo */
+.navbar-brand:hover img,
+.navbar-brand:hover .logo-img {
+    transform: scale(1.1) rotate(2deg);
+    box-shadow: 0 0 15px rgba(0, 199, 247, 0.4); /* Teal glow */
+}
+
+/* Brand Text - "LumosKart" */
+.brand-text {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+/* Hover glow on text */
+.navbar-brand:hover .brand-text {
+    text-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.3),
+        0 0 15px rgba(0, 199, 247, 0.6); /* Stronger teal glow */
+}
+
+/* Optional: Slight lift on whole brand on hover */
+.navbar-brand:hover {
+    transform: translateY(-2px);
+}
     </style>
 
 </head>
@@ -2314,13 +2485,14 @@
 
     <div class="content-wrapper">
 
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid navbar-container">
-                <div class="navbar-brand d-flex align-items-center">
-                    <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" class="logo-img">
-                    <span class="brand-text"></span>
-                </div>
 
+ <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid navbar-container">
+            <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                    alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                <span class="brand-text">LumosKart</span>
+            </a>
                 <!-- Desktop Navigation (Hidden on mobile) -->
                 <div class="d-none d-lg-flex align-items-center">
                     <div class="amazon-search-container me-3">
@@ -2441,13 +2613,15 @@
         </div>
 
         <!-- Off-canvas Menu for Mobile/Tablet -->
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
-            <div class="offcanvas-header" style="background-color: #0e0e0e; border-bottom: 1px solid #333;">
-                <h5 class="offcanvas-title text-white" id="navbarOffcanvasLabel">
-                    <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" height="40"
-                        class="d-inline-block align-middle me-2">
-
-                </h5>
+         <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
+        <div class="offcanvas-header" style="background-color: #1e293b;">
+            <h5 class="offcanvas-title" id="navbarOffcanvasLabel">
+                <div class="navbar-brand d-flex align-items-center gap-2">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                    <span class="brand-text" style="font-size: 1.4rem;">LumosKart</span>
+                </div>
+            </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
                     aria-label="Close"></button>
             </div>
@@ -2582,32 +2756,42 @@
                     Discover products curated by our most trusted influencers and content creators who bring you the
                     latest trends and highest quality items.</p>
             </div>
-            <div class="grid-container">
-                {% for profile in influencers %}
-                <div class="card-base influencer-card">
-                    {% if profile.photo %}
-                    <img src="{{ profile.photo.url }}" class="influencer-avatar" alt="{{ profile.user.username }}"
-                        loading="lazy">
-                    {% else %}
-                    <img src="{% static 'default_profile.png' %}" class="influencer-avatar" alt="Default"
-                        loading="lazy">
-                    {% endif %}
-                    <h5 class="influencer-name">{{ profile.user.get_full_name|default:profile.user.username }}</h5>
-                    <p class="influencer-bio">{{ profile.bio|truncatewords:12 }}</p>
-                    <a href="{% url 'view_influencer_products' profile.user.id %}" class="view-products-btn">
-                        <span data-en="View Products" data-ar="عرض المنتجات" data-hi="उत्पाद देखें">View Products</span>
-                    </a>
+            
+            <!-- Swiper for Influencers -->
+            <div class="swiper influencers-swiper">
+                <div class="swiper-wrapper">
+                    {% for profile in influencers %}
+                    <div class="swiper-slide">
+                        <div class="card-base influencer-card">
+                            {% if profile.photo %}
+                            <img src="{{ profile.photo.url }}" class="influencer-avatar" alt="{{ profile.user.username }}"
+                                loading="lazy">
+                            {% else %}
+                            <img src="{% static 'default_profile.png' %}" class="influencer-avatar" alt="Default"
+                                loading="lazy">
+                            {% endif %}
+                            <h5 class="influencer-name">{{ profile.user.get_full_name|default:profile.user.username }}</h5>
+                            <p class="influencer-bio">{{ profile.bio|truncatewords:12 }}</p>
+                            <a href="{% url 'view_influencer_products' profile.user.id %}" class="view-products-btn">
+                                <span data-en="View Products" data-ar="عرض المنتجات" data-hi="उत्पाद देखें">View Products</span>
+                            </a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="swiper-slide">
+                        <div class="empty-state">
+                            <div class="empty-icon">🔍</div>
+                            <p class="empty-text"
+                                data-en="No influencers available right now. Check back soon for amazing content!"
+                                data-ar="لا توجد مؤثرون متاحون الآن. تحقق مرة أخرى قريباً من المحتوى المذهل!"
+                                data-hi="अभी कोई प्रभावक उपलब्ध नहीं है। शानदार सामग्री के लिए जल्द ही वापस आएँ!">No influencers
+                                available right now. Check back soon for amazing content!</p>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% empty %}
-                <div class="empty-state">
-                    <div class="empty-icon">🔍</div>
-                    <p class="empty-text"
-                        data-en="No influencers available right now. Check back soon for amazing content!"
-                        data-ar="لا توجد مؤثرون متاحون الآن. تحقق مرة أخرى قريباً من المحتوى المذهل!"
-                        data-hi="अभी कोई प्रभावक उपलब्ध नहीं है। शानदार सामग्री के लिए जल्द ही वापस आएँ!">No influencers
-                        available right now. Check back soon for amazing content!</p>
-                </div>
-                {% endfor %}
+                <!-- Add Pagination -->
+                <div class="swiper-pagination influencers-pagination"></div>
             </div>
         </div>
 
@@ -2661,7 +2845,7 @@
             <div class="section-header">
                 <h2 class="section-title">
                     <span data-en="🎥 Trending Reels" data-ar="🎥 مقاطع الفيديو الرائجة" data-hi="🎥 ट्रेंडिंग रील्स">🎥
-                        Trending Reels</span>
+                        Videos</span>
                 </h2>
                 <p class="section-description" data-en="Watch engaging videos from our top influencers"
                     data-ar="شاهد مقاطع الفيديو الممتعة من مؤثرينا الأعلى"
@@ -2955,6 +3139,35 @@
             },
         });
 
+        // Initialize Influencers Swiper
+        const influencersSwiper = new Swiper('.influencers-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.influencers-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 30,
+                },
+            },
+        });
+
         // Clear Search Function
         function clearSearch() {
             const searchInput = document.getElementById('search-input');
@@ -3193,11 +3406,11 @@
         // Share button click
         videoShareBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
-            
+
             // Get the current video ID
             const item = allVideoItems[currentIndex];
             const videoId = item.getAttribute('data-video-id');
-            
+
             if (videoId) {
                 // Implement actual sharing functionality
                 const shareData = {
@@ -3205,7 +3418,7 @@
                     text: 'Amazing video from Lumoskart',
                     url: window.location.origin + '/accounts/video/' + videoId + '/'
                 };
-                
+
                 if (navigator.share) {
                     navigator.share(shareData)
                     .then(() => console.log('Shared successfully'))
@@ -3217,7 +3430,7 @@
                         const button = videoShareBtn;
                         const originalHTML = button.innerHTML;
                         button.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                        
+
                         setTimeout(() => {
                             button.innerHTML = originalHTML;
                         }, 2000);
@@ -3235,10 +3448,10 @@
         videoBuyBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            
+
             const item = allVideoItems[currentIndex];
             const productsData = item.getAttribute('data-video-products');
-            
+
             try {
                 const products = JSON.parse(productsData);
                 if (products && products.length > 0) {
@@ -3257,7 +3470,7 @@
                 alert('Error loading products. Please try again.');
             }
         });
-        
+
         // Function to show product selection modal when multiple products exist
         function showProductSelectionModal(products) {
             // Remove existing modal if present
@@ -3265,7 +3478,7 @@
             if (existingModal) {
                 existingModal.remove();
             }
-            
+
             // Create modal HTML
             let modalHtml = '<div id="productSelectionModal" class="product-selection-modal">';
             modalHtml += '<div class="product-selection-content">';
@@ -3274,7 +3487,7 @@
             modalHtml += '<span class="product-selection-close">&times;</span>';
             modalHtml += '</div>';
             modalHtml += '<div class="product-selection-body">';
-            
+
             // Add products to modal
             products.forEach(function (product) {
                 modalHtml += '<div class="product-selection-item" data-product-id="' + product.id + '">';
@@ -3285,14 +3498,14 @@
                 modalHtml += '<button class="btn btn-primary select-product-btn">Select</button>';
                 modalHtml += '</div>';
             });
-            
+
             modalHtml += '</div>';
             modalHtml += '</div>';
             modalHtml += '</div>';
-            
+
             // Add modal to page
             document.body.insertAdjacentHTML('beforeend', modalHtml);
-            
+
             // Add modal styles if not already present
             if (!document.querySelector('#productSelectionModalStyles')) {
                 const modalStyles = document.createElement('style');
@@ -3300,23 +3513,23 @@
                 modalStyles.textContent = ".product-selection-modal {\n                        display: none;\n                        position: fixed;\n                        z-index: 10000;\n                        left: 0;\n                        top: 0;\n                        width: 100%;\n                        height: 100%;\n                        background-color: rgba(0,0,0,0.5);\n                    }\n                    .product-selection-content {\n                        background-color: #fefefe;\n                        margin: 15% auto;\n                        padding: 20px;\n                        border: none;\n                        border-radius: 10px;\n                        width: 80%;\n                        max-width: 500px;\n                        position: relative;\n                    }\n                    .product-selection-header {\n                        display: flex;\n                        justify-content: space-between;\n                        align-items: center;\n                        margin-bottom: 20px;\n                        padding-bottom: 10px;\n                        border-bottom: 1px solid #eee;\n                    }\n                    .product-selection-close {\n                        font-size: 28px;\n                        font-weight: bold;\n                        cursor: pointer;\n                    }\n                    .product-selection-body {\n                        max-height: 400px;\n                        overflow-y: auto;\n                    }\n                    .product-selection-item {\n                        display: flex;\n                        justify-content: space-between;\n                        align-items: center;\n                        padding: 15px;\n                        border: 1px solid #eee;\n                        border-radius: 5px;\n                        margin-bottom: 10px;\n                    }\n                    .product-selection-info h4 {\n                        margin: 0 0 5px 0;\n                        font-size: 16px;\n                    }\n                    .product-selection-info p {\n                        margin: 0;\n                        color: #007bff;\n                        font-weight: bold;\n                    }\n                    .select-product-btn {\n                        background-color: #007bff;\n                        color: white;\n                        border: none;\n                        padding: 8px 16px;\n                        border-radius: 5px;\n                        cursor: pointer;\n                    }\n                    .select-product-btn:hover {\n                        background-color: #0056b3;\n                    }";
                 document.head.appendChild(modalStyles);
             }
-            
+
             // Show modal
             const modal = document.getElementById('productSelectionModal');
             modal.style.display = 'block';
-            
+
             // Close modal when clicking the X
             modal.querySelector('.product-selection-close').addEventListener('click', function () {
                 modal.remove();
             });
-            
+
             // Close modal when clicking outside the content
             window.addEventListener('click', function (event) {
                 if (event.target === modal) {
                     modal.remove();
                 }
             });
-            
+
             // Handle product selection
             const productItems = modal.querySelectorAll('.product-selection-item');
             productItems.forEach(function (item) {
@@ -3368,7 +3581,7 @@
             }
         `;
         document.head.appendChild(style);
-        
+
         // Double tap to like
         let lastTap = 0;
         videoElement?.addEventListener('click', (e) => {
@@ -3376,7 +3589,7 @@
             if (now - lastTap < 300) {
                 const videoId = allVideoItems[currentIndex].getAttribute('data-video-id');
                 if (videoId) toggleVideoLike(videoId);
-                
+
                 // Show heart animation
                 // Remove any existing heart animations
                 const existingHearts = document.querySelectorAll('.heart-animation');
