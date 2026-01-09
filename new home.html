@@ -22,6 +22,9 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
     <style>
         * {
             margin: 0;
@@ -48,13 +51,37 @@
             justify-content: space-between;
         }
 
-        .navbar-brand img {
-            height: 40px;
-            transition: transform 0.3s ease;
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none !important;
         }
 
-        .navbar-brand img:hover {
-            transform: scale(1.05);
+        .navbar-brand img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+        }
+
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
 
         .search-container {
@@ -809,6 +836,32 @@
             transition: width 0.1s linear;
         }
 
+        /* Heart Animation for Double Tap */
+        @keyframes heartPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .heart-animation {
+            position: absolute;
+            pointer-events: none;
+            z-index: 100;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 45, 85, 0.6);
+        }
+
         /* Navigation Arrows (Desktop) */
         .nav-arrow {
             position: absolute;
@@ -954,16 +1007,6 @@
 
         .banner-card {
             background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
-
-            border-radius: 16px;
-            padding: 3rem 2rem;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(129, 140, 248, 0.3);
-        }
-
-        .banner-card {
-            background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
             border-radius: 16px;
             padding: 3rem 2rem;
             text-align: center;
@@ -980,6 +1023,44 @@
         .banner-card p {
             font-size: 1.1rem;
             color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Responsive adjustments for banner */
+        @media (max-width: 768px) {
+            .banner-section {
+                margin-bottom: 2rem;
+            }
+
+            .banner-card {
+                padding: 2rem 1.5rem;
+                margin: 0 1rem;
+            }
+
+            .banner-card h2 {
+                font-size: 1.5rem;
+            }
+
+            .banner-card p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .banner-section {
+                margin-bottom: 1.5rem;
+            }
+
+            .banner-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .banner-card h2 {
+                font-size: 1.3rem;
+            }
+
+            .banner-card p {
+                font-size: 0.9rem;
+            }
         }
 
         .whatsapp-widget {
@@ -1157,7 +1238,11 @@
             }
 
             .navbar-brand img {
-                height: 40px;
+                height: 45px;
+            }
+
+            .brand-text {
+                font-size: 1.4rem;
             }
 
             .search-bar {
@@ -3883,258 +3968,396 @@
         fill: #ff2d55;
     }
 
-    /* Amazon Style Grid Section - Added */
-    .amazon-home-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-        padding: 20px 0;
-        max-width: 100%;
-        margin: 0 auto;
+    /* Amazon Style Category Showcase with Swiper */
+    .category-showcase-section {
+        margin: 60px 0;
+        position: relative;
+        padding: 0 15px;
+    }
+
+    .category-showcase-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 35px;
+        padding-left: 20px;
+        border-left: 6px solid #ef4444;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .amazon-swiper {
+        padding: 20px 10px 60px 10px !important;
+        overflow: visible !important;
+    }
+
+    .amazon-card-item {
+        height: auto;
     }
 
     .amazon-card {
-        background-color: #1e293b;
-        padding: 20px;
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 24px;
+        height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        height: 420px;
-        z-index: 1;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        overflow: hidden;
-        border: 1px solid #334155;
-        border-radius: 4px;
-        position: relative;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
     }
 
     .amazon-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        z-index: 2;
+        transform: translateY(-12px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        border-color: rgba(239, 68, 68, 0.6);
+        background: rgba(30, 41, 59, 0.9);
     }
 
     .amazon-card-title {
-        font-size: 1.3rem;
-        font-weight: 700;
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #ffffff;
         margin-bottom: 20px;
-        color: #f1f5f9;
-        line-height: 1.3;
+        line-height: 1.2;
     }
 
     .amazon-quad-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        flex-grow: 1;
-        margin-bottom: 10px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
     }
 
     .amazon-quad-item {
+        text-decoration: none;
         display: flex;
         flex-direction: column;
-        text-decoration: none;
-        cursor: pointer;
+        gap: 10px;
     }
 
     .amazon-quad-img-wrapper {
-        width: 100%;
         aspect-ratio: 1/1;
-        margin-bottom: 5px;
+        border-radius: 12px;
         overflow: hidden;
+        background: #0f172a;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
     }
 
     .amazon-quad-img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    .amazon-quad-item:hover .amazon-quad-img {
+        transform: scale(1.15);
     }
 
     .amazon-quad-label {
         font-size: 0.8rem;
         color: #cbd5e1;
-        line-height: 1.2;
-    }
-
-    .amazon-single-item {
-        flex-grow: 1;
-        margin-bottom: 10px;
-        overflow: hidden;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .amazon-single-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        font-weight: 600;
+        text-align: center;
     }
 
     .amazon-card-link {
-        color: #38bdf8;
+        color: #ef4444;
         text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 500;
+        font-size: 1rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
         margin-top: auto;
+        padding-top: 15px;
+        transition: all 0.3s ease;
     }
 
     .amazon-card-link:hover {
-        text-decoration: underline;
-        color: #0ea5e9;
+        color: #f87171;
+        transform: translateX(5px);
     }
 
-    @media (max-width: 1200px) {
-        .amazon-home-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
+    /* Category Showcase Swiper Styles */
+    .category-showcase-section {
+        margin: 60px 0;
+        position: relative;
+        padding: 0 15px;
     }
 
-    @media (max-width: 992px) {
-        .amazon-home-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
+    .category-showcase-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 35px;
+        padding-left: 20px;
+        border-left: 6px solid #32c2e6;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
+    .amazon-swiper {
+        padding: 20px 10px 60px 10px !important;
+        overflow: visible !important;
+    }
+
+    .amazon-card-item {
+        height: auto;
+    }
+
+    .amazon-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 24px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .amazon-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        border-color: rgba(140, 210, 238, 0.6);
+        background: rgba(30, 41, 59, 0.9);
+    }
+
+    .amazon-card-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+
+    .amazon-quad-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .amazon-quad-item {
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .amazon-quad-img-wrapper {
+        aspect-ratio: 1/1;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #0f172a;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .amazon-quad-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    .amazon-quad-item:hover .amazon-quad-img {
+        transform: scale(1.15);
+    }
+
+    .amazon-quad-label {
+        font-size: 0.8rem;
+        color: #cbd5e1;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .amazon-card-link {
+        color: #3ddef3;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: auto;
+        padding-top: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .amazon-card-link:hover {
+        color: #3ddef3;
+        transform: translateX(5px);
+    }
+
+    /* Mobile Perfection */
     @media (max-width: 768px) {
-        .amazon-home-grid {
-            grid-template-columns: repeat(2, 1fr);
-            padding: 10px;
-            gap: 12px;
+        .category-showcase-section {
+            margin: 40px 0;
+        }
+
+        .category-showcase-title {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
         }
 
         .amazon-card {
-            height: auto;
-            min-height: 280px;
-            padding: 12px;
+            padding: 18px;
         }
 
         .amazon-card-title {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
+            font-size: 1.2rem;
         }
 
         .amazon-quad-grid {
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .amazon-quad-img-wrapper {
-            margin-bottom: 3px;
-        }
-
-        .amazon-quad-label {
-            font-size: 0.7rem;
-        }
-
-        .amazon-card-link {
-            font-size: 0.8rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .amazon-home-grid {
-            grid-template-columns: repeat(2, 1fr);
-            padding: 10px;
             gap: 12px;
         }
 
-        .amazon-card {
-            height: auto;
-            min-height: 280px;
-            padding: 12px;
-        }
-
-        .amazon-card-title {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-        }
-
-        .amazon-quad-grid {
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .amazon-quad-img-wrapper {
-            margin-bottom: 3px;
-        }
-
         .amazon-quad-label {
-            font-size: 0.7rem;
-        }
-
-        .amazon-card-link {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
     }
 
+    /* Swiper Responsive Adjustments */
     @media (max-width: 576px) {
-        .amazon-home-grid {
-            grid-template-columns: repeat(2, 1fr);
-            padding: 8px;
+        .category-showcase-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+
+        .amazon-card {
+            padding: 15px;
+        }
+
+        .amazon-card-title {
+            font-size: 1.1rem;
+        }
+
+        .amazon-quad-grid {
             gap: 10px;
         }
 
-        .amazon-card {
-            height: auto;
-            min-height: 200px;
-            padding: 8px;
-        }
-
-        .amazon-card-title {
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-        }
-
-        .amazon-quad-grid {
-            gap: 6px;
-            margin-bottom: 5px;
-        }
-
         .amazon-quad-label {
-            font-size: 0.6rem;
-        }
-
-        .amazon-card-link {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
         }
     }
 
-    @media (max-width: 480px) {
-        .amazon-home-grid {
-            grid-template-columns: repeat(2, 1fr);
-            padding: 6px;
-            gap: 8px;
+    .swiper-pagination-bullet {
+        background: rgba(255, 255, 255, 0.3) !important;
+        opacity: 1 !important;
+        width: 10px !important;
+        height: 10px !important;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: #1da4e2 !important;
+        width: 25px !important;
+        border-radius: 5px !important;
+    }
+
+    .navbar-brand:hover .brand-text {
+        color: #ffffff;
+        text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
+        /* Teal glow using your primary color */
+        transition: all 0.3s ease;
+    }
+
+    .navbar-brand:hover .logo-img {
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+
+    /* Mobile Navbar Optimization */
+    @media (max-width: 991px) {
+        .navbar-container {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            width: 100% !important;
+            padding: 0 5px !important;
         }
 
-        .amazon-card {
-            min-height: 180px;
-            padding: 6px;
+        .navbar-brand {
+            margin-right: 0 !important;
+            gap: 10px !important;
+            flex-shrink: 0;
+            display: flex !important;
+            align-items: center !important;
         }
 
-        .amazon-card-title {
-            font-size: 0.8rem;
+        .logo-img {
+            max-height: 40px !important;
+            width: auto !important;
+            flex-shrink: 0;
         }
 
-        .amazon-quad-grid {
-            gap: 5px;
+        .brand-text {
+            font-size: 1.4rem !important;
+            display: inline-block !important;
+            color: #ffffff !important;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            white-space: nowrap !important;
         }
 
-        .amazon-quad-label {
-            font-size: 0.55rem;
+        .mobile-view {
+            display: flex !important;
+            align-items: center !important;
+            gap: 5px !important;
+            flex-shrink: 0;
         }
 
-        .amazon-card-link {
-            font-size: 0.6rem;
+        .desktop-view {
+            display: none !important;
         }
+
+        .btn-open-app {
+            padding: 4px 12px !important;
+            font-size: 0.85rem !important;
+            height: fit-content;
+        }
+    }
+
+
+    /* Custom Toggler Icon and Buttons */
+    .navbar-toggler {
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        padding: 5px 8px !important;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        width: 1.25em !important;
+        height: 1.25em !important;
+    }
+
+    .mobile-view .btn-outline-light {
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff !important;
+    }
+
+    .mobile-view .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.1);
     }
 </style>
 
 <body>
     <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a href="{% url 'home' %}" class="navbar-brand">
-                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo"
-                    class="d-inline-block align-middle" style="max-height: 50px; width: auto;">
+        <div class="container-fluid navbar-container">
+            <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                    alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                <span class="brand-text">LumosKart</span>
             </a>
 
             <div class="mobile-view d-flex align-items-center justify-content-end">
@@ -4142,7 +4365,7 @@
                     aria-controls="searchOffcanvas">
                     <i class="fas fa-search"></i>
                 </button>
-                <a href="{% url 'login' %}" class="btn btn-open-app mx-auto">Login</a>
+                <a href="{% url 'login' %}" class="btn btn-open-app">Login</a>
                 <button class="navbar-toggler ms-2" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
                     <span class="navbar-toggler-icon text-light"></span>
@@ -4207,9 +4430,6 @@
                         data-hi="साइन अप करें"><span class="btn-text">Sign up</span></a>
                     <a href="{% url 'login' %}" class="btn btn-login" data-en="Log in" data-ar="تسجيل الدخول"
                         data-hi="लॉग इन करें"><span class="btn-text">Log in</span></a>
-                    <!--{% if user.is_staff %}-->
-                    <!--<a href="{% url 'admin_dashboard' %}" class="btn btn-outline-light ms-2">Admin</a>-->
-                    <!--{% endif %}-->
                 </div>
             </div>
         </div>
@@ -4218,8 +4438,11 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
         <div class="offcanvas-header" style="background-color: #1e293b;">
             <h5 class="offcanvas-title" id="navbarOffcanvasLabel">
-                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo"
-                    class="d-inline-block align-middle" style="max-height: 40px; width: auto;">
+                <div class="navbar-brand d-flex align-items-center gap-2">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                    <span class="brand-text" style="font-size: 1.4rem;">LumosKart</span>
+                </div>
             </h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
                 aria-label="Close"></button>
@@ -4400,129 +4623,214 @@
         </section>
 
 
-        <!-- Amazon Quad Grid Section -->
-        <section class="amazon-category-section mb-5" style="padding: 0 20px;">
-            <div class="amazon-home-grid">
-                <!-- Card 1: Revamp your home (Quad) -->
-                <div class="amazon-card">
-                    <h3 class="amazon-card-title">Choose your Shirt</h3>
-                    <div class="amazon-quad-grid">
-                        <a href="{% url 'product_lists' %}?search=cushion" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/457e9ae6e5436125a6cda19a9fa01dc0.jpg' %}"
-                                    class="amazon-quad-img" alt="Cushion covers">
-                            </div>
-                            <span class="amazon-quad-label"></span>
-                        </a>
-                        <a href="{% url 'product_lists' %}?search=decor" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
-                                    class="amazon-quad-img" alt="Decor">
-                            </div>
-                            <span class="amazon-quad-label"></span>
-                        </a>
-                        <a href="{% url 'product_lists' %}?search=storage" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/9b6814ab4ea603641233ee7f1e4f4bef.jpg' %}"
-                                    class="amazon-quad-img" alt="Storage">
-                            </div>
-                            <span class="amazon-quad-label"></span>
-                        </a>
-                        <a href="{% url 'product_lists' %}?search=lighting" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
-                                    class="amazon-quad-img" alt="Lighting">
-                            </div>
-                            <span class="amazon-quad-label"></span>
+        <!-- Category Showcase Swiper Section (Amazon Style) -->
+        <section class="category-showcase-section">
+            <h2 class="category-showcase-title" data-en="Shop by Category" data-ar="تسوق حسب الفئة"
+                data-hi="श्रेणी के अनुसार खरीदारी करें">Shop by Category</h2>
 
-                        </a>
+            <div class="swiper amazon-swiper">
+                <div class="swiper-wrapper">
+                    <!-- Category 1: Fashion -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Latest in Fashion</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=shirt" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/457e9ae6e5436125a6cda19a9fa01dc0.jpg' %}"
+                                            class="amazon-quad-img" alt="Shirts">
+                                    </div>
+                                    <span class="amazon-quad-label">Shirts</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=t-shirt" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
+                                            class="amazon-quad-img" alt="T-Shirts">
+                                    </div>
+                                    <span class="amazon-quad-label">T-Shirts</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=dress" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/9b6814ab4ea603641233ee7f1e4f4bef.jpg' %}"
+                                            class="amazon-quad-img" alt="Dresses">
+                                    </div>
+                                    <span class="amazon-quad-label">Dresses</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=shoes" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
+                                            class="amazon-quad-img" alt="Shoes">
+                                    </div>
+                                    <span class="amazon-quad-label">Shoes</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Explore Fashion <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
                     </div>
-                    <a href="{% url 'product_lists' %}" class="amazon-card-link">Explore all</a>
-                </div>
 
-                <!-- Card 2: Appliances (Quad) -->
-                <div class="amazon-card">
-                    <h3 class="amazon-card-title">T Shirts</h3>
-                    <div class="amazon-quad-grid">
-                        <a href="{% url 'product_lists' %}?search=ac" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/5663f38bb21ad810f2772fff8d49d2a6 (1).jpg' %}"
-                                    class="amazon-quad-img" alt="AC">
+                    <!-- Category 2: Electronics -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Top Electronics</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=mobile" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/5663f38bb21ad810f2772fff8d49d2a6 (1).jpg' %}"
+                                            class="amazon-quad-img" alt="Mobiles">
+                                    </div>
+                                    <span class="amazon-quad-label">Mobiles</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=laptop" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/2a5be5560e281c7438851cae8dde2074.jpg' %}"
+                                            class="amazon-quad-img" alt="Laptops">
+                                    </div>
+                                    <span class="amazon-quad-label">Laptops</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=headphones" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/896464c0d818a2e8182cd48e98e580ee.jpg' %}"
+                                            class="amazon-quad-img" alt="Audio">
+                                    </div>
+                                    <span class="amazon-quad-label">Audio</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=watch" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/a7773c266513b1c4384baf5d5c26e556.jpg' %}"
+                                            class="amazon-quad-img" alt="Watches">
+                                    </div>
+                                    <span class="amazon-quad-label">Watches</span>
+                                </a>
                             </div>
-                            <span class="amazon-quad-label"></span>
-                        </a>
-                        <a href="{% url 'product_lists' %}?search=fridge" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/2a5be5560e281c7438851cae8dde2074.jpg' %}"
-                                    class="amazon-quad-img" alt="Fridge">
-                            </div>
-                            <span class="amazon-quad-label"></span>
-                        </a>
-                        <a href="{% url 'product_lists' %}?search=microwave" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/896464c0d818a2e8182cd48e98e580ee.jpg' %}"
-                                    class="amazon-quad-img" alt="Microwaves">
-                            </div>
-                            <span class="amazon-quad-label"></span>
-                        </a>
-                        <a href="{% url 'product_lists' %}?search=washing" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/a7773c266513b1c4384baf5d5c26e556.jpg' %}"
-                                    class="amazon-quad-img" alt="Washing machines">
-                            </div>
-                            <span class="amazon-quad-label"></span>
-                        </a>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Gadget Hub <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
                     </div>
-                    <a href="{% url 'product_lists' %}" class="amazon-card-link">See more</a>
-                </div>
 
-                <!-- Card 3: Single Image -->
-                <div class="amazon-card">
-                    <h3 class="amazon-card-title">Arts</h3>
-                    <a href="{% url 'product_lists' %}?search=headphones" class="amazon-single-item">
-                        <img src="{% static 'accounts/images/f46b924c93829734af158a2328d3568b.jpg' %}"
-                            class="amazon-single-img" alt="Headphones">
-                    </a>
-                    <a href="{% url 'product_lists' %}?search=headphones" class="amazon-card-link">See all offers</a>
-                </div>
-
-                <!-- Card 4: Automotive (Quad) or Generic -->
-                <div class="amazon-card">
-                    <h3 class="amazon-card-title">Top</h3>
-                    <div class="amazon-quad-grid">
-                        <a href="{% url 'product_lists' %}?search=cleaning" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/30da728012339c421f4dff6791cb53d7.jpg' %}"
-                                    class="amazon-quad-img" alt="Cleaning">
+                    <!-- Category 3: Beauty & Care -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Beauty & Care</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=skincare" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/457e9ae6e5436125a6cda19a9fa01dc0.jpg' %}"
+                                            class="amazon-quad-img" alt="Skincare">
+                                    </div>
+                                    <span class="amazon-quad-label">Skincare</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=makeup" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
+                                            class="amazon-quad-img" alt="Makeup">
+                                    </div>
+                                    <span class="amazon-quad-label">Makeup</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=fragrance" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/9b6814ab4ea603641233ee7f1e4f4bef.jpg' %}"
+                                            class="amazon-quad-img" alt="Fragrance">
+                                    </div>
+                                    <span class="amazon-quad-label">Perfumes</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=haircare" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
+                                            class="amazon-quad-img" alt="Haircare">
+                                    </div>
+                                    <span class="amazon-quad-label">Haircare</span>
+                                </a>
                             </div>
-                            <span class="amazon-quad-label"></span>
-                        </a>
-                        <a href="{% url 'product_lists' %}?search=tyre" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/3e22534c2bb1bd48a4ff47498add8d23.jpg' %}"
-                                    class="amazon-quad-img" alt="Tyre">
-                            </div>
-                            <span class="amazon-quad-label"></span>
-                        </a>
-                        <a href="{% url 'product_lists' %}?search=helmet" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/bc8e7d8a7e90fac45b1bbda38166b311.jpg' %}"
-                                    class="amazon-quad-img" alt="Helmet">
-                            </div>
-                            <span class="amazon-quad-label"></span>
-                        </a>
-                        <a href="{% url 'product_lists' %}?search=vacuum" class="amazon-quad-item">
-                            <div class="amazon-quad-img-wrapper">
-                                <img src="{% static 'accounts/images/28f3f610972c329bfefb89266fa52b5d.jpg' %}"
-                                    class="amazon-quad-img" alt="Vacuum">
-                            </div>
-                            <span class="amazon-quad-label"></span>
-                        </a>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Beauty Boutique <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
                     </div>
-                    <a href="{% url 'product_lists' %}" class="amazon-card-link">see more</a>
+
+                    <!-- Category 4: Home & Kitchen -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Home & Kitchen</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=decor" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/5663f38bb21ad810f2772fff8d49d2a6 (1).jpg' %}"
+                                            class="amazon-quad-img" alt="Decor">
+                                    </div>
+                                    <span class="amazon-quad-label">Decor</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=furniture" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/2a5be5560e281c7438851cae8dde2074.jpg' %}"
+                                            class="amazon-quad-img" alt="Furniture">
+                                    </div>
+                                    <span class="amazon-quad-label">Living</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=cookware" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/896464c0d818a2e8182cd48e98e580ee.jpg' %}"
+                                            class="amazon-quad-img" alt="Cookware">
+                                    </div>
+                                    <span class="amazon-quad-label">Kitchen</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=appliances" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/a7773c266513b1c4384baf5d5c26e556.jpg' %}"
+                                            class="amazon-quad-img" alt="Appliances">
+                                    </div>
+                                    <span class="amazon-quad-label">Smart Home</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Upgrade Home <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Category 5: Sports & Fitness -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Sports & Fitness</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=gym" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/457e9ae6e5436125a6cda19a9fa01dc0.jpg' %}"
+                                            class="amazon-quad-img" alt="Gym Wear">
+                                    </div>
+                                    <span class="amazon-quad-label">Training</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=equipment" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
+                                            class="amazon-quad-img" alt="Equipment">
+                                    </div>
+                                    <span class="amazon-quad-label">Gear</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=yoga" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/9b6814ab4ea603641233ee7f1e4f4bef.jpg' %}"
+                                            class="amazon-quad-img" alt="Yoga">
+                                    </div>
+                                    <span class="amazon-quad-label">Yoga</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=sneakers" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
+                                            class="amazon-quad-img" alt="Sneakers">
+                                    </div>
+                                    <span class="amazon-quad-label">Sneakers</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Fitness Hub <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Swiper dots -->
+                <div class="swiper-pagination"></div>
             </div>
         </section>
+
 
 
 
@@ -4943,7 +5251,7 @@
                 </div>
 
                 <div class="footer-bottom">
-                    <p>&copy; 2025 Lumoskart. All rights reserved.</p>
+                    <p>&copy; 2025 LumosKart. All rights reserved.</p>
                 </div>
             </div>
         </footer>
@@ -5311,299 +5619,7 @@
                     });
                 });
 
-                // Video Shorts Player Functionality - Enhanced for Instagram/Facebook-like experience
-                const videoItems = document.querySelectorAll('.video-shorts-item');
-                const videoPlayer = document.querySelector('.video-shorts-player');
-                const videoElement = document.querySelector('.video-shorts-video');
-                const videoTitle = document.querySelector('.video-shorts-title');
-                const influencerName = document.querySelector('.video-shorts-influencer');
-                const videoProducts = document.querySelector('.video-shorts-products');
-                const likeCount = document.querySelector('.like-count');
-                const videoCloseBtn = document.querySelector('.video-shorts-close');
 
-                // Store all video items and current index
-                let allVideoItems = Array.from(videoItems);
-                let currentIndex = 0;
-
-                // Open video player when clicking on a video thumbnail
-                videoItems.forEach((item, index) => {
-                    item.addEventListener('click', function (e) {
-                        e.preventDefault();
-
-                        currentIndex = allVideoItems.indexOf(item);
-
-                        loadVideo(currentIndex);
-
-                        // Show player and play video
-                        videoPlayer.classList.add('active');
-                        document.body.style.overflow = 'hidden'; // Prevent background scroll
-
-                        // Play the video after a short delay to ensure source is loaded
-                        setTimeout(() => {
-                            videoElement.muted = false; // Enable sound
-                            videoElement.play().catch(e => console.log('Auto-play prevented:', e));
-                        }, 100);
-                    });
-                });
-
-                function loadVideo(index) {
-                    if (index < 0 || index >= allVideoItems.length) return;
-
-                    const item = allVideoItems[index];
-                    const videoUrl = item.getAttribute('data-video-url');
-                    const title = item.getAttribute('data-video-title');
-                    const influencer = item.getAttribute('data-video-influencer');
-                    const likes = item.getAttribute('data-video-likes');
-                    const productsData = item.getAttribute('data-video-products');
-
-                    // Set video source and play
-                    videoElement.src = videoUrl;
-                    videoElement.muted = false; // Enable sound
-                    videoTitle.textContent = title;
-                    influencerName.textContent = '@' + influencer;
-                    likeCount.textContent = likes;
-
-                    // Parse and display products if available
-                    try {
-                        const products = JSON.parse(productsData);
-                        videoProducts.innerHTML = '';
-                        if (products.length > 0) {
-                            products.forEach(product => {
-                                const productEl = document.createElement('div');
-                                productEl.className = 'product-tag';
-                                productEl.textContent = product.name;
-                                videoProducts.appendChild(productEl);
-                            });
-                        } else {
-                            videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
-                        }
-                    } catch (e) {
-                        videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
-                    }
-
-                    // Update pagination dots
-                    updatePagination();
-                }
-
-                function updatePagination() {
-                    const paginationDots = document.querySelector('.video-shorts-pagination');
-                    if (paginationDots) {
-                        paginationDots.innerHTML = '';
-                        allVideoItems.forEach((_, i) => {
-                            const dot = document.createElement('div');
-                            dot.className = 'video-shorts-pagination-dot';
-                            if (i === currentIndex) {
-                                dot.classList.add('active');
-                            }
-                            paginationDots.appendChild(dot);
-                        });
-                    }
-                }
-
-                // Navigation between videos
-                function goToNextVideo() {
-                    if (currentIndex < allVideoItems.length - 1) {
-                        currentIndex++;
-                        loadVideo(currentIndex);
-                        videoElement.muted = false; // Enable sound
-                        videoElement.play().catch(e => console.log('Auto-play prevented:', e));
-                    }
-                }
-
-                function goToPrevVideo() {
-                    if (currentIndex > 0) {
-                        currentIndex--;
-                        loadVideo(currentIndex);
-                        videoElement.muted = false; // Enable sound
-                        videoElement.play().catch(e => console.log('Auto-play prevented:', e));
-                    }
-                }
-
-                // Enhanced swipe functionality for video navigation with vertical swipe support
-                let touchStartX = 0;
-                let touchStartY = 0;
-                let touchEndX = 0;
-                let touchEndY = 0;
-
-                videoElement.addEventListener('touchstart', function (e) {
-                    touchStartX = e.changedTouches[0].screenX;
-                    touchStartY = e.changedTouches[0].screenY;
-                }, { passive: true });
-
-                videoElement.addEventListener('touchend', function (e) {
-                    touchEndX = e.changedTouches[0].screenX;
-                    touchEndY = e.changedTouches[0].screenY;
-                    handleSwipe();
-                }, { passive: true });
-
-                function handleSwipe() {
-                    const swipeThreshold = 50;
-                    const verticalSwipeThreshold = 30; // Lower threshold for vertical swipes
-
-                    const diffX = touchStartX - touchEndX;
-                    const diffY = touchStartY - touchEndY;
-
-                    // Check if it's more of a vertical swipe than horizontal
-                    if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > verticalSwipeThreshold) {
-                        if (diffY > 0) {
-                            // Swipe up - go to next video
-                            goToNextVideo();
-                        } else {
-                            // Swipe down - go to previous video
-                            goToPrevVideo();
-                        }
-                    } else if (Math.abs(diffX) > swipeThreshold) {
-                        if (diffX > 0) {
-                            // Swipe left - go to next video
-                            goToNextVideo();
-                        } else {
-                            // Swipe right - go to previous video
-                            goToPrevVideo();
-                        }
-                    }
-                }
-
-                // Keyboard navigation
-                document.addEventListener('keydown', function (e) {
-                    if (videoPlayer.classList.contains('active')) {
-                        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                            goToNextVideo();
-                        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                            goToPrevVideo();
-                        } else if (e.key === 'Escape') {
-                            videoPlayer.classList.remove('active');
-                            videoElement.pause();
-                            document.body.style.overflow = 'auto'; // Re-enable background scroll
-                        } else if (e.key === ' ') { // Spacebar to play/pause
-                            e.preventDefault();
-                            if (videoElement.paused) {
-                                videoElement.play();
-                            } else {
-                                videoElement.pause();
-                            }
-                        }
-                    }
-                });
-
-                // Mouse wheel for navigation - now supports both vertical and horizontal
-                videoElement.addEventListener('wheel', function (e) {
-                    // Check if shift key is pressed to differentiate horizontal/vertical scrolling
-                    if (e.shiftKey) {
-                        // Horizontal scroll with shift + wheel
-                        if (e.deltaX > 0) {
-                            goToNextVideo();
-                        } else {
-                            goToPrevVideo();
-                        }
-                    } else {
-                        // Vertical scroll with just wheel
-                        if (e.deltaY > 0) {
-                            // Scroll down - next video
-                            goToNextVideo();
-                        } else {
-                            // Scroll up - previous video
-                            goToPrevVideo();
-                        }
-                    }
-                    e.preventDefault();
-                }, { passive: false });
-
-                // Close video player
-                videoCloseBtn.addEventListener('click', function () {
-                    videoPlayer.classList.remove('active');
-                    videoElement.pause();
-                    document.body.style.overflow = 'auto'; // Re-enable background scroll
-                });
-
-                // Close when clicking outside video area
-                videoPlayer.addEventListener('click', function (e) {
-                    if (e.target === videoPlayer) {
-                        videoPlayer.classList.remove('active');
-                        videoElement.pause();
-                        document.body.style.overflow = 'auto';
-                    }
-                });
-
-                // Handle Buy Now button in video player
-                document.addEventListener('click', function (e) {
-                    if (e.target.closest('#video-shorts-buy-btn')) {
-                        e.preventDefault();
-
-                        // Get the current video item's product data
-                        const currentVideoItem = allVideoItems[currentIndex];
-                        if (currentVideoItem) {
-                            const productsData = currentVideoItem.getAttribute('data-video-products');
-                            try {
-                                const products = JSON.parse(productsData);
-                                if (products.length > 0) {
-                                    // Get the first product for now (you can modify this to handle multiple products)
-                                    const productId = products[0].id;
-
-                                    // Redirect to buy now page
-                                    window.location.href = `/orders/buy-now/${productId}/`;
-                                } else {
-                                    alert('No products available for purchase in this video');
-                                }
-                            } catch (e) {
-                                alert('Error processing products');
-                            }
-                        }
-                    }
-                });
-
-                // Horizontal Swipe Functionality for Influencer Cards
-                const influencersGrid = document.querySelector('.influencers-grid.horizontal');
-
-                if (influencersGrid) {
-                    let isDown = false;
-                    let startX;
-                    let scrollLeft;
-
-                    influencersGrid.addEventListener('mousedown', (e) => {
-                        isDown = true;
-                        startX = e.pageX - influencersGrid.offsetLeft;
-                        scrollLeft = influencersGrid.scrollLeft;
-                    });
-
-                    influencersGrid.addEventListener('mouseleave', () => {
-                        isDown = false;
-                    });
-
-                    influencersGrid.addEventListener('mouseup', () => {
-                        isDown = false;
-                    });
-
-                    influencersGrid.addEventListener('mousemove', (e) => {
-                        if (!isDown) return;
-                        e.preventDefault();
-                        const x = e.pageX - influencersGrid.offsetLeft;
-                        const walk = (x - startX) * 2; //scroll-fast
-                        influencersGrid.scrollLeft = scrollLeft - walk;
-                    });
-
-                    // Touch events for mobile devices
-                    influencersGrid.addEventListener('touchstart', (e) => {
-                        isDown = true;
-                        startX = e.touches[0].pageX - influencersGrid.offsetLeft;
-                        scrollLeft = influencersGrid.scrollLeft;
-                    });
-
-                    influencersGrid.addEventListener('touchend', () => {
-                        isDown = false;
-                    });
-
-                    influencersGrid.addEventListener('touchcancel', () => {
-                        isDown = false;
-                    });
-
-                    influencersGrid.addEventListener('touchmove', (e) => {
-                        if (!isDown) return;
-                        e.preventDefault();
-                        const x = e.touches[0].pageX - influencersGrid.offsetLeft;
-                        const walk = (x - startX) * 2; //scroll-fast
-                        influencersGrid.scrollLeft = scrollLeft - walk;
-                    });
-                }
             });
 
             // Video Shorts Player Functionality - Enhanced for Instagram/Facebook-like experience
@@ -6387,6 +6403,41 @@
                 });
             }
 
+            // Initialize Swiper for Amazon Categories
+            const amazonSwiper = new Swiper('.amazon-swiper', {
+                slidesPerView: 1.2,
+                spaceBetween: 15,
+                centeredSlides: false,
+                loop: true,
+                autoplay: {
+                    delay: 4000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    dynamicBullets: true
+                },
+                breakpoints: {
+                    576: {
+                        slidesPerView: 1.5,
+                        spaceBetween: 20
+                    },
+                    768: {
+                        slidesPerView: 2.2,
+                        spaceBetween: 25
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 30
+                    },
+                    1400: {
+                        slidesPerView: 4,
+                        spaceBetween: 30
+                    }
+                }
+            });
+
             // Initialize Swiper for influencers section
             const influencersSwiper = new Swiper('.influencers-swiper', {
                 slidesPerView: 'auto',
@@ -6585,6 +6636,10 @@
                 }
             });
         </script>
+
+        <!-- Swiper JS -->
+        <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
 
         <!-- Hidden CSRF Token for AJAX requests -->
         {% csrf_token %}
