@@ -551,16 +551,18 @@
         }
 
         /* Video Shorts Player */
+        /* Video Shorts Player - Instagram Reels Style */
         .video-shorts-player {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 9999;
+            background: #000;
+            z-index: 10000;
             display: none;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .video-shorts-player.active {
@@ -568,293 +570,292 @@
         }
 
         .video-shorts-content {
-            flex: 1;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            transition: all 0.3s ease;
         }
 
+        /* Container for the 9:16 Video */
         .video-shorts-video-container {
             width: 100%;
-            max-width: 500px;
             height: 100%;
+            max-width: 480px;
             position: relative;
+            background: #000;
             overflow: hidden;
-            border-radius: 15px;
-            transition: all 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            .video-shorts-video-container {
+                border-radius: 12px;
+                height: 90vh;
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            }
         }
 
         .video-shorts-video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.3s ease;
+            display: block;
         }
 
-        .video-shorts-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
-
-        .video-shorts-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: rgba(18, 18, 18, 0.7);
-            border-radius: 8px;
-            margin: 10px;
-            pointer-events: auto;
-        }
-
-        .video-shorts-header .video-shorts-close {
-            pointer-events: auto;
-        }
-
-        .video-shorts-product-info {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 8px;
-            margin: 10px;
-            pointer-events: auto;
-        }
-
-        .video-shorts-actions {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            padding: 20px;
-            margin: 10px;
-            pointer-events: auto;
-        }
-
-        .video-shorts-pagination {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            padding: 20px;
-            margin: 10px;
-            pointer-events: auto;
-        }
-
-        .video-shorts-pagination-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        .video-shorts-pagination-dot.active {
-            background: white;
-        }
-
-        .video-shorts-title {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin: 0;
-            flex-grow: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
+        /* Close Button - Top Right */
         .video-shorts-close {
-            background: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.4);
             border: none;
             color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
             width: 40px;
             height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            z-index: 20;
+            backdrop-filter: blur(5px);
+            transition: all 0.2s;
         }
 
         .video-shorts-close:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
         }
 
-        .video-shorts-content {
-            flex: 1;
+        /* Right Sidebar Actions */
+        .video-shorts-actions-sidebar {
+            position: absolute;
+            right: 15px;
+            bottom: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 20;
+            align-items: center;
+        }
+
+        .video-shorts-actions-sidebar .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .video-shorts-actions-sidebar button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
-        .video-shorts-video-container {
-            width: 100%;
-            max-width: 400px;
-            height: 70vh;
-            position: relative;
+        .video-shorts-actions-sidebar button:hover {
+            transform: scale(1.1);
         }
 
-        .video-shorts-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .video-shorts-actions-sidebar button.liked i {
+            color: #ef4444;
+            font-weight: 900;
         }
 
-        .video-shorts-overlay {
+        .video-shorts-actions-sidebar button.liked i.far {
+            display: none;
+        }
+
+        .video-shorts-actions-sidebar .like-count,
+        .video-shorts-actions-sidebar .action-label {
+            font-size: 13px;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+
+        /* Bottom Info Overlay */
+        .video-shorts-info-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
-            right: 0;
+            width: 100%;
             padding: 20px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-            color: white;
+            padding-bottom: 30px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 60%, transparent 100%);
+            z-index: 15;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
         }
 
-        .video-shorts-product-info {
-            margin-bottom: 15px;
-        }
-
-        .video-shorts-product-name {
-            font-size: 1.4rem;
-            font-weight: 700;
+        .influencer-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 5px;
         }
 
+        .influencer-avatar-placeholder {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #4f46e5;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+        }
+
         .video-shorts-influencer {
-            font-size: 1rem;
-            color: #ccc;
-            margin-bottom: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            margin: 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
+        /* Description */
         .video-shorts-description {
-            color: #e3e3e3;
-            font-size: 0.95rem;
-            margin-bottom: 12px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            line-height: 1.4;
+            max-width: 85%;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
+        .video-shorts-title {
+            display: none;
+        }
+
+        /* Products / Pills */
         .video-shorts-products {
             display: flex;
-            flex-wrap: wrap;
             gap: 8px;
-            margin-top: 10px;
+            overflow-x: auto;
+            max-width: 100%;
+            padding-bottom: 5px;
+            margin-top: 5px;
+            scrollbar-width: none;
         }
 
-        .product-tag {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 999px;
-            padding: 6px 14px;
-            font-size: 0.85rem;
-            display: inline-flex;
+        .video-shorts-products::-webkit-scrollbar {
+            display: none;
+        }
+
+        .product-tag-pill {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            display: flex;
             align-items: center;
             gap: 6px;
+            transition: background 0.2s;
+            text-decoration: none;
         }
 
-        .video-shorts-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+        .product-tag-pill:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
         }
 
-        .video-shorts-action-btn {
+        .product-tag-pill img {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        /* Progress Bar */
+        .video-progress-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 25;
+        }
+
+        .video-progress-bar {
+            height: 100%;
+            background: #ff0050;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* Navigation Arrows (Desktop) */
+        .nav-arrow {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.1);
             border: none;
             color: white;
-            padding: 12px 18px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            min-width: 100px;
             justify-content: center;
-        }
-
-        .video-shorts-action-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Improve overlay layout for better button alignment */
-        .video-shorts-overlay {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 25px;
-            gap: 15px;
-        }
-
-        /* Better positioning for the action buttons container */
-        .video-shorts-actions {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 12px;
-            backdrop-filter: blur(10px);
-        }
-
-        /* Consistent button sizing */
-        .video-shorts-action-btn {
-            flex: 1;
-            min-width: auto;
-        }
-
-        /* Specific width for buttons to ensure proper alignment */
-        .video-shorts-like,
-        .video-shorts-share,
-        .video-shorts-buy {
-            flex: 1;
-            margin: 0 2px;
-        }
-
-        .video-shorts-pagination {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 10px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .video-shorts-pagination-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            transition: all 0.3s ease;
             cursor: pointer;
+            z-index: 100;
+            transition: all 0.2s;
+            backdrop-filter: blur(5px);
         }
 
-        .video-shorts-pagination-dot.active {
-            background: white;
-            transform: scale(1.4);
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        .nav-arrow:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
-        /* Add hover effect for pagination dots */
-        .video-shorts-pagination-dot:hover {
-            background: rgba(255, 255, 255, 0.8);
-            transform: scale(1.2);
+        .nav-arrow.prev-video {
+            top: 20px;
+            display: none;
+        }
+
+        .nav-arrow.next-video {
+            bottom: 20px;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .nav-arrow {
+                display: flex;
+                left: calc(50% + 280px);
+            }
+
+            .nav-arrow.prev-video {
+                top: 40%;
+            }
+
+            .nav-arrow.next-video {
+                bottom: 40%;
+            }
         }
 
         .footer {
@@ -4132,8 +4133,8 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a href="{% url 'home' %}" class="navbar-brand">
-                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-06 at 12.18.37 PM.jpeg' %}"
-                    alt="Lumoskart Logo" class="d-inline-block align-middle" style="max-height: 50px; width: auto;">
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo"
+                    class="d-inline-block align-middle" style="max-height: 50px; width: auto;">
             </a>
 
             <div class="mobile-view d-flex align-items-center justify-content-end">
@@ -4217,8 +4218,8 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
         <div class="offcanvas-header" style="background-color: #1e293b;">
             <h5 class="offcanvas-title" id="navbarOffcanvasLabel">
-                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-06 at 12.18.37 PM.jpeg' %}"
-                    alt="Lumoskart Logo" class="d-inline-block align-middle" style="max-height: 40px; width: auto;">
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo"
+                    class="d-inline-block align-middle" style="max-height: 40px; width: auto;">
             </h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
                 aria-label="Close"></button>
@@ -4415,7 +4416,7 @@
                         </a>
                         <a href="{% url 'product_lists' %}?search=decor" class="amazon-quad-item">
                             <div class="amazon-quad-img-wrapper">
-                               <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
+                                <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
                                     class="amazon-quad-img" alt="Decor">
                             </div>
                             <span class="amazon-quad-label"></span>
@@ -4429,7 +4430,7 @@
                         </a>
                         <a href="{% url 'product_lists' %}?search=lighting" class="amazon-quad-item">
                             <div class="amazon-quad-img-wrapper">
-                               <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
+                                <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
                                     class="amazon-quad-img" alt="Lighting">
                             </div>
                             <span class="amazon-quad-label"></span>
@@ -4445,7 +4446,7 @@
                     <div class="amazon-quad-grid">
                         <a href="{% url 'product_lists' %}?search=ac" class="amazon-quad-item">
                             <div class="amazon-quad-img-wrapper">
-                                 <img src="{% static 'accounts/images/5663f38bb21ad810f2772fff8d49d2a6 (1).jpg' %}"
+                                <img src="{% static 'accounts/images/5663f38bb21ad810f2772fff8d49d2a6 (1).jpg' %}"
                                     class="amazon-quad-img" alt="AC">
                             </div>
                             <span class="amazon-quad-label"></span>
@@ -4453,7 +4454,6 @@
                         <a href="{% url 'product_lists' %}?search=fridge" class="amazon-quad-item">
                             <div class="amazon-quad-img-wrapper">
                                 <img src="{% static 'accounts/images/2a5be5560e281c7438851cae8dde2074.jpg' %}"
-' %}"
                                     class="amazon-quad-img" alt="Fridge">
                             </div>
                             <span class="amazon-quad-label"></span>
@@ -4467,7 +4467,7 @@
                         </a>
                         <a href="{% url 'product_lists' %}?search=washing" class="amazon-quad-item">
                             <div class="amazon-quad-img-wrapper">
-                                 <img src="{% static 'accounts/images/a7773c266513b1c4384baf5d5c26e556.jpg' %}"
+                                <img src="{% static 'accounts/images/a7773c266513b1c4384baf5d5c26e556.jpg' %}"
                                     class="amazon-quad-img" alt="Washing machines">
                             </div>
                             <span class="amazon-quad-label"></span>
@@ -4798,103 +4798,64 @@
             {% endif %}
         </section>
 
-        <!-- Instagram-style Video Player Modal -->
+        <!-- Video Shorts Player Modal (Instagram Reels Style) -->
         <div class="video-shorts-player">
             <div class="video-shorts-content">
                 <div class="video-shorts-video-container">
-                    <video class="video-shorts-video" muted playsinline controls volume="0"></video>
-                    <div class="video-shorts-overlay">
-                        <div class="video-shorts-header">
-                            <div class="video-shorts-title"></div>
-                            <button class="video-shorts-close">
-                                <i class="fas fa-times"></i>
+                    <video class="video-shorts-video" muted playsinline loop></video>
+
+                    <!-- Close Button -->
+                    <button class="video-shorts-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+
+                    <!-- Right Sidebar Actions -->
+                    <div class="video-shorts-actions-sidebar">
+                        <div class="action-item">
+                            <button class="video-shorts-like">
+                                <i class="far fa-heart"></i>
                             </button>
+                            <span class="like-count">0</span>
                         </div>
-                        <div class="video-shorts-product-info">
-                            <h3 class="video-shorts-product-name"></h3>
-                            <p class="video-shorts-influencer"></p>
-                            <p class="video-shorts-description"></p>
+                        <div class="action-item">
+                            <button class="video-shorts-share">
+                                <i class="far fa-paper-plane"></i>
+                            </button>
+                            <span class="action-label">Share</span>
                         </div>
-                        <div class="video-shorts-products"></div>
-                        <div class="video-shorts-actions">
-
-
+                        <div class="action-item">
+                            <button class="video-shorts-buy" id="video-shorts-buy-btn">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                            <span class="action-label">Shop</span>
                         </div>
                     </div>
-                    <div class="video-shorts-pagination">
-                        <div class="video-shorts-pagination-dot active"></div>
-                        <div class="video-shorts-pagination-dot"></div>
-                        <div class="video-shorts-pagination-dot"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Video Shorts Player Modal -->
-        <div class="video-shorts-player">
-            <div class="video-shorts-content">
-                <div class="video-shorts-video-container">
-                    <video class="video-shorts-video" muted playsinline controls volume="0"></video>
-                    <div class="video-shorts-overlay">
-                        <div class="video-shorts-header">
-                            <div class="video-shorts-title"></div>
-                            <button class="video-shorts-close">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="video-shorts-player">
-                            <div class="video-shorts-content">
-                                <div class="video-shorts-video-container">
-                                    <video class="video-shorts-video" muted playsinline controls volume="0"></video>
-                                    <div class="video-shorts-overlay">
-                                        <div class="video-shorts-header">
-                                            <div class="video-shorts-title"></div>
-                                            <button class="video-shorts-close">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                        <div class="video-shorts-product-info">
-                                            <h3 class="video-shorts-product-name"></h3>
-                                            <p class="video-shorts-influencer"></p>
-                                            <p class="video-shorts-description"></p>
-                                        </div>
-                                        <div class="video-shorts-products"></div>
-                                        <div class="video-shorts-actions">
-                                            <a href="javascript:void(0);"
-                                                class="video-shorts-action-btn video-shorts-like">
-                                                <i class="fas fa-heart"></i> <span class="like-count"></span>
-                                            </a>
-                                            <a href="javascript:void(0);"
-                                                class="video-shorts-action-btn video-shorts-share">
-                                                <i class="fas fa-share"></i> Share
-                                            </a>
-                                            <a href="javascript:void(0);"
-                                                class="video-shorts-action-btn video-shorts-buy"
-                                                id="video-shorts-buy-btn">
-                                                <i class="fas fa-shopping-cart"></i> Buy Now
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="video-shorts-pagination">
-                                        <div class="video-shorts-pagination-dot active"></div>
-                                        <div class="video-shorts-pagination-dot"></div>
-                                        <div class="video-shorts-pagination-dot"></div>
-                                    </div>
-                                </div>
+                    <!-- Bottom Overlay Info -->
+                    <div class="video-shorts-info-overlay">
+                        <div class="influencer-info">
+                            <div class="influencer-avatar-placeholder">
+                                <i class="fas fa-user"></i>
                             </div>
+                            <h3 class="video-shorts-influencer"></h3>
                         </div>
-                        <div class="video-shorts-product-info">
-                            <h3 class="video-shorts-product-name"></h3>
-                            <p class="video-shorts-influencer"></p>
-                            <p class="video-shorts-description"></p>
+                        <div class="video-shorts-description"></div>
+                        <!-- Hidden title element for JS compatibility -->
+                        <div class="video-shorts-title" style="display:none;"></div>
+
+                        <div class="video-shorts-products">
+                            <!-- Products will be injected here as pills -->
                         </div>
-                        <div class="video-shorts-products"></div>
                     </div>
-                    <div class="video-shorts-pagination">
-                        <div class="video-shorts-pagination-dot active"></div>
-                        <div class="video-shorts-pagination-dot"></div>
-                        <div class="video-shorts-pagination-dot"></div>
+
+                    <!-- Progress Bar -->
+                    <div class="video-progress-container">
+                        <div class="video-progress-bar"></div>
                     </div>
+
+                    <!-- Navigation Arrows (Desktop) -->
+                    <button class="nav-arrow prev-video"><i class="fas fa-chevron-up"></i></button>
+                    <button class="nav-arrow next-video"><i class="fas fa-chevron-down"></i></button>
                 </div>
             </div>
         </div>
@@ -5722,27 +5683,18 @@
                     const products = JSON.parse(productsData);
                     videoProducts.innerHTML = '';
                     if (products.length > 0) {
-                        // Create product list container
-                        const productList = document.createElement('div');
-                        productList.className = 'video-shorts-products-list';
-
                         products.forEach(product => {
-                            const productEl = document.createElement('div');
-                            productEl.className = 'video-shorts-product-item';
-                            productEl.innerHTML = `
-                                <img src="${product.image}" alt="${product.name}" class="video-shorts-product-thumb">
-                                <div class="video-shorts-product-details">
-                                    <h4>${product.name}</h4>
-                                    <p class="product-price" data-price="${product.price}" data-currency="${product.currency}">${product.currency} ${product.price}</p>
-                                </div>
+                            const productPill = document.createElement('a');
+                            productPill.className = 'product-tag-pill';
+                            productPill.href = `/orders/buy-now/${product.id}/`;
+                            productPill.innerHTML = `
+                                <img src="${product.image}" alt="${product.name}">
+                                ${product.name}
                             `;
-                            productList.appendChild(productEl);
+                            videoProducts.appendChild(productPill);
                         });
-
-                        videoProducts.innerHTML = '';
-                        videoProducts.appendChild(productList);
                     } else {
-                        videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
+                        videoProducts.innerHTML = '';
                     }
                 } catch (e) {
                     videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
