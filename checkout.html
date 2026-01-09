@@ -825,6 +825,19 @@
             <div class="checkout-section order-summary">
                 <h4 class="section-title">📋 Order Summary</h4>
 
+                {% if is_buy_now %}
+                <!-- Display buy now item -->
+                {% with item=cart_items|first %}
+                <div class="order-item">
+                    <div class="item-details">
+                        <strong>{{ item.product.name }}</strong>
+                        <small>Quantity: {{ item.quantity }} × ₹{{ item.product.price }}</small>
+                    </div>
+                    <span class="item-price">₹{{ item.total_price }}</span>
+                </div>
+                {% endwith %}
+                {% else %}
+                <!-- Display cart items -->
                 {% for item in cart_items %}
                 <div class="order-item">
                     <div class="item-details">
@@ -834,6 +847,7 @@
                     <span class="item-price">₹{{ item.total_price }}</span>
                 </div>
                 {% endfor %}
+                {% endif %}
 
                 <div class="total-item">
                     <span class="total-label">Total Amount</span>
