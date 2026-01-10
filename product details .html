@@ -498,7 +498,7 @@
                 </ul>
 
                 <ul class="navbar-nav">
-                  
+
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -607,6 +607,40 @@
                     {% endif %}
                 </div>
 
+                <!-- Size Selection for Dress Items -->
+                {% if "dress" in product.category.name.lower or "gown" in product.category.name.lower or "frock" in product.category.name.lower or "apparel" in product.category.name.lower or "clothing" in product.category.name.lower or "womenswear" in product.category.name.lower or "dresses" in product.category.name.lower or "shirts" in product.category.name.lower or "shirts" in product.name.lower or "shirt" in product.category.name.lower or "shirt" in product.name.lower or "t-shirt" in product.category.name.lower or "t-shirt" in product.name.lower or "tshirts" in product.category.name.lower or "tshirts" in product.name.lower or "tops" in product.category.name.lower or "tops" in product.name.lower or "dress" in product.name.lower or "gown" in product.name.lower or "frock" in product.name.lower %}
+                <div class="size-selection-section mt-4">
+                    <h5>Select Size:</h5>
+
+                    <!-- Mobile Responsive Size Dropdown -->
+                    <div class="d-md-none mb-3">
+                        <select class="form-select form-select-lg" id="sizeSelectMobile">
+                            <option value="">Choose a size...</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="2XL">2XL</option>
+                            <option value="3XL">3XL</option>
+                        </select>
+                    </div>
+
+                    <!-- Desktop Size Buttons -->
+                    <div class="d-none d-md-flex flex-wrap gap-2" id="sizeButtons">
+                        <button type="button" class="btn btn-outline-primary size-btn" data-size="S">S</button>
+                        <button type="button" class="btn btn-outline-primary size-btn" data-size="M">M</button>
+                        <button type="button" class="btn btn-outline-primary size-btn" data-size="L">L</button>
+                        <button type="button" class="btn btn-outline-primary size-btn" data-size="XL">XL</button>
+                        <button type="button" class="btn btn-outline-primary size-btn" data-size="2XL">2XL</button>
+                        <button type="button" class="btn btn-outline-primary size-btn" data-size="3XL">3XL</button>
+                    </div>
+
+                    <div class="mt-2">
+                        <small class="text-muted">Select your size</small>
+                    </div>
+                </div>
+                {% endif %}
+
                 {% if product.influencer %}
                 <div class="influencer-info">
                     <div class="influencer-avatar">
@@ -621,10 +655,10 @@
 
                 <div class="product-actions">
                     {% if user.is_authenticated %}
-                        <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">
+                        <a href="#" class="btn btn-primary" onclick="addToCartWithSize({{ product.id }}); return false;">
                             <i class="fas fa-shopping-cart me-2"></i><span data-translate="add_to_cart">Add to Cart</span>
                         </a>
-                        <a href="{% url 'buy_now' product.id %}" class="btn btn-outline-primary">
+                        <a href="#" class="btn btn-outline-primary" onclick="buyNowWithSize({{ product.id }}); return false;">
                             <i class="fas fa-bolt me-2"></i><span data-translate="buy_now">Buy Now</span>
                         </a>
                     {% else %}
@@ -981,6 +1015,142 @@
             // Update all prices on the page
             updatePrices(savedCurrency);
         });
+
+        // ===============================
+        // 👕 Size Selection Functionality
+        // ===============================
+
+        // Handle size selection synchronization
+        document.addEventListener('DOMContentLoaded', function() {
+            const sizeButtons = document.querySelectorAll('.size-btn');
+            const sizeSelectMobile = document.getElementById('sizeSelectMobile');
+
+            // Sync mobile dropdown selection to desktop buttons
+            if (sizeSelectMobile) {
+                sizeSelectMobile.addEventListener('change', function() {
+                    const selectedSize = this.value;
+
+                    // Update desktop buttons to reflect selection
+                    sizeButtons.forEach(button => {
+                        if (button.getAttribute('data-size') === selectedSize) {
+                            button.classList.add('active', 'btn-primary');
+                            button.classList.remove('btn-outline-primary');
+                        } else {
+                            button.classList.remove('active', 'btn-primary');
+                            button.classList.add('btn-outline-primary');
+                        }
+                    });
+                });
+            }
+
+            // Sync desktop button selection to mobile dropdown
+            sizeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const selectedSize = this.getAttribute('data-size');
+
+                    // Update desktop buttons
+                    sizeButtons.forEach(btn => {
+                        if (btn === button) {
+                            btn.classList.add('active', 'btn-primary');
+                            btn.classList.remove('btn-outline-primary');
+                        } else {
+                            btn.classList.remove('active', 'btn-primary');
+                            btn.classList.add('btn-outline-primary');
+                        }
+                    });
+
+                    // Update mobile dropdown
+                    if (sizeSelectMobile) {
+                        sizeSelectMobile.value = selectedSize;
+                    }
+                });
+            });
+        });
+
+        // Function to add to cart with selected size
+        function addToCartWithSize(productId) {
+            const selectedSize = getSelectedSize();
+
+            // Check if this is a dress/gown/frock item and validate size selection
+            const isDressItem = isDressItemCheck();
+            if (isDressItem && !selectedSize) {
+                alert('Please select a size before adding to cart.');
+                return;
+            }
+
+            // Build URL with size parameter if size is selected
+            let url = `/orders/add-to-cart/${productId}/`;
+            if (selectedSize) {
+                url += `?size=${selectedSize}`;
+            }
+
+            window.location.href = url;
+        }
+
+        // Function to buy now with selected size
+        function buyNowWithSize(productId) {
+            const selectedSize = getSelectedSize();
+
+            // Check if this is a dress/gown/frock item and validate size selection
+            const isDressItem = isDressItemCheck();
+            if (isDressItem && !selectedSize) {
+                alert('Please select a size before purchasing.');
+                return;
+            }
+
+            // Build URL with size parameter if size is selected
+            let url = `/orders/buy-now/${productId}/`;
+            if (selectedSize) {
+                url += `?size=${selectedSize}`;
+            }
+
+            window.location.href = url;
+        }
+
+        // Helper function to get selected size
+        function getSelectedSize() {
+            const sizeSelectMobile = document.getElementById('sizeSelectMobile');
+            const activeButton = document.querySelector('#sizeButtons .size-btn.active');
+
+            // Check mobile dropdown first
+            if (sizeSelectMobile && sizeSelectMobile.value) {
+                return sizeSelectMobile.value;
+            }
+
+            // Check desktop buttons
+            if (activeButton) {
+                return activeButton.getAttribute('data-size');
+            }
+
+            return null;
+        }
+
+        // Helper function to check if this is a dress/shirt item
+        function isDressItemCheck() {
+            const categoryName = '{{ product.category.name.lower }}';
+            const productName = '{{ product.name.lower }}';
+
+            return categoryName.includes('dress') ||
+                   categoryName.includes('gown') ||
+                   categoryName.includes('frock') ||
+                   categoryName.includes('apparel') ||
+                   categoryName.includes('clothing') ||
+                   categoryName.includes('womenswear') ||
+                   categoryName.includes('dresses') ||
+                   categoryName.includes('shirts') ||
+                   categoryName.includes('shirt') ||
+                   categoryName.includes('t-shirt') ||
+                   categoryName.includes('tshirts') ||
+                   categoryName.includes('tops') ||
+                   productName.includes('dress') ||
+                   productName.includes('gown') ||
+                   productName.includes('frock') ||
+                   productName.includes('shirts') ||
+                   productName.includes('shirt') ||
+                   productName.includes('t-shirt') ||
+                   productName.includes('tshirts') ||
+                   productName.includes('tops');
+        }
 
     </script>
 </body>
