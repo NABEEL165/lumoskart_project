@@ -2468,6 +2468,184 @@
     transform: translateY(-2px);
 }
 
+/* Amazon Style Category Showcase with Swiper */
+.category-showcase-section {
+    margin: 60px 0;
+    position: relative;
+    padding: 0 15px;
+}
+
+.category-showcase-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 35px;
+    padding-left: 20px;
+    border-left: 6px solid #ef4444;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.amazon-swiper {
+    padding: 20px 10px 60px 10px !important;
+    overflow: visible !important;
+}
+
+.amazon-card-item {
+    height: auto;
+}
+
+.amazon-card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.amazon-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    border-color: rgba(239, 68, 68, 0.6);
+    background: rgba(30, 41, 59, 0.9);
+}
+
+.amazon-card-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.amazon-quad-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.amazon-quad-item {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.amazon-quad-img-wrapper {
+    aspect-ratio: 1/1;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0f172a;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.amazon-quad-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.amazon-quad-item:hover .amazon-quad-img {
+    transform: scale(1.15);
+}
+
+.amazon-quad-label {
+    font-size: 0.8rem;
+    color: #cbd5e1;
+    font-weight: 600;
+    text-align: center;
+}
+
+.amazon-card-link {
+    color: #1da4e2;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 15px;
+    transition: all 0.3s ease;
+}
+
+.amazon-card-link:hover {
+    color: #1da4e2;
+    transform: translateX(5px);
+}
+
+/* Mobile Perfection */
+@media (max-width: 768px) {
+    .category-showcase-section {
+        margin: 40px 0;
+    }
+
+    .category-showcase-title {
+        font-size: 1.6rem;
+        margin-bottom: 25px;
+    }
+
+    .amazon-card {
+        padding: 18px;
+    }
+
+    .amazon-card-title {
+        font-size: 1.2rem;
+    }
+
+    .amazon-quad-grid {
+        gap: 12px;
+    }
+
+    .amazon-quad-label {
+        font-size: 0.75rem;
+    }
+}
+
+/* Swiper Responsive Adjustments */
+@media (max-width: 576px) {
+    .category-showcase-title {
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+    }
+
+    .amazon-card {
+        padding: 15px;
+    }
+
+    .amazon-card-title {
+        font-size: 1.1rem;
+    }
+
+    .amazon-quad-grid {
+        gap: 10px;
+    }
+
+    .amazon-quad-label {
+        font-size: 0.7rem;
+    }
+}
+
+.swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.3) !important;
+    opacity: 1 !important;
+    width: 10px !important;
+    height: 10px !important;
+}
+
+.swiper-pagination-bullet-active {
+    background: #1da4e2 !important;
+    width: 25px !important;
+    border-radius: 5px !important;
+}
 
 
 
@@ -2853,6 +3031,214 @@
             </div>
         </div>
 
+        <!-- Category Showcase Swiper Section (Amazon Style) -->
+        <section class="category-showcase-section">
+            <h2 class="category-showcase-title" data-en="Shop by Category" data-ar="تسوق حسب الفئة"
+                data-hi="श्रेणी के अनुसार खरीदारी करें">Shop by Category</h2>
+
+            <div class="swiper amazon-swiper">
+                <div class="swiper-wrapper">
+                    <!-- Category 1: Fashion -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Latest in Fashion</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=shirt" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/457e9ae6e5436125a6cda19a9fa01dc0.jpg' %}"
+                                            class="amazon-quad-img" alt="Shirts">
+                                    </div>
+                                    <span class="amazon-quad-label">Shirts</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=t-shirt" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
+                                            class="amazon-quad-img" alt="T-Shirts">
+                                    </div>
+                                    <span class="amazon-quad-label">T-Shirts</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=dress" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/9b6814ab4ea603641233ee7f1e4f4bef.jpg' %}"
+                                            class="amazon-quad-img" alt="Dresses">
+                                    </div>
+                                    <span class="amazon-quad-label">Dresses</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=shoes" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
+                                            class="amazon-quad-img" alt="Shoes">
+                                    </div>
+                                    <span class="amazon-quad-label">Shoes</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Explore Fashion <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Category 2: Electronics -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Top Electronics</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=mobile" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/5663f38bb21ad810f2772fff8d49d2a6 (1).jpg' %}"
+                                            class="amazon-quad-img" alt="Mobiles">
+                                    </div>
+                                    <span class="amazon-quad-label">Mobiles</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=laptop" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/2a5be5560e281c7438851cae8dde2074.jpg' %}"
+                                            class="amazon-quad-img" alt="Laptops">
+                                    </div>
+                                    <span class="amazon-quad-label">Laptops</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=headphones" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/896464c0d818a2e8182cd48e98e580ee.jpg' %}"
+                                            class="amazon-quad-img" alt="Audio">
+                                    </div>
+                                    <span class="amazon-quad-label">Audio</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=watch" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/a7773c266513b1c4384baf5d5c26e556.jpg' %}"
+                                            class="amazon-quad-img" alt="Watches">
+                                    </div>
+                                    <span class="amazon-quad-label">Watches</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Gadget Hub <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Category 3: Beauty & Care -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Beauty & Care</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=skincare" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/457e9ae6e5436125a6cda19a9fa01dc0.jpg' %}"
+                                            class="amazon-quad-img" alt="Skincare">
+                                    </div>
+                                    <span class="amazon-quad-label">Skincare</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=makeup" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
+                                            class="amazon-quad-img" alt="Makeup">
+                                    </div>
+                                    <span class="amazon-quad-label">Makeup</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=fragrance" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/9b6814ab4ea603641233ee7f1e4f4bef.jpg' %}"
+                                            class="amazon-quad-img" alt="Fragrance">
+                                    </div>
+                                    <span class="amazon-quad-label">Perfumes</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=haircare" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
+                                            class="amazon-quad-img" alt="Haircare">
+                                    </div>
+                                    <span class="amazon-quad-label">Haircare</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Beauty Boutique <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Category 4: Home & Kitchen -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Home & Kitchen</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=decor" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/5663f38bb21ad810f2772fff8d49d2a6 (1).jpg' %}"
+                                            class="amazon-quad-img" alt="Decor">
+                                    </div>
+                                    <span class="amazon-quad-label">Decor</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=furniture" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/2a5be5560e281c7438851cae8dde2074.jpg' %}"
+                                            class="amazon-quad-img" alt="Furniture">
+                                    </div>
+                                    <span class="amazon-quad-label">Living</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=cookware" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/896464c0d818a2e8182cd48e98e580ee.jpg' %}"
+                                            class="amazon-quad-img" alt="Cookware">
+                                    </div>
+                                    <span class="amazon-quad-label">Kitchen</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=appliances" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/a7773c266513b1c4384baf5d5c26e556.jpg' %}"
+                                            class="amazon-quad-img" alt="Appliances">
+                                    </div>
+                                    <span class="amazon-quad-label">Smart Home</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Upgrade Home <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Category 5: Sports & Fitness -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Sports & Fitness</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=gym" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/457e9ae6e5436125a6cda19a9fa01dc0.jpg' %}"
+                                            class="amazon-quad-img" alt="Gym Wear">
+                                    </div>
+                                    <span class="amazon-quad-label">Training</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=equipment" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
+                                            class="amazon-quad-img" alt="Equipment">
+                                    </div>
+                                    <span class="amazon-quad-label">Gear</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=yoga" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/9b6814ab4ea603641233ee7f1e4f4bef.jpg' %}"
+                                            class="amazon-quad-img" alt="Yoga">
+                                    </div>
+                                    <span class="amazon-quad-label">Yoga</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=sneakers" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
+                                            class="amazon-quad-img" alt="Sneakers">
+                                    </div>
+                                    <span class="amazon-quad-label">Sneakers</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Fitness Hub <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Swiper dots -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
         <!-- Enhanced Products Section -->
         <div class="section-container">
             <div class="section-header">
@@ -3230,6 +3616,35 @@
             },
         });
 
+        // Initialize Category Showcase Swiper
+        const categoryShowcaseSwiper = new Swiper('.amazon-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                },
+                1024: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                },
+            },
+        });
+
         // Clear Search Function
         function clearSearch() {
             const searchInput = document.getElementById('search-input');
@@ -3506,30 +3921,24 @@
             }
         });
 
-        // Buy button click
-        videoBuyBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
+        // Handle Buy Now button in video player - same as home.html
+        document.addEventListener('click', function (e) {
+            if (e.target.closest('#video-shorts-buy-btn')) {
+                e.preventDefault();
 
-            const item = allVideoItems[currentIndex];
-            const productsData = item.getAttribute('data-video-products');
+                // Get the current video item's product data
+                const currentVideoItem = allVideoItems[currentIndex];
+                if (currentVideoItem) {
+                    // Get influencer ID from the video element
+                    let influencerId = currentVideoItem.getAttribute('data-video-influencer-id');
 
-            try {
-                const products = JSON.parse(productsData);
-                if (products && products.length > 0) {
-                    if (products.length === 1) {
-                        // Single product - redirect directly to buy now
-                        window.location.href = `/orders/buy-now/${products[0].id}/`;
+                    if (influencerId) {
+                        // Redirect to influencer products page
+                        window.location.href = `/products/influencer/${influencerId}/products/`;
                     } else {
-                        // Multiple products - show selection modal
-                        showProductSelectionModal(products);
+                        alert('Unable to find influencer for this video');
                     }
-                } else {
-                    alert('No products available for this video');
                 }
-            } catch (e) {
-                console.error('Error parsing products data:', e);
-                alert('Error loading products. Please try again.');
             }
         });
 
