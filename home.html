@@ -22,6 +22,9 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
     <style>
         * {
             margin: 0;
@@ -48,13 +51,37 @@
             justify-content: space-between;
         }
 
-        .navbar-brand img {
-            height: 40px;
-            transition: transform 0.3s ease;
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none !important;
         }
 
-        .navbar-brand img:hover {
-            transform: scale(1.05);
+        .navbar-brand img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+        }
+
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
 
         .search-container {
@@ -551,16 +578,18 @@
         }
 
         /* Video Shorts Player */
+        /* Video Shorts Player - Instagram Reels Style */
         .video-shorts-player {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 9999;
+            background: #000;
+            z-index: 10000;
             display: none;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .video-shorts-player.active {
@@ -568,293 +597,318 @@
         }
 
         .video-shorts-content {
-            flex: 1;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            transition: all 0.3s ease;
         }
 
+        /* Container for the 9:16 Video */
         .video-shorts-video-container {
             width: 100%;
-            max-width: 500px;
             height: 100%;
+            max-width: 480px;
             position: relative;
+            background: #000;
             overflow: hidden;
-            border-radius: 15px;
-            transition: all 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            .video-shorts-video-container {
+                border-radius: 12px;
+                height: 90vh;
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            }
         }
 
         .video-shorts-video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.3s ease;
+            display: block;
         }
 
-        .video-shorts-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
-
-        .video-shorts-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: rgba(18, 18, 18, 0.7);
-            border-radius: 8px;
-            margin: 10px;
-            pointer-events: auto;
-        }
-
-        .video-shorts-header .video-shorts-close {
-            pointer-events: auto;
-        }
-
-        .video-shorts-product-info {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 8px;
-            margin: 10px;
-            pointer-events: auto;
-        }
-
-        .video-shorts-actions {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            padding: 20px;
-            margin: 10px;
-            pointer-events: auto;
-        }
-
-        .video-shorts-pagination {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            padding: 20px;
-            margin: 10px;
-            pointer-events: auto;
-        }
-
-        .video-shorts-pagination-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        .video-shorts-pagination-dot.active {
-            background: white;
-        }
-
-        .video-shorts-title {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin: 0;
-            flex-grow: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
+        /* Close Button - Top Right */
         .video-shorts-close {
-            background: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.4);
             border: none;
             color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
             width: 40px;
             height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            z-index: 20;
+            backdrop-filter: blur(5px);
+            transition: all 0.2s;
         }
 
         .video-shorts-close:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
         }
 
-        .video-shorts-content {
-            flex: 1;
+        /* Right Sidebar Actions */
+        .video-shorts-actions-sidebar {
+            position: absolute;
+            right: 15px;
+            bottom: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 20;
+            align-items: center;
+        }
+
+        .video-shorts-actions-sidebar .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .video-shorts-actions-sidebar button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
-        .video-shorts-video-container {
-            width: 100%;
-            max-width: 400px;
-            height: 70vh;
-            position: relative;
+        .video-shorts-actions-sidebar button:hover {
+            transform: scale(1.1);
         }
 
-        .video-shorts-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .video-shorts-actions-sidebar button.liked i {
+            color: #ef4444;
+            font-weight: 900;
         }
 
-        .video-shorts-overlay {
+        .video-shorts-actions-sidebar button.liked i.far {
+            display: none;
+        }
+
+        .video-shorts-actions-sidebar .like-count,
+        .video-shorts-actions-sidebar .action-label {
+            font-size: 13px;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+
+        /* Bottom Info Overlay */
+        .video-shorts-info-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
-            right: 0;
+            width: 100%;
             padding: 20px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-            color: white;
+            padding-bottom: 30px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 60%, transparent 100%);
+            z-index: 15;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
         }
 
-        .video-shorts-product-info {
-            margin-bottom: 15px;
-        }
-
-        .video-shorts-product-name {
-            font-size: 1.4rem;
-            font-weight: 700;
+        .influencer-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 5px;
         }
 
+        .influencer-avatar-placeholder {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #4f46e5;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+        }
+
         .video-shorts-influencer {
-            font-size: 1rem;
-            color: #ccc;
-            margin-bottom: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            margin: 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
+        /* Description */
         .video-shorts-description {
-            color: #e3e3e3;
-            font-size: 0.95rem;
-            margin-bottom: 12px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            line-height: 1.4;
+            max-width: 85%;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
+        .video-shorts-title {
+            display: none;
+        }
+
+        /* Products / Pills */
         .video-shorts-products {
             display: flex;
-            flex-wrap: wrap;
             gap: 8px;
-            margin-top: 10px;
+            overflow-x: auto;
+            max-width: 100%;
+            padding-bottom: 5px;
+            margin-top: 5px;
+            scrollbar-width: none;
         }
 
-        .product-tag {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 999px;
-            padding: 6px 14px;
-            font-size: 0.85rem;
-            display: inline-flex;
+        .video-shorts-products::-webkit-scrollbar {
+            display: none;
+        }
+
+        .product-tag-pill {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            display: flex;
             align-items: center;
             gap: 6px;
+            transition: background 0.2s;
+            text-decoration: none;
         }
 
-        .video-shorts-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+        .product-tag-pill:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
         }
 
-        .video-shorts-action-btn {
+        .product-tag-pill img {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        /* Progress Bar */
+        .video-progress-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 25;
+        }
+
+        .video-progress-bar {
+            height: 100%;
+            background: #ff0050;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* Heart Animation for Double Tap */
+        @keyframes heartPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .heart-animation {
+            position: absolute;
+            pointer-events: none;
+            z-index: 100;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 45, 85, 0.6);
+        }
+
+        /* Navigation Arrows (Desktop) */
+        .nav-arrow {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.1);
             border: none;
             color: white;
-            padding: 12px 18px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            min-width: 100px;
             justify-content: center;
-        }
-
-        .video-shorts-action-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Improve overlay layout for better button alignment */
-        .video-shorts-overlay {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 25px;
-            gap: 15px;
-        }
-
-        /* Better positioning for the action buttons container */
-        .video-shorts-actions {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 12px;
-            backdrop-filter: blur(10px);
-        }
-
-        /* Consistent button sizing */
-        .video-shorts-action-btn {
-            flex: 1;
-            min-width: auto;
-        }
-
-        /* Specific width for buttons to ensure proper alignment */
-        .video-shorts-like,
-        .video-shorts-share,
-        .video-shorts-buy {
-            flex: 1;
-            margin: 0 2px;
-        }
-
-        .video-shorts-pagination {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 10px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .video-shorts-pagination-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            transition: all 0.3s ease;
             cursor: pointer;
+            z-index: 100;
+            transition: all 0.2s;
+            backdrop-filter: blur(5px);
         }
 
-        .video-shorts-pagination-dot.active {
-            background: white;
-            transform: scale(1.4);
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        .nav-arrow:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
-        /* Add hover effect for pagination dots */
-        .video-shorts-pagination-dot:hover {
-            background: rgba(255, 255, 255, 0.8);
-            transform: scale(1.2);
+        .nav-arrow.prev-video {
+            top: 20px;
+            display: none;
+        }
+
+        .nav-arrow.next-video {
+            bottom: 20px;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .nav-arrow {
+                display: flex;
+                left: calc(50% + 280px);
+            }
+
+            .nav-arrow.prev-video {
+                top: 40%;
+            }
+
+            .nav-arrow.next-video {
+                bottom: 40%;
+            }
         }
 
         .footer {
@@ -947,27 +1001,59 @@
             font-size: 0.9rem;
         }
 
+        /* Enhanced Footer Responsiveness */
+        @media (max-width: 768px) {
+            .footer {
+                padding: 3rem 1rem 1.5rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-column h3 {
+                font-size: 1.1rem;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .footer {
+                padding: 2rem 0.5rem 1rem;
+            }
+
+            .footer-column h3 {
+                font-size: 1rem;
+            }
+
+            .footer-links a {
+                font-size: 0.9rem;
+            }
+
+            .social-link {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+        }
+
         .banner-section {
             margin-bottom: 3rem;
         }
 
         .banner-card {
             background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
-
             border-radius: 16px;
             padding: 3rem 2rem;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 30px rgba(129, 140, 248, 0.3);
         }
-.banner-card {
-    background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
-    border-radius: 16px;
-    padding: 3rem 2rem;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 30px rgba(129, 140, 248, 0.3);
-}
+
         .banner-card h2 {
             font-size: 2rem;
             color: white;
@@ -977,6 +1063,44 @@
         .banner-card p {
             font-size: 1.1rem;
             color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Responsive adjustments for banner */
+        @media (max-width: 768px) {
+            .banner-section {
+                margin-bottom: 2rem;
+            }
+
+            .banner-card {
+                padding: 2rem 1.5rem;
+                margin: 0 1rem;
+            }
+
+            .banner-card h2 {
+                font-size: 1.5rem;
+            }
+
+            .banner-card p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .banner-section {
+                margin-bottom: 1.5rem;
+            }
+
+            .banner-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .banner-card h2 {
+                font-size: 1.3rem;
+            }
+
+            .banner-card p {
+                font-size: 0.9rem;
+            }
         }
 
         .whatsapp-widget {
@@ -1154,7 +1278,11 @@
             }
 
             .navbar-brand img {
-                height: 40px;
+                height: 45px;
+            }
+
+            .brand-text {
+                font-size: 1.4rem;
             }
 
             .search-bar {
@@ -1502,12 +1630,12 @@
         font-weight: 500;
     }
 
-    /* Footer Styles */
+    /* Footer Styles - Consolidated and Responsive */
     .footer {
-        background: linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 100%);
-        border-top: 2px solid rgba(255, 255, 255, 0.1);
-        padding: 60px 24px 30px;
-        margin-top: 100px;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-top: 2px solid #334155;
+        padding: 4rem 2rem 2rem;
+        margin-top: 4rem;
     }
 
     .footer-container {
@@ -1518,16 +1646,16 @@
     .footer-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 40px;
-        margin-bottom: 40px;
+        gap: 2rem;
+        margin-bottom: 3rem;
     }
 
     .footer-column h3 {
-        font-size: 1.5rem;
-        margin-bottom: 20px;
-        color: #e0e0e0;
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: #e2e8f0;
         position: relative;
-        padding-bottom: 10px;
+        padding-bottom: 0.5rem;
     }
 
     .footer-column h3::after {
@@ -1537,7 +1665,7 @@
         left: 0;
         width: 50px;
         height: 3px;
-        background: linear-gradient(90deg, #9e9e9e, #757575);
+        background: linear-gradient(90deg, #818cf8, #6366f1);
         border-radius: 2px;
     }
 
@@ -1548,27 +1676,27 @@
     }
 
     .footer-links li {
-        margin-bottom: 12px;
+        margin-bottom: 0.75rem;
     }
 
     .footer-links a {
-        color: rgba(255, 255, 255, 0.7);
+        color: #94a3b8;
         text-decoration: none;
         transition: all 0.3s ease;
-        font-size: 1rem;
+        font-size: 0.95rem;
         display: block;
-        padding: 5px 0;
+        padding: 0.25rem 0;
     }
 
     .footer-links a:hover {
-        color: #9e9e9e;
+        color: #818cf8;
         transform: translateX(5px);
     }
 
     .social-links {
         display: flex;
-        gap: 15px;
-        margin-top: 20px;
+        gap: 1rem;
+        margin-top: 1.5rem;
     }
 
     .social-link {
@@ -1578,24 +1706,64 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.1);
+        background: #334155;
         color: white;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         transition: all 0.3s ease;
         text-decoration: none;
     }
 
     .social-link:hover {
-        background: #9e9e9e;
+        background: #818cf8;
         transform: translateY(-3px);
     }
 
     .footer-bottom {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        padding-top: 30px;
+        border-top: 1px solid #334155;
+        padding-top: 2rem;
         text-align: center;
-        color: rgba(255, 255, 255, 0.6);
+        color: #94a3b8;
         font-size: 0.9rem;
+    }
+
+    /* Enhanced Footer Responsiveness */
+    @media (max-width: 768px) {
+        .footer {
+            padding: 3rem 1rem 1.5rem;
+        }
+
+        .footer-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.1rem;
+        }
+
+        .social-links {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .footer {
+            padding: 2rem 0.5rem 1rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1rem;
+        }
+
+        .footer-links a {
+            font-size: 0.9rem;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            font-size: 1rem;
+        }
     }
 
     .influencers-section {
@@ -3094,7 +3262,8 @@
 
     .reel-video-info {
         position: absolute;
-        bottom: 120px; /* Position above the product overlay */
+        bottom: 120px;
+        /* Position above the product overlay */
         left: 0;
         right: 0;
         z-index: 2;
@@ -3343,6 +3512,190 @@
         box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
     }
 
+    /* Categories Grid Styles */
+    .categories-grid {
+        display: flex;
+        gap: 20px;
+        padding: 15px 0;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #333 #111;
+        margin-bottom: 30px;
+    }
+
+    /* Custom Scrollbar for Categories Grid */
+    .categories-grid::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .categories-grid::-webkit-scrollbar-track {
+        background: #111;
+        border-radius: 10px;
+    }
+
+    .categories-grid::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 10px;
+        transition: background 0.3s ease;
+    }
+
+    .categories-grid::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    .category-card {
+        flex: 0 0 auto;
+        width: 150px;
+        text-align: center;
+        background: #1f1f1f;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        border: 1px solid #333;
+    }
+
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        background: #252525;
+    }
+
+    .category-link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .category-img {
+        width: 100%;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .category-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .category-card:hover .category-image {
+        transform: scale(1.05);
+    }
+
+    .category-name {
+        padding: 12px;
+        font-weight: 600;
+        color: #e3e3e3;
+        font-size: 0.9rem;
+    }
+
+    /* Responsive adjustments for categories grid */
+    @media (max-width: 768px) {
+        .categories-grid {
+            gap: 15px;
+        }
+
+        .category-card {
+            width: 130px;
+        }
+
+        .category-img {
+            height: 130px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .categories-grid {
+            gap: 12px;
+            padding: 10px 5px;
+        }
+
+        .category-card {
+            width: 120px;
+        }
+
+        .category-img {
+            height: 120px;
+        }
+
+        .category-name {
+            font-size: 0.8rem;
+            padding: 8px;
+        }
+    }
+
+    /* Marquee Animation for Categories */
+    .categories-grid.marquee {
+        display: flex;
+        width: 100%;
+        animation: marquee-scroll 20s linear infinite;
+    }
+
+    .categories-grid.marquee:hover {
+        animation-play-state: paused;
+    }
+
+    @keyframes marquee-scroll {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+    /* Individual card marquee animation */
+    .categories-grid {
+        display: flex;
+        width: max-content;
+        animation: grid-marquee 20s linear infinite;
+    }
+
+    .categories-grid:hover {
+        animation-play-state: paused;
+    }
+
+    @keyframes grid-marquee {
+        0% {
+            transform: translateX(100%);
+        }
+
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+    /* Adjust container for marquee effect */
+    .categories-container {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        padding: 15px 0;
+        white-space: nowrap;
+    }
+
+    /* Individual category card styling */
+    .category-card {
+        flex: 0 0 auto;
+        width: 150px;
+        text-align: center;
+        background: #1f1f1f;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        border: 1px solid #333;
+        margin-right: 20px;
+    }
+
     /* Product Description */
     .product-description {
         color: rgba(255, 255, 255, 0.85);
@@ -3491,13 +3844,16 @@
             font-size: 14px;
         }
     }
+
     a {
-    color: var(--color-primary);  /* This is #00c7f7 (blue) */
-    text-decoration: none;
-}
+        color: var(--color-primary);
+        /* This is #00c7f7 (blue) */
+        text-decoration: none;
+    }
 
     /* Language Translation Styles */
-    .nav-text, .btn-text {
+    .nav-text,
+    .btn-text {
         display: inline;
     }
 
@@ -3513,11 +3869,11 @@
         display: none;
         flex-direction: column;
     }
-    
+
     .video-shorts-player.active {
         display: flex;
     }
-    
+
     .video-shorts-content {
         flex: 1;
         display: flex;
@@ -3525,36 +3881,36 @@
         justify-content: center;
         position: relative;
     }
-    
+
     .video-shorts-video-container {
         width: 100%;
         height: 100%;
         position: relative;
     }
-    
+
     .video-shorts-video {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
+
     .video-shorts-overlay {
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
         padding: 20px;
-        background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
         color: white;
     }
-    
+
     .video-shorts-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
     }
-    
+
     .video-shorts-close {
         background: none;
         border: none;
@@ -3562,20 +3918,20 @@
         font-size: 24px;
         cursor: pointer;
     }
-    
+
     .video-shorts-products {
         margin: 10px 0;
     }
-    
+
     .video-shorts-product-item {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
         padding: 10px;
-        background: rgba(255,255,255,0.1);
+        background: rgba(255, 255, 255, 0.1);
         border-radius: 8px;
     }
-    
+
     .video-shorts-product-thumb {
         width: 60px;
         height: 60px;
@@ -3583,17 +3939,17 @@
         border-radius: 8px;
         margin-right: 10px;
     }
-    
+
     .video-shorts-product-details {
         flex: 1;
     }
-    
+
     .video-shorts-actions {
         display: flex;
         gap: 20px;
         margin-top: 20px;
     }
-    
+
     .video-shorts-action-btn {
         display: flex;
         flex-direction: column;
@@ -3601,12 +3957,12 @@
         color: white;
         text-decoration: none;
     }
-    
+
     .video-shorts-action-btn i {
         font-size: 24px;
         margin-bottom: 5px;
     }
-    
+
     .video-shorts-pagination {
         position: absolute;
         top: 20px;
@@ -3615,49 +3971,49 @@
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .video-shorts-pagination-dot {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.5);
+        background: rgba(255, 255, 255, 0.5);
     }
-    
+
     .video-shorts-pagination-dot.active {
         background: white;
     }
-    
+
     /* Mobile responsive */
     @media (max-width: 768px) {
         .video-shorts-overlay {
             padding: 15px;
         }
-        
+
         .video-shorts-actions {
             gap: 15px;
         }
-        
+
         .video-shorts-action-btn i {
             font-size: 20px;
         }
     }
-    
+
     /* Video Shorts Products List */
     .video-shorts-products-list {
         display: flex;
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .video-shorts-product-item {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
         padding: 10px;
-        background: rgba(255,255,255,0.1);
+        background: rgba(255, 255, 255, 0.1);
         border-radius: 8px;
     }
-    
+
     .video-shorts-product-thumb {
         width: 60px;
         height: 60px;
@@ -3665,40 +4021,499 @@
         border-radius: 8px;
         margin-right: 10px;
     }
-    
+
     .video-shorts-product-details {
         flex: 1;
     }
-    
+
     .video-shorts-product-details h4 {
         margin: 0 0 5px 0;
         font-size: 1rem;
         color: white;
     }
-    
+
     .video-shorts-product-details p {
         margin: 0;
         font-size: 0.9rem;
         color: #ccc;
     }
-    
+
     /* Video Shorts Player Like Button */
     .video-shorts-like.liked {
         color: #ff2d55;
     }
-    
+
     .video-shorts-like.liked i {
         color: #ff2d55;
         fill: #ff2d55;
     }
+
+    /* Amazon Style Category Showcase with Swiper */
+    .category-showcase-section {
+        margin: 60px 0;
+        position: relative;
+        padding: 0 15px;
+    }
+
+    .category-showcase-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 35px;
+        padding-left: 20px;
+        border-left: 6px solid #ef4444;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .amazon-swiper {
+        padding: 20px 10px 60px 10px !important;
+        overflow: visible !important;
+    }
+
+    .amazon-card-item {
+        height: auto;
+    }
+
+    .amazon-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 24px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .amazon-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        border-color: rgba(239, 68, 68, 0.6);
+        background: rgba(30, 41, 59, 0.9);
+    }
+
+    .amazon-card-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+
+    .amazon-quad-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .amazon-quad-item {
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .amazon-quad-img-wrapper {
+        aspect-ratio: 1/1;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #0f172a;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .amazon-quad-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    .amazon-quad-item:hover .amazon-quad-img {
+        transform: scale(1.15);
+    }
+
+    .amazon-quad-label {
+        font-size: 0.8rem;
+        color: #cbd5e1;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .amazon-card-link {
+        color: #ef4444;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: auto;
+        padding-top: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .amazon-card-link:hover {
+        color: #f87171;
+        transform: translateX(5px);
+    }
+
+    /* Category Showcase Swiper Styles */
+    .category-showcase-section {
+        margin: 60px 0;
+        position: relative;
+        padding: 0 15px;
+    }
+
+    .category-showcase-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 35px;
+        padding-left: 20px;
+        border-left: 6px solid #32c2e6;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .amazon-swiper {
+        padding: 20px 10px 60px 10px !important;
+        overflow: visible !important;
+    }
+
+    .amazon-card-item {
+        height: auto;
+    }
+
+    .amazon-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 24px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .amazon-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        border-color: rgba(140, 210, 238, 0.6);
+        background: rgba(30, 41, 59, 0.9);
+    }
+
+    .amazon-card-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+
+    .amazon-quad-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .amazon-quad-item {
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .amazon-quad-img-wrapper {
+        aspect-ratio: 1/1;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #0f172a;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .amazon-quad-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    .amazon-quad-item:hover .amazon-quad-img {
+        transform: scale(1.15);
+    }
+
+    .amazon-quad-label {
+        font-size: 0.8rem;
+        color: #cbd5e1;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .amazon-card-link {
+        color: #3ddef3;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: auto;
+        padding-top: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .amazon-card-link:hover {
+        color: #3ddef3;
+        transform: translateX(5px);
+    }
+
+    /* Mobile Perfection */
+    @media (max-width: 768px) {
+        .category-showcase-section {
+            margin: 40px 0;
+        }
+
+        .category-showcase-title {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+        }
+
+        .amazon-card {
+            padding: 18px;
+        }
+
+        .amazon-card-title {
+            font-size: 1.2rem;
+        }
+
+        .amazon-quad-grid {
+            gap: 12px;
+        }
+
+        .amazon-quad-label {
+            font-size: 0.75rem;
+        }
+    }
+
+    /* Swiper Responsive Adjustments */
+    @media (max-width: 576px) {
+        .category-showcase-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+
+        .amazon-card {
+            padding: 15px;
+        }
+
+        .amazon-card-title {
+            font-size: 1.1rem;
+        }
+
+        .amazon-quad-grid {
+            gap: 10px;
+        }
+
+        .amazon-quad-label {
+            font-size: 0.7rem;
+        }
+    }
+
+    .swiper-pagination-bullet {
+        background: rgba(255, 255, 255, 0.3) !important;
+        opacity: 1 !important;
+        width: 10px !important;
+        height: 10px !important;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: #1da4e2 !important;
+        width: 25px !important;
+        border-radius: 5px !important;
+    }
+
+    .navbar-brand:hover .brand-text {
+        color: #ffffff;
+        text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
+        /* Teal glow using your primary color */
+        transition: all 0.3s ease;
+    }
+
+    .navbar-brand:hover .logo-img {
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+
+    /* Mobile Navbar Optimization */
+    @media (max-width: 991px) {
+        .navbar-container {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            width: 100% !important;
+            padding: 0 5px !important;
+        }
+
+        .navbar-brand {
+            margin-right: 0 !important;
+            gap: 10px !important;
+            flex-shrink: 0;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .logo-img {
+            max-height: 40px !important;
+            width: auto !important;
+            flex-shrink: 0;
+        }
+
+        .brand-text {
+            font-size: 1.4rem !important;
+            display: inline-block !important;
+            color: #ffffff !important;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            white-space: nowrap !important;
+        }
+
+        .mobile-view {
+            display: flex !important;
+            align-items: center !important;
+            gap: 5px !important;
+            flex-shrink: 0;
+        }
+
+        .desktop-view {
+            display: none !important;
+        }
+
+        .btn-open-app {
+            padding: 4px 12px !important;
+            font-size: 0.85rem !important;
+            height: fit-content;
+        }
+    }
+
+
+    /* Custom Toggler Icon and Buttons */
+    .navbar-toggler {
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        padding: 5px 8px !important;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        width: 1.25em !important;
+        height: 1.25em !important;
+    }
+
+    .mobile-view .btn-outline-light {
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff !important;
+    }
+
+    .mobile-view .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .banner-section {
+    margin-bottom: 3rem;
+    padding: 3rem 0;
+    background: #00c7f7; /* Solid primary blue */
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 199, 247, 0.3);
+}
+
+.banner-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(0, 0, 0, 0.1) 0%, 
+        rgba(0, 0, 0, 0.2) 100%
+    ); /* Subtle dark overlay for depth */
+    pointer-events: none;
+    border-radius: 20px;
+}
+
+.banner-card {
+    background: transparent;
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    border: none;
+    box-shadow: none;
+}
+
+.banner-card h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffffff; /* Pure white text */
+    margin-bottom: 1rem;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.banner-card p {
+    font-size: 1.2rem;
+    color: #ffffff; /* Pure white text */
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.7;
+    opacity: 0.95;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .banner-section {
+        margin: 1rem;
+        border-radius: 16px;
+        padding: 2rem 0;
+    }
+    .banner-card {
+        padding: 2rem 1.5rem;
+    }
+    .banner-card h2 {
+        font-size: 2rem;
+    }
+    .banner-card p {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .banner-card h2 {
+        font-size: 1.7rem;
+    }
+    .banner-card p {
+        font-size: 1rem;
+    }
+}
 </style>
 
 <body>
     <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a href="{% url 'home' %}" class="navbar-brand">
-                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-06 at 12.18.37 PM.jpeg' %}" alt="Lumoskart Logo"
-                    class="d-inline-block align-middle" style="max-height: 50px; width: auto;">
+        <div class="container-fluid navbar-container">
+            <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                    alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                <span class="brand-text">LumosKart</span>
             </a>
 
             <div class="mobile-view d-flex align-items-center justify-content-end">
@@ -3706,7 +4521,7 @@
                     aria-controls="searchOffcanvas">
                     <i class="fas fa-search"></i>
                 </button>
-                <a href="{% url 'login' %}" class="btn btn-open-app mx-auto">Login</a>
+                <a href="{% url 'login' %}" class="btn btn-open-app">Login</a>
                 <button class="navbar-toggler ms-2" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
                     <span class="navbar-toggler-icon text-light"></span>
@@ -3719,10 +4534,14 @@
                         <input type="hidden" name="page" value="home">
                         <span class="search-icon"><i class="fas fa-search"></i></span>
                         <input type="text" name="q" class="form-control search-bar"
-                            placeholder="Search influencers, products..." data-placeholder-en="Search influencers, products..." data-placeholder-ar="ابحث عن المؤثرين أو المنتجات..." data-placeholder-hi="प्रभावकों या उत्पादों को खोजें..." value="{{ request.GET.q|default:'' }}"
-                            required>
+                            placeholder="Search influencers, products..."
+                            data-placeholder-en="Search influencers, products..."
+                            data-placeholder-ar="ابحث عن المؤثرين أو المنتجات..."
+                            data-placeholder-hi="प्रभावकों या उत्पादों को खोजें..."
+                            value="{{ request.GET.q|default:'' }}" required>
                         {% if request.GET.q %}
-                        <a href="{% url 'home' %}" class="btn btn-outline-light ms-2" data-en="Clear" data-ar="مسح" data-hi="साफ़ करें">Clear</a>
+                        <a href="{% url 'home' %}" class="btn btn-outline-light ms-2" data-en="Clear" data-ar="مسح"
+                            data-hi="साफ़ करें">Clear</a>
                         {% endif %}
                     </form>
                 </div>
@@ -3747,41 +4566,53 @@
                             <i class="fas fa-exchange-alt me-1"></i> <span id="currentCurrency">INR (₹)</span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="INR" data-symbol="₹">India (INR)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="AED" data-symbol="د.إ">UAE (AED)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="SGD" data-symbol="$">Singapore (SGD)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="PHP" data-symbol="₱">Philippines (PHP)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="USD" data-symbol="$">USA (USD)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="EUR" data-symbol="€">Germany (EUR)</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-currency="IDR" data-symbol="Rp">Indonesia (IDR)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="INR"
+                                    data-symbol="₹">India (INR)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="AED"
+                                    data-symbol="د.إ">UAE (AED)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="SGD"
+                                    data-symbol="$">Singapore (SGD)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="PHP"
+                                    data-symbol="₱">Philippines (PHP)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="USD"
+                                    data-symbol="$">USA (USD)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="EUR"
+                                    data-symbol="€">Germany (EUR)</a></li>
+                            <li><a class="dropdown-item currency-option" href="#" data-currency="IDR"
+                                    data-symbol="Rp">Indonesia (IDR)</a></li>
                         </ul>
                     </div>
-                    <a href="{% url 'register_customer' %}" class="btn btn-signup" data-en="Sign up" data-ar="اشتراك" data-hi="साइन अप करें"><span class="btn-text">Sign up</span></a>
-                    <a href="{% url 'login' %}" class="btn btn-login" data-en="Log in" data-ar="تسجيل الدخول" data-hi="लॉग इन करें"><span class="btn-text">Log in</span></a>
-                    <!--{% if user.is_staff %}-->
-                    <!--<a href="{% url 'admin_dashboard' %}" class="btn btn-outline-light ms-2">Admin</a>-->
-                    <!--{% endif %}-->
+                    <a href="{% url 'register_customer' %}" class="btn btn-signup" data-en="Sign up" data-ar="اشتراك"
+                        data-hi="साइन अप करें"><span class="btn-text">Sign up</span></a>
+                    <a href="{% url 'login' %}" class="btn btn-login" data-en="Log in" data-ar="تسجيل الدخول"
+                        data-hi="लॉग इन करें"><span class="btn-text">Log in</span></a>
                 </div>
             </div>
         </div>
     </nav>
-  <!-- Off-canvas Menu for Mobile/Tablet -->
+    <!-- Off-canvas Menu for Mobile/Tablet -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
         <div class="offcanvas-header" style="background-color: #1e293b;">
             <h5 class="offcanvas-title" id="navbarOffcanvasLabel">
-                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-06 at 12.18.37 PM.jpeg' %}" alt="Lumoskart Logo"
-                    class="d-inline-block align-middle" style="max-height: 40px; width: auto;">
+                <div class="navbar-brand d-flex align-items-center gap-2">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                    <span class="brand-text" style="font-size: 1.4rem;">LumosKart</span>
+                </div>
             </h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
                 aria-label="Close"></button>
         </div>
         <div class="offcanvas-body" style="background-color: #0f172a;">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}" data-en="Home" data-ar="الرئيسية" data-hi="होम"><i
-                            class="fas fa-home me-2"></i><span class="nav-text">Home</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}" data-en="About" data-ar="من نحن" data-hi="हमारे बारे में"><i
-                            class="fas fa-info-circle me-2"></i><span class="nav-text">About</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}" data-en="Support" data-ar="الدعم" data-hi="सहायता"><i class="fas fa-headset me-2"></i><span class="nav-text">Support</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}" data-en="Home" data-ar="الرئيسية"
+                        data-hi="होम"><i class="fas fa-home me-2"></i><span class="nav-text">Home</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}" data-en="About" data-ar="من نحن"
+                        data-hi="हमारे बारे में"><i class="fas fa-info-circle me-2"></i><span
+                            class="nav-text">About</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}" data-en="Support" data-ar="الدعم"
+                        data-hi="सहायता"><i class="fas fa-headset me-2"></i><span class="nav-text">Support</span></a>
+                </li>
                 <!-- Language Selection in Mobile Menu -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="mobileLanguageDropdown" role="button"
@@ -3801,32 +4632,48 @@
                         <i class="fas fa-exchange-alt me-2"></i> <span id="mobileCurrentCurrency">INR (₹)</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="mobileCurrencyDropdown">
-                        <li><a class="dropdown-item currency-option" href="#" data-currency="INR" data-symbol="₹">India (INR)</a></li>
-                        <li><a class="dropdown-item currency-option" href="#" data-currency="AED" data-symbol="د.إ">UAE (AED)</a></li>
-                        <li><a class="dropdown-item currency-option" href="#" data-currency="SGD" data-symbol="$">Singapore (SGD)</a></li>
-                        <li><a class="dropdown-item currency-option" href="#" data-currency="PHP" data-symbol="₱">Philippines (PHP)</a></li>
-                        <li><a class="dropdown-item currency-option" href="#" data-currency="USD" data-symbol="$">USA (USD)</a></li>
-                        <li><a class="dropdown-item currency-option" href="#" data-currency="EUR" data-symbol="€">Germany (EUR)</a></li>
-                        <li><a class="dropdown-item currency-option" href="#" data-currency="IDR" data-symbol="Rp">Indonesia (IDR)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="INR" data-symbol="₹">India
+                                (INR)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="AED" data-symbol="د.إ">UAE
+                                (AED)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="SGD"
+                                data-symbol="$">Singapore (SGD)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="PHP"
+                                data-symbol="₱">Philippines (PHP)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="USD" data-symbol="$">USA
+                                (USD)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="EUR"
+                                data-symbol="€">Germany (EUR)</a></li>
+                        <li><a class="dropdown-item currency-option" href="#" data-currency="IDR"
+                                data-symbol="Rp">Indonesia (IDR)</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'register_customer' %}" data-en="Sign up" data-ar="اشتراك" data-hi="साइन अप करें"><i
-                            class="fas fa-user me-2"></i><span class="nav-text">Sign up</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}" data-en="Log in" data-ar="تسجيل الدخول" data-hi="लॉग इन करें"><i
-                            class="fas fa-sign-in-alt me-2"></i><span class="nav-text">Log in</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'order_tracking' %}" data-en="Order Tracking" data-ar="تتبع الطلب" data-hi="ऑर्डर ट्रैकिंग"><i
-                            class="fas fa-box me-2"></i><span class="nav-text">Order Tracking</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register_customer' %}" data-en="Sign up"
+                        data-ar="اشتراك" data-hi="साइन अप करें"><i class="fas fa-user me-2"></i><span
+                            class="nav-text">Sign up</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}" data-en="Log in"
+                        data-ar="تسجيل الدخول" data-hi="लॉग इन करें"><i class="fas fa-sign-in-alt me-2"></i><span
+                            class="nav-text">Log in</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'order_tracking' %}" data-en="Order Tracking"
+                        data-ar="تتبع الطلب" data-hi="ऑर्डर ट्रैकिंग"><i class="fas fa-box me-2"></i><span
+                            class="nav-text">Order Tracking</span></a></li>
                 <!-- Moved Premium option here as a sub-section under Sign Up -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Sign up as an Influencer" data-ar="التسجيل كمؤثر" data-hi="एक प्रभावक के रूप में साइन अप करें"><i class="fas fa-user-plus me-2"></i><span class="nav-text">Sign
-                        up as an Influencer</span></a>
+                    <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Sign up as an Influencer"
+                        data-ar="التسجيل كمؤثر" data-hi="एक प्रभावक के रूप में साइन अप करें"><i
+                            class="fas fa-user-plus me-2"></i><span class="nav-text">Sign
+                            up as an Influencer</span></a>
                     <ul class="nav flex-column ms-4">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Premium" data-ar="مميز" data-hi="प्रीमियम"><i class="fas fa-crown me-2"></i><span class="nav-text">Premium</span></a>
-                        </li>
+                        <!--<li class="nav-item">-->
+                        <!--    <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Premium" data-ar="مميز"-->
+                        <!--        data-hi="प्रीमियम"><i class="fas fa-crown me-2"></i><span-->
+                        <!--            class="nav-text">Premium</span></a>-->
+                        <!--</li>-->
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" data-en="Logout" data-ar="تسجيل الخروج" data-hi="लॉग आउट"><i class="fas fa-sign-out-alt me-2"></i><span class="nav-text">Logout</span></a>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" data-en="Logout"
+                        data-ar="تسجيل الخروج" data-hi="लॉग आउट"><i class="fas fa-sign-out-alt me-2"></i><span
+                            class="nav-text">Logout</span></a>
                 </li>
 
             </ul>
@@ -3843,7 +4690,11 @@
             <form action="{% url 'search' %}" method="get" class="d-flex align-items-center w-100">
                 <input type="hidden" name="page" value="home">
                 <input type="text" name="q" class="form-control search-bar"
-                    placeholder="Search influencers or products..." data-placeholder-en="Search influencers or products..." data-placeholder-ar="ابحث عن المؤثرين أو المنتجات..." data-placeholder-hi="प्रभावकों या उत्पादों को खोजें..." value="{{ request.GET.q|default:'' }}" required>
+                    placeholder="Search influencers or products..."
+                    data-placeholder-en="Search influencers or products..."
+                    data-placeholder-ar="ابحث عن المؤثرين أو المنتجات..."
+                    data-placeholder-hi="प्रभावकों या उत्पादों को खोजें..." value="{{ request.GET.q|default:'' }}"
+                    required>
                 <button type="submit" class="btn btn-primary ms-2">
                     <i class="fas fa-search"></i>
                 </button>
@@ -3856,10 +4707,16 @@
         <!-- Search Results Feedback -->
         {% if request.GET.q %}
         <div class="search-results-feedback mb-4">
-            <p data-en="Showing results for \"{{ request.GET.q }}\": {{ products|length }} products, {{ influencers|length }} influencers" data-ar="عرض النتائج لـ \"{{ request.GET.q }}\": {{ products|length }} منتجات، {{ influencers|length }} مؤثرون" data-hi="\"{{ request.GET.q }}\" के लिए परिणाम दिखा रहा है: {{ products|length }} उत्पाद, {{ influencers|length }} प्रभावक">Showing results for "{{ request.GET.q }}": {{ products|length }} products, {{ influencers|length }}
+            <p data-en="Showing results for \" {{ request.GET.q }}\": {{ products|length }} products, {{
+                influencers|length }} influencers" data-ar="عرض النتائج لـ \" {{ request.GET.q }}\": {{ products|length
+                }} منتجات، {{ influencers|length }} مؤثرون" data-hi="\" {{ request.GET.q }}\" के लिए परिणाम दिखा रहा है:
+                {{ products|length }} उत्पाद, {{ influencers|length }} प्रभावक">Showing results for "{{ request.GET.q
+                }}": {{ products|length }} products, {{ influencers|length }}
                 influencers</p>
             {% if not products and not influencers %}
-            <p data-en="No results found. Try a different search term." data-ar="لا توجد نتائج. حاول مصطلح بحث مختلف." data-hi="कोई परिणाम नहीं मिला। कोई अलग खोज शब्द आज़माएं।">No results found. Try a different search term.</p>
+            <p data-en="No results found. Try a different search term." data-ar="لا توجد نتائج. حاول مصطلح بحث مختلف."
+                data-hi="कोई परिणाम नहीं मिला। कोई अलग खोज शब्द आज़माएं।">No results found. Try a different search term.
+            </p>
             {% endif %}
         </div>
         {% endif %}
@@ -3867,16 +4724,23 @@
         <!-- Banner Section -->
         <div class="banner-section">
             <div class="banner-card">
-                <h2 data-en="Discover Amazing Products" data-ar="اكتشف منتجات رائعة" data-hi="शानदार उत्पाद खोजें">Discover Amazing Products</h2>
-                <p data-en="Browse through our curated selection of products promoted by top influencers" data-ar="تصفح اختيارنا المنسق من المنتجات المقدمة من المؤثرين الرائدين" data-hi="शीर्ष प्रभावकों द्वारा संसोर्ट किए गए उत्पादों के हमारे चयनित संग्रह को ब्राउज़ करें">Browse through our curated selection of products promoted by top influencers</p>
+                <h2 data-en="Discover Amazing Products" data-ar="اكتشف منتجات رائعة" data-hi="शानदार उत्पाद खोजें">
+                    Discover Amazing Products</h2>
+                <p data-en="Browse through our curated selection of products promoted by top influencers"
+                    data-ar="تصفح اختيارنا المنسق من المنتجات المقدمة من المؤثرين الرائدين"
+                    data-hi="शीर्ष प्रभावकों द्वारा संसोर्ट किए गए उत्पादों के हमारे चयनित संग्रह को ब्राउज़ करें">
+                    Browse through our curated selection of products promoted by top influencers</p>
             </div>
         </div>
+
+
 
         <!-- Featured Influencers -->
         <section class="artist-section">
             <div class="section-title-bar mb-4">
                 <h2 data-en="Influencers" data-ar="المؤثرون" data-hi="प्रभावक"> Influencers</h2>
-                <a href="{% url 'influencer_list' %}" class="view-all-btn" data-en="Show all" data-ar="عرض الكل" data-hi="सभी दिखाएं">Show all</a>
+                <a href="{% url 'influencer_list' %}" class="view-all-btn" data-en="Show all" data-ar="عرض الكل"
+                    data-hi="सभी दिखाएं">Show all</a>
             </div>
             <div class="influencers-section">
                 <div class="swiper influencers-swiper">
@@ -3887,12 +4751,14 @@
                             <a href="{% url 'view_influencer_detail' influencer.id %}" class="influencer-card">
                                 <div class="influencer-img">
                                     {% if influencer.influencer_profile.photo %}
-                                    <img src="{{ influencer.influencer_profile.photo.url }}" alt="{{ influencer.username }}">
+                                    <img src="{{ influencer.influencer_profile.photo.url }}"
+                                        alt="{{ influencer.username }}">
                                     {% else %}
                                     <img src="{% static 'images/default_profile.png' %}" alt="Default profile">
                                     {% endif %}
                                 </div>
-                                <h3 class="influencer-name">{{ influencer.get_full_name|default:influencer.username }}</h3>
+                                <h3 class="influencer-name">{{ influencer.get_full_name|default:influencer.username }}
+                                </h3>
                                 <p class="product-count">{{ influencer.products.count }} Products</p>
                             </a>
                         </div>
@@ -3900,7 +4766,8 @@
                         {% empty %}
                         <div class="swiper-slide">
                             <div class="empty-state">
-                                <p data-en="No influencers registered yet." data-ar="لا يوجد مؤثرون مسجلون بعد." data-hi="अभी तक कोई प्रभावक पंजीकृत नहीं है।">No influencers registered yet.</p>
+                                <p data-en="No influencers registered yet." data-ar="لا يوجد مؤثرون مسجلون بعد."
+                                    data-hi="अभी तक कोई प्रभावक पंजीकृत नहीं है।">No influencers registered yet.</p>
                             </div>
                         </div>
                         {% endfor %}
@@ -3912,6 +4779,216 @@
         </section>
 
 
+        <!-- Category Showcase Swiper Section (Amazon Style) -->
+        <section class="category-showcase-section">
+            <h2 class="category-showcase-title" data-en="Shop by Category" data-ar="تسوق حسب الفئة"
+                data-hi="श्रेणी के अनुसार खरीदारी करें">Shop by Category</h2>
+
+            <div class="swiper amazon-swiper">
+                <div class="swiper-wrapper">
+                    <!-- Category 1: Fashion -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Latest in Fashion</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=shirt" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/457e9ae6e5436125a6cda19a9fa01dc0.jpg' %}"
+                                            class="amazon-quad-img" alt="Shirts">
+                                    </div>
+                                    <span class="amazon-quad-label">Shirts</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=t-shirt" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
+                                            class="amazon-quad-img" alt="T-Shirts">
+                                    </div>
+                                    <span class="amazon-quad-label">T-Shirts</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=dress" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/9b6814ab4ea603641233ee7f1e4f4bef.jpg' %}"
+                                            class="amazon-quad-img" alt="Dresses">
+                                    </div>
+                                    <span class="amazon-quad-label">Dresses</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=shoes" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
+                                            class="amazon-quad-img" alt="Shoes">
+                                    </div>
+                                    <span class="amazon-quad-label">Shoes</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Explore Fashion <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Category 2: Electronics -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Top Electronics</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=mobile" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/5663f38bb21ad810f2772fff8d49d2a6 (1).jpg' %}"
+                                            class="amazon-quad-img" alt="Mobiles">
+                                    </div>
+                                    <span class="amazon-quad-label">Mobiles</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=laptop" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/2a5be5560e281c7438851cae8dde2074.jpg' %}"
+                                            class="amazon-quad-img" alt="Laptops">
+                                    </div>
+                                    <span class="amazon-quad-label">Laptops</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=headphones" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/896464c0d818a2e8182cd48e98e580ee.jpg' %}"
+                                            class="amazon-quad-img" alt="Audio">
+                                    </div>
+                                    <span class="amazon-quad-label">Audio</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=watch" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/a7773c266513b1c4384baf5d5c26e556.jpg' %}"
+                                            class="amazon-quad-img" alt="Watches">
+                                    </div>
+                                    <span class="amazon-quad-label">Watches</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Gadget Hub <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Category 3: Beauty & Care -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Beauty & Care</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=skincare" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/457e9ae6e5436125a6cda19a9fa01dc0.jpg' %}"
+                                            class="amazon-quad-img" alt="Skincare">
+                                    </div>
+                                    <span class="amazon-quad-label">Skincare</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=makeup" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
+                                            class="amazon-quad-img" alt="Makeup">
+                                    </div>
+                                    <span class="amazon-quad-label">Makeup</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=fragrance" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/9b6814ab4ea603641233ee7f1e4f4bef.jpg' %}"
+                                            class="amazon-quad-img" alt="Fragrance">
+                                    </div>
+                                    <span class="amazon-quad-label">Perfumes</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=haircare" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
+                                            class="amazon-quad-img" alt="Haircare">
+                                    </div>
+                                    <span class="amazon-quad-label">Haircare</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Beauty Boutique <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Category 4: Home & Kitchen -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Home & Kitchen</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=decor" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/5663f38bb21ad810f2772fff8d49d2a6 (1).jpg' %}"
+                                            class="amazon-quad-img" alt="Decor">
+                                    </div>
+                                    <span class="amazon-quad-label">Decor</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=furniture" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/2a5be5560e281c7438851cae8dde2074.jpg' %}"
+                                            class="amazon-quad-img" alt="Furniture">
+                                    </div>
+                                    <span class="amazon-quad-label">Living</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=cookware" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/896464c0d818a2e8182cd48e98e580ee.jpg' %}"
+                                            class="amazon-quad-img" alt="Cookware">
+                                    </div>
+                                    <span class="amazon-quad-label">Kitchen</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=appliances" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/a7773c266513b1c4384baf5d5c26e556.jpg' %}"
+                                            class="amazon-quad-img" alt="Appliances">
+                                    </div>
+                                    <span class="amazon-quad-label">Smart Home</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Upgrade Home <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Category 5: Sports & Fitness -->
+                    <div class="swiper-slide amazon-card-item">
+                        <div class="amazon-card">
+                            <h3 class="amazon-card-title">Sports & Fitness</h3>
+                            <div class="amazon-quad-grid">
+                                <a href="{% url 'product_lists' %}?search=gym" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/457e9ae6e5436125a6cda19a9fa01dc0.jpg' %}"
+                                            class="amazon-quad-img" alt="Gym Wear">
+                                    </div>
+                                    <span class="amazon-quad-label">Training</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=equipment" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/8186fa2e6e60c6776e032a5046836538.jpg' %}"
+                                            class="amazon-quad-img" alt="Equipment">
+                                    </div>
+                                    <span class="amazon-quad-label">Gear</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=yoga" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/9b6814ab4ea603641233ee7f1e4f4bef.jpg' %}"
+                                            class="amazon-quad-img" alt="Yoga">
+                                    </div>
+                                    <span class="amazon-quad-label">Yoga</span>
+                                </a>
+                                <a href="{% url 'product_lists' %}?search=sneakers" class="amazon-quad-item">
+                                    <div class="amazon-quad-img-wrapper">
+                                        <img src="{% static 'accounts/images/f7445a302775880f5d607a78ca69a8e3.jpg' %}"
+                                            class="amazon-quad-img" alt="Sneakers">
+                                    </div>
+                                    <span class="amazon-quad-label">Sneakers</span>
+                                </a>
+                            </div>
+                            <a href="{% url 'product_lists' %}" class="amazon-card-link">Fitness Hub <i
+                                    class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Swiper dots -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+
+
 
         <!-- Products by Category (Amazon/Flipkart Style) -->
         {% for category, category_products in products_by_category.items %}
@@ -3919,80 +4996,89 @@
             <div class="section-title-bar">
                 <div>
                     <h2>{{ category.name }}</h2>
-                    <p class="category-description" data-en="Explore our collection of {{ category.name|lower }}" data-ar="استكشف مجموعتنا من {{ category.name|lower }}" data-hi="{{ category.name|lower }} के हमारे संग्रह का पता लगाएं">Explore our collection of {{ category.name|lower }}</p>
+                    <p class="category-description" data-en="Explore our collection of {{ category.name|lower }}"
+                        data-ar="استكشف مجموعتنا من {{ category.name|lower }}"
+                        data-hi="{{ category.name|lower }} के हमारे संग्रह का पता लगाएं">Explore our collection of {{
+                        category.name|lower }}</p>
                 </div>
-                <a href="{% url 'product_lists' %}?category={{ category.id }}" class="view-all-btn" data-en="View All {{ category.name }}" data-ar="عرض الكل {{ category.name }}" data-hi="सभी {{ category.name }} देखें">View All {{
+                <a href="{% url 'product_lists' %}?category={{ category.id }}" class="view-all-btn"
+                    data-en="View All {{ category.name }}" data-ar="عرض الكل {{ category.name }}"
+                    data-hi="सभी {{ category.name }} देखें">View All {{
                     category.name }}</a>
             </div>
             <div class="products-grid">
                 {% for product in category_products %}
                 <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
-                <div class="product-card" data-product-id="{{ product.id }}"
-                    data-category-id="{{ product.category.id|default:'0' }}">
-                    <div class="product-img-wrapper">
-                        {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                        {% else %}
-                        <img src="{% static 'images/product-placeholder.jpg' %}" alt="Product Image">
-                        {% endif %}
+                    <div class="product-card" data-product-id="{{ product.id }}"
+                        data-category-id="{{ product.category.id|default:'0' }}">
+                        <div class="product-img-wrapper">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                            <img src="{% static 'images/product-placeholder.jpg' %}" alt="Product Image">
+                            {% endif %}
 
-                        <!-- Category Badge -->
-                        <div class="category-badge">{{ product.category.name }}</div>
+                            <!-- Category Badge -->
+                            <div class="category-badge">{{ product.category.name }}</div>
 
-                        {% if product.influencer %}
-                        <div class="promoted-badge">{{ product.influencer.username|upper }}</div>
-                        {% endif %}
-                    </div>
-
-                    <div class="product-details">
-                        <h3 class="product-title">{{ product.name }}</h3>
-
-                        <!-- Influencer Name -->
-                        {% if product.influencer %}
-                        <p class="product-influencer">{{ product.influencer.username }}</p>
-                        {% endif %}
-
-                        <!-- Product Description -->
-                        {% if product.description %}
-                        <p class="product-description">{{ product.description|truncatewords:15 }}</p>
-                        {% endif %}
-
-                        <!-- Size Information -->
-                        {% if product.size %}
-                        <div class="product-size-info">
-                            <i class="fas fa-ruler-combined"></i>
-                            <span>Size: {{ product.size }}</span>
+                            {% if product.influencer %}
+                            <div class="promoted-badge">{{ product.influencer.username|upper }}</div>
+                            {% endif %}
                         </div>
-                        {% endif %}
 
-                        <!-- Optional rating -->
-                        {% if product.rating %}
-                        <div class="rating">
-                            {% for i in "12345" %}
-                            {% if forloop.counter <= product.rating %} <span class="star filled">★</span>
-                                {% else %}
-                                <span class="star">☆</span>
-                                {% endif %}
-                                {% endfor %}
-                                <span class="rating-count">({{ product.rating }})</span>
-                        </div>
-                        {% endif %}
+                        <div class="product-details">
+                            <h3 class="product-title">{{ product.name }}</h3>
 
-                        <div class="product-footer">
-                            <div class="price-section">
-                                <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{ product.price }}</span>
-                                {% if product.original_price %}
-                                <span class="original-price" data-price="{{ product.original_price }}" data-currency="INR">₹{{ product.original_price }}</span>
-                                <span class="discount-badge">{% widthratio product.price product.original_price 100 %}%
-                                    OFF</span>
-                                {% endif %}
+                            <!-- Influencer Name -->
+                            {% if product.influencer %}
+                            <p class="product-influencer">{{ product.influencer.username }}</p>
+                            {% endif %}
+
+                            <!-- Product Description -->
+                            {% if product.description %}
+                            <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                            {% endif %}
+
+                            <!-- Size Information -->
+                            {% if product.size %}
+                            <div class="product-size-info">
+                                <i class="fas fa-ruler-combined"></i>
+                                <span>Size: {{ product.size }}</span>
                             </div>
-                            <button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist" data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">
-                                <i class="fas fa-heart"></i>
-                            </button>
+                            {% endif %}
+
+                            <!-- Optional rating -->
+                            {% if product.rating %}
+                            <div class="rating">
+                                {% for i in "12345" %}
+                                {% if forloop.counter <= product.rating %} <span class="star filled">★</span>
+                                    {% else %}
+                                    <span class="star">☆</span>
+                                    {% endif %}
+                                    {% endfor %}
+                                    <span class="rating-count">({{ product.rating }})</span>
+                            </div>
+                            {% endif %}
+
+                            <div class="product-footer">
+                                <div class="price-section">
+                                    <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{
+                                        product.price }}</span>
+                                    {% if product.original_price %}
+                                    <span class="original-price" data-price="{{ product.original_price }}"
+                                        data-currency="INR">₹{{ product.original_price }}</span>
+                                    <span class="discount-badge">{% widthratio product.price product.original_price 100
+                                        %}%
+                                        OFF</span>
+                                    {% endif %}
+                                </div>
+                                <button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"
+                                    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </a>
                 {% endfor %}
             </div>
@@ -4002,71 +5088,75 @@
         <section class="artist-section">
             <div class="section-title-bar">
                 <h2 data-en="Products" data-ar="المنتجات" data-hi="उत्पाद"> Products</h2>
-                <a href="{% url 'product_lists' %}" class="view-all-btn" data-en="View More" data-ar="عرض المزيد" data-hi="और देखें">View More</a>
+                <a href="{% url 'product_lists' %}" class="view-all-btn" data-en="View More" data-ar="عرض المزيد"
+                    data-hi="और देखें">View More</a>
             </div>
             <div class="products-grid">
                 {% for product in products %}
                 <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
-                <div class="product-card" data-product-id="{{ product.id }}"
-                    data-category-id="{{ product.category.id|default:'0' }}">
-                    <div class="product-img-wrapper">
-                        {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                        {% else %}
-                        <img src="{% static 'images/product-placeholder.jpg' %}" alt="Product Image">
-                        {% endif %}
+                    <div class="product-card" data-product-id="{{ product.id }}"
+                        data-category-id="{{ product.category.id|default:'0' }}">
+                        <div class="product-img-wrapper">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                            <img src="{% static 'images/product-placeholder.jpg' %}" alt="Product Image">
+                            {% endif %}
 
-                        {% if product.category %}
-                        <div class="category-badge">{{ product.category.name }}</div>
-                        {% endif %}
+                            {% if product.category %}
+                            <div class="category-badge">{{ product.category.name }}</div>
+                            {% endif %}
 
-                        {% if product.influencer %}
-                        <div class="promoted-badge">{{ product.influencer.username|upper }}</div>
-                        {% endif %}
+                            {% if product.influencer %}
+                            <div class="promoted-badge">{{ product.influencer.username|upper }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="product-details">
+                            <h3 class="product-title">{{ product.name }}</h3>
+
+                            <!-- Influencer Name -->
+                            {% if product.influencer %}
+                            <p class="product-influencer">{{ product.influencer.username }}</p>
+                            {% endif %}
+
+                            {% if product.description %}
+                            <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                            {% endif %}
+
+                            {% if product.size %}
+                            <div class="product-size-info">
+                                <i class="fas fa-ruler-combined"></i>
+                                <span>Size: {{ product.size }}</span>
+                            </div>
+                            {% endif %}
+
+                            {% if product.rating %}
+                            <div class="rating">
+                                {% for i in "12345" %}
+                                {% if forloop.counter <= product.rating %} <span class="star filled">★</span>
+                                    {% else %}
+                                    <span class="star">☆</span>
+                                    {% endif %}
+                                    {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            <div class="product-footer">
+                                <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{
+                                    product.price }}</span>
+                                <button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"
+                                    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="product-details">
-                        <h3 class="product-title">{{ product.name }}</h3>
-
-                        <!-- Influencer Name -->
-                        {% if product.influencer %}
-                        <p class="product-influencer">{{ product.influencer.username }}</p>
-                        {% endif %}
-
-                        {% if product.description %}
-                        <p class="product-description">{{ product.description|truncatewords:15 }}</p>
-                        {% endif %}
-
-                        {% if product.size %}
-                        <div class="product-size-info">
-                            <i class="fas fa-ruler-combined"></i>
-                            <span>Size: {{ product.size }}</span>
-                        </div>
-                        {% endif %}
-
-                        {% if product.rating %}
-                        <div class="rating">
-                            {% for i in "12345" %}
-                            {% if forloop.counter <= product.rating %} <span class="star filled">★</span>
-                                {% else %}
-                                <span class="star">☆</span>
-                                {% endif %}
-                                {% endfor %}
-                        </div>
-                        {% endif %}
-
-                        <div class="product-footer">
-                            <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{ product.price }}</span>
-                            <button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist" data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">
-                                <i class="fas fa-heart"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
                 </a>
                 {% empty %}
                 <div class="empty-state">
-                    <p data-en="No products available." data-ar="لا توجد منتجات متاحة." data-hi="कोई उत्पाद उपलब्ध नहीं है।">No products available.</p>
+                    <p data-en="No products available." data-ar="لا توجد منتجات متاحة."
+                        data-hi="कोई उत्पाद उपलब्ध नहीं है।">No products available.</p>
                 </div>
                 {% endfor %}
             </div>
@@ -4077,7 +5167,10 @@
         <section class="video-shorts-section">
             <div class="section-header">
                 <h2 class="section-title" data-en="Videos" data-ar="فيديوهات" data-hi="वीडियो">Videos</h2>
-                <p class="section-description" data-en="Watch engaging videos from our top influencers" data-ar="شاهد مقاطع الفيديو الممتعة من مؤثرينا الأعلى" data-hi="हमारे शीर्ष प्रभावकों से आकर्षक वीडियो देखें">Watch engaging videos from our top influencers</p>
+                <p class="section-description" data-en="Watch engaging videos from our top influencers"
+                    data-ar="شاهد مقاطع الفيديو الممتعة من مؤثرينا الأعلى"
+                    data-hi="हमारे शीर्ष प्रभावकों से आकर्षक वीडियो देखें">Watch engaging videos from our top
+                    influencers</p>
             </div>
 
             {% if reels_videos %}
@@ -4094,12 +5187,13 @@
 
                     <!-- Video Background -->
                     <a href="javascript:void(0);" class="text-decoration-none video-shorts-item"
-                        data-video-id="{{ video.id }}" data-video-url="{{ video.video_file.url }}" data-video-title="{{ video.title }}"
-                        data-video-influencer="{{ video.influencer.username }}"
+                        data-video-id="{{ video.id }}" data-video-url="{{ video.video_file.url }}"
+                        data-video-title="{{ video.title }}" data-video-influencer="{{ video.influencer.username }}"
                         data-video-influencer-id="{{ video.influencer.id }}"
                         data-video-likes="{{ video.likes|default:0 }}" data-video-views="{{ video.views|default:0 }}"
                         data-video-products='{% for prod in video.products.all %}{"id": {{ prod.id }}, "name": "{{ prod.name }}", "price": {{ prod.price }}, "currency": "INR", "image": "{{ prod.image.url|default:"" }}", "influencer_id": {{ video.influencer.id }}}{% if not forloop.last %},{% endif %}{% endfor %}'>
-                        <video class="w-100 h-100 object-fit-cover" muted autoplay loop playsinline preload="metadata" volume="0">
+                        <video class="w-100 h-100 object-fit-cover" muted autoplay loop playsinline preload="metadata"
+                            volume="0">
                             <source src="{{ video.video_file.url }}#t=0.1" type="video/mp4">
                         </video>
 
@@ -4110,9 +5204,7 @@
                         <div class="reel-video-info">
                             <h6 class="reel-video-title">{{ video.title|truncatewords:6 }}</h6>
                             <p class="reel-video-influencer">@{{ video.influencer.username }}</p>
-                            {% if video.influencer.influencer_profile and video.influencer.influencer_profile.bio %}
-                            <p class="reel-video-description">{{ video.influencer.influencer_profile.bio|truncatewords:10 }}</p>
-                            {% endif %}
+                            
                         </div>
 
                         {% if product %}
@@ -4129,8 +5221,10 @@
                             <div class="reel-product-info">
                                 <div class="reel-product-name">{{ product.name }}</div>
                                 <div class="reel-product-price-row">
-                                    <span class="reel-current-price" data-price="{{ product.price }}" data-currency="INR">₹{{ product.price }}</span>
-                                    <span class="reel-original-price" data-price="{% widthratio product.price 4 10 %}" data-currency="INR">₹{% widthratio product.price 4 10 %}</span>
+                                    <span class="reel-current-price" data-price="{{ product.price }}"
+                                        data-currency="INR">₹{{ product.price }}</span>
+                                    <span class="reel-original-price" data-price="{% widthratio product.price 4 10 %}"
+                                        data-currency="INR">₹{% widthratio product.price 4 10 %}</span>
                                 </div>
                             </div>
                         </div>
@@ -4140,7 +5234,8 @@
                     <!-- Add to Cart / Buy Now Bar -->
                     {% if product %}
                     <a href="{% url 'view_influencer_products' product.influencer.id %}"
-                        class="reel-add-to-cart-bar buy-now-btn" data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">
+                        class="reel-add-to-cart-bar buy-now-btn" data-en="Buy Now" data-ar="اشتري الآن"
+                        data-hi="अभी खरीदें">
                         <span class="btn-text">Buy Now</span> <i class="fas fa-caret-down"></i>
                     </a>
                     {% else %}
@@ -4158,108 +5253,70 @@
             {% else %}
             <div class="empty-state">
                 <h4 data-en="No Reels Yet" data-ar="لا توجد مقاطع بعد" data-hi="अभी तक कोई रील्स नहीं">No Reels Yet</h4>
-                <p data-en="Be the first influencer to post!" data-ar="كن أول مؤثر ينشر!" data-hi="पोस्ट करने वाले पहले प्रभावक बनें!">Be the first influencer to post!</p>
+                <p data-en="Be the first influencer to post!" data-ar="كن أول مؤثر ينشر!"
+                    data-hi="पोस्ट करने वाले पहले प्रभावक बनें!">Be the first influencer to post!</p>
             </div>
             {% endif %}
         </section>
 
-        <!-- Instagram-style Video Player Modal -->
+        <!-- Video Shorts Player Modal (Instagram Reels Style) -->
         <div class="video-shorts-player">
             <div class="video-shorts-content">
                 <div class="video-shorts-video-container">
-                    <video class="video-shorts-video" muted playsinline controls volume="0"></video>
-                    <div class="video-shorts-overlay">
-                        <div class="video-shorts-header">
-                            <div class="video-shorts-title"></div>
-                            <button class="video-shorts-close">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="video-shorts-product-info">
-                            <h3 class="video-shorts-product-name"></h3>
-                            <p class="video-shorts-influencer"></p>
-                            <p class="video-shorts-description"></p>
-                        </div>
-                        <div class="video-shorts-products"></div>
-                        <div class="video-shorts-actions">
-                           
-                            
-                        </div>
-                    </div>
-                    <div class="video-shorts-pagination">
-                        <div class="video-shorts-pagination-dot active"></div>
-                        <div class="video-shorts-pagination-dot"></div>
-                        <div class="video-shorts-pagination-dot"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    <video class="video-shorts-video" muted playsinline loop></video>
 
-        <!-- Video Shorts Player Modal -->
-        <div class="video-shorts-player">
-            <div class="video-shorts-content">
-                <div class="video-shorts-video-container">
-                    <video class="video-shorts-video" muted playsinline controls volume="0"></video>
-                    <div class="video-shorts-overlay">
-                        <div class="video-shorts-header">
-                            <div class="video-shorts-title"></div>
-                            <button class="video-shorts-close">
-                                <i class="fas fa-times"></i>
+                    <!-- Close Button -->
+                    <button class="video-shorts-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+
+                    <!-- Right Sidebar Actions -->
+                    <div class="video-shorts-actions-sidebar">
+                        <div class="action-item">
+                            <button class="video-shorts-like">
+                                <i class="far fa-heart"></i>
                             </button>
+                            <span class="like-count">0</span>
                         </div>
-                        <div class="video-shorts-player">
-                            <div class="video-shorts-content">
-                                <div class="video-shorts-video-container">
-                                    <video class="video-shorts-video" muted playsinline controls volume="0"></video>
-                                    <div class="video-shorts-overlay">
-                                        <div class="video-shorts-header">
-                                            <div class="video-shorts-title"></div>
-                                            <button class="video-shorts-close">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                        <div class="video-shorts-product-info">
-                                            <h3 class="video-shorts-product-name"></h3>
-                                            <p class="video-shorts-influencer"></p>
-                                            <p class="video-shorts-description"></p>
-                                        </div>
-                                        <div class="video-shorts-products"></div>
-                                        <div class="video-shorts-actions">
-                                            <a href="javascript:void(0);"
-                                                class="video-shorts-action-btn video-shorts-like">
-                                                <i class="fas fa-heart"></i> <span class="like-count"></span>
-                                            </a>
-                                            <a href="javascript:void(0);"
-                                                class="video-shorts-action-btn video-shorts-share">
-                                                <i class="fas fa-share"></i> Share
-                                            </a>
-                                            <a href="javascript:void(0);"
-                                                class="video-shorts-action-btn video-shorts-buy"
-                                                id="video-shorts-buy-btn">
-                                                <i class="fas fa-shopping-cart"></i> Buy Now
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="video-shorts-pagination">
-                                        <div class="video-shorts-pagination-dot active"></div>
-                                        <div class="video-shorts-pagination-dot"></div>
-                                        <div class="video-shorts-pagination-dot"></div>
-                                    </div>
-                                </div>
+                        <div class="action-item">
+                            <button class="video-shorts-share">
+                                <i class="far fa-paper-plane"></i>
+                            </button>
+                            <span class="action-label">Share</span>
+                        </div>
+                        <div class="action-item">
+                            <button class="video-shorts-buy" id="video-shorts-buy-btn">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                            <span class="action-label">Shop</span>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Overlay Info -->
+                    <div class="video-shorts-info-overlay">
+                        <div class="influencer-info">
+                            <div class="influencer-avatar-placeholder">
+                                <i class="fas fa-user"></i>
                             </div>
+                            <h3 class="video-shorts-influencer"></h3>
                         </div>
-                        <div class="video-shorts-product-info">
-                            <h3 class="video-shorts-product-name"></h3>
-                            <p class="video-shorts-influencer"></p>
-                            <p class="video-shorts-description"></p>
+                        <div class="video-shorts-description"></div>
+                        <!-- Hidden title element for JS compatibility -->
+                        <div class="video-shorts-title" style="display:none;"></div>
+
+                        <div class="video-shorts-products">
+                            <!-- Products will be injected here as pills -->
                         </div>
-                        <div class="video-shorts-products"></div>
                     </div>
-                    <div class="video-shorts-pagination">
-                        <div class="video-shorts-pagination-dot active"></div>
-                        <div class="video-shorts-pagination-dot"></div>
-                        <div class="video-shorts-pagination-dot"></div>
+
+                    <!-- Progress Bar -->
+                    <div class="video-progress-container">
+                        <div class="video-progress-bar"></div>
                     </div>
+
+                    <!-- Navigation Arrows (Desktop) -->
+                    <button class="nav-arrow prev-video"><i class="fas fa-chevron-up"></i></button>
+                    <button class="nav-arrow next-video"><i class="fas fa-chevron-down"></i></button>
                 </div>
             </div>
         </div>
@@ -4272,57 +5329,60 @@
 
 
 
-
-        <!-- Footer -->
+ <!-- Footer -->
         <footer class="footer">
-            <div class="container">
+            <div class="footer-container">
                 <div class="footer-grid">
                     <!-- About Us -->
                     <div class="footer-column">
                         <h3 data-en="About Us" data-ar="من نحن" data-hi="हमारे बारे में">About Us</h3>
                         <ul class="footer-links">
-                            <li><a href="{% url 'about_us' %}" data-en="Our Story" data-ar="قصتنا" data-hi="हमारी कहानी">Our Story</a></li>
-                            <li><a href="#" data-en="Careers" data-ar="الوظائف" data-hi="करियर">Careers</a></li>
-                            <li><a href="#" data-en="Press" data-ar="الصحافة" data-hi="प्रेस">Press</a></li>
-                            <li><a href="#" data-en="Blog" data-ar="المدونة" data-hi="ब्लॉग">Blog</a></li>
+                            <li><a href="{% url 'about_us' %}">Our Story</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Press</a></li>
+                            <li><a href="#">Blog</a></li>
                         </ul>
                     </div>
 
                     <!-- Terms & Conditions -->
                     <div class="footer-column">
-                        <h3 data-en="Terms & Conditions" data-ar="الشروط والأحكام" data-hi="नियम एवं शर्तें">Terms & Conditions</h3>
+                        <h3 data-en="Terms & Conditions" data-ar="الشروط والأحكام" data-hi="नियम एवं शर्तें">Terms &
+                            Conditions</h3>
                         <ul class="footer-links">
-                            <li><a href="#" data-en="Terms of Service" data-ar="شروط الخدمة" data-hi="सेवा की शर्तें">Terms of Service</a></li>
-                            <li><a href="#" data-en="Privacy Policy" data-ar="سياسة الخصوصية" data-hi="गोपनीयता नीति">Privacy Policy</a></li>
-                            <li><a href="#" data-en="Return Policy" data-ar="سياسة الإرجاع" data-hi="वापसी नीति">Return Policy</a></li>
-                            <li><a href="#" data-en="Shipping Policy" data-ar="سياسة الشحن" data-hi="शिपिंग नीति">Shipping Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Return Policy</a></li>
+                            <li><a href="#">Shipping Policy</a></li>
                         </ul>
                     </div>
 
                     <!-- Connect With Us -->
                     <div class="footer-column">
-                        <h3 data-en="Connect With Us" data-ar="تواصل معنا" data-hi="हमसे संपर्क करें">Connect With Us</h3>
+                        <h3 data-en="Connect With Us" data-ar="تواصل معنا" data-hi="हमसे संपर्क करें">Connect With Us
+                        </h3>
                         <ul class="footer-links">
-                            <li><a href="{% url 'support' %}" data-en="Contact Us" data-ar="اتصل بنا" data-hi="हमसे संपर्क करें">Contact Us</a></li>
-                            <li><a href="{% url 'support' %}" data-en="FAQs" data-ar="الأسئلة الشائعة" data-hi="पूछे जाने वाले प्रश्न">FAQs</a></li>
-                            <li><a href="{% url 'support' %}" data-en="Support Center" data-ar="مركز الدعم" data-hi="सहायता केंद्र">Support Center</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">FAQs</a></li>
+                            <li><a href="{% url 'support' %}">Support Center</a></li>
+
                         </ul>
                         <div class="social-links">
-                            <a href="#" class="social-link" aria-label="Facebook" data-en="Facebook" data-ar="فيسبوك" data-hi="फेसबुक"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="social-link" aria-label="Twitter" data-en="Twitter" data-ar="تويتر" data-hi="ट्विटर"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-link" aria-label="Instagram" data-en="Instagram" data-ar="إنستغرام" data-hi="इंस्टाग्राम"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="social-link" aria-label="LinkedIn" data-en="LinkedIn" data-ar="لينكدإن" data-hi="लिंक्डइन"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-link" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#" class="social-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                            <a href="#" class="social-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
                         </div>
                     </div>
 
                     <!-- Let Us Help You -->
                     <div class="footer-column">
-                        <h3 data-en="Let Us Help You" data-ar="دعنا نساعدك" data-hi="हम आपकी मदद करें">Let Us Help You</h3>
+                        <h3 data-en="Let Us Help You" data-ar="دعنا نساعدك" data-hi="हम आपकी सहायता करें">Let Us Help
+                            You</h3>
                         <ul class="footer-links">
-                            <li><a href="#" data-en="Customer Service" data-ar="خدمة العملاء" data-hi="ग्राहक सेवा">Customer Service</a></li>
-                            <li><a href="#" data-en="Track Your Order" data-ar="تتبع طلبك" data-hi="अपना ऑर्डर ट्रैक करें">Track Your Order</a></li>
-                            <li><a href="#" data-en="Returns & Exchanges" data-ar="الإرجاع والاستبدال" data-hi="वापसी और आदान-प्रदान">Returns & Exchanges</a></li>
-                            <li><a href="#" data-en="Payment Options" data-ar="خيارات الدفع" data-hi="भुगतान विकल्प">Payment Options</a></li>
+                            <li><a href="#">Customer Service</a></li>
+                            <li><a href="#">Track Your Order</a></li>
+                            <li><a href="#">Returns & Exchanges</a></li>
+                            <li><a href="#">Payment Options</a></li>
                         </ul>
                     </div>
                 </div>
@@ -4332,11 +5392,8 @@
                 </div>
             </div>
         </footer>
+    </div>
 
-        <a href="https://api.whatsapp.com/send?phone=918075909735&text=Hello!%20I'm%20interested%20in%20your%20products"
-            target="_blank" class="whatsapp-widget" aria-label="Chat with us on WhatsApp" data-en="Chat with us on WhatsApp" data-ar="الدردشة معنا على واتساب" data-hi="हमसे व्हाट्सएप पर बात करें">
-            <i class="fab fa-whatsapp"></i>
-        </a>
 
         <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -4354,15 +5411,15 @@
                     item.addEventListener('click', function (e) {
                         e.preventDefault();
                         const selectedLang = this.getAttribute('data-lang');
-                        
+
                         // Store selected language in localStorage for entire website
                         localStorage.setItem('preferredLanguage', selectedLang);
-                        
+
                         // Reload the page to apply language changes
                         window.location.reload();
                     });
                 });
-                
+
                 // Function to apply language translations
                 function applyLanguage(langCode) {
                     // Define translation objects
@@ -4452,18 +5509,18 @@
                             'browseProducts': 'शीर्ष प्रभावकों द्वारा संसोर्ट किए गए उत्पादों के हमारे चयनित संग्रह को ब्राउज़ करें'
                         }
                     };
-                    
+
                     const lang = translations[langCode] || translations['en'];
-                    
+
                     // Update text content based on language
                     document.querySelectorAll('[data-en]').forEach(element => {
                         const enText = element.getAttribute('data-en');
                         const arText = element.getAttribute('data-ar');
                         const hiText = element.getAttribute('data-hi');
-                        
+
                         // Check if element has a span child with nav-text or btn-text class
                         const spanElement = element.querySelector('.nav-text, .btn-text');
-                        
+
                         if (langCode === 'ar' && arText) {
                             if (spanElement) {
                                 spanElement.textContent = arText;
@@ -4484,13 +5541,13 @@
                             }
                         }
                     });
-                    
+
                     // Update placeholder text
                     document.querySelectorAll('[data-placeholder-en]').forEach(element => {
                         const enPlaceholder = element.getAttribute('data-placeholder-en');
                         const arPlaceholder = element.getAttribute('data-placeholder-ar');
                         const hiPlaceholder = element.getAttribute('data-placeholder-hi');
-                        
+
                         if (langCode === 'ar' && arPlaceholder) {
                             element.placeholder = arPlaceholder;
                         } else if (langCode === 'hi' && hiPlaceholder) {
@@ -4499,13 +5556,13 @@
                             element.placeholder = enPlaceholder;
                         }
                     });
-                    
+
                     // Update title attributes
                     document.querySelectorAll('[data-title-en]').forEach(element => {
                         const enTitle = element.getAttribute('data-title-en');
                         const arTitle = element.getAttribute('data-title-ar');
                         const hiTitle = element.getAttribute('data-title-hi');
-                        
+
                         if (langCode === 'ar' && arTitle) {
                             element.title = arTitle;
                         } else if (langCode === 'hi' && hiTitle) {
@@ -4515,21 +5572,21 @@
                         }
                     });
                 }
-                
+
                 // Get language from localStorage for entire website or default to 'en'
                 const savedLang = localStorage.getItem('preferredLanguage') || 'en';
                 applyLanguage(savedLang);
-                
+
                 // Update language selector display
                 const langDisplay = document.getElementById('currentLanguage');
                 const mobileLangDisplay = document.getElementById('mobileCurrentLanguage');
-                
+
                 if (langDisplay) {
                     if (savedLang === 'ar') langDisplay.textContent = 'العربية';
                     else if (savedLang === 'hi') langDisplay.textContent = 'हिंदी';
                     else langDisplay.textContent = 'English';
                 }
-                
+
                 if (mobileLangDisplay) {
                     if (savedLang === 'ar') mobileLangDisplay.textContent = 'العربية';
                     else if (savedLang === 'hi') mobileLangDisplay.textContent = 'हिंदी';
@@ -4695,299 +5752,7 @@
                     });
                 });
 
-                // Video Shorts Player Functionality - Enhanced for Instagram/Facebook-like experience
-                const videoItems = document.querySelectorAll('.video-shorts-item');
-                const videoPlayer = document.querySelector('.video-shorts-player');
-                const videoElement = document.querySelector('.video-shorts-video');
-                const videoTitle = document.querySelector('.video-shorts-title');
-                const influencerName = document.querySelector('.video-shorts-influencer');
-                const videoProducts = document.querySelector('.video-shorts-products');
-                const likeCount = document.querySelector('.like-count');
-                const videoCloseBtn = document.querySelector('.video-shorts-close');
 
-                // Store all video items and current index
-                let allVideoItems = Array.from(videoItems);
-                let currentIndex = 0;
-
-                // Open video player when clicking on a video thumbnail
-                videoItems.forEach((item, index) => {
-                    item.addEventListener('click', function (e) {
-                        e.preventDefault();
-
-                        currentIndex = allVideoItems.indexOf(item);
-
-                        loadVideo(currentIndex);
-
-                        // Show player and play video
-                        videoPlayer.classList.add('active');
-                        document.body.style.overflow = 'hidden'; // Prevent background scroll
-
-                        // Play the video after a short delay to ensure source is loaded
-                        setTimeout(() => {
-                            videoElement.muted = false; // Enable sound
-                            videoElement.play().catch(e => console.log('Auto-play prevented:', e));
-                        }, 100);
-                    });
-                });
-
-                function loadVideo(index) {
-                    if (index < 0 || index >= allVideoItems.length) return;
-
-                    const item = allVideoItems[index];
-                    const videoUrl = item.getAttribute('data-video-url');
-                    const title = item.getAttribute('data-video-title');
-                    const influencer = item.getAttribute('data-video-influencer');
-                    const likes = item.getAttribute('data-video-likes');
-                    const productsData = item.getAttribute('data-video-products');
-
-                    // Set video source and play
-                    videoElement.src = videoUrl;
-                    videoElement.muted = false; // Enable sound
-                    videoTitle.textContent = title;
-                    influencerName.textContent = '@' + influencer;
-                    likeCount.textContent = likes;
-
-                    // Parse and display products if available
-                    try {
-                        const products = JSON.parse(productsData);
-                        videoProducts.innerHTML = '';
-                        if (products.length > 0) {
-                            products.forEach(product => {
-                                const productEl = document.createElement('div');
-                                productEl.className = 'product-tag';
-                                productEl.textContent = product.name;
-                                videoProducts.appendChild(productEl);
-                            });
-                        } else {
-                            videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
-                        }
-                    } catch (e) {
-                        videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
-                    }
-
-                    // Update pagination dots
-                    updatePagination();
-                }
-
-                function updatePagination() {
-                    const paginationDots = document.querySelector('.video-shorts-pagination');
-                    if (paginationDots) {
-                        paginationDots.innerHTML = '';
-                        allVideoItems.forEach((_, i) => {
-                            const dot = document.createElement('div');
-                            dot.className = 'video-shorts-pagination-dot';
-                            if (i === currentIndex) {
-                                dot.classList.add('active');
-                            }
-                            paginationDots.appendChild(dot);
-                        });
-                    }
-                }
-
-                // Navigation between videos
-                function goToNextVideo() {
-                    if (currentIndex < allVideoItems.length - 1) {
-                        currentIndex++;
-                        loadVideo(currentIndex);
-                        videoElement.muted = false; // Enable sound
-                        videoElement.play().catch(e => console.log('Auto-play prevented:', e));
-                    }
-                }
-
-                function goToPrevVideo() {
-                    if (currentIndex > 0) {
-                        currentIndex--;
-                        loadVideo(currentIndex);
-                        videoElement.muted = false; // Enable sound
-                        videoElement.play().catch(e => console.log('Auto-play prevented:', e));
-                    }
-                }
-
-                // Enhanced swipe functionality for video navigation with vertical swipe support
-                let touchStartX = 0;
-                let touchStartY = 0;
-                let touchEndX = 0;
-                let touchEndY = 0;
-
-                videoElement.addEventListener('touchstart', function (e) {
-                    touchStartX = e.changedTouches[0].screenX;
-                    touchStartY = e.changedTouches[0].screenY;
-                }, { passive: true });
-
-                videoElement.addEventListener('touchend', function (e) {
-                    touchEndX = e.changedTouches[0].screenX;
-                    touchEndY = e.changedTouches[0].screenY;
-                    handleSwipe();
-                }, { passive: true });
-
-                function handleSwipe() {
-                    const swipeThreshold = 50;
-                    const verticalSwipeThreshold = 30; // Lower threshold for vertical swipes
-
-                    const diffX = touchStartX - touchEndX;
-                    const diffY = touchStartY - touchEndY;
-
-                    // Check if it's more of a vertical swipe than horizontal
-                    if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > verticalSwipeThreshold) {
-                        if (diffY > 0) {
-                            // Swipe up - go to next video
-                            goToNextVideo();
-                        } else {
-                            // Swipe down - go to previous video
-                            goToPrevVideo();
-                        }
-                    } else if (Math.abs(diffX) > swipeThreshold) {
-                        if (diffX > 0) {
-                            // Swipe left - go to next video
-                            goToNextVideo();
-                        } else {
-                            // Swipe right - go to previous video
-                            goToPrevVideo();
-                        }
-                    }
-                }
-
-                // Keyboard navigation
-                document.addEventListener('keydown', function (e) {
-                    if (videoPlayer.classList.contains('active')) {
-                        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                            goToNextVideo();
-                        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                            goToPrevVideo();
-                        } else if (e.key === 'Escape') {
-                            videoPlayer.classList.remove('active');
-                            videoElement.pause();
-                            document.body.style.overflow = 'auto'; // Re-enable background scroll
-                        } else if (e.key === ' ') { // Spacebar to play/pause
-                            e.preventDefault();
-                            if (videoElement.paused) {
-                                videoElement.play();
-                            } else {
-                                videoElement.pause();
-                            }
-                        }
-                    }
-                });
-
-                // Mouse wheel for navigation - now supports both vertical and horizontal
-                videoElement.addEventListener('wheel', function (e) {
-                    // Check if shift key is pressed to differentiate horizontal/vertical scrolling
-                    if (e.shiftKey) {
-                        // Horizontal scroll with shift + wheel
-                        if (e.deltaX > 0) {
-                            goToNextVideo();
-                        } else {
-                            goToPrevVideo();
-                        }
-                    } else {
-                        // Vertical scroll with just wheel
-                        if (e.deltaY > 0) {
-                            // Scroll down - next video
-                            goToNextVideo();
-                        } else {
-                            // Scroll up - previous video
-                            goToPrevVideo();
-                        }
-                    }
-                    e.preventDefault();
-                }, { passive: false });
-
-                // Close video player
-                videoCloseBtn.addEventListener('click', function () {
-                    videoPlayer.classList.remove('active');
-                    videoElement.pause();
-                    document.body.style.overflow = 'auto'; // Re-enable background scroll
-                });
-
-                // Close when clicking outside video area
-                videoPlayer.addEventListener('click', function (e) {
-                    if (e.target === videoPlayer) {
-                        videoPlayer.classList.remove('active');
-                        videoElement.pause();
-                        document.body.style.overflow = 'auto';
-                    }
-                });
-
-                // Handle Buy Now button in video player
-                document.addEventListener('click', function (e) {
-                    if (e.target.closest('#video-shorts-buy-btn')) {
-                        e.preventDefault();
-
-                        // Get the current video item's product data
-                        const currentVideoItem = allVideoItems[currentIndex];
-                        if (currentVideoItem) {
-                            const productsData = currentVideoItem.getAttribute('data-video-products');
-                            try {
-                                const products = JSON.parse(productsData);
-                                if (products.length > 0) {
-                                    // Get the first product for now (you can modify this to handle multiple products)
-                                    const productId = products[0].id;
-
-                                    // Redirect to buy now page
-                                    window.location.href = `/orders/buy-now/${productId}/`;
-                                } else {
-                                    alert('No products available for purchase in this video');
-                                }
-                            } catch (e) {
-                                alert('Error processing products');
-                            }
-                        }
-                    }
-                });
-
-                // Horizontal Swipe Functionality for Influencer Cards
-                const influencersGrid = document.querySelector('.influencers-grid.horizontal');
-
-                if (influencersGrid) {
-                    let isDown = false;
-                    let startX;
-                    let scrollLeft;
-
-                    influencersGrid.addEventListener('mousedown', (e) => {
-                        isDown = true;
-                        startX = e.pageX - influencersGrid.offsetLeft;
-                        scrollLeft = influencersGrid.scrollLeft;
-                    });
-
-                    influencersGrid.addEventListener('mouseleave', () => {
-                        isDown = false;
-                    });
-
-                    influencersGrid.addEventListener('mouseup', () => {
-                        isDown = false;
-                    });
-
-                    influencersGrid.addEventListener('mousemove', (e) => {
-                        if (!isDown) return;
-                        e.preventDefault();
-                        const x = e.pageX - influencersGrid.offsetLeft;
-                        const walk = (x - startX) * 2; //scroll-fast
-                        influencersGrid.scrollLeft = scrollLeft - walk;
-                    });
-
-                    // Touch events for mobile devices
-                    influencersGrid.addEventListener('touchstart', (e) => {
-                        isDown = true;
-                        startX = e.touches[0].pageX - influencersGrid.offsetLeft;
-                        scrollLeft = influencersGrid.scrollLeft;
-                    });
-
-                    influencersGrid.addEventListener('touchend', () => {
-                        isDown = false;
-                    });
-
-                    influencersGrid.addEventListener('touchcancel', () => {
-                        isDown = false;
-                    });
-
-                    influencersGrid.addEventListener('touchmove', (e) => {
-                        if (!isDown) return;
-                        e.preventDefault();
-                        const x = e.touches[0].pageX - influencersGrid.offsetLeft;
-                        const walk = (x - startX) * 2; //scroll-fast
-                        influencersGrid.scrollLeft = scrollLeft - walk;
-                    });
-                }
             });
 
             // Video Shorts Player Functionality - Enhanced for Instagram/Facebook-like experience
@@ -5045,18 +5810,18 @@
                 videoElement.src = videoUrl;
                 videoTitle.textContent = title;
                 influencerName.textContent = '@' + influencer;
-                
+
                 // Update like and view counts
                 likeCount.textContent = likes;
-                
+
                 // Add video description with views
                 if (videoDescription) {
                     videoDescription.textContent = `${likes} likes • ${views} views`;
                 }
-                
+
                 // Update like button state
                 updateLikeButtonState(videoId, likes);
-                
+
                 // Increment video view count
                 if (videoId) {
                     incrementVideoView(videoId);
@@ -5067,27 +5832,18 @@
                     const products = JSON.parse(productsData);
                     videoProducts.innerHTML = '';
                     if (products.length > 0) {
-                        // Create product list container
-                        const productList = document.createElement('div');
-                        productList.className = 'video-shorts-products-list';
-                        
                         products.forEach(product => {
-                            const productEl = document.createElement('div');
-                            productEl.className = 'video-shorts-product-item';
-                            productEl.innerHTML = `
-                                <img src="${product.image}" alt="${product.name}" class="video-shorts-product-thumb">
-                                <div class="video-shorts-product-details">
-                                    <h4>${product.name}</h4>
-                                    <p class="product-price" data-price="${product.price}" data-currency="${product.currency}">${product.currency} ${product.price}</p>
-                                </div>
+                            const productPill = document.createElement('a');
+                            productPill.className = 'product-tag-pill';
+                            productPill.href = `/orders/buy-now/${product.id}/`;
+                            productPill.innerHTML = `
+                                <img src="${product.image}" alt="${product.name}">
+                                ${product.name}
                             `;
-                            productList.appendChild(productEl);
+                            videoProducts.appendChild(productPill);
                         });
-                        
-                        videoProducts.innerHTML = '';
-                        videoProducts.appendChild(productList);
                     } else {
-                        videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
+                        videoProducts.innerHTML = '';
                     }
                 } catch (e) {
                     videoProducts.innerHTML = '<p class="text-white small mb-0">No products tagged</p>';
@@ -5096,20 +5852,20 @@
                 // Update pagination dots
                 updatePagination();
             }
-            
+
             // Function to update like button state based on current video
             function updateLikeButtonState(videoId, currentLikes) {
                 // Update the like count in the video player
                 if (likeCount) {
                     likeCount.textContent = currentLikes;
                 }
-                
+
                 // Update the video description if it exists
                 if (videoDescription) {
                     const views = getCurrentVideoViews();
                     videoDescription.textContent = `${currentLikes} likes • ${views} views`;
                 }
-                
+
                 // Update the like button state in the video player
                 const likeButtons = document.querySelectorAll('.video-shorts-like');
                 likeButtons.forEach(button => {
@@ -5118,18 +5874,18 @@
                     button.classList.remove('liked');
                     button.innerHTML = '<i class="far fa-heart"></i> ' + currentLikes;
                 });
-                
+
                 // Update the like count in the main video card
                 const currentVideoItem = allVideoItems[currentIndex];
                 if (currentVideoItem) {
                     // Update the like count in the data attribute
                     currentVideoItem.setAttribute('data-video-likes', currentLikes);
-                    
+
                     // Update the like count in the reel-action-buttons if it exists
                     const likeButtonInCard = currentVideoItem.querySelector('.btn.like-btn');
                     if (likeButtonInCard) {
                         likeButtonInCard.querySelector('span').textContent = currentLikes;
-                        
+
                         // For now, we'll assume the user hasn't liked the video initially
                         // In a real implementation, we'd check if the user has already liked this video
                         likeButtonInCard.classList.remove('liked');
@@ -5137,7 +5893,7 @@
                     }
                 }
             }
-            
+
             // Function to get current video views
             function getCurrentVideoViews() {
                 const currentVideoItem = allVideoItems[currentIndex];
@@ -5168,7 +5924,7 @@
                     });
                 }
             }
-            
+
             // Function to increment video view count
             function incrementVideoView(videoId) {
                 fetch('/accounts/videos/increment-views/', {
@@ -5181,39 +5937,39 @@
                         'video_id': videoId
                     })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Update the view count display if needed
-                        console.log('View count updated successfully:', data.views);
-                        
-                        // Update the view count in the video player
-                        if (videoDescription) {
-                            const likes = likeCount.textContent || '0';
-                            videoDescription.textContent = `${likes} likes • ${data.views} views`;
-                        }
-                        
-                        // Update the view count in the main video card
-                        const currentVideoItem = allVideoItems[currentIndex];
-                        if (currentVideoItem) {
-                            // Update the view count in the data attribute
-                            currentVideoItem.setAttribute('data-video-views', data.views);
-                            
-                            // Update the view count in the reel-views-badge if it exists
-                            const viewBadge = currentVideoItem.querySelector('.reel-views-badge');
-                            if (viewBadge) {
-                                viewBadge.innerHTML = '<i class="fas fa-eye"></i> ' + data.views;
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update the view count display if needed
+                            console.log('View count updated successfully:', data.views);
+
+                            // Update the view count in the video player
+                            if (videoDescription) {
+                                const likes = likeCount.textContent || '0';
+                                videoDescription.textContent = `${likes} likes • ${data.views} views`;
                             }
+
+                            // Update the view count in the main video card
+                            const currentVideoItem = allVideoItems[currentIndex];
+                            if (currentVideoItem) {
+                                // Update the view count in the data attribute
+                                currentVideoItem.setAttribute('data-video-views', data.views);
+
+                                // Update the view count in the reel-views-badge if it exists
+                                const viewBadge = currentVideoItem.querySelector('.reel-views-badge');
+                                if (viewBadge) {
+                                    viewBadge.innerHTML = '<i class="fas fa-eye"></i> ' + data.views;
+                                }
+                            }
+                        } else {
+                            console.error('Failed to increment view:', data.error);
                         }
-                    } else {
-                        console.error('Failed to increment view:', data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error incrementing video view:', error);
-                });
+                    })
+                    .catch(error => {
+                        console.error('Error incrementing video view:', error);
+                    });
             }
-            
+
             // Function to toggle video like
             function toggleVideoLike(videoId) {
                 fetch('/accounts/videos/toggle-like/', {
@@ -5226,80 +5982,80 @@
                         'video_id': videoId
                     })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        console.log('Like toggled successfully:', data.likes);
-                        
-                        // Update the like count in the video player
-                        if (likeCount) {
-                            likeCount.textContent = data.likes;
-                            
-                            // Update the video description if it exists
-                            if (videoDescription) {
-                                const views = getCurrentVideoViews();
-                                videoDescription.textContent = `${data.likes} likes • ${views} views`;
-                            }
-                        }
-                        
-                        // Update the like button state in the video player
-                        const likeButtons = document.querySelectorAll('.video-shorts-like');
-                        likeButtons.forEach(button => {
-                            if (data.user_liked) {
-                                button.classList.add('liked');
-                                button.innerHTML = '<i class="fas fa-heart"></i> ' + data.likes;
-                            } else {
-                                button.classList.remove('liked');
-                                button.innerHTML = '<i class="far fa-heart"></i> ' + data.likes;
-                            }
-                        });
-                        
-                        // Update the like count in the main video card
-                        const currentVideoItem = allVideoItems[currentIndex];
-                        if (currentVideoItem) {
-                            // Update the like count in the data attribute
-                            currentVideoItem.setAttribute('data-video-likes', data.likes);
-                            
-                            // Update the like count in the reel-action-buttons if it exists
-                            const likeButtonInCard = currentVideoItem.querySelector('.btn.like-btn');
-                            if (likeButtonInCard) {
-                                likeButtonInCard.querySelector('span').textContent = data.likes;
-                                
-                                if (data.user_liked) {
-                                    likeButtonInCard.classList.add('liked');
-                                    likeButtonInCard.querySelector('i').className = 'fas fa-heart';
-                                } else {
-                                    likeButtonInCard.classList.remove('liked');
-                                    likeButtonInCard.querySelector('i').className = 'far fa-heart';
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Like toggled successfully:', data.likes);
+
+                            // Update the like count in the video player
+                            if (likeCount) {
+                                likeCount.textContent = data.likes;
+
+                                // Update the video description if it exists
+                                if (videoDescription) {
+                                    const views = getCurrentVideoViews();
+                                    videoDescription.textContent = `${data.likes} likes • ${views} views`;
                                 }
                             }
-                        }
-                        
-                        // Update the like button state in the main video grid
-                        const currentVideoCard = document.querySelector(`.reel-widget-card[data-video-id="${videoId}"]`);
-                        if (currentVideoCard) {
-                            const gridLikeButton = currentVideoCard.querySelector('.btn.like-btn');
-                            if (gridLikeButton) {
-                                gridLikeButton.querySelector('span').textContent = data.likes;
-                                
+
+                            // Update the like button state in the video player
+                            const likeButtons = document.querySelectorAll('.video-shorts-like');
+                            likeButtons.forEach(button => {
                                 if (data.user_liked) {
-                                    gridLikeButton.classList.add('liked');
-                                    gridLikeButton.querySelector('i').className = 'fas fa-heart';
+                                    button.classList.add('liked');
+                                    button.innerHTML = '<i class="fas fa-heart"></i> ' + data.likes;
                                 } else {
-                                    gridLikeButton.classList.remove('liked');
-                                    gridLikeButton.querySelector('i').className = 'far fa-heart';
+                                    button.classList.remove('liked');
+                                    button.innerHTML = '<i class="far fa-heart"></i> ' + data.likes;
+                                }
+                            });
+
+                            // Update the like count in the main video card
+                            const currentVideoItem = allVideoItems[currentIndex];
+                            if (currentVideoItem) {
+                                // Update the like count in the data attribute
+                                currentVideoItem.setAttribute('data-video-likes', data.likes);
+
+                                // Update the like count in the reel-action-buttons if it exists
+                                const likeButtonInCard = currentVideoItem.querySelector('.btn.like-btn');
+                                if (likeButtonInCard) {
+                                    likeButtonInCard.querySelector('span').textContent = data.likes;
+
+                                    if (data.user_liked) {
+                                        likeButtonInCard.classList.add('liked');
+                                        likeButtonInCard.querySelector('i').className = 'fas fa-heart';
+                                    } else {
+                                        likeButtonInCard.classList.remove('liked');
+                                        likeButtonInCard.querySelector('i').className = 'far fa-heart';
+                                    }
                                 }
                             }
+
+                            // Update the like button state in the main video grid
+                            const currentVideoCard = document.querySelector(`.reel-widget-card[data-video-id="${videoId}"]`);
+                            if (currentVideoCard) {
+                                const gridLikeButton = currentVideoCard.querySelector('.btn.like-btn');
+                                if (gridLikeButton) {
+                                    gridLikeButton.querySelector('span').textContent = data.likes;
+
+                                    if (data.user_liked) {
+                                        gridLikeButton.classList.add('liked');
+                                        gridLikeButton.querySelector('i').className = 'fas fa-heart';
+                                    } else {
+                                        gridLikeButton.classList.remove('liked');
+                                        gridLikeButton.querySelector('i').className = 'far fa-heart';
+                                    }
+                                }
+                            }
+                        } else {
+                            console.error('Failed to toggle like:', data.error);
                         }
-                    } else {
-                        console.error('Failed to toggle like:', data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error toggling video like:', error);
-                });
+                    })
+                    .catch(error => {
+                        console.error('Error toggling video like:', error);
+                    });
             }
-            
+
             // Helper function to get current video views
             function getCurrentVideoViews() {
                 const currentVideoItem = allVideoItems[currentIndex];
@@ -5308,7 +6064,7 @@
                 }
                 return '0';
             }
-            
+
             // Helper function to get CSRF token
             function getCookie(name) {
                 let cookieValue = null;
@@ -5324,14 +6080,14 @@
                 }
                 return cookieValue;
             }
-            
+
             // Function to get CSRF token - try both cookie and hidden input
             function getCSRFToken() {
                 const csrfTokenInput = document.querySelector('[name=csrfmiddlewaretoken]');
                 if (csrfTokenInput) {
                     return csrfTokenInput.value;
                 }
-                
+
                 // Fallback to cookie
                 return getCookie('csrftoken');
             }
@@ -5514,13 +6270,13 @@
                     e.preventDefault();
                     const likeBtn = e.target.closest('.video-shorts-like');
                     const videoId = getVideoIdForCurrentIndex(); // Get video ID for current index
-                    
+
                     if (videoId) {
                         toggleVideoLike(videoId);
                     }
                 }
             });
-            
+
             // Helper function to get video ID for current index
             function getVideoIdForCurrentIndex() {
                 const currentVideoItem = allVideoItems[currentIndex];
@@ -5538,13 +6294,13 @@
                     alert('Video sharing would be implemented here');
                 }
             });
-            
+
             // Handle like button in main video grid
             document.addEventListener('click', function (e) {
                 if (e.target.closest('.reel-action-buttons .btn')) {
                     e.preventDefault();
                     const likeBtn = e.target.closest('.btn');
-                    
+
                     // Check if this is a like button
                     if (likeBtn.querySelector('i.fa-heart')) {
                         const videoCard = likeBtn.closest('.reel-widget-card');
@@ -5557,13 +6313,13 @@
                     }
                 }
             });
-            
+
             // Double tap to like functionality for video player
             let tapCount = 0;
             let tapTimer = 0;
-            
+
             // Touch event listener for mobile devices
-            document.addEventListener('touchend', function(e) {
+            document.addEventListener('touchend', function (e) {
                 // Check if touch is on the video in the player
                 if (e.target.closest('.video-shorts-video') || e.target.closest('.video-shorts-video-container')) {
                     const videoPlayer = document.querySelector('.video-shorts-video');
@@ -5572,27 +6328,27 @@
                         const player = document.querySelector('.video-shorts-player');
                         if (player && getComputedStyle(player).display !== 'none' && player.style.display !== 'none') {
                             tapCount++;
-                            
+
                             if (tapCount === 1) {
-                                tapTimer = setTimeout(function() {
+                                tapTimer = setTimeout(function () {
                                     tapCount = 0; // Reset after 300ms if single tap
                                 }, 300);
                             } else if (tapCount === 2) {
                                 clearTimeout(tapTimer);
                                 tapCount = 0;
-                                
+
                                 // Double tap detected - trigger like
                                 const videoId = getVideoIdForCurrentIndex();
                                 if (videoId) {
                                     toggleVideoLike(videoId);
-                                    
+
                                     // Show heart animation
                                     showHeartAnimation(e.changedTouches[0]);
-                                    
+
                                     // Prevent any default behavior that might pause the video
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    
+
                                     // Ensure video keeps playing after double tap
                                     setTimeout(() => {
                                         if (videoPlayer.paused) {
@@ -5605,9 +6361,9 @@
                     }
                 }
             });
-            
+
             // Click event listener for desktop devices
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', function (e) {
                 // Check if click is on the video in the player
                 if (e.target.closest('.video-shorts-video') || e.target.closest('.video-shorts-video-container')) {
                     const videoPlayer = document.querySelector('.video-shorts-video');
@@ -5616,27 +6372,27 @@
                         const player = document.querySelector('.video-shorts-player');
                         if (player && getComputedStyle(player).display !== 'none' && player.style.display !== 'none') {
                             tapCount++;
-                            
+
                             if (tapCount === 1) {
-                                tapTimer = setTimeout(function() {
+                                tapTimer = setTimeout(function () {
                                     tapCount = 0; // Reset after 300ms if single tap
                                 }, 300);
                             } else if (tapCount === 2) {
                                 clearTimeout(tapTimer);
                                 tapCount = 0;
-                                
+
                                 // Double tap detected - trigger like
                                 const videoId = getVideoIdForCurrentIndex();
                                 if (videoId) {
                                     toggleVideoLike(videoId);
-                                    
+
                                     // Show heart animation
                                     showHeartAnimation(e);
-                                    
+
                                     // Prevent any default behavior that might pause the video
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    
+
                                     // Ensure video keeps playing after double tap
                                     setTimeout(() => {
                                         if (videoPlayer.paused) {
@@ -5649,48 +6405,48 @@
                     }
                 }
             });
-            
+
             // Function to show heart animation on double tap
             function showHeartAnimation(event) {
                 // Remove any existing heart animations
                 const existingHearts = document.querySelectorAll('.heart-animation');
                 existingHearts.forEach(heart => heart.remove());
-                
+
                 // Create heart animation element
                 const heart = document.createElement('div');
                 heart.className = 'heart-animation';
                 heart.innerHTML = '<i class="fas fa-heart" style="color: #e11d48; font-size: 2rem;"></i>';
-                
+
                 // Position the heart at the tap location
                 const videoContainer = document.querySelector('.video-shorts-video-container');
                 if (videoContainer) {
                     const rect = videoContainer.getBoundingClientRect();
                     const x = event.clientX - rect.left;
                     const y = event.clientY - rect.top;
-                    
+
                     heart.style.position = 'absolute';
                     heart.style.left = `${x}px`;
                     heart.style.top = `${y}px`;
                     heart.style.transform = 'translate(-50%, -50%)';
                     heart.style.pointerEvents = 'none';
                     heart.style.zIndex = '1000';
-                    
+
                     // Add animation styles
                     heart.style.animation = 'heartPulse 1.5s ease-out';
-                    
+
                     // Make sure video container has relative positioning
                     videoContainer.style.position = 'relative';
-                    
+
                     // Add to video container
                     videoContainer.appendChild(heart);
-                    
+
                     // Remove after animation completes
                     setTimeout(() => {
                         heart.remove();
                     }, 1500);
                 }
             }
-            
+
             // Add CSS for heart animation
             const style = document.createElement('style');
             style.textContent = `
@@ -5780,6 +6536,41 @@
                 });
             }
 
+            // Initialize Swiper for Amazon Categories
+            const amazonSwiper = new Swiper('.amazon-swiper', {
+                slidesPerView: 1.2,
+                spaceBetween: 15,
+                centeredSlides: false,
+                loop: true,
+                autoplay: {
+                    delay: 4000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    dynamicBullets: true
+                },
+                breakpoints: {
+                    576: {
+                        slidesPerView: 1.5,
+                        spaceBetween: 20
+                    },
+                    768: {
+                        slidesPerView: 2.2,
+                        spaceBetween: 25
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 30
+                    },
+                    1400: {
+                        slidesPerView: 4,
+                        spaceBetween: 30
+                    }
+                }
+            });
+
             // Initialize Swiper for influencers section
             const influencersSwiper = new Swiper('.influencers-swiper', {
                 slidesPerView: 'auto',
@@ -5829,7 +6620,7 @@
             });
 
 
- // Currency Conversion Functionality
+            // Currency Conversion Functionality
             // Exchange rates (relative to INR)
             const exchangeRates = {
                 'INR': 1,        // Indian Rupee
@@ -5924,7 +6715,7 @@
             });
 
             // Initialize currency on page load
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 // Get currency from localStorage or default to 'INR'
                 const savedCurrency = localStorage.getItem('preferredCurrency') || 'INR';
 
@@ -5953,18 +6744,39 @@
                 // Update all prices on the page
                 updatePrices(savedCurrency);
             });
+
+            // Marquee animation for categories grid
+            document.addEventListener('DOMContentLoaded', function () {
+                const categoriesGrid = document.querySelector('.categories-grid');
+
+                if (categoriesGrid) {
+                    // Add hover effect to pause animation
+                    categoriesGrid.addEventListener('mouseenter', function () {
+                        this.style.animationPlayState = 'paused';
+                    });
+
+                    categoriesGrid.addEventListener('mouseleave', function () {
+                        this.style.animationPlayState = 'running';
+                    });
+                }
+            });
+
             // Ensure CSRF token is available
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 // Make sure the CSRF token is available for AJAX requests
                 if (document.querySelector('[name=csrfmiddlewaretoken]')) {
                     // CSRF token already exists in the page
                 }
             });
         </script>
-        
+
+        <!-- Swiper JS -->
+        <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+
         <!-- Hidden CSRF Token for AJAX requests -->
         {% csrf_token %}
-        
+
 </body>
 
 </html>
