@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Summary | GreenStore</title>
+    <style>
+        :root {
+            --primary-green: #2e8b57;
+            --secondary-green: #3cb371;
+            --light-green: #f0f7f4;
+            --dark-green: #1a5336;
+            --black: #222222;
+            --gray-dark: #343a40;
+            --gray: #6c757d;
+            --gray-light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--gray-light);
+            color: var(--gray-dark);
+            line-height: 1.6;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: var(--black);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary-green);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            margin-right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: var(--primary-green);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .navbar-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar-item {
+            margin-left: 30px;
+        }
+
+        .navbar-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .navbar-link:hover {
+            color: var(--secondary-green);
+        }
+
+        .navbar-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-green);
+            transition: width 0.3s;
+        }
+
+        .navbar-link:hover::after {
+            width: 100%;
+        }
+
+        .logout-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: var(--dark-green);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--black);
+            font-size: 32px;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-green);
+        }
+
+        .order-container {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary-green);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 25px;
+        }
+
+        .order-id {
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        .order-date {
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        .section-title {
+            color: var(--primary-green);
+            font-size: 22px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .shipping-address {
+            background-color: var(--light-green);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .address-name {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--black);
+        }
+
+        .address-details {
+            line-height: 1.8;
+            color: var(--gray-dark);
+        }
+
+        .phone {
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .items-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .order-item {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            margin-right: 20px;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--black);
+        }
+
+        .item-meta {
+            color: var(--gray);
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        .item-subtotal {
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-top: 8px;
+        }
+
+        .order-summary {
+            background-color: var(--black);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-label {
+            font-weight: 500;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .logo-container {
+          display: flex;
+          align-items: center;
+      }
+
+      .logo {
+          margin-right: 10px;
+          filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+          background-color: var(--primary-green);
+      }
+
+        .total-amount {
+            color: var(--secondary-green);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dark-green);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--light-green);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-menu {
+                display: none;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .order-date {
+                margin-top: 10px;
+            }
+
+            .order-item {
+                flex-direction: column;
+            }
+
+            .item-image {
+                margin-bottom: 15px;
+                margin-right: 0;
+                width: 100%;
+                height: auto;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+            .navbar-brand:hover .brand-text {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
+            /* Teal glow using your primary color */
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Navbar Optimization */
+        @media (max-width: 991px) {
+            .navbar-container {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+                padding: 0 5px !important;
+            }
+
+            .navbar-brand {
+                margin-right: 0 !important;
+                gap: 10px !important;
+                flex-shrink: 0;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            .logo-img {
+                max-height: 40px !important;
+                width: auto !important;
+                flex-shrink: 0;
+            }
+
+            .brand-text {
+                font-size: 1.4rem !important;
+                display: inline-block !important;
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+                -webkit-background-clip: text !important;
+                background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                white-space: nowrap !important;
+            }
+
+            .mobile-view {
+                display: flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                flex-shrink: 0;
+            }
+
+            .desktop-view {
+                display: none !important;
+            }
+
+            .btn-open-app {
+                padding: 4px 12px !important;
+                font-size: 0.85rem !important;
+                height: fit-content;
+            }
+        }
+
+
+        /* Custom Toggler Icon and Buttons */
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 5px 8px !important;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+            width: 1.25em !important;
+            height: 1.25em !important;
+        }
+
+        .mobile-view .btn-outline-light {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff !important;
+        }
+
+        .mobile-view .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Influencer Swiper Styles */
+        .influencers-swiper {
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .influencers-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+        }
+
+        .influencers-swiper .swiper-wrapper {
+            padding: 10px 0;
+        }
+
+
+        .swiper-pagination.influencers-pagination {
+            bottom: 0 !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: #00c7f7;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #00c7f7;
+        }
+
+        /* Logo + Brand Text Container */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Space between logo and text */
+            text-decoration: none !important;
+        }
+
+        /* Logo Image */
+        .navbar-brand img,
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hover effect on logo */
+        .navbar-brand:hover img,
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+            /* Teal glow */
+        }
+
+        /* Brand Text - "LumosKart" */
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* Hover glow on text */
+        .navbar-brand:hover .brand-text {
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 0 15px rgba(0, 199, 247, 0.6);
+            /* Stronger teal glow */
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <!--<div class="container navbar-container">-->
+        <!--    <a href="#" class="navbar-brand">-->
+        <!--        <div class="logo-container">-->
+        <!--            <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="lumoskart Logo" class="logo">-->
+                    <!--<span>Lumoskart</span>-->
+        <!--        </div>-->
+        <!--    </a>-->
+        <div class="container-fluid navbar-container">
+                <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                    <span class="brand-text">LumosKart</span>
+                </a>
+            <ul class="navbar-menu">
+                <li class="navbar-item"><a href="{%url 'home'%}" class="navbar-link">Home</a></li>
+                <li class="navbar-item"><a href="{%url 'customer_dashboard'%}" class="navbar-link">Dashboard</a></li>
+                <li class="navbar-item"><a href="{%url 'logout'%}" class="navbar-link">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">Order Summary</h1>
+
+            <div class="order-container">
+                <div class="order-header">
+                    <div class="order-id"><strong>Order ID:</strong> {{ order.id }}</div>
+                    <div class="order-date"><strong>Date:</strong> {{ order.created_at }}</div>
+                </div>
+
+                <h2 class="section-title">Shipping Address</h2>
+                <div class="shipping-address">
+                    <div class="address-name">{{ order.address.full_name }}</div>
+                    <div class="address-details">
+                        {{ order.address.street_address }}<br>
+                        {{ order.address.city }}, {{ order.address.state }} - {{ order.address.postal_code }}
+                    </div>
+                    <div class="phone">Phone: {{ order.address.phone }}</div>
+                </div>
+
+                <h2 class="section-title">Items</h2>
+                <ul class="items-list">
+                    {% for item in order.items.all %}
+                        <li class="order-item">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="item-image">
+                            <div class="item-details">
+                                <div class="item-name">{{ item.product.name }}</div>
+                                <div class="item-meta">Quantity: {{ item.quantity }}</div>
+                                <div class="item-price">${{ item.price }} each</div>
+                                <div class="item-subtotal">Subtotal: ${{ item.total_price }}</div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span class="summary-label">Subtotal</span>
+                        <span>${{ order.total_amount }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Shipping</span>
+                        <span>$0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Tax</span>
+                        <span>Included</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Total</span>
+                        <span class="total-amount">${{ order.total_amount }}</span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <a href="{%url 'customer_dashboard'%}" class="btn btn-outline">Continue Shopping</a>
+                    {% comment %} <a href="#" class="btn btn-primary">Track Order</a> {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+
+
