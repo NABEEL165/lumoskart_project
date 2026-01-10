@@ -2519,11 +2519,11 @@
                     <div class="amazon-search-container me-3">
                         <form action="{% url 'search' %}" method="get" class="amazon-search-form">
                             <input type="hidden" name="page" value="customer_dashboard">
-                            <select class="search-select">
-                                <option>All</option>
-                                <option>Products</option>
-                                <option>Influencers</option>
-                            </select>
+                            <!--<select class="search-select">-->
+                            <!--    <option>All</option>-->
+                            <!--    <option>Products</option>-->
+                            <!--    <option>Influencers</option>-->
+                            <!--</select>-->
                             <input type="text" name="q" class="search-input" id="search-input"
                                 placeholder="Who’s your favorite influencer" value="{{ query|default:'' }}">
                             <button type="submit" class="search-button">
@@ -2541,32 +2541,7 @@
                         <li><a href="{% url 'support' %}" class="nav-link">
                                 <span>Support</span>
                             </a></li>
-                        <!--<li class="dropdown">-->
-                        <!--    <button class="btn btn-outline-light dropdown-toggle" type="button" id="languageDropdown"-->
-                        <!--        data-bs-toggle="dropdown" aria-expanded="false">-->
-                        <!--        <i class="fas fa-globe me-1"></i> <span id="currentLanguage">English</span>-->
-                        <!--    </button>-->
-                        <!--    <ul class="dropdown-menu" aria-labelledby="languageDropdown">-->
-                        <!--        <li><a class="dropdown-item lang-option" href="#" data-lang="en">English</a></li>-->
-                        <!--        <li><a class="dropdown-item lang-option" href="#" data-lang="ar">Arabic</a></li>-->
-                        <!--        <li><a class="dropdown-item lang-option" href="#" data-lang="hi">Hindi</a></li>-->
-                        <!--    </ul>-->
-                        <!--</li>-->
-                        <!--<li class="dropdown">-->
-                        <!--    <button class="btn btn-outline-light dropdown-toggle" type="button" id="currencyDropdown"-->
-                        <!--        data-bs-toggle="dropdown" aria-expanded="false">-->
-                        <!--        <i class="fas fa-exchange-alt me-1"></i> <span id="currentCurrency">INR (₹)</span>-->
-                        <!--    </button>-->
-                        <!--    <ul class="dropdown-menu" aria-labelledby="currencyDropdown">-->
-                        <!--        <li><a class="dropdown-item currency-option" href="#" data-currency="INR" data-symbol="₹">India (INR)</a></li>-->
-                        <!--        <li><a class="dropdown-item currency-option" href="#" data-currency="AED" data-symbol="د.إ">UAE (AED)</a></li>-->
-                        <!--        <li><a class="dropdown-item currency-option" href="#" data-currency="SGD" data-symbol="$">Singapore (SGD)</a></li>-->
-                        <!--        <li><a class="dropdown-item currency-option" href="#" data-currency="PHP" data-symbol="₱">Philippines (PHP)</a></li>-->
-                        <!--        <li><a class="dropdown-item currency-option" href="#" data-currency="USD" data-symbol="$">USA (USD)</a></li>-->
-                        <!--        <li><a class="dropdown-item currency-option" href="#" data-currency="EUR" data-symbol="€">Germany (EUR)</a></li>-->
-                        <!--        <li><a class="dropdown-item currency-option" href="#" data-currency="IDR" data-symbol="Rp">Indonesia (IDR)</a></li>-->
-                        <!--    </ul>-->
-                        <!--</li>-->
+
                         <li><a href="{% url 'logout' %}" class="nav-link">
                                 <span>Logout</span>
                             </a></li>
@@ -2605,6 +2580,68 @@
                 </div>
             </div>
         </nav>
+
+        <!-- Amazon-style Category Navigation Menu -->
+        <div class="container-fluid px-4" style="background: linear-gradient(135deg, #0e0e0e 0%, #2a2a2a 100%); border-bottom: 2px solid rgba(255, 255, 255, 0.1);">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="categories-scroll d-flex align-items-center py-2" style="overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: #333 #111;">
+                            <style>
+                                .categories-scroll::-webkit-scrollbar {
+                                    height: 8px;
+                                }
+                                .categories-scroll::-webkit-scrollbar-track {
+                                    background: #111;
+                                    border-radius: 10px;
+                                }
+                                .categories-scroll::-webkit-scrollbar-thumb {
+                                    background: #333;
+                                    border-radius: 10px;
+                                }
+                                .categories-scroll::-webkit-scrollbar-thumb:hover {
+                                    background: #555;
+                                }
+                                /* Mobile-specific optimizations for category navigation */
+                                @media (max-width: 768px) {
+                                    .category-pill {
+                                        min-width: 80px !important;
+                                        font-size: 0.8rem !important;
+                                        padding: 0.5rem 0.75rem !important;
+                                        margin-right: 0.5rem !important;
+                                    }
+                                    .category-pill i {
+                                        font-size: 0.7rem !important;
+                                        margin-right: 0.25rem !important;
+                                    }
+                                }
+                                @media (max-width: 576px) {
+                                    .category-pill {
+                                        min-width: 70px !important;
+                                        font-size: 0.75rem !important;
+                                        padding: 0.4rem 0.6rem !important;
+                                    }
+                                    .category-pill i {
+                                        font-size: 0.65rem !important;
+                                    }
+                                }
+                            </style>
+                            <!-- Category Items -->
+                            <div class="d-flex" style="gap: 8px;">
+                                <a href="{% url 'product_lists' %}?category=All" class="category-pill d-flex align-items-center justify-content-center text-decoration-none text-white px-3 py-2 me-1" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; font-size: 0.85rem; white-space: nowrap; min-width: 70px; transition: all 0.3s ease; padding-top: 0.65rem; padding-bottom: 0.65rem;">
+                                    <i class="fas fa-th-large me-1" style="font-size: 0.8rem;"></i> All
+                                </a>
+                                {% for category in categories %}
+                                <a href="{% url 'product_lists' %}?category={{ category.name }}" class="category-pill d-flex align-items-center justify-content-center text-decoration-none text-white px-3 py-2 me-1" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; font-size: 0.85rem; white-space: nowrap; min-width: 90px; transition: all 0.3s ease; padding-top: 0.65rem; padding-bottom: 0.65rem;">
+                                    {{ category.name }}
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Off-canvas Search for Mobile/Tablet -->
         <div class="offcanvas offcanvas-top" tabindex="-1" id="searchOffcanvas" aria-labelledby="searchOffcanvasLabel">
