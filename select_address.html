@@ -1,0 +1,1031 @@
+
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Address</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #0f0f0f 50%, #1f1f1f 75%, #0a0a0a 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: #ffffff;
+      padding-top: 90px;
+      overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.015) 0%, transparent 50%);
+      animation: float 25s infinite linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      25% { transform: translateY(-15px) rotate(90deg); }
+      50% { transform: translateY(0px) rotate(180deg); }
+      75% { transform: translateY(-10px) rotate(270deg); }
+      100% { transform: translateY(0px) rotate(360deg); }
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .navbar-logo {
+      height: 40px;
+      width: auto;
+      filter: drop-shadow(0 4px 8px rgba(255, 255, 255, 0.2));
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-logo:hover {
+      transform: scale(1.05) rotate(5deg);
+    }
+
+    .navbar-brand span {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff, #e0e0e0, #ffffff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .navbar-nav {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .navbar a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .navbar a:hover::before {
+      left: 100%;
+    }
+
+    .navbar a:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+    }
+
+    /* Mobile menu */
+    .mobile-menu-btn {
+      display: none;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 50px;
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(60px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff, #d0d0d0, #ffffff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #ffffff, transparent);
+      border-radius: 2px;
+    }
+
+    h3 {
+      text-align: center;
+      margin-bottom: 35px;
+      color: #ffffff;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    /* Address Cards */
+    .address-card {
+      position: relative;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 25px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      overflow: hidden;
+      animation: slideInLeft 0.6s ease-out forwards;
+      animation-delay: calc(var(--index) * 0.1s);
+      opacity: 0;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .address-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .address-card:hover::before {
+      left: 100%;
+    }
+
+    .address-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .address-card p {
+      margin: 10px 0;
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+    }
+
+    .address-card strong {
+      font-size: 1.3rem;
+      color: #ffffff;
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    /* Delete Button */
+    .remove-btn {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .remove-btn:hover {
+      background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .remove-btn:active {
+      transform: translateY(0) scale(1.05);
+    }
+
+    /* Action Buttons */
+    .actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .actions button {
+      background: linear-gradient(135deg, #ffffff, #e0e0e0, #ffffff);
+      color: #000000;
+      border: none;
+      padding: 18px 40px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 10px 30px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    .actions button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .actions button:hover::before {
+      left: 100%;
+    }
+
+    .actions button:hover {
+      background: linear-gradient(135deg, #f5f5f5, #ffffff, #f5f5f5);
+      transform: translateY(-4px) scale(1.05);
+      box-shadow:
+        0 15px 40px rgba(255, 255, 255, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .actions button:active {
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    /* New Address Form */
+    #new-address-form {
+      display: none;
+      margin-top: 50px;
+      border-top: 2px solid rgba(255, 255, 255, 0.1);
+      padding-top: 40px;
+      position: relative;
+      animation: slideDown 0.5s ease-out;
+    }
+
+    #new-address-form::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #ffffff, #e0e0e0);
+      border-radius: 2px;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    form label {
+      display: block;
+      margin-top: 20px;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 16px 20px;
+      margin-top: 8px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      font-size: 1.1rem;
+      background: rgba(255, 255, 255, 0.03);
+      color: #fff;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    form input:focus, form textarea:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow:
+        0 0 0 4px rgba(255, 255, 255, 0.05),
+        0 4px 20px rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    form input::placeholder, form textarea::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .save-btn, .cancel-btn {
+      margin-top: 25px;
+      padding: 16px 32px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .save-btn::before, .cancel-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .save-btn:hover::before, .cancel-btn:hover::before {
+      left: 100%;
+    }
+
+    .save-btn {
+      background: linear-gradient(135deg, #ffffff, #e0e0e0);
+      color: #000000;
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    }
+
+    .save-btn:hover {
+      background: linear-gradient(135deg, #f5f5f5, #ffffff);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .cancel-btn {
+      background: linear-gradient(135deg, #3a3a3a, #4a4a4a);
+      color: #fff;
+      margin-left: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cancel-btn:hover {
+      background: linear-gradient(135deg, #4a4a4a, #5a5a5a);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .no-address {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.5);
+      font-style: italic;
+      font-size: 1.3rem;
+      margin-top: 30px;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      position: relative;
+    }
+
+    .no-address::before {
+      content: '📍';
+      display: block;
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    /* Form styling improvements */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 15px 20px;
+        position: relative;
+      }
+
+      .navbar-nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.98);
+        backdrop-filter: blur(15px);
+        padding: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      }
+
+      .navbar-nav.active {
+        display: flex;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      body {
+        padding-top: 100px;
+      }
+
+      .container {
+        margin: 20px;
+        padding: 30px 25px;
+        border-radius: 20px;
+      }
+
+      h2 {
+        font-size: 2.2rem;
+      }
+
+      .address-card {
+        padding: 25px;
+        border-radius: 16px;
+      }
+
+      .remove-btn {
+        top: 20px;
+        right: 20px;
+        padding: 10px 15px;
+        font-size: 13px;
+      }
+
+      .actions {
+        gap: 20px;
+      }
+
+      .actions button {
+        padding: 16px 30px;
+        font-size: 1.1rem;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      form input, form textarea {
+        padding: 14px 16px;
+        font-size: 1rem;
+      }
+
+      .save-btn, .cancel-btn {
+        padding: 14px 28px;
+        font-size: 1rem;
+      }
+
+      .cancel-btn {
+        margin-left: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        margin: 15px;
+        padding: 25px 20px;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      .address-card {
+        padding: 20px;
+      }
+
+      .address-card p {
+        font-size: 1rem;
+      }
+
+      .address-card strong {
+        font-size: 1.2rem;
+      }
+
+      .actions button {
+        padding: 14px 25px;
+        font-size: 1rem;
+      }
+
+      .save-btn, .cancel-btn {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+        margin-top: 20px;
+      }
+
+      .cancel-btn {
+        margin-left: 8px;
+      }
+    }
+
+    /* Loading animations and micro-interactions */
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Enhanced scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #ffffff, #e0e0e0);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #f5f5f5, #ffffff);
+    }
+
+    /* Pulse animation for main action button */
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+      }
+      50% {
+        box-shadow: 0 10px 40px rgba(255, 255, 255, 0.3), 0 0 0 8px rgba(255, 255, 255, 0.05);
+      }
+      100% {
+        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    .actions button:first-child:hover {
+      animation: pulse 2s infinite;
+    }
+    .navbar-brand:hover .brand-text {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
+            /* Teal glow using your primary color */
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Navbar Optimization */
+        @media (max-width: 991px) {
+            .navbar-container {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+                padding: 0 5px !important;
+            }
+
+            .navbar-brand {
+                margin-right: 0 !important;
+                gap: 10px !important;
+                flex-shrink: 0;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            .logo-img {
+                max-height: 40px !important;
+                width: auto !important;
+                flex-shrink: 0;
+            }
+
+            .brand-text {
+                font-size: 1.4rem !important;
+                display: inline-block !important;
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+                -webkit-background-clip: text !important;
+                background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                white-space: nowrap !important;
+            }
+
+            .mobile-view {
+                display: flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                flex-shrink: 0;
+            }
+
+            .desktop-view {
+                display: none !important;
+            }
+
+            .btn-open-app {
+                padding: 4px 12px !important;
+                font-size: 0.85rem !important;
+                height: fit-content;
+            }
+        }
+
+
+        /* Custom Toggler Icon and Buttons */
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 5px 8px !important;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+            width: 1.25em !important;
+            height: 1.25em !important;
+        }
+
+        .mobile-view .btn-outline-light {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff !important;
+        }
+
+        .mobile-view .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Influencer Swiper Styles */
+        .influencers-swiper {
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .influencers-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+        }
+
+        .influencers-swiper .swiper-wrapper {
+            padding: 10px 0;
+        }
+
+
+        .swiper-pagination.influencers-pagination {
+            bottom: 0 !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: #00c7f7;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #00c7f7;
+        }
+
+        /* Logo + Brand Text Container */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Space between logo and text */
+            text-decoration: none !important;
+        }
+
+        /* Logo Image */
+        .navbar-brand img,
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hover effect on logo */
+        .navbar-brand:hover img,
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+            /* Teal glow */
+        }
+
+        /* Brand Text - "LumosKart" */
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* Hover glow on text */
+        .navbar-brand:hover .brand-text {
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 0 15px rgba(0, 199, 247, 0.6);
+            /* Stronger teal glow */
+        }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <!--<div class="navbar-brand">-->
+    <!--  <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Company Logo" class="navbar-logo">-->
+      <!--<span>Lumoskart</span>-->
+    <!--</div>-->
+<div class="container-fluid navbar-container">
+                <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                    <span class="brand-text">LumosKart</span>
+                </a>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+
+    <div class="navbar-nav" id="navLinks">
+      <!--<a href="{% url 'home' %}"> Home</a>-->
+      <a href="{% url 'view_cart' %}"> Cart</a>
+      <a href="{%url 'customer_dashboard'%}">Dashboard</a>
+      <a href="{% url 'logout' %}"> Logout</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2> Delivery Address</h2>
+
+    {% if addresses %}
+      {% for address in addresses %}
+        <div class="address-card" style="--index: {{ forloop.counter0 }};">
+          <p><strong>📍 {{ address.full_name }}</strong></p>
+          <p>{{ address.street_address|linebreaksbr }}</p>
+          <p>{{ address.city }}, {{ address.state }} - {{ address.postal_code }}</p>
+          <p style="color: #e0e0e0;">📞 {{ address.phone }}</p>
+          <form method="post" action="{% url 'delete_address' address.id %}">
+            {% csrf_token %}
+            <button type="submit" class="remove-btn" onclick="return confirm('⚠️ Are you sure you want to delete this address?')">🗑️ Delete</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="no-address">
+        <p>No saved addresses found.<br>Please add one below to continue.</p>
+      </div>
+    {% endif %}
+
+    <!-- Action Buttons -->
+    <div class="actions">
+      <form method="post" action="{% url 'checkout' %}">
+        {% csrf_token %}
+        <button type="submit">🚀 Proceed to Payment</button>
+      </form>
+      <button onclick="showForm()">➕ Add New Address</button>
+    </div>
+
+    <!-- New Address Form -->
+    <div id="new-address-form">
+      <h3>✨ Add New Address</h3>
+      <form method="POST" action="{% url 'select_address' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save-btn">💾 Save Address</button>
+        <button type="button" class="cancel-btn" onclick="hideForm()">❌ Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Mobile menu functionality
+    function toggleMobileMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const navLinks = document.getElementById('navLinks');
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+        navLinks.classList.remove('active');
+      }
+    });
+
+    // Enhanced form show/hide with animations
+    function showForm() {
+      const form = document.getElementById('new-address-form');
+      const button = document.querySelector('.actions button:last-child');
+
+      form.style.display = 'block';
+      button.style.display = 'none';
+
+      // Add smooth scroll to form
+      setTimeout(() => {
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+
+    function hideForm() {
+      const form = document.getElementById('new-address-form');
+      const button = document.querySelector('.actions button:last-child');
+
+      form.style.display = 'none';
+      button.style.display = 'inline-block';
+    }
+
+    // Add stagger animation to address cards
+    document.addEventListener('DOMContentLoaded', function() {
+      const addressCards = document.querySelectorAll('.address-card');
+      addressCards.forEach((card, index) => {
+        card.style.setProperty('--index', index);
+        setTimeout(() => {
+          card.style.opacity = '1';
+        }, index * 100);
+      });
+
+      // Add form validation animations
+      const formInputs = document.querySelectorAll('input, textarea');
+      formInputs.forEach(input => {
+        input.addEventListener('invalid', function() {
+          this.style.animation = 'shake 0.3s ease-in-out';
+          setTimeout(() => {
+            this.style.animation = '';
+          }, 300);
+        });
+      });
+    });
+
+    // Add shake animation for validation errors
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Add smooth scroll behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
+
+    // Add intersection observer for scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe container for scroll animations
+    const container = document.querySelector('.container');
+    if (container) {
+      observer.observe(container);
+    }
+  </script>
+</body>
+</html>
