@@ -12,6 +12,168 @@
     <link rel="stylesheet" href="whatsapp-widget.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <style>
+     .navbar-brand:hover .logo-img {
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Navbar Optimization */
+        @media (max-width: 991px) {
+            .navbar-container {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+                padding: 0 5px !important;
+            }
+
+            .navbar-brand {
+                margin-right: 0 !important;
+                gap: 10px !important;
+                flex-shrink: 0;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            .logo-img {
+                max-height: 40px !important;
+                width: auto !important;
+                flex-shrink: 0;
+            }
+
+            .brand-text {
+                font-size: 1.4rem !important;
+                display: inline-block !important;
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+                -webkit-background-clip: text !important;
+                background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                white-space: nowrap !important;
+            }
+
+            .mobile-view {
+                display: flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                flex-shrink: 0;
+            }
+
+            .desktop-view {
+                display: none !important;
+            }
+
+            .btn-open-app {
+                padding: 4px 12px !important;
+                font-size: 0.85rem !important;
+                height: fit-content;
+            }
+        }
+
+
+        /* Custom Toggler Icon and Buttons */
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 5px 8px !important;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+            width: 1.25em !important;
+            height: 1.25em !important;
+        }
+
+        .mobile-view .btn-outline-light {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff !important;
+        }
+
+        .mobile-view .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Influencer Swiper Styles */
+        .influencers-swiper {
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .influencers-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+        }
+
+        .influencers-swiper .swiper-wrapper {
+            padding: 10px 0;
+        }
+
+
+        .swiper-pagination.influencers-pagination {
+            bottom: 0 !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: #00c7f7;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #00c7f7;
+        }
+
+        /* Logo + Brand Text Container */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Space between logo and text */
+            text-decoration: none !important;
+        }
+
+        /* Logo Image */
+        .navbar-brand img,
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hover effect on logo */
+        .navbar-brand:hover img,
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+            /* Teal glow */
+        }
+
+        /* Brand Text - "LumosKart" */
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* Hover glow on text */
+        .navbar-brand:hover .brand-text {
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 0 15px rgba(0, 199, 247, 0.6);
+            /* Stronger teal glow */
+        }
+
         /* Reset and base styles */
         * {
             box-sizing: border-box;
@@ -1603,11 +1765,16 @@
 <div class="nav-overlay" id="navOverlay"></div>
 
 <nav class="navbar">
-    <div class="navbar-container">
-        <div class="logo">
-            <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" class="logo-img">
-        </div>
-
+    <!--<div class="navbar-container">-->
+    <!--    <div class="logo">-->
+    <!--        <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" class="logo-img">-->
+    <!--    </div>-->
+div class="container-fluid navbar-container">
+                <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                    <span class="brand-text">LumosKart</span>
+                </a>
         <button class="hamburger" id="hamburger" aria-label="Menu">
             <span></span>
             <span></span>
@@ -1786,6 +1953,20 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Overall Summary Graph Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3>Overall Summary</h3>
+                <div class="chart-container" style="position: relative; height:40vh; width:80vw; max-width:800px; margin: 0 auto;">
+                    <canvas id="summaryChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid mt-4">
+            <div class="row">
 
                 <h3>Top Performing Products</h3>
                 <div class="table-responsive mt-3">
@@ -1831,6 +2012,9 @@
     </a>
 </div>
 
+<!-- Chart.js for pie chart visualization -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <!-- Bootstrap JS (with jQuery and Popper.js) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
@@ -1866,7 +2050,7 @@
         const accountDropdown = document.getElementById('accountDropdown');
         const languageDropdown = document.querySelector('#languageDropdown + .dropdown-menu');
         const currencyDropdown = document.querySelector('#currencyDropdown + .dropdown-menu');
-        
+
         if (!event.target.closest('#accountDropdown')) {
             accountDropdown.classList.remove('show');
         }
@@ -1889,22 +2073,22 @@
             }
         });
     });
-    
+
     // ===============================
     // 🌐 Language Selection Functionality
     // ===============================
-    
+
     // Language translations
     const translations = {
         'en': {}, // English (default)
         'ar': {}, // Arabic translations would go here
         'hi': {}  // Hindi translations would go here
     };
-    
+
     // Apply language to page elements
     function applyLanguage(langCode) {
         const langTranslations = translations[langCode] || translations['en'];
-        
+
         // Update text elements based on data attributes
         document.querySelectorAll('[data-translate]').forEach(element => {
             const key = element.getAttribute('data-translate');
@@ -1913,33 +2097,33 @@
             }
         });
     }
-    
+
     // Handle language selection
     const languageItems = document.querySelectorAll('.lang-option');
     languageItems.forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             const selectedLang = this.getAttribute('data-lang');
-            
+
             // Store selected language in localStorage
             localStorage.setItem('preferredLanguage', selectedLang);
-            
+
             // Update language selector display
             const langDisplay = document.getElementById('currentLanguage');
             if (langDisplay) {
                 const langNames = {
                     'en': 'English',
-                    'ar': 'Arabic', 
+                    'ar': 'Arabic',
                     'hi': 'Hindi'
                 };
                 langDisplay.textContent = langNames[selectedLang] || 'English';
             }
-            
+
             // Apply language
             applyLanguage(selectedLang);
         });
     });
-    
+
     // Add click handler for language dropdown toggle
     const languageDropdownBtn = document.getElementById('languageDropdown');
     if (languageDropdownBtn) {
@@ -1949,7 +2133,7 @@
             dropdownMenu.classList.toggle('show');
         });
     }
-    
+
     // Add click handler for currency dropdown toggle
     const currencyDropdownBtn = document.getElementById('currencyDropdown');
     if (currencyDropdownBtn) {
@@ -1959,14 +2143,14 @@
             dropdownMenu.classList.toggle('show');
         });
     }
-    
 
-    
+
+
     // Initialize language on page load
     document.addEventListener('DOMContentLoaded', function() {
         // Get language from localStorage or default to 'en'
         const savedLang = localStorage.getItem('preferredLanguage') || 'en';
-        
+
         // Update language selector display
         const langDisplay = document.getElementById('currentLanguage');
         if (langDisplay) {
@@ -1977,15 +2161,15 @@
             };
             langDisplay.textContent = langNames[savedLang] || 'English';
         }
-        
+
         // Apply language
         applyLanguage(savedLang);
     });
-    
+
     // ===============================
     // 💰 Currency Conversion Functionality
     // ===============================
-    
+
     // Exchange rates (relative to INR)
     const exchangeRates = {
         'INR': 1,        // Indian Rupee
@@ -1996,17 +2180,17 @@
         'EUR': 0.011,    // Euro
         'IDR': 183.33    // Indonesian Rupiah
     };
-    
+
     // Function to convert prices
     function convertPrice(price, fromCurrency, toCurrency) {
         if (fromCurrency === toCurrency) return price;
-        
+
         // Convert to INR first, then to target currency
         const inrValue = price / exchangeRates[fromCurrency];
         const convertedValue = inrValue * exchangeRates[toCurrency];
         return convertedValue;
     }
-    
+
     // Function to format currency with symbol
     function formatCurrency(amount, currency) {
         const symbols = {
@@ -2018,24 +2202,24 @@
             'EUR': '€',
             'IDR': 'Rp'
         };
-        
+
         const symbol = symbols[currency] || '₹';
         return `${symbol}${amount.toFixed(2)}`;
     }
-    
+
     // Function to update all prices on the page
     function updatePrices(toCurrency) {
         // Update elements with price information
         document.querySelectorAll('[data-price]').forEach(element => {
             const originalPrice = element.getAttribute('data-price');
             const originalCurrency = element.getAttribute('data-currency') || 'INR';
-            
+
             if (originalPrice && !isNaN(originalPrice)) {
                 const convertedPrice = convertPrice(parseFloat(originalPrice), originalCurrency, toCurrency);
                 const formattedPrice = formatCurrency(convertedPrice, toCurrency);
-                
+
                 element.textContent = formattedPrice;
-                
+
                 // Store the original price data to allow future conversions
                 if (!element.hasAttribute('data-original-price')) {
                     element.setAttribute('data-original-price', originalPrice);
@@ -2044,7 +2228,7 @@
             }
         });
     }
-    
+
     // Handle currency selection
     const currencyItems = document.querySelectorAll('.currency-option');
     currencyItems.forEach(item => {
@@ -2052,30 +2236,30 @@
             e.preventDefault();
             const selectedCurrency = this.getAttribute('data-currency');
             const currencySymbol = this.getAttribute('data-symbol');
-            
+
             // Store selected currency in localStorage
             localStorage.setItem('preferredCurrency', selectedCurrency);
-            
+
             // Update currency selector display
             const currencyDisplay = document.getElementById('currentCurrency');
-            
+
             if (currencyDisplay) {
                 currencyDisplay.textContent = `${selectedCurrency} (${currencySymbol})`;
             }
-            
+
             // Update all prices on the page
             updatePrices(selectedCurrency);
         });
     });
-    
+
     // Initialize currency on page load
     document.addEventListener('DOMContentLoaded', function() {
         // Get currency from localStorage or default to 'INR'
         const savedCurrency = localStorage.getItem('preferredCurrency') || 'INR';
-        
+
         // Update currency selector display
         const currencyDisplay = document.getElementById('currentCurrency');
-        
+
         if (currencyDisplay) {
             const symbols = {
                 'INR': '₹', 'AED': 'د.إ', 'SGD': '$', 'PHP': '₱',
@@ -2084,9 +2268,71 @@
             const symbol = symbols[savedCurrency] || '₹';
             currencyDisplay.textContent = `${savedCurrency} (${symbol})`;
         }
-        
+
         // Update all prices on the page
         updatePrices(savedCurrency);
+    });
+
+    // Initialize the summary pie chart
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get data from the page (using the existing stats)
+        const totalRevenue = parseFloat('{{ total_revenue|floatformat:2 }}') || 0;
+        const totalOrders = parseInt('{{ total_orders }}') || 0;
+        const monthlyRevenue = parseFloat('{{ monthly_revenue|floatformat:2 }}') || 0;
+
+        // Create the pie chart
+        const ctx = document.getElementById('summaryChart').getContext('2d');
+
+        // Calculate other metrics
+        const otherRevenue = totalRevenue - monthlyRevenue;
+
+        const summaryChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Monthly Revenue', 'Other Revenue', 'Total Orders'],
+                datasets: [{
+                    data: [monthlyRevenue, otherRevenue, totalOrders],
+                    backgroundColor: [
+                        '#0a0a0a',      // Black for Monthly Revenue
+                        '#4a4a4a',      // Dark Gray for Other Revenue
+                        '#0891b2'       // Blue for Total Orders
+                    ],
+                    borderColor: [
+                        '#ffffff',
+                        '#ffffff',
+                        '#ffffff'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                if (label.includes('Revenue')) {
+                                    return `${label}: ₹${value.toFixed(2)}`;
+                                } else if (label.includes('Orders')) {
+                                    return `${label}: ${value}`;
+                                }
+                                return `${label}: ${value}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
     });
 </script>
 
