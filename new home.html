@@ -1001,6 +1001,46 @@
             font-size: 0.9rem;
         }
 
+        /* Enhanced Footer Responsiveness */
+        @media (max-width: 768px) {
+            .footer {
+                padding: 3rem 1rem 1.5rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-column h3 {
+                font-size: 1.1rem;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .footer {
+                padding: 2rem 0.5rem 1rem;
+            }
+
+            .footer-column h3 {
+                font-size: 1rem;
+            }
+
+            .footer-links a {
+                font-size: 0.9rem;
+            }
+
+            .social-link {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+        }
+
         .banner-section {
             margin-bottom: 3rem;
         }
@@ -1590,12 +1630,12 @@
         font-weight: 500;
     }
 
-    /* Footer Styles */
+    /* Footer Styles - Consolidated and Responsive */
     .footer {
-        background: linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 100%);
-        border-top: 2px solid rgba(255, 255, 255, 0.1);
-        padding: 60px 24px 30px;
-        margin-top: 100px;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-top: 2px solid #334155;
+        padding: 4rem 2rem 2rem;
+        margin-top: 4rem;
     }
 
     .footer-container {
@@ -1606,16 +1646,16 @@
     .footer-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 40px;
-        margin-bottom: 40px;
+        gap: 2rem;
+        margin-bottom: 3rem;
     }
 
     .footer-column h3 {
-        font-size: 1.5rem;
-        margin-bottom: 20px;
-        color: #e0e0e0;
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: #e2e8f0;
         position: relative;
-        padding-bottom: 10px;
+        padding-bottom: 0.5rem;
     }
 
     .footer-column h3::after {
@@ -1625,7 +1665,7 @@
         left: 0;
         width: 50px;
         height: 3px;
-        background: linear-gradient(90deg, #9e9e9e, #757575);
+        background: linear-gradient(90deg, #818cf8, #6366f1);
         border-radius: 2px;
     }
 
@@ -1636,27 +1676,27 @@
     }
 
     .footer-links li {
-        margin-bottom: 12px;
+        margin-bottom: 0.75rem;
     }
 
     .footer-links a {
-        color: rgba(255, 255, 255, 0.7);
+        color: #94a3b8;
         text-decoration: none;
         transition: all 0.3s ease;
-        font-size: 1rem;
+        font-size: 0.95rem;
         display: block;
-        padding: 5px 0;
+        padding: 0.25rem 0;
     }
 
     .footer-links a:hover {
-        color: #9e9e9e;
+        color: #818cf8;
         transform: translateX(5px);
     }
 
     .social-links {
         display: flex;
-        gap: 15px;
-        margin-top: 20px;
+        gap: 1rem;
+        margin-top: 1.5rem;
     }
 
     .social-link {
@@ -1666,24 +1706,64 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.1);
+        background: #334155;
         color: white;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         transition: all 0.3s ease;
         text-decoration: none;
     }
 
     .social-link:hover {
-        background: #9e9e9e;
+        background: #818cf8;
         transform: translateY(-3px);
     }
 
     .footer-bottom {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        padding-top: 30px;
+        border-top: 1px solid #334155;
+        padding-top: 2rem;
         text-align: center;
-        color: rgba(255, 255, 255, 0.6);
+        color: #94a3b8;
         font-size: 0.9rem;
+    }
+
+    /* Enhanced Footer Responsiveness */
+    @media (max-width: 768px) {
+        .footer {
+            padding: 3rem 1rem 1.5rem;
+        }
+
+        .footer-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.1rem;
+        }
+
+        .social-links {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .footer {
+            padding: 2rem 0.5rem 1rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1rem;
+        }
+
+        .footer-links a {
+            font-size: 0.9rem;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            font-size: 1rem;
+        }
     }
 
     .influencers-section {
@@ -4349,6 +4429,82 @@
     .mobile-view .btn-outline-light:hover {
         background: rgba(255, 255, 255, 0.1);
     }
+    
+    .banner-section {
+    margin-bottom: 3rem;
+    padding: 3rem 0;
+    background: #00c7f7; /* Solid primary blue */
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 199, 247, 0.3);
+}
+
+.banner-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(0, 0, 0, 0.1) 0%, 
+        rgba(0, 0, 0, 0.2) 100%
+    ); /* Subtle dark overlay for depth */
+    pointer-events: none;
+    border-radius: 20px;
+}
+
+.banner-card {
+    background: transparent;
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    border: none;
+    box-shadow: none;
+}
+
+.banner-card h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffffff; /* Pure white text */
+    margin-bottom: 1rem;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.banner-card p {
+    font-size: 1.2rem;
+    color: #ffffff; /* Pure white text */
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.7;
+    opacity: 0.95;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .banner-section {
+        margin: 1rem;
+        border-radius: 16px;
+        padding: 2rem 0;
+    }
+    .banner-card {
+        padding: 2rem 1.5rem;
+    }
+    .banner-card h2 {
+        font-size: 2rem;
+    }
+    .banner-card p {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .banner-card h2 {
+        font-size: 1.7rem;
+    }
+    .banner-card p {
+        font-size: 1rem;
+    }
+}
 </style>
 
 <body>
@@ -4508,11 +4664,11 @@
                             class="fas fa-user-plus me-2"></i><span class="nav-text">Sign
                             up as an Influencer</span></a>
                     <ul class="nav flex-column ms-4">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Premium" data-ar="مميز"
-                                data-hi="प्रीमियम"><i class="fas fa-crown me-2"></i><span
-                                    class="nav-text">Premium</span></a>
-                        </li>
+                        <!--<li class="nav-item">-->
+                        <!--    <a class="nav-link" href="{% url 'register_influencer' %}" data-en="Premium" data-ar="مميز"-->
+                        <!--        data-hi="प्रीमियम"><i class="fas fa-crown me-2"></i><span-->
+                        <!--            class="nav-text">Premium</span></a>-->
+                        <!--</li>-->
                     </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" data-en="Logout"
@@ -5176,20 +5332,18 @@
 
 
 
-
-        <!-- Footer -->
+ <!-- Footer -->
         <footer class="footer">
-            <div class="container">
+            <div class="footer-container">
                 <div class="footer-grid">
                     <!-- About Us -->
                     <div class="footer-column">
                         <h3 data-en="About Us" data-ar="من نحن" data-hi="हमारे बारे में">About Us</h3>
                         <ul class="footer-links">
-                            <li><a href="{% url 'about_us' %}" data-en="Our Story" data-ar="قصتنا"
-                                    data-hi="हमारी कहानी">Our Story</a></li>
-                            <li><a href="#" data-en="Careers" data-ar="الوظائف" data-hi="करियर">Careers</a></li>
-                            <li><a href="#" data-en="Press" data-ar="الصحافة" data-hi="प्रेस">Press</a></li>
-                            <li><a href="#" data-en="Blog" data-ar="المدونة" data-hi="ब्लॉग">Blog</a></li>
+                            <li><a href="{% url 'about_us' %}">Our Story</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Press</a></li>
+                            <li><a href="#">Blog</a></li>
                         </ul>
                     </div>
 
@@ -5198,14 +5352,10 @@
                         <h3 data-en="Terms & Conditions" data-ar="الشروط والأحكام" data-hi="नियम एवं शर्तें">Terms &
                             Conditions</h3>
                         <ul class="footer-links">
-                            <li><a href="#" data-en="Terms of Service" data-ar="شروط الخدمة"
-                                    data-hi="सेवा की शर्तें">Terms of Service</a></li>
-                            <li><a href="#" data-en="Privacy Policy" data-ar="سياسة الخصوصية"
-                                    data-hi="गोपनीयता नीति">Privacy Policy</a></li>
-                            <li><a href="#" data-en="Return Policy" data-ar="سياسة الإرجاع" data-hi="वापसी नीति">Return
-                                    Policy</a></li>
-                            <li><a href="#" data-en="Shipping Policy" data-ar="سياسة الشحن"
-                                    data-hi="शिपिंग नीति">Shipping Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Return Policy</a></li>
+                            <li><a href="#">Shipping Policy</a></li>
                         </ul>
                     </div>
 
@@ -5214,53 +5364,39 @@
                         <h3 data-en="Connect With Us" data-ar="تواصل معنا" data-hi="हमसे संपर्क करें">Connect With Us
                         </h3>
                         <ul class="footer-links">
-                            <li><a href="{% url 'support' %}" data-en="Contact Us" data-ar="اتصل بنا"
-                                    data-hi="हमसे संपर्क करें">Contact Us</a></li>
-                            <li><a href="{% url 'support' %}" data-en="FAQs" data-ar="الأسئلة الشائعة"
-                                    data-hi="पूछे जाने वाले प्रश्न">FAQs</a></li>
-                            <li><a href="{% url 'support' %}" data-en="Support Center" data-ar="مركز الدعم"
-                                    data-hi="सहायता केंद्र">Support Center</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">FAQs</a></li>
+                            <li><a href="{% url 'support' %}">Support Center</a></li>
+
                         </ul>
                         <div class="social-links">
-                            <a href="#" class="social-link" aria-label="Facebook" data-en="Facebook" data-ar="فيسبوك"
-                                data-hi="फेसबुक"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="social-link" aria-label="Twitter" data-en="Twitter" data-ar="تويتر"
-                                data-hi="ट्विटर"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-link" aria-label="Instagram" data-en="Instagram"
-                                data-ar="إنستغرام" data-hi="इंस्टाग्राम"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="social-link" aria-label="LinkedIn" data-en="LinkedIn" data-ar="لينكدإن"
-                                data-hi="लिंक्डइन"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-link" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#" class="social-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                            <a href="#" class="social-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
                         </div>
                     </div>
 
                     <!-- Let Us Help You -->
                     <div class="footer-column">
-                        <h3 data-en="Let Us Help You" data-ar="دعنا نساعدك" data-hi="हम आपकी मदद करें">Let Us Help You
-                        </h3>
+                        <h3 data-en="Let Us Help You" data-ar="دعنا نساعدك" data-hi="हम आपकी सहायता करें">Let Us Help
+                            You</h3>
                         <ul class="footer-links">
-                            <li><a href="#" data-en="Customer Service" data-ar="خدمة العملاء"
-                                    data-hi="ग्राहक सेवा">Customer Service</a></li>
-                            <li><a href="#" data-en="Track Your Order" data-ar="تتبع طلبك"
-                                    data-hi="अपना ऑर्डर ट्रैक करें">Track Your Order</a></li>
-                            <li><a href="#" data-en="Returns & Exchanges" data-ar="الإرجاع والاستبدال"
-                                    data-hi="वापसी और आदान-प्रदान">Returns & Exchanges</a></li>
-                            <li><a href="#" data-en="Payment Options" data-ar="خيارات الدفع"
-                                    data-hi="भुगतान विकल्प">Payment Options</a></li>
+                            <li><a href="#">Customer Service</a></li>
+                            <li><a href="#">Track Your Order</a></li>
+                            <li><a href="#">Returns & Exchanges</a></li>
+                            <li><a href="#">Payment Options</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="footer-bottom">
-                    <p>&copy; 2025 LumosKart. All rights reserved.</p>
+                    <p>&copy; 2025 Lumoskart. All rights reserved.</p>
                 </div>
             </div>
         </footer>
+    </div>
 
-        <a href="https://api.whatsapp.com/send?phone=918075909735&text=Hello!%20I'm%20interested%20in%20your%20products"
-            target="_blank" class="whatsapp-widget" aria-label="Chat with us on WhatsApp"
-            data-en="Chat with us on WhatsApp" data-ar="الدردشة معنا على واتساب" data-hi="हमसे व्हाट्सएप पर बात करें">
-            <i class="fab fa-whatsapp"></i>
-        </a>
 
         <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
