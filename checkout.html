@@ -849,13 +849,39 @@
                 {% endfor %}
                 {% endif %}
 
-                <div class="total-item">
-                    <span class="total-label">Total Amount</span>
-                    <span class="total-amount">₹{{ total }}</span>
+                <div class="order-breakdown">
+                    <div class="order-item">
+                        <div class="item-details">
+                            <strong>Products</strong>
+                            <small>Subtotal</small>
+                        </div>
+                        <span class="item-price">₹{{ total }}</span>
+                    </div>
+                    
+                    <div class="order-item">
+                        <div class="item-details">
+                            <strong>GST</strong>
+                            <small>18% of Subtotal</small>
+                        </div>
+                        <span class="item-price">₹{{ gst_amount|default:0 }}</span>
+                    </div>
+                    
+                    <div class="order-item">
+                        <div class="item-details">
+                            <strong>Courier Charge</strong>
+                            <small>Delivery Fee</small>
+                        </div>
+                        <span class="item-price">₹{{ courier_charge|default:0 }}</span>
+                    </div>
+                    
+                    <div class="total-item">
+                        <span class="total-label">Total Amount</span>
+                        <span class="total-amount">₹{{ grand_total|default:0 }}</span>
+                    </div>
                 </div>
 
                 <button id="rzp-button" class="btn btn-primary">
-                    🔒 Secure Payment ₹{{ total }}
+                    🔒 Secure Payment ₹{{ grand_total|default:0 }}
                 </button>
             </div>
         </div>
