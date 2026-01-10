@@ -1,9 +1,4 @@
 
-
-
-
-
-
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -411,9 +406,7 @@
             }
 
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 1.5rem;
-                padding: 1rem 0;
+                grid-template-columns: 1fr;
             }
 
             .page-title {
@@ -426,49 +419,7 @@
             }
         }
 
-        @media (max-width: 576px) {
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-                padding: 10px;
-            }
-
-            .product-card {
-                padding: 1rem;
-            }
-
-            .product-name {
-                font-size: 1rem;
-            }
-
-            .product-price {
-                font-size: 1.2rem;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .action-buttons form {
-                width: 100%;
-            }
-
-            .product-image {
-                height: 150px;
-            }
-        }
-
         @media (max-width: 480px) {
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-                padding: 8px;
-            }
-
-            .product-image {
-                height: 120px;
-            }
-
             .action-buttons {
                 flex-direction: column;
             }
@@ -476,15 +427,241 @@
             .action-buttons form {
                 width: 100%;
             }
+        }
 
-            .product-name {
-                font-size: 0.9rem;
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-left: 15px;
+        }
+
+        .dropdown-btn {
+            background-color: #2e7d32;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-btn:hover {
+            background-color: #1b5e20;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none;
+            min-width: 10rem;
+            padding: 0.5rem 0;
+            margin: 0.125rem 0 0;
+            font-size: 1rem;
+            color: #212529;
+            text-align: left;
+            list-style: none;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 0.375rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            clear: both;
+            font-weight: 400;
+            color: #212529;
+            text-align: inherit;
+            text-decoration: none;
+            white-space: nowrap;
+            background-color: transparent;
+            border: 0;
+            cursor: pointer;
+        }
+
+        .dropdown-item:hover {
+            background-color: #e9ecef;
+        }
+         .navbar-brand:hover .brand-text {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
+            /* Teal glow using your primary color */
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Navbar Optimization */
+        @media (max-width: 991px) {
+            .navbar-container {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+                padding: 0 5px !important;
             }
 
-            .product-price {
-                font-size: 1.1rem;
+            .navbar-brand {
+                margin-right: 0 !important;
+                gap: 10px !important;
+                flex-shrink: 0;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            .logo-img {
+                max-height: 40px !important;
+                width: auto !important;
+                flex-shrink: 0;
+            }
+
+            .brand-text {
+                font-size: 1.4rem !important;
+                display: inline-block !important;
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+                -webkit-background-clip: text !important;
+                background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                white-space: nowrap !important;
+            }
+
+            .mobile-view {
+                display: flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                flex-shrink: 0;
+            }
+
+            .desktop-view {
+                display: none !important;
+            }
+
+            .btn-open-app {
+                padding: 4px 12px !important;
+                font-size: 0.85rem !important;
+                height: fit-content;
             }
         }
+
+
+        /* Custom Toggler Icon and Buttons */
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 5px 8px !important;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+            width: 1.25em !important;
+            height: 1.25em !important;
+        }
+
+        .mobile-view .btn-outline-light {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff !important;
+        }
+
+        .mobile-view .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Influencer Swiper Styles */
+        .influencers-swiper {
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .influencers-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+        }
+
+        .influencers-swiper .swiper-wrapper {
+            padding: 10px 0;
+        }
+
+
+        .swiper-pagination.influencers-pagination {
+            bottom: 0 !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: #00c7f7;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #00c7f7;
+        }
+
+        /* Logo + Brand Text Container */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Space between logo and text */
+            text-decoration: none !important;
+        }
+
+        /* Logo Image */
+        .navbar-brand img,
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hover effect on logo */
+        .navbar-brand:hover img,
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+            /* Teal glow */
+        }
+
+        /* Brand Text - "LumosKart" */
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* Hover glow on text */
+        .navbar-brand:hover .brand-text {
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 0 15px rgba(0, 199, 247, 0.6);
+            /* Stronger teal glow */
+        }
+
     </style>
 </head>
 <body>
@@ -493,10 +670,15 @@
 
     <!-- Navbar -->
     <div class="navbar">
-        <div class="navbar-brand">
-            <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" class="logo-img">
-        </div>
-
+        <!--<div class="navbar-brand">-->
+        <!--    <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" class="logo-img">-->
+        <!--</div>-->
+<div class="container-fluid navbar-container">
+                <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                    <span class="brand-text">LumosKart</span>
+                </a>
         <button class="hamburger" id="hamburger" aria-label="Menu">
             <span></span>
             <span></span>
@@ -504,9 +686,10 @@
         </button>
 
         <div class="navbar-links" id="navLinks">
-            <a href="{% url 'wishlist' %}"><i class="far fa-heart"></i> Wishlist</a>
-            <a href="{%url 'view_cart' %}"><i class="fas fa-shopping-cart"></i> Cart</a>
-            <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+
+            <a href="{% url 'wishlist' %}"><i class="far fa-heart"></i> <span data-translate="wishlist">Wishlist</span></a>
+            <a href="{%url 'view_cart' %}"><i class="fas fa-shopping-cart"></i> <span data-translate="cart">Cart</span></a>
+            <a href="#"><i class="fas fa-sign-out-alt"></i> <span data-translate="logout">Logout</span></a>
         </div>
     </div>
 
@@ -560,7 +743,9 @@
 
                 <!-- Product Details -->
                 <p class="product-description">{{ product.description }}</p>
-                <p class="product-price">₹{{ product.price }}</p>
+                <p class="product-price">
+                    <span class="price-amount" data-price="{{ product.price }}" data-currency="INR">₹{{ product.price }}</span>
+                </p>
                 <p class="product-stock"><i class="fas fa-cubes"></i> Stock: {{ product.stock }}</p>
 
                 <!-- Action Buttons -->
@@ -580,7 +765,7 @@
     {% else %}
         <div class="no-products">
             <i class="fas fa-box-open fa-3x" style="color: #4CAF50; margin-bottom: 15px;"></i>
-            <p>This influencer has not added any products yet.</p>
+            <p><span data-translate="no_products">This influencer has not added any products yet.</span></p>
         </div>
     {% endif %}
 
@@ -651,8 +836,242 @@
             }
             return '';
         }
+
+        // Dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownButtons = document.querySelectorAll('.dropdown > button');
+
+            dropdownButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const dropdown = this.parentElement;
+                    const menu = dropdown.querySelector('.dropdown-menu');
+
+                    // Close all other dropdowns
+                    document.querySelectorAll('.dropdown-menu').forEach(otherMenu => {
+                        if (otherMenu !== menu) {
+                            otherMenu.classList.remove('show');
+                        }
+                    });
+
+                    // Toggle current dropdown
+                    menu.classList.toggle('show');
+                });
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown')) {
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        menu.classList.remove('show');
+                    });
+                }
+            });
+        });
+
+        // ===============================
+        // 🌐 Language Selection Functionality
+        // ===============================
+
+        // Handle language selection
+        const languageItems = document.querySelectorAll('.lang-option');
+        languageItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const selectedLang = this.getAttribute('data-lang');
+
+                // Store selected language in localStorage
+                localStorage.setItem('preferredLanguage', selectedLang);
+
+                // Update language selector display
+                const langDisplay = document.getElementById('currentLanguage');
+                if (langDisplay) {
+                    const langNames = {
+                        'en': 'English',
+                        'ar': 'Arabic',
+                        'hi': 'Hindi'
+                    };
+                    langDisplay.textContent = langNames[selectedLang] || 'English';
+                }
+
+                // Apply language changes
+                applyLanguage(selectedLang);
+            });
+        });
+
+        // Function to apply language translations
+        function applyLanguage(langCode) {
+            // Define translation objects
+            const translations = {
+                'en': {
+                    'wishlist': 'Wishlist',
+                    'cart': 'Cart',
+                    'logout': 'Logout',
+                    'no_products': 'This influencer has not added any products yet.'
+                },
+                'ar': {
+                    'wishlist': 'قائمة الأمنيات',
+                    'cart': 'عربة التسوق',
+                    'logout': 'تسجيل الخروج',
+                    'no_products': 'لم يقم هذا المؤثر بإضافة أي منتجات حتى الآن.'
+                },
+                'hi': {
+                    'wishlist': 'इच्छा सूची',
+                    'cart': 'कार्ट',
+                    'logout': 'लॉग आउट',
+                    'no_products': 'इस प्रभावशाली ने अभी तक कोई उत्पाद नहीं जोड़ा है।'
+                }
+            };
+
+            // Get translations for selected language
+            const langTranslations = translations[langCode] || translations['en'];
+
+            // Update text elements based on data attributes
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (langTranslations[key]) {
+                    element.textContent = langTranslations[key];
+                }
+            });
+        }
+
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get language from localStorage or default to 'en'
+            const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+
+            // Update language selector display
+            const langDisplay = document.getElementById('currentLanguage');
+            if (langDisplay) {
+                const langNames = {
+                    'en': 'English',
+                    'ar': 'Arabic',
+                    'hi': 'Hindi'
+                };
+                langDisplay.textContent = langNames[savedLang] || 'English';
+            }
+
+            // Apply language
+            applyLanguage(savedLang);
+        });
+
+        // ===============================
+        // 💰 Currency Conversion Functionality
+        // ===============================
+
+        // Exchange rates (relative to INR)
+        const exchangeRates = {
+            'INR': 1,        // Indian Rupee
+            'AED': 0.31,     // UAE Dirham
+            'SGD': 0.017,    // Singapore Dollar
+            'PHP': 0.69,     // Philippine Peso
+            'USD': 0.012,    // US Dollar
+            'EUR': 0.011,    // Euro
+            'IDR': 183.33    // Indonesian Rupiah
+        };
+
+        // Function to convert prices
+        function convertPrice(price, fromCurrency, toCurrency) {
+            if (fromCurrency === toCurrency) return price;
+
+            // Convert to INR first, then to target currency
+            const inrValue = price / exchangeRates[fromCurrency];
+            const convertedValue = inrValue * exchangeRates[toCurrency];
+            return convertedValue;
+        }
+
+        // Function to format currency with symbol
+        function formatCurrency(amount, currency) {
+            const symbols = {
+                'INR': '₹',
+                'AED': 'د.إ',
+                'SGD': '$',
+                'PHP': '₱',
+                'USD': '$',
+                'EUR': '€',
+                'IDR': 'Rp'
+            };
+
+            // Format the amount based on currency
+            let formattedAmount;
+            if (['INR', 'USD', 'EUR', 'SGD'].includes(currency)) {
+                formattedAmount = amount.toFixed(2);
+            } else if (currency === 'PHP') {
+                formattedAmount = amount.toFixed(2);
+            } else if (currency === 'AED') {
+                formattedAmount = amount.toFixed(2);
+            } else if (currency === 'IDR') {
+                formattedAmount = Math.round(amount).toString();
+            } else {
+                formattedAmount = amount.toFixed(2);
+            }
+
+            return symbols[currency] + formattedAmount;
+        }
+
+        // Function to update all prices on the page
+        function updatePrices(targetCurrency) {
+            const priceElements = document.querySelectorAll('.price-amount');
+            priceElements.forEach(element => {
+                const originalPrice = parseFloat(element.getAttribute('data-price'));
+                const originalCurrency = element.getAttribute('data-currency');
+
+                if (!isNaN(originalPrice) && originalCurrency) {
+                    const convertedPrice = convertPrice(originalPrice, originalCurrency, targetCurrency);
+                    const formattedPrice = formatCurrency(convertedPrice, targetCurrency);
+
+                    element.textContent = formattedPrice;
+                    element.setAttribute('data-price', convertedPrice);
+                    element.setAttribute('data-currency', targetCurrency);
+                }
+            });
+        }
+
+        // Handle currency selection
+        const currencyItems = document.querySelectorAll('.currency-option');
+        currencyItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const selectedCurrency = this.getAttribute('data-currency');
+                const currencySymbol = this.getAttribute('data-symbol');
+
+                // Store selected currency in localStorage
+                localStorage.setItem('preferredCurrency', selectedCurrency);
+
+                // Update currency selector display
+                const currencyDisplay = document.getElementById('currentCurrency');
+
+                if (currencyDisplay) {
+                    currencyDisplay.textContent = `${selectedCurrency} (${currencySymbol})`;
+                }
+
+                // Update all prices on the page
+                updatePrices(selectedCurrency);
+            });
+        });
+
+        // Initialize currency on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get currency from localStorage or default to 'INR'
+            const savedCurrency = localStorage.getItem('preferredCurrency') || 'INR';
+
+            // Update currency selector display
+            const currencyDisplay = document.getElementById('currentCurrency');
+
+            if (currencyDisplay) {
+                const symbols = {
+                    'INR': '₹', 'AED': 'د.إ', 'SGD': '$', 'PHP': '₱',
+                    'USD': '$', 'EUR': '€', 'IDR': 'Rp'
+                };
+                const symbol = symbols[savedCurrency] || '₹';
+                currencyDisplay.textContent = `${savedCurrency} (${symbol})`;
+            }
+
+            // Update all prices on the page
+            updatePrices(savedCurrency);
+        });
     </script>
 
 </body>
 </html>
-
