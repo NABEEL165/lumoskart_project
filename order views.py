@@ -61,17 +61,6 @@ def buy_now(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     request.session['buy_now_product_id'] = product.id
     request.session['buy_now_quantity'] = 1
-    
-    # Also check if quantity is provided in request
-    quantity = request.GET.get('quantity', 1)
-    try:
-        quantity = int(quantity)
-        if quantity < 1:
-            quantity = 1
-    except (ValueError, TypeError):
-        quantity = 1
-    
-    request.session['buy_now_quantity'] = quantity
     return redirect('checkout')
 
 
@@ -249,39 +238,62 @@ def checkout(request):
     """
     Shows checkout page with addresses and creates a Razorpay order
     (Razorpay order is created server-side so we can verify server-side later).
-    Handles both cart items and buy now items.
     """
-    # Check if this is a buy now request
-    buy_now_product_id = request.session.get('buy_now_product_id')
-    buy_now_quantity = request.session.get('buy_now_quantity', 1)
+    # Check if this is a buy_now request
+    is_buy_now = 'buy_now_product_id' in request.session
     
-    if buy_now_product_id:
-        # This is a buy now request
-        product = get_object_or_404(Product, id=buy_now_product_id)
+    if is_buy_now:
+        # For buy now, create a temporary cart-like object
+        product_id = request.session.get('buy_now_product_id')
+        quantity = request.session.get('buy_now_quantity', 1)
         
-        # Create a temporary cart item class for buy now
-        class TempCartItem:
-            def __init__(self, product, quantity):
-                self.product = product
-                self.quantity = quantity
+        if product_id:
+            product = get_object_or_404(Product, id=product_id)
+            # Create a mock cart item for the template
+            from django.db import models
+            from collections import namedtuple
             
-            def total_price(self):
-                return self.product.price * self.quantity
-        
-        cart_item = TempCartItem(product, buy_now_quantity)
-        cart_items = [cart_item]
-        total = Decimal(product.price) * Decimal(buy_now_quantity)
+            # Create a mock CartItem-like object for buy now
+            class MockCartItem:
+                def __init__(self, product, quantity):
+                    self.product = product
+                    self.quantity = quantity
+                    
+                @property
+                def total_price(self):
+                    return self.product.price * self.quantity
+            
+            mock_item = MockCartItem(product, quantity)
+            cart_items = [mock_item]
+            total_for_calculation = product.price * quantity
+        else:
+            messages.info(request, "Product not found for buy now.")
+            return redirect('view_cart')
     else:
-        # This is a regular cart checkout
         cart_items = CartItem.objects.filter(user=request.user)
         if not cart_items.exists():
             messages.info(request, "Your cart is empty.")
             return redirect('view_cart')
-        
-        # compute total as Decimal
-        total = sum(Decimal(item.product.price) * item.quantity for item in cart_items)
+        total_for_calculation = sum(Decimal(item.product.price) * item.quantity for item in cart_items)
+
+    # compute total as Decimal
+    if is_buy_now:
+        subtotal = total_for_calculation
+    else:
+        subtotal = sum(Decimal(item.product.price) * item.quantity for item in cart_items)
     
-    total_paise = rupees_to_paise(total)
+    # Calculate GST (18% of subtotal)
+    gst_rate = Decimal('0.18')
+    gst_amount = subtotal * gst_rate
+    
+    # Fixed courier charge
+    courier_charge = Decimal('100.00')
+    
+    # Calculate grand total
+    grand_total = subtotal + gst_amount + courier_charge
+    
+    # Convert grand total to paise for Razorpay (since we want to charge the full amount including GST and courier)
+    total_paise = rupees_to_paise(grand_total)
 
     # get addresses for user (to let them choose)
     addresses = request.user.addresses.all()
@@ -297,12 +309,15 @@ def checkout(request):
 
     context = {
         'cart_items': cart_items,
-        'total': total,
+        'total': subtotal,
+        'gst_amount': gst_amount,
+        'courier_charge': courier_charge,
+        'grand_total': grand_total,
+        'is_buy_now': is_buy_now,
         'razorpay_order_id': razorpay_order['id'],
         'razorpay_key_id': settings.RAZORPAY_KEY_ID,
         'addresses': addresses,
         'address_form': address_form,
-        'is_buy_now': bool(buy_now_product_id),  # Pass flag to template
     }
     return render(request, 'checkout.html', context)
 
@@ -353,59 +368,27 @@ def paymenthandler(request):
         # signature verification failed
         return HttpResponse("Payment verification failed: " + str(e), status=400)
 
-    # signature ok → create Order from cart or buy now and mark completed
+    # signature ok → create Order from cart and mark completed
     try:
         address = None
         if selected_address_id:
             address = get_object_or_404(Address, id=selected_address_id, user=request.user)
-        
-        # Check if this is a buy now request
-        buy_now_product_id = request.session.get('buy_now_product_id')
-        buy_now_quantity = request.session.get('buy_now_quantity', 1)
-        
-        if buy_now_product_id:
-            # This is a buy now request
-            product = get_object_or_404(Product, id=buy_now_product_id)
-            
-            # Check stock availability
-            if product.stock < buy_now_quantity:
-                return HttpResponse(f"Not enough stock for {product.name}. Available: {product.stock}, Requested: {buy_now_quantity}", status=400)
-            
-            # Create order and order item
-            order = Order.objects.create(user=request.user, address=address, total_amount=Decimal(product.price) * Decimal(buy_now_quantity))
-            
-            # Reduce stock
-            product.stock -= buy_now_quantity
-            product.save()
-            
-            # Create order item
-            OrderItem.objects.create(
-                order=order,
-                product=product,
-                quantity=buy_now_quantity,
-                price=product.price
-            )
-            
-            # Mark order completed
-            order.status = Order.COMPLETED
-            order.save()
-            
-            # Clear buy now session data
-            if 'buy_now_product_id' in request.session:
-                del request.session['buy_now_product_id']
-            if 'buy_now_quantity' in request.session:
-                del request.session['buy_now_quantity']
-        else:
-            # This is a regular cart checkout
-            # create order and items (this will reserve stock)
-            order = create_order_from_cart(request.user, address=address)
 
-            # mark order paid/completed
-            order.status = Order.COMPLETED
-            order.save()
+        # create order and items (this will reserve stock)
+        order = create_order_from_cart(request.user, address=address)
 
-            # clear user's cart
-            CartItem.objects.filter(user=request.user).delete()
+        # mark order paid/completed
+        order.status = Order.COMPLETED
+        order.save()
+
+        # clear user's cart
+        CartItem.objects.filter(user=request.user).delete()
+        
+        # clear buy_now session data if it exists
+        if 'buy_now_product_id' in request.session:
+            del request.session['buy_now_product_id']
+        if 'buy_now_quantity' in request.session:
+            del request.session['buy_now_quantity']
 
         # Optionally, store razorpay ids somewhere (extend Order model if you like)
         # e.g., order.razorpay_payment_id = payment_id ; order.save()
