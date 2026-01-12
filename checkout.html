@@ -655,6 +655,21 @@
             }
         }
 
+        @media (max-width: 992px) {
+            .checkout-row {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .page-header h2 {
+                font-size: 2.8rem;
+            }
+
+            .container {
+                padding: 40px 25px;
+            }
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 padding: 15px 20px;
@@ -666,6 +681,10 @@
 
             .page-header h2 {
                 font-size: 2.5rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
             }
 
             .checkout-section {
@@ -703,38 +722,251 @@
                 padding: 16px 30px;
                 font-size: 1.1rem;
             }
+            
+            .container {
+                padding: 35px 15px;
+            }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 576px) {
+            .page-header {
+                margin-bottom: 40px;
+            }
+            
             .page-header h2 {
-                font-size: 2rem;
+                font-size: 2.2rem;
+            }
+            
+            .page-header p {
+                font-size: 0.95rem;
             }
 
             .checkout-section {
                 padding: 20px;
+                border-radius: 18px;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+                margin-bottom: 25px;
             }
 
             .address-option {
-                padding: 15px;
+                padding: 18px;
+                margin-bottom: 15px;
             }
 
-            .btn-primary {
-                padding: 16px;
+            .form-check-label {
+                font-size: 1rem;
+            }
+
+            .order-item {
+                padding: 20px;
+            }
+
+            .item-details strong {
                 font-size: 1.1rem;
+            }
+
+            .item-details small {
+                font-size: 0.9rem;
+            }
+
+            .item-price {
+                font-size: 1.2rem;
+            }
+
+            .total-item {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .total-label {
+                font-size: 1.3rem;
             }
 
             .total-amount {
                 font-size: 1.8rem;
             }
 
-            .container {
-                padding: 30px 15px;
+            .btn-primary {
+                padding: 16px;
+                font-size: 1.1rem;
+                margin-top: 25px;
             }
 
             .add-address-link {
                 padding: 14px 25px;
                 font-size: 1rem;
             }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px 12px;
+            }
+
+            .page-header h2 {
+                font-size: 2rem;
+            }
+
+            .checkout-section {
+                padding: 18px;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .address-option {
+                padding: 15px;
+            }
+
+            .order-item {
+                padding: 18px;
+            }
+
+            .total-item {
+                padding: 22px;
+            }
+
+            .total-amount {
+                font-size: 1.6rem;
+            }
+
+            .btn-primary {
+                padding: 15px;
+                font-size: 1rem;
+            }
+
+            .add-address-link {
+                padding: 13px 22px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .page-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .page-header p {
+                font-size: 0.9rem;
+            }
+
+            .checkout-section {
+                padding: 15px;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+            }
+
+            .address-option {
+                padding: 12px;
+            }
+
+            .form-check-label {
+                font-size: 0.95rem;
+            }
+
+            .item-details strong {
+                font-size: 1rem;
+            }
+
+            .total-amount {
+                font-size: 1.4rem;
+            }
+
+            .btn-primary {
+                padding: 14px;
+                font-size: 0.95rem;
+            }
+
+            .add-address-link {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Mobile-Specific Optimizations */
+        @media (max-width: 768px) {
+            /* Improve touch targets */
+            .form-check-input {
+                width: 26px;
+                height: 26px;
+                margin-top: 2px;
+            }
+            
+            .address-option {
+                cursor: pointer;
+            }
+            
+            /* Better spacing on mobile */
+            .order-item {
+                margin-bottom: 15px;
+            }
+            
+            /* Optimize payment button for thumb access */
+            .btn-primary {
+                margin-top: 25px;
+                padding: 18px 15px;
+                border-radius: 16px;
+            }
+            
+            /* Improve readability */
+            .item-details {
+                width: 70%;
+            }
+            
+            .item-price {
+                width: 30%;
+                text-align: right;
+            }
+        }
+        
+        /* Touch-friendly controls */
+        @media (hover: none) and (pointer: coarse) {
+            /* For touch devices */
+            .address-option {
+                padding: 22px;
+            }
+            
+            .form-check-input {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .btn-primary {
+                padding: 20px 15px;
+            }
+            
+            /* Increase tap targets */
+            .form-check-label {
+                padding: 8px 0;
+            }
+        }
+        
+        /* Screen reader and accessibility improvements */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* Focus indicators for accessibility */
+        .address-option:focus-within,
+        .form-check-input:focus {
+            outline: 2px solid #ffffff;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
         }
 
         /* Pulse animation for payment button */
@@ -771,15 +1003,126 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(180deg, #f0f0f0, #d0d0d0);
         }
+    
+
+
+        /* Custom Toggler Icon and Buttons */
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 5px 8px !important;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+            width: 1.25em !important;
+            height: 1.25em !important;
+        }
+
+        .mobile-view .btn-outline-light {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff !important;
+        }
+
+        .mobile-view .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Influencer Swiper Styles */
+        .influencers-swiper {
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .influencers-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+        }
+
+        .influencers-swiper .swiper-wrapper {
+            padding: 10px 0;
+        }
+
+
+        .swiper-pagination.influencers-pagination {
+            bottom: 0 !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: #00c7f7;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #00c7f7;
+        }
+
+        /* Logo + Brand Text Container */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Space between logo and text */
+            text-decoration: none !important;
+        }
+
+        /* Logo Image */
+        .navbar-brand img,
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hover effect on logo */
+        .navbar-brand:hover img,
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+            /* Teal glow */
+        }
+
+        /* Brand Text - "LumosKart" */
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* Hover glow on text */
+        .navbar-brand:hover .brand-text {
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 0 15px rgba(0, 199, 247, 0.6);
+            /* Stronger teal glow */
+        }
+
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo-container">
-            <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Company Logo" class="logo">
+    <!--    <div class="logo-container">-->
+    <!--        <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Company Logo" class="logo">-->
             <!--<span class="company-name">Lumoskart</span>-->
-        </div>
-    </nav>
+    <!--    </div>-->
+    <!--</nav>-->
+     <div class="container-fluid navbar-container">
+                <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                    <span class="brand-text">LumosKart</span>
+                </a>
 
     <div class="container">
         <div class="page-header">
@@ -857,7 +1200,7 @@
                         </div>
                         <span class="item-price">₹{{ total }}</span>
                     </div>
-                    
+
                     <div class="order-item">
                         <div class="item-details">
                             <strong>GST</strong>
@@ -865,15 +1208,15 @@
                         </div>
                         <span class="item-price">₹{{ gst_amount|default:0 }}</span>
                     </div>
-                    
+
                     <div class="order-item">
                         <div class="item-details">
-                            <strong>Courier Charge</strong>
+                            <strong>{{ courier_name|default:"Courier Service" }}</strong>
                             <small>Delivery Fee</small>
                         </div>
                         <span class="item-price">₹{{ courier_charge|default:0 }}</span>
                     </div>
-                    
+
                     <div class="total-item">
                         <span class="total-label">Total Amount</span>
                         <span class="total-amount">₹{{ grand_total|default:0 }}</span>
