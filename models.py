@@ -164,12 +164,34 @@ class Order(models.Model):
         # Auto-calculate commission_amount before saving
         if self.total_amount:
             self.commission_amount = self.total_amount * (self.commission_percentage / 100)
+
+
+            # Check if status is being updated to Shipped or Completed
+        old_instance = None
+        if self.pk:  # If this is an update (not a new instance)
+            try:
+                old_instance = Order.objects.get(pk=self.pk)
+            except Order.DoesNotExist:
+                pass
+
+
         super().save(*args, **kwargs)
+
+ # Auto-update influencer earnings after delivery
+        if old_instance and self.status in [self.SHIPPED, self.COMPLETED] and \
+           old_instance.status not in [self.SHIPPED, self.COMPLETED]:
+            # Calculate and update influencer earnings
+            for item in self.items.all():
+                if item.product and item.product.influencer:
+                    # In a real implementation, you might want to track influencer earnings
+                    # in a separate model or field. For now, we just log the action.
+                    pass
 
     def __str__(self):
         return f"Order #{self.id} - {self.user.email} - ₹{self.total_amount}"
 
-
+    def get_status_display_choices(self):
+        return self.ORDER_STATUS_CHOICES
 
 
 from django.db import models
@@ -224,3 +246,33 @@ class InfluencerApplication(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - Influencer Application ({'Approved' if self.is_approved else 'Pending'})"
+
+
+
+
+
+
+
+
+
+
+
+        # Model to track which users liked which videos
+class VideoLike(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='video_likes'
+    )
+    video = models.ForeignKey(
+        InfluencerVideo,
+        on_delete=models.CASCADE,
+        related_name='user_likes'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'video')  # Prevent duplicate likes
+
+    def __str__(self):
+        return f"{self.user.username} liked {self.video.title}"
