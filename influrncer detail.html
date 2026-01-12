@@ -761,7 +761,7 @@ button:focus:not(:focus-visible) {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-    
+
 .product-brand {
     font-size: 0.85rem;
     color: var(--text-color);
@@ -1186,27 +1186,27 @@ button:focus:not(:focus-visible) {
         padding: 10px;
         scroll-snap-type: x mandatory;
     }
-    
+
     .product-item {
         min-width: calc(50% - 5px);
         scroll-snap-align: start;
     }
-    
+
     /* Custom scrollbar for horizontal scroll */
     .product-grid::-webkit-scrollbar {
         height: 8px;
     }
-    
+
     .product-grid::-webkit-scrollbar-track {
         background: #2a2a2a;
         border-radius: 4px;
     }
-    
+
     .product-grid::-webkit-scrollbar-thumb {
         background: #555;
         border-radius: 4px;
     }
-    
+
     .product-grid::-webkit-scrollbar-thumb:hover {
         background: #777;
     }
@@ -1263,16 +1263,189 @@ button:focus:not(:focus-visible) {
         font-size: 20px;
     }
 }
+ .navbar-brand:hover .brand-text {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
+            /* Teal glow using your primary color */
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Navbar Optimization */
+        @media (max-width: 991px) {
+            .navbar-container {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+                padding: 0 5px !important;
+            }
+
+            .navbar-brand {
+                margin-right: 0 !important;
+                gap: 10px !important;
+                flex-shrink: 0;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            .logo-img {
+                max-height: 40px !important;
+                width: auto !important;
+                flex-shrink: 0;
+            }
+
+            .brand-text {
+                font-size: 1.4rem !important;
+                display: inline-block !important;
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+                -webkit-background-clip: text !important;
+                background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                white-space: nowrap !important;
+            }
+
+            .mobile-view {
+                display: flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                flex-shrink: 0;
+            }
+
+            .desktop-view {
+                display: none !important;
+            }
+
+            .btn-open-app {
+                padding: 4px 12px !important;
+                font-size: 0.85rem !important;
+                height: fit-content;
+            }
+        }
+
+
+        /* Custom Toggler Icon and Buttons */
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 5px 8px !important;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+            width: 1.25em !important;
+            height: 1.25em !important;
+        }
+
+        .mobile-view .btn-outline-light {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff !important;
+        }
+
+        .mobile-view .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Influencer Swiper Styles */
+        .influencers-swiper {
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .influencers-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+        }
+
+        .influencers-swiper .swiper-wrapper {
+            padding: 10px 0;
+        }
+
+
+        .swiper-pagination.influencers-pagination {
+            bottom: 0 !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: #00c7f7;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #00c7f7;
+        }
+
+        /* Logo + Brand Text Container */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Space between logo and text */
+            text-decoration: none !important;
+        }
+
+        /* Logo Image */
+        .navbar-brand img,
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hover effect on logo */
+        .navbar-brand:hover img,
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+            /* Teal glow */
+        }
+
+        /* Brand Text - "LumosKart" */
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* Hover glow on text */
+        .navbar-brand:hover .brand-text {
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 0 15px rgba(0, 199, 247, 0.6);
+            /* Stronger teal glow */
+        }
 
 </style>
 <body>
     <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid" style="display: flex; justify-content: space-between; height: 80px; align-items: center;">
+        <!--<div class="container-fluid" style="display: flex; justify-content: space-between; height: 80px; align-items: center;">-->
             <!-- Logo -->
-            <a class="navbar-brand" href="{% url 'home' %}">
-               <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart" height="50" class="d-inline-block align-middle mr-2">
-            </a>
-
+        <!--    <a class="navbar-brand" href="{% url 'home' %}">-->
+        <!--       <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart" height="50" class="d-inline-block align-middle mr-2">-->
+        <!--    </a>-->
+<div class="container-fluid navbar-container">
+                <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                    <span class="brand-text">LumosKart</span>
+                </a>
             <!-- Mobile/Tablet View -->
             <div class="mobile-view d-flex align-items-center justify-content-end">
                 <a href="{% url 'login' %}" class="btn btn-open-app mx-auto">Login</a>
@@ -1403,8 +1576,12 @@ button:focus:not(:focus-visible) {
 
     <!-- Off-canvas Menu for Mobile/Tablet -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="navbarOffcanvasLabel" style="color: #00c7f7;">LUMOSKART</h5>
+        <div class="navbar-brand d-flex align-items-center gap-2">
+                        <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                            alt="LumosKart Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                        <span class="brand-text" style="font-size: 1.4rem;">LumosKart</span>
+                    </div>
+                </h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
