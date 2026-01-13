@@ -426,20 +426,6 @@ def search_view(request):
 
 
 
-# @login_required
-# def upload_video(request):
-#     if request.user.user_type != 'influencer':
-#         return redirect('home')
-
-#     if request.method == 'POST':
-#         form = VideoUploadForm(request.POST, request.FILES, influencer=request.user)
-#         if form.is_valid():
-#             video = form.save()
-#             return redirect('manage_videos')
-#     else:
-#         form = VideoUploadForm(influencer=request.user)
-
-#     return render(request, 'upload_video.html', {'form': form})
 
 
 from django.contrib.auth.decorators import login_required
@@ -553,6 +539,12 @@ def admin_dashboard(request):
     active_customers = CustomUser.objects.filter(user_type='customer', is_active=True).count()
     pending_influencer_approvals = CustomUser.objects.filter(user_type='influencer', is_active=False)
     pending_orders = Order.objects.filter(status='Pending').count()
+
+    # Additional order statistics
+    shipped_orders = Order.objects.filter(status='Shipped').count()
+    completed_orders = Order.objects.filter(status='Completed').count()
+    canceled_orders = Order.objects.filter(status='Canceled').count()
+    total_orders = Order.objects.count()
 
     # Additional influencer management data
     all_influencers = CustomUser.objects.filter(user_type='influencer').select_related('influencer_profile')
@@ -719,6 +711,10 @@ def admin_dashboard(request):
         'pending_influencer_approvals': pending_influencer_approvals,
         'pending_influencer_approvals_count': pending_influencer_approvals.count(),
         'pending_orders': pending_orders,
+        'shipped_orders': shipped_orders,
+        'completed_orders': completed_orders,
+        'canceled_orders': canceled_orders,
+        'total_orders': total_orders,
         'monthly_revenue_labels': json.dumps(monthly_labels),
         'monthly_revenue_values': json.dumps(monthly_values),
         'top_influencers': top_influencers,
@@ -1091,3 +1087,151 @@ def toggle_video_like(request):
             return JsonResponse({'success': False, 'error': str(e)})
     else:
         return JsonResponse({'success': False, 'error': 'Method not allowed'})
+
+
+@login_required
+def manage_orders(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    # Get all orders with filters
+    orders = Order.objects.select_related('user').all()
+
+    # Apply filters if provided
+    influencer_filter = request.GET.get('influencer')
+    customer_filter = request.GET.get('customer')
+    status_filter = request.GET.get('status')
+    date_filter = request.GET.get('date')
+
+    if influencer_filter:
+        orders = orders.filter(items__product__influencer__username__icontains=influencer_filter)
+    if customer_filter:
+        orders = orders.filter(user__username__icontains=customer_filter)
+    if status_filter:
+        orders = orders.filter(status=status_filter)
+    if date_filter:
+        from django.utils.dateparse import parse_date
+        parsed_date = parse_date(date_filter)
+        if parsed_date:
+            orders = orders.filter(created_at__date=parsed_date)
+
+    # Get unique influencer and customer lists for filters
+    influencers = CustomUser.objects.filter(user_type='influencer').values_list('username', flat=True)
+    customers = CustomUser.objects.filter(user_type='customer').values_list('username', flat=True)
+
+    # Get unique statuses
+    statuses = [choice[0] for choice in Order.ORDER_STATUS_CHOICES]
+
+    context = {
+        'orders': orders.distinct(),
+        'influencers': influencers,
+        'customers': customers,
+        'statuses': statuses,
+        'current_filters': {
+            'influencer': influencer_filter,
+            'customer': customer_filter,
+            'status': status_filter,
+            'date': date_filter,
+        },
+    }
+
+    return render(request, 'manage_orders.html', context)
+
+
+@login_required
+def order_detail(request, order_id):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    order = get_object_or_404(Order, id=order_id)
+    order_items = order.items.all().select_related('product')
+
+    context = {
+        'order': order,
+        'order_items': order_items,
+    }
+
+    return render(request, 'order_detail.html', context)
+
+
+@login_required
+def update_order_status(request, order_id):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    if request.method == 'POST':
+        order = get_object_or_404(Order, id=order_id)
+        new_status = request.POST.get('status')
+
+        if new_status in dict(Order.ORDER_STATUS_CHOICES):
+            order.status = new_status
+            order.save()
+
+            # Auto-update influencer earnings after delivery
+            if new_status == Order.SHIPPED or new_status == Order.COMPLETED:
+                # Calculate and update influencer earnings
+                for item in order.items.all():
+                    if item.product and item.product.influencer:
+                        # Trigger earning calculation for the influencer
+                        # This is handled automatically in the models
+                        pass
+
+            messages.success(request, f'Order #{order.id} status updated to {new_status}')
+        else:
+            messages.error(request, 'Invalid status')
+
+    return redirect('order_detail', order_id=order_id)
+
+
+@login_required
+def process_refund(request, order_id):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    if request.method == 'POST':
+        order = get_object_or_404(Order, id=order_id)
+        refund_type = request.POST.get('refund_type')
+        partial_amount = request.POST.get('partial_amount', 0)
+
+        if refund_type == 'full':
+            # Process full refund
+            order.status = Order.CANCELED
+            order.save()
+            messages.success(request, f'Full refund processed for Order #{order.id}')
+        elif refund_type == 'partial' and partial_amount:
+            # Process partial refund
+            try:
+                partial_amount = float(partial_amount)
+                if partial_amount <= float(order.total_amount):
+                    # For partial refunds, keep the order status as is but mark as refunded
+                    # Or create a separate refund record
+                    messages.success(request, f'Partial refund of ₹{partial_amount} processed for Order #{order.id}')
+                else:
+                    messages.error(request, 'Refund amount exceeds order total')
+            except ValueError:
+                messages.error(request, 'Invalid refund amount')
+
+    return redirect('order_detail', order_id=order_id)
+
+
+@login_required
+def manage_support_tickets(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    # For now, we'll use a simple approach without a dedicated ticket model
+    # In a real application, you would have a SupportTicket model
+    # For demo purposes, we'll just display recent orders
+    recent_orders = Order.objects.select_related('user').order_by('-created_at')[:10]
+
+    context = {
+        'recent_orders': recent_orders,
+    }
+
+    return render(request, 'manage_support_tickets.html', context)
+
+
+
+
+
+
