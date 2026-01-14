@@ -4429,7 +4429,7 @@
     .mobile-view .btn-outline-light:hover {
         background: rgba(255, 255, 255, 0.1);
     }
-    
+
     .banner-section {
     margin-bottom: 3rem;
     padding: 3rem 0;
@@ -4444,8 +4444,8 @@
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, 
-        rgba(0, 0, 0, 0.1) 0%, 
+    background: linear-gradient(135deg,
+        rgba(0, 0, 0, 0.1) 0%,
         rgba(0, 0, 0, 0.2) 100%
     ); /* Subtle dark overlay for depth */
     pointer-events: none;
@@ -4505,6 +4505,18 @@
         font-size: 1rem;
     }
 }
+.heart-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #ff4d6d;
+}
+
+.heart-btn:hover {
+    transform: scale(1.1);
+}
+
 </style>
 
 <body>
@@ -4739,8 +4751,8 @@
         <section class="artist-section">
             <div class="section-title-bar mb-4">
                 <h2 data-en="Influencers" data-ar="المؤثرون" data-hi="प्रभावक"> Influencers</h2>
-                <a href="{% url 'influencer_list' %}" class="view-all-btn" data-en="Show all" data-ar="عرض الكل"
-                    data-hi="सभी दिखाएं">Show all</a>
+                <!--<a href="{% url 'influencer_list' %}" class="view-all-btn" data-en="Show all" data-ar="عرض الكل"-->
+                <!--    data-hi="सभी दिखाएं">Show all</a>-->
             </div>
             <div class="influencers-section">
                 <div class="swiper influencers-swiper">
@@ -5072,10 +5084,14 @@
                                         OFF</span>
                                     {% endif %}
                                 </div>
-                                <button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"
-                                    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">
-                                    <i class="fas fa-heart"></i>
-                                </button>
+                                <!--<button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"-->
+                                <!--    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">-->
+                                <!--    <i class="fas fa-heart"></i>-->
+                                <!--</button>-->
+                                <button class="heart-btn" aria-label="Wishlist">
+    <i class="fas fa-heart"></i>
+</button>
+
                             </div>
                         </div>
                     </div>
@@ -5145,10 +5161,14 @@
                             <div class="product-footer">
                                 <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{
                                     product.price }}</span>
-                                <button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"
-                                    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">
-                                    <i class="fas fa-heart"></i>
-                                </button>
+                                <!--<button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"-->
+                                <!--    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">-->
+                                <!--    <i class="fas fa-heart"></i>-->
+                                <!--</button>-->
+                                <button class="heart-btn" aria-label="Wishlist">
+    <i class="fas fa-heart"></i>
+</button>
+
                             </div>
                         </div>
                     </div>
@@ -5204,7 +5224,7 @@
                         <div class="reel-video-info">
                             <h6 class="reel-video-title">{{ video.title|truncatewords:6 }}</h6>
                             <p class="reel-video-influencer">@{{ video.influencer.username }}</p>
-                            
+
                         </div>
 
                         {% if product %}
