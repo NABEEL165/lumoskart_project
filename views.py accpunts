@@ -12,6 +12,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import  Q, Sum, F
+from django.core.exceptions import FieldError
 # from django.utils.timezone import now
 from .forms import InfluencerRegisterForm, CustomerRegisterForm, InfluencerProfileForm,VideoUploadForm,VideoEditForm
 from .models import CustomUser, InfluencerProfile, InfluencerVideo, WithdrawRequest, Order, OrderItem, InfluencerApplication
@@ -19,12 +20,14 @@ from django.contrib import messages
 
 try:
     from product.models import Category, Product
-except ModuleNotFoundError:
-    from products.models import Category, Product
+except (ModuleNotFoundError, ImportError):
+    try:
+        from products.models import Category, Product
+    except ImportError:
+        from .models import Category, Product  # fallback
 
 
 from django.utils import timezone
-from .models import Order, OrderItem, WithdrawRequest
 
 import json
 
@@ -527,11 +530,22 @@ def admin_dashboard(request):
         total=Sum('total_amount')
     )['total'] or 0
 
-    total_commission = Order.objects.filter(status='Completed').aggregate(
-        total=Sum('commission_amount')
-    )['total'] or 0
+    # Check if commission_amount field exists before using it
+    try:
+        total_commission = Order.objects.filter(status='Completed').aggregate(
+            total=Sum('commission_amount')
+        )['total'] or 0
+    except FieldError:
+        # Fallback if commission_amount field doesn't exist
+        total_commission = 0
+        
+    # Calculate commission based on percentage if commission_amount is 0
+    if total_commission == 0:
+        completed_orders = Order.objects.filter(status='Completed')
+        total_commission = sum(float(order.total_amount) * (float(order.commission_percentage) / 100) 
+                             for order in completed_orders if order.total_amount and order.commission_percentage)
 
-    commission_percentage = round((total_commission / total_revenue * 100), 2) if total_revenue else 0
+    commission_percentage = round((total_commission / total_revenue * 100), 2) if total_revenue and total_revenue != 0 else 0
     total_influencer_earnings = total_revenue - total_commission
 
     # Counts
@@ -592,7 +606,12 @@ def admin_dashboard(request):
             influencer = getattr(item.product, 'influencer', None)
             if not influencer:
                 continue
-            earnings = item.price * item.quantity * (1 - order.commission_percentage / 100)
+            # Safely calculate commission percentage
+            try:
+                commission_percentage = order.commission_percentage
+            except AttributeError:
+                commission_percentage = 10.0  # Default 10% commission
+            earnings = item.price * item.quantity * (1 - commission_percentage / 100)
 
             if influencer.id not in influencer_earnings:
                 influencer_earnings[influencer.id] = {'user': influencer, 'total_earnings': 0}
@@ -730,8 +749,8 @@ def admin_dashboard(request):
     return render(request, 'admin_dashboard.html', context)
 
 # accounts/views.py
-# from django.shortcuts import render
-# from orders.models import Order
+from django.shortcuts import render
+from orders.models import Order
 
 def order_tracking(request):
     order = None
@@ -1001,6 +1020,15 @@ def manage_users(request):
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+# Import product models for the views
+try:
+    from products.models import Product, Category
+except ImportError:
+    try:
+        from product.models import Product, Category
+    except ImportError:
+        from .models import Product, Category  # fallback in case of import issues
+
 
 
 @csrf_exempt
@@ -1229,6 +1257,144 @@ def manage_support_tickets(request):
     }
 
     return render(request, 'manage_support_tickets.html', context)
+
+
+@login_required
+def manage_products(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    # Get all products with filtering options
+    products = Product.objects.select_related('influencer', 'category').all()
+    
+    # Apply filters if provided
+    influencer_filter = request.GET.get('influencer')
+    category_filter = request.GET.get('category')
+    status_filter = request.GET.get('status')  # approved, pending, hidden, featured, trending
+    
+    if influencer_filter:
+        products = products.filter(influencer__username__icontains=influencer_filter)
+    if category_filter:
+        products = products.filter(category__name__icontains=category_filter)
+    if status_filter == 'approved':
+        products = products.filter(is_approved=True)
+    elif status_filter == 'pending':
+        products = products.filter(is_approved=False)
+    elif status_filter == 'hidden':
+        products = products.filter(is_hidden=True)
+    elif status_filter == 'featured':
+        products = products.filter(is_featured=True)
+    elif status_filter == 'trending':
+        products = products.filter(is_trending=True)
+    
+    # Get unique influencers and categories for filters
+    influencers = CustomUser.objects.filter(user_type='influencer').values_list('username', flat=True)
+    categories = Category.objects.values_list('name', flat=True)
+    
+    # Handle POST requests for bulk actions
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        product_ids = request.POST.getlist('product_ids')
+        
+        if action and product_ids:
+            products_to_update = Product.objects.filter(id__in=product_ids)
+            
+            if action == 'approve':
+                products_to_update.update(is_approved=True)
+                messages.success(request, f'{len(product_ids)} products approved successfully.')
+            elif action == 'unapprove':
+                products_to_update.update(is_approved=False)
+                messages.success(request, f'{len(product_ids)} products unapproved successfully.')
+            elif action == 'feature':
+                products_to_update.update(is_featured=True)
+                messages.success(request, f'{len(product_ids)} products marked as featured.')
+            elif action == 'unfeature':
+                products_to_update.update(is_featured=False)
+                messages.success(request, f'{len(product_ids)} products unmarked as featured.')
+            elif action == 'hide':
+                products_to_update.update(is_hidden=True)
+                messages.success(request, f'{len(product_ids)} products hidden successfully.')
+            elif action == 'show':
+                products_to_update.update(is_hidden=False)
+                messages.success(request, f'{len(product_ids)} products shown successfully.')
+            elif action == 'make_trending':
+                products_to_update.update(is_trending=True)
+                messages.success(request, f'{len(product_ids)} products marked as trending.')
+            elif action == 'remove_trending':
+                products_to_update.update(is_trending=False)
+                messages.success(request, f'{len(product_ids)} products removed from trending.')
+            elif action == 'delete':
+                # Delete the selected products
+                products_to_update.delete()
+                messages.success(request, f'{len(product_ids)} products deleted successfully.')
+        
+        return redirect('manage_products')
+    
+    context = {
+        'products': products,
+        'influencers': influencers,
+        'categories': categories,
+        'current_filters': {
+            'influencer': influencer_filter,
+            'category': category_filter,
+            'status': status_filter,
+        },
+    }
+    
+    return render(request, 'manage_products.html', context)
+
+
+@login_required
+def toggle_product_flag(request, product_id):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        product = get_object_or_404(Product, id=product_id)
+        flag = request.POST.get('flag')
+        value = request.POST.get('value') == 'true'
+        
+        if flag in ['is_approved', 'is_featured', 'is_hidden', 'is_trending']:
+            setattr(product, flag, value)
+            product.save()
+            
+            status_map = {
+                'is_approved': 'approved' if value else 'unapproved',
+                'is_featured': 'featured' if value else 'unfeatured',
+                'is_hidden': 'hidden' if value else 'shown',
+                'is_trending': 'trending' if value else 'not trending',
+            }
+            messages.success(request, f'Product {product.name} {status_map[flag]} successfully.')
+        
+        return JsonResponse({'success': True})
+    
+    return JsonResponse({'success': False})
+
+
+@login_required
+def reassign_product(request, product_id):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    product = get_object_or_404(Product, id=product_id)
+    
+    if request.method == 'POST':
+        new_influencer_id = request.POST.get('influencer_id')
+        new_influencer = get_object_or_404(CustomUser, id=new_influencer_id, user_type='influencer')
+        
+        product.influencer = new_influencer
+        product.save()
+        
+        messages.success(request, f'Product {product.name} reassigned to {new_influencer.username}.')
+        return redirect('manage_products')
+    
+    influencers = CustomUser.objects.filter(user_type='influencer')
+    context = {
+        'product': product,
+        'influencers': influencers,
+    }
+    
+    return render(request, 'reassign_product.html', context)
 
 
 
