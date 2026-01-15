@@ -135,19 +135,7 @@ def user_login(request):
         form = AuthenticationForm()
 
     return render(request, 'login.html', {'form': form})
-# def user_login(request):
-#     if request.method == 'POST':
-#         form = AuthenticationForm(request, data=request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             login(request, user)
-#             if user.user_type == 'influencer':
-#                 return redirect('influencer_dashboard')
-#                 return redirect('admin_dashboard')
-#             return redirect('customer_dashboard')
-#     else:
-#         form = AuthenticationForm()
-#     return render(request, 'login.html', {'form': form})
+
 
 @login_required
 def influencer_dashboard(request):
