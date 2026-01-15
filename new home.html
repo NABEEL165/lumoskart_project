@@ -193,8 +193,12 @@
         .section-title-bar h2 {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #f1f5f9;
             margin: 0;
+            color: #ffffff;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .view-all-btn {
@@ -3164,8 +3168,12 @@
     .video-shorts-section .section-title {
         font-size: 2rem;
         font-weight: 700;
-        color: #e3e3e3;
         margin-bottom: 8px;
+        color: #ffffff;
+        background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     .video-shorts-section .section-description {
@@ -3349,6 +3357,11 @@
     .section-title-bar h2 {
         font-size: 28px;
         font-weight: bold;
+        color: #ffffff;
+        background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     .view-all-btn {
@@ -4172,12 +4185,16 @@
     .category-showcase-title {
         font-size: 2.2rem;
         font-weight: 800;
-        color: #fff;
         margin-bottom: 35px;
         padding-left: 20px;
         border-left: 6px solid #32c2e6;
         text-transform: uppercase;
         letter-spacing: 1px;
+        color: #ffffff;
+        background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     .amazon-swiper {
@@ -4429,82 +4446,104 @@
     .mobile-view .btn-outline-light:hover {
         background: rgba(255, 255, 255, 0.1);
     }
-    
+
     .banner-section {
-    margin-bottom: 3rem;
-    padding: 3rem 0;
-    background: #00c7f7; /* Solid primary blue */
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 10px 30px rgba(0, 199, 247, 0.3);
-}
-
-.banner-section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, 
-        rgba(0, 0, 0, 0.1) 0%, 
-        rgba(0, 0, 0, 0.2) 100%
-    ); /* Subtle dark overlay for depth */
-    pointer-events: none;
-    border-radius: 20px;
-}
-
-.banner-card {
-    background: transparent;
-    padding: 3rem 2rem;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-    border: none;
-    box-shadow: none;
-}
-
-.banner-card h2 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #ffffff; /* Pure white text */
-    margin-bottom: 1rem;
-    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-}
-
-.banner-card p {
-    font-size: 1.2rem;
-    color: #ffffff; /* Pure white text */
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.7;
-    opacity: 0.95;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .banner-section {
-        margin: 1rem;
-        border-radius: 16px;
-        padding: 2rem 0;
+        margin-bottom: 3rem;
+        padding: 3rem 0;
+        background: #00c7f7;
+        /* Solid primary blue */
+        border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 199, 247, 0.3);
     }
+
+    .banner-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg,
+                rgba(0, 0, 0, 0.1) 0%,
+                rgba(0, 0, 0, 0.2) 100%);
+        /* Subtle dark overlay for depth */
+        pointer-events: none;
+        border-radius: 20px;
+    }
+
     .banner-card {
-        padding: 2rem 1.5rem;
+        background: transparent;
+        padding: 3rem 2rem;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        border: none;
+        box-shadow: none;
     }
-    .banner-card h2 {
-        font-size: 2rem;
-    }
-    .banner-card p {
-        font-size: 1.1rem;
-    }
-}
 
-@media (max-width: 576px) {
     .banner-card h2 {
-        font-size: 1.7rem;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #ffffff;
+        /* Pure white text */
+        margin-bottom: 1rem;
+        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     }
+
     .banner-card p {
-        font-size: 1rem;
+        font-size: 1.2rem;
+        color: #ffffff;
+        /* Pure white text */
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.7;
+        opacity: 0.95;
     }
-}
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .banner-section {
+            margin: 1rem;
+            border-radius: 16px;
+            padding: 2rem 0;
+        }
+
+        .banner-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .banner-card h2 {
+            font-size: 2rem;
+        }
+
+        .banner-card p {
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .banner-card h2 {
+            font-size: 1.7rem;
+        }
+
+        .banner-card p {
+            font-size: 1rem;
+        }
+    }
+
+    .heart-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        color: #ff4d6d;
+    }
+
+    .heart-btn:hover {
+        transform: scale(1.1);
+    }
 </style>
 
 <body>
@@ -4739,8 +4778,8 @@
         <section class="artist-section">
             <div class="section-title-bar mb-4">
                 <h2 data-en="Influencers" data-ar="المؤثرون" data-hi="प्रभावक"> Influencers</h2>
-                <a href="{% url 'influencer_list' %}" class="view-all-btn" data-en="Show all" data-ar="عرض الكل"
-                    data-hi="सभी दिखाएं">Show all</a>
+                <!--<a href="{% url 'influencer_list' %}" class="view-all-btn" data-en="Show all" data-ar="عرض الكل"-->
+                <!--    data-hi="सभी दिखाएं">Show all</a>-->
             </div>
             <div class="influencers-section">
                 <div class="swiper influencers-swiper">
@@ -5072,10 +5111,14 @@
                                         OFF</span>
                                     {% endif %}
                                 </div>
-                                <button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"
-                                    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">
+                                <!--<button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"-->
+                                <!--    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">-->
+                                <!--    <i class="fas fa-heart"></i>-->
+                                <!--</button>-->
+                                <button class="heart-btn" aria-label="Wishlist">
                                     <i class="fas fa-heart"></i>
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -5087,7 +5130,7 @@
         <!-- Fallback: Show all products if no categories exist -->
         <section class="artist-section">
             <div class="section-title-bar">
-                <h2 data-en="Products" data-ar="المنتجات" data-hi="उत्पाद"> Products</h2>
+                <h2 data-en=" Trending Products" data-ar="المنتجات" data-hi="उत्पTाद">Trending Products</h2>
                 <a href="{% url 'product_lists' %}" class="view-all-btn" data-en="View More" data-ar="عرض المزيد"
                     data-hi="और देखें">View More</a>
             </div>
@@ -5145,10 +5188,14 @@
                             <div class="product-footer">
                                 <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{
                                     product.price }}</span>
-                                <button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"
-                                    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">
+                                <!--<button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"-->
+                                <!--    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">-->
+                                <!--    <i class="fas fa-heart"></i>-->
+                                <!--</button>-->
+                                <button class="heart-btn" aria-label="Wishlist">
                                     <i class="fas fa-heart"></i>
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -5204,10 +5251,7 @@
                         <div class="reel-video-info">
                             <h6 class="reel-video-title">{{ video.title|truncatewords:6 }}</h6>
                             <p class="reel-video-influencer">@{{ video.influencer.username }}</p>
-                            {% if video.influencer.influencer_profile and video.influencer.influencer_profile.bio %}
-                            <p class="reel-video-description">{{
-                                video.influencer.influencer_profile.bio|truncatewords:10 }}</p>
-                            {% endif %}
+
                         </div>
 
                         {% if product %}
@@ -5332,7 +5376,7 @@
 
 
 
- <!-- Footer -->
+        <!-- Footer -->
         <footer class="footer">
             <div class="footer-container">
                 <div class="footer-grid">
@@ -5395,7 +5439,7 @@
                 </div>
             </div>
         </footer>
-    </div>
+        </div>
 
 
         <!-- Scripts -->
