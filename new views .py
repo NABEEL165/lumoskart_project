@@ -28,7 +28,7 @@ import json
 def home_view(request):
     categories = Category.objects.all()
     influencers = CustomUser.objects.filter(user_type='influencer')
-    products = Product.objects.select_related('category', 'influencer')[:12]
+    products = Product.objects.filter(is_trending=True).select_related('category', 'influencer')[:12]
 
     # FIXED: Use correct field names from your model
     reels_videos = InfluencerVideo.objects.filter(is_active=True).order_by('-created_at')
