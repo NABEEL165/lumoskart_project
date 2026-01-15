@@ -8,7 +8,7 @@ from django.db.models import  Q, Sum, F
 from django.core.exceptions import FieldError
 # from django.utils.timezone import now
 from .forms import InfluencerRegisterForm, CustomerRegisterForm, InfluencerProfileForm,VideoUploadForm,VideoEditForm
-from .models import CustomUser, InfluencerProfile, InfluencerVideo, WithdrawRequest, Order, OrderItem, InfluencerApplication
+from .models import CustomUser, InfluencerProfile, InfluencerVideo, WithdrawRequest, Order, OrderItem, InfluencerApplication,Banner, BlogPost, PageContent, PromoVideo
 from django.contrib import messages
 
 try:
@@ -1376,6 +1376,275 @@ def reassign_product(request, product_id):
     }
 
     return render(request, 'reassign_product.html', context)
+
+
+
+# === ADMIN CONTENT MANAGEMENT VIEWS ===
+
+@login_required
+def manage_banners_sliders(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'add_banner':
+            title = request.POST.get('title')
+            image = request.FILES.get('image')
+            link_url = request.POST.get('link_url', '')
+            section = request.POST.get('section', 'hero')
+            order = request.POST.get('order', 0)
+            is_active = bool(request.POST.get('is_active', True))
+
+            if title and image:
+                Banner.objects.create(
+                    title=title,
+                    image=image,
+                    link_url=link_url,
+                    section=section,
+                    order=int(order),
+                    is_active=is_active
+                )
+                messages.success(request, 'Banner added successfully.')
+            else:
+                messages.error(request, 'Title and image are required.')
+
+        elif action == 'toggle_banner':
+            banner_id = request.POST.get('banner_id')
+            banner = get_object_or_404(Banner, id=banner_id)
+            banner.is_active = not banner.is_active
+            banner.save()
+            status = 'activated' if banner.is_active else 'deactivated'
+            messages.success(request, f'Banner {status} successfully.')
+
+        elif action == 'delete_banner':
+            banner_id = request.POST.get('banner_id')
+            banner = get_object_or_404(Banner, id=banner_id)
+            banner.delete()
+            messages.success(request, 'Banner deleted successfully.')
+
+        return redirect('manage_banners_sliders')
+
+    # Get all banners grouped by section
+    hero_banners = Banner.objects.filter(section='hero').order_by('order')
+    middle_banners = Banner.objects.filter(section='middle').order_by('order')
+    bottom_banners = Banner.objects.filter(section='bottom').order_by('order')
+
+    context = {
+        'hero_banners': hero_banners,
+        'middle_banners': middle_banners,
+        'bottom_banners': bottom_banners,
+    }
+
+    return render(request, 'manage_banners_sliders.html', context)
+
+
+@login_required
+def manage_promo_videos(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'add_video':
+            title = request.POST.get('title')
+            video_file = request.FILES.get('video_file')
+            thumbnail = request.FILES.get('thumbnail')
+            is_active = bool(request.POST.get('is_active', True))
+
+            if title and video_file:
+                PromoVideo.objects.create(
+                    title=title,
+                    video_file=video_file,
+                    thumbnail=thumbnail,
+                    is_active=is_active
+                )
+                messages.success(request, 'Promo video added successfully.')
+            else:
+                messages.error(request, 'Title and video file are required.')
+
+        elif action == 'toggle_video':
+            video_id = request.POST.get('video_id')
+            video = get_object_or_404(PromoVideo, id=video_id)
+            video.is_active = not video.is_active
+            video.save()
+            status = 'activated' if video.is_active else 'deactivated'
+            messages.success(request, f'Promo video {status} successfully.')
+
+        elif action == 'delete_video':
+            video_id = request.POST.get('video_id')
+            video = get_object_or_404(PromoVideo, id=video_id)
+            video.delete()
+            messages.success(request, 'Promo video deleted successfully.')
+
+        return redirect('manage_promo_videos')
+
+    promo_videos = PromoVideo.objects.all().order_by('-created_at')
+
+    context = {
+        'promo_videos': promo_videos,
+    }
+
+    return render(request, 'manage_promo_videos.html', context)
+
+
+@login_required
+def manage_cms_pages(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'add_page':
+            slug = request.POST.get('slug')
+            title = request.POST.get('title')
+            content = request.POST.get('content')
+
+            if slug and title:
+                PageContent.objects.update_or_create(
+                    slug=slug,
+                    defaults={
+                        'title': title,
+                        'content': content
+                    }
+                )
+                messages.success(request, 'CMS page saved successfully.')
+            else:
+                messages.error(request, 'Slug and title are required.')
+
+        elif action == 'delete_page':
+            page_id = request.POST.get('page_id')
+            page = get_object_or_404(PageContent, id=page_id)
+            page.delete()
+            messages.success(request, 'CMS page deleted successfully.')
+
+        return redirect('manage_cms_pages')
+
+    cms_pages = PageContent.objects.all().order_by('slug')
+
+    context = {
+        'cms_pages': cms_pages,
+    }
+
+    return render(request, 'manage_cms_pages.html', context)
+
+
+@login_required
+def manage_blog_posts(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'add_post':
+            title = request.POST.get('title')
+            slug = request.POST.get('slug')
+            content = request.POST.get('content')
+            thumbnail = request.FILES.get('thumbnail')
+            is_published = bool(request.POST.get('is_published', False))
+
+            if title and slug:
+                BlogPost.objects.update_or_create(
+                    slug=slug,
+                    defaults={
+                        'title': title,
+                        'content': content,
+                        'thumbnail': thumbnail,
+                        'is_published': is_published
+                    }
+                )
+                status = 'published' if is_published else 'saved as draft'
+                messages.success(request, f'Blog post {status} successfully.')
+            else:
+                messages.error(request, 'Title and slug are required.')
+
+        elif action == 'toggle_publish':
+            post_id = request.POST.get('post_id')
+            post = get_object_or_404(BlogPost, id=post_id)
+            post.is_published = not post.is_published
+            post.save()
+            status = 'published' if post.is_published else 'unpublished'
+            messages.success(request, f'Blog post {status} successfully.')
+
+        elif action == 'delete_post':
+            post_id = request.POST.get('post_id')
+            post = get_object_or_404(BlogPost, id=post_id)
+            post.delete()
+            messages.success(request, 'Blog post deleted successfully.')
+
+        return redirect('manage_blog_posts')
+
+    blog_posts = BlogPost.objects.all().order_by('-created_at')
+    published_posts = blog_posts.filter(is_published=True)
+    draft_posts = blog_posts.filter(is_published=False)
+
+    context = {
+        'blog_posts': blog_posts,
+        'published_posts': published_posts,
+        'draft_posts': draft_posts,
+    }
+
+    return render(request, 'manage_blog_posts.html', context)
+
+
+@login_required
+def manage_thumbnails(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    # This view manages thumbnails for various content types
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'replace_thumbnail':
+            content_type = request.POST.get('content_type')  # 'product', 'blog', 'video', 'promo'
+            content_id = request.POST.get('content_id')
+            new_thumbnail = request.FILES.get('new_thumbnail')
+
+            if content_type and content_id and new_thumbnail:
+                try:
+                    if content_type == 'product':
+                        content = get_object_or_404(Product, id=content_id)
+                    elif content_type == 'blog':
+                        content = get_object_or_404(BlogPost, id=content_id)
+                    elif content_type == 'video':
+                        content = get_object_or_404(InfluencerVideo, id=content_id)
+                    elif content_type == 'promo':
+                        content = get_object_or_404(PromoVideo, id=content_id)
+                    else:
+                        messages.error(request, 'Invalid content type.')
+                        return redirect('manage_thumbnails')
+
+                    content.thumbnail = new_thumbnail
+                    content.save()
+                    messages.success(request, 'Thumbnail replaced successfully.')
+                except Exception as e:
+                    messages.error(request, f'Error replacing thumbnail: {str(e)}')
+            else:
+                messages.error(request, 'All fields are required.')
+
+        return redirect('manage_thumbnails')
+
+    # Get content that can have thumbnails
+    products = Product.objects.all()
+    blog_posts = BlogPost.objects.all()
+    videos = InfluencerVideo.objects.all()
+    promo_videos = PromoVideo.objects.all()
+
+    context = {
+        'products': products,
+        'blog_posts': blog_posts,
+        'videos': videos,
+        'promo_videos': promo_videos,
+    }
+
+    return render(request, 'manage_thumbnails.html', context)
+
+
 
 
 
