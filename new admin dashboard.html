@@ -185,12 +185,18 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_products' %}">
+                                <i class="fas fa-box me-2"></i>
+                                Product Management
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <i class="fas fa-chart-bar me-2"></i>
                                 Analytics
                             </a>
                         </li>
-
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <i class="fas fa-dollar-sign me-2"></i>
@@ -231,12 +237,18 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_products' %}">
+                                <i class="fas fa-box me-2"></i>
+                                Product Management
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <i class="fas fa-chart-bar me-2"></i>
                                 Analytics
                             </a>
                         </li>
-
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <i class="fas fa-dollar-sign me-2"></i>
@@ -483,7 +495,8 @@
                             <div class="card-body">
                                 <a href="{% url 'manage_orders' %}" class="btn btn-primary btn-sm d-block mb-2">Manage Orders</a>
                                 <a href="{% url 'manage_support_tickets' %}" class="btn btn-warning btn-sm d-block mb-2">Support Tickets</a>
-                                <a href="{% url 'manage_influencers' %}" class="btn btn-info btn-sm d-block">Manage Influencers</a>
+                                <a href="{% url 'manage_products' %}" class="btn btn-info btn-sm d-block mb-2">Product Management</a>
+                                <a href="{% url 'manage_influencers' %}" class="btn btn-success btn-sm d-block">Manage Influencers</a>
                             </div>
                         </div>
                     </div>
@@ -569,7 +582,7 @@
                                 <h5>Quick Actions</h5>
                             </div>
                             <div class="card-body">
-                                <a href="#" class="btn btn-outline-primary me-2">View All Transactions</a>
+                                <a href="{% url 'manage_products' %}" class="btn btn-outline-primary me-2">Product Management</a>
                                 <a href="#" class="btn btn-outline-secondary me-2">Analytics Reports</a>
                                 <a href="#" class="btn btn-outline-info me-2">User Management</a>
                                 <a href="#" class="btn btn-outline-warning">System Settings</a>
