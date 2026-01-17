@@ -1435,11 +1435,7 @@ button:focus:not(:focus-visible) {
 </style>
 <body>
     <nav class="navbar navbar-expand-lg">
-        <!--<div class="container-fluid" style="display: flex; justify-content: space-between; height: 80px; align-items: center;">-->
-            <!-- Logo -->
-        <!--    <a class="navbar-brand" href="{% url 'home' %}">-->
-        <!--       <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart" height="50" class="d-inline-block align-middle mr-2">-->
-        <!--    </a>-->
+
 <div class="container-fluid navbar-container">
                 <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
                     <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
@@ -1576,12 +1572,12 @@ button:focus:not(:focus-visible) {
 
     <!-- Off-canvas Menu for Mobile/Tablet -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
-        <div class="navbar-brand d-flex align-items-center gap-2">
-                        <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
-                            alt="LumosKart Logo" style="height: 40px; width: auto; border-radius: 6px;">
-                        <span class="brand-text" style="font-size: 1.4rem;">LumosKart</span>
-                    </div>
-                </h5>
+        <div class="offcanvas-header">
+            <div class="navbar-brand d-flex align-items-center gap-2">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                    alt="LumosKart Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                <span class="brand-text" style="font-size: 1.4rem;">LumosKart</span>
+            </div>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -1638,6 +1634,48 @@ button:focus:not(:focus-visible) {
 
     <!-- Main JS -->
     <script src="{% static 'assets/js/main.js' %}"></script>
+
+    <script>
+        // Mobile menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileToggle = document.querySelector('.navbar-toggler');
+            const offcanvasElement = document.getElementById('navbarOffcanvas');
+
+            if (mobileToggle && offcanvasElement) {
+                mobileToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    // Bootstrap handles the offcanvas toggle automatically
+                    // Just ensure proper functionality
+                });
+
+                // Close offcanvas when clicking outside
+                document.addEventListener('click', function(event) {
+                    const isClickInsideNavbar = mobileToggle.contains(event.target) ||
+                                               offcanvasElement.contains(event.target);
+
+                    if (!isClickInsideNavbar && offcanvasElement.classList.contains('show')) {
+                        bootstrap.Offcanvas.getInstance(offcanvasElement).hide();
+                    }
+                });
+            }
+
+            // Ensure search offcanvas works properly too
+            const searchToggle = document.querySelector('[data-bs-target="#searchOffcanvas"]');
+            const searchOffcanvasElement = document.getElementById('searchOffcanvas');
+
+            if (searchToggle && searchOffcanvasElement) {
+                // Close search offcanvas when clicking outside
+                document.addEventListener('click', function(event) {
+                    const isClickInsideSearch = searchToggle.contains(event.target) ||
+                                               searchOffcanvasElement.contains(event.target);
+
+                    if (!isClickInsideSearch && searchOffcanvasElement.classList.contains('show')) {
+                        bootstrap.Offcanvas.getInstance(searchOffcanvasElement).hide();
+                    }
+                });
+            }
+        });
+    </script>
 
         <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
