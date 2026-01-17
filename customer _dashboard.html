@@ -1003,15 +1003,40 @@
 
         .product-footer {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: flex-start;
-            margin-top: auto;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color:  white;
+        }
+
+        /* Enhanced Price Section */
+        .price-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .original-price {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            text-decoration: line-through;
+        }
+
+        .discount-badge {
+            background: #10b981;
             color: white;
-            font-weight: 800;
-            font-size: 1.4rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
         }
 
         .heart-btn {
@@ -3292,8 +3317,16 @@
                         <h5 class="product-name">{{ product.name }}</h5>
                         <p class="product-description">{{ product.description|truncatewords:10 }}</p>
                         <div class="product-footer">
-                            <p class="product-price" data-price="{{ product.price }}" data-currency="USD">${{
-                                product.price }}</p>
+                            <div class="price-section">
+                                <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{
+                                    product.price }}</span>
+                                {% if product.original_price %}
+                                <span class="original-price" data-price="{{ product.original_price }}"
+                                    data-currency="INR">₹{{ product.original_price }}</span>
+                                <span class="discount-badge">{% widthratio product.price product.original_price 100 %}%
+                                    OFF</span>
+                                {% endif %}
+                            </div>
                             <!--<button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"-->
                             <!--    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">-->
                             <!--    <i class="fas fa-heart"></i>-->
