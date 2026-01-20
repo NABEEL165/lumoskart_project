@@ -885,6 +885,53 @@ def delete_influencer(request, user_id):
 
 
 @login_required
+def reset_influencer_password(request, user_id):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    influencer = get_object_or_404(CustomUser, id=user_id, user_type='influencer')
+
+    if request.method == 'POST':
+        # Check if a custom password was provided
+        custom_password = request.POST.get('custom_password')
+        
+        if custom_password:
+            # Use the custom password provided by admin
+            temp_password = custom_password
+        else:
+            # Generate a temporary password
+            import secrets
+            import string
+            temp_password = ''.join(secrets.choice(string.ascii_letters + string.digits + string.punctuation) for _ in range(12))
+        
+        # Set the new password
+        influencer.set_password(temp_password)
+        influencer.save()
+        
+        # Send email notification with the temporary password
+        try:
+            send_mail(
+                'Password Reset - LumosKart',
+                f'Hello {influencer.username},\n\nYour password has been reset by an administrator.\n\nYour new password is: {temp_password}\n\nPlease log in with this password and change it immediately.\n\nBest regards,\nThe LumosKart Team',
+                'empireaeitservices8@gmail.com',
+                [influencer.email],
+                fail_silently=False,
+            )
+            messages.success(request, f'Password has been reset successfully for {influencer.username}. A password has been sent to their email.')
+        except Exception as e:
+            # If email fails, still notify the admin
+            messages.warning(request, f'Password reset for {influencer.username}, but email notification failed. Please inform the user manually.')
+        
+        return redirect('manage_influencers')
+
+    # If GET request, show confirmation page
+    context = {
+        'influencer': influencer
+    }
+    return render(request, 'confirm_reset_password.html', context)
+
+
+@login_required
 def influencer_earnings(request):
     if request.user.user_type != 'influencer':
         return redirect('home')
