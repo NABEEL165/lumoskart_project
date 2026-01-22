@@ -1,0 +1,431 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Detail #{{ order.id }} - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background-color: #f8f9fa;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+        }
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+        }
+        .order-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .status-pending { background-color: #fff3cd; color: #856404; }
+        .status-completed { background-color: #d4edda; color: #155724; }
+        .status-shipped { background-color: #cce5ff; color: #004085; }
+        .status-canceled { background-color: #f8d7da; color: #721c24; }
+        .summary-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <h5 class="text-center mb-4">Admin Panel</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                                <i class="fas fa-home"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_influencers' %}">
+                                <i class="fas fa-users"></i>
+                                Influencers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'manage_orders' %}">
+                                <i class="fas fa-shopping-cart"></i>
+                                Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_support_tickets' %}">
+                                <i class="fas fa-ticket-alt"></i>
+                                Support Tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-bar-chart-2"></i>
+                                Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-box"></i>
+                                Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-dollar-sign"></i>
+                                Transactions
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-10 ms-sm-auto px-md-4 main-content">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Order #{{ order.id }} Details</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <a href="{% url 'manage_orders' %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Orders
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <!-- Order Summary Card -->
+                        <div class="card order-card">
+                            <div class="card-header">
+                                <h5>Order Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Order ID:</strong> #{{ order.id }}</p>
+                                        <p><strong>Customer:</strong> {{ order.user.username }}</p>
+                                        <p><strong>Customer Email:</strong> {{ order.user.email }}</p>
+                                        <p><strong>Created At:</strong> {{ order.created_at }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+                                        {% if order.commission_percentage is not None %}
+                                        <p><strong>Commission Percentage:</strong> {{ order.commission_percentage }}%</p>
+                                        {% else %}
+                                        <p><strong>Commission Percentage:</strong> N/A</p>
+                                        {% endif %}
+                                        {% if order.commission_amount is not None %}
+                                        <p><strong>Commission Amount:</strong> ₹{{ order.commission_amount }}</p>
+                                        {% else %}
+                                        <p><strong>Commission Amount:</strong> ₹0.00</p>
+                                        {% endif %}
+                                        <p><strong>Status:</strong>
+                                            <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {% if order.address %}
+                                <div class="mt-3">
+                                    <h6>Delivery Address:</h6>
+                                    <p>{{ order.address }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Order Items Card -->
+                        <div class="card order-card">
+                            <div class="card-header">
+                                <h5>Order Items</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Influencer</th>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in order_items %}
+                                            <tr>
+                                                <td>{{ item.product.name }}</td>
+                                                <td>
+                                                    {% if item.product.influencer %}
+                                                        {{ item.product.influencer.username }}
+                                                    {% else %}
+                                                        N/A
+                                                    {% endif %}
+                                                </td>
+                                                <td>₹{{ item.price }}</td>
+                                                <td>{{ item.quantity }}</td>
+                                                <td>₹{{ item.total_price }}</td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="5" class="text-center">No items in this order.</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <!-- Action Cards -->
+                        <div class="summary-card mb-3">
+                            <h6>Quick Actions</h6>
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#statusModal">
+                                    <i class="fas fa-edit"></i> Update Status
+                                </button>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#refundModal">
+                                    <i class="fas fa-undo"></i> Process Refund
+                                </button>
+                                 <a href="{% url 'download_invoice' order.id %}" class="btn btn-info">
+                                    <i class="fas fa-file-pdf"></i> Download Invoice
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Order Summary -->
+                        <div class="card order-card">
+                            <div class="card-header">
+                                <h5>Order Summary</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Subtotal:</span>
+                                            <span>₹{{ order.total_amount|floatformat:2 }}</span>
+                                        </div>
+                                    </li>
+                                    <li class="mb-2">
+                                        <div class="d-flex justify-content-between">
+                                            {% if order.commission_percentage is not None %}
+                                            <span>Commission ({{ order.commission_percentage }}%):</span>
+                                            {% else %}
+                                            <span>Commission (N/A):</span>
+                                            {% endif %}
+                                            {% if order.commission_amount is not None %}
+                                            <span>-₹{{ order.commission_amount|floatformat:2 }}</span>
+                                            {% else %}
+                                            <span>-₹0.00</span>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                    <hr>
+                                    <li class="mb-2">
+                                        <div class="d-flex justify-content-between fw-bold">
+                                            <span>LumosKart Revenue:</span>
+                                            <span>₹{% if order.commission_amount is not None %}{{ order.commission_amount|floatformat:2 }}{% else %}0.00{% endif %}</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-between fw-bold">
+                                            <span>Influencer Earnings:</span>
+                                            <span>₹{% if order.commission_amount is not None %}{{ order.total_amount|floatformat:2|add:"-"|add:order.commission_amount|floatformat:2 }}{% else %}{{ order.total_amount|floatformat:2 }}{% endif %}</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Status History -->
+                        <div class="card order-card">
+                            <div class="card-header">
+                                <h5>Status History</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <i class="fas fa-shopping-cart text-primary"></i>
+                                        <div>
+                                            <h6 class="mb-0">Order Placed</h6>
+                                            <small class="text-muted">{{ order.created_at }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <i class="fas fa-credit-card text-success"></i>
+                                        <div>
+                                            <h6 class="mb-0">Payment Confirmed</h6>
+                                            <small class="text-muted">{{ order.created_at }}</small>
+                                        </div>
+                                    </div>
+                                    {% if order.status != 'Pending' %}
+                                    <div class="timeline-item">
+                                        <i class="fas fa-check-circle text-info"></i>
+                                        <div>
+                                            <h6 class="mb-0">Order Confirmed</h6>
+                                            <small class="text-muted">{{ order.updated_at|default:order.created_at }}</small>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% if order.status == 'Shipped' or order.status == 'Completed' %}
+                                    <div class="timeline-item">
+                                        <i class="fas fa-truck text-warning"></i>
+                                        <div>
+                                            <h6 class="mb-0">Order Shipped</h6>
+                                            <small class="text-muted">{{ order.updated_at|default:order.created_at }}</small>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% if order.status == 'Completed' %}
+                                    <div class="timeline-item">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                        <div>
+                                            <h6 class="mb-0">Order Delivered</h6>
+                                            <small class="text-muted">{{ order.updated_at|default:order.created_at }}</small>
+                                        </div>
+                                    </div>
+                                    {% elif order.status == 'Canceled' %}
+                                    <div class="timeline-item">
+                                        <i class="fas fa-times-circle text-danger"></i>
+                                        <div>
+                                            <h6 class="mb-0">Order Canceled</h6>
+                                            <small class="text-muted">{{ order.updated_at|default:order.created_at }}</small>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Status Update Modal -->
+    <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="statusModalLabel">Update Order Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'update_order_status' order.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="statusSelect" class="form-label">Select New Status</label>
+                            <select class="form-select" id="statusSelect" name="status" required>
+                                {% for status_choice in order.ORDER_STATUS_CHOICES %}
+                                    <option value="{{ status_choice.0 }}" {% if order.status == status_choice.0 %}selected{% endif %}>
+                                        {{ status_choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update Status</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Refund Modal -->
+    <div class="modal fade" id="refundModal" tabindex="-1" aria-labelledby="refundModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="refundModalLabel">Process Refund</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'process_refund' order.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Refund Type</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="refund_type" id="fullRefund" value="full">
+                                    <label class="form-check-label" for="fullRefund">Full Refund</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="refund_type" id="partialRefund" value="partial">
+                                    <label class="form-check-label" for="partialRefund">Partial Refund</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3" id="partialAmountDiv" style="display:none;">
+                            <label for="partial_amount" class="form-label">Partial Amount</label>
+                            <input type="number" class="form-control" id="partial_amount" name="partial_amount" min="0" max="{{ order.total_amount }}">
+                            <small class="text-muted">Max: ₹{{ order.total_amount }}</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Process Refund</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Show/hide partial refund amount field based on selection
+        document.querySelectorAll('[name="refund_type"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const partialDiv = document.getElementById('partialAmountDiv');
+
+                if (this.value === 'partial') {
+                    partialDiv.style.display = 'block';
+                } else {
+                    partialDiv.style.display = 'none';
+                }
+            });
+        });
+
+        // Add timeline styling
+        document.querySelectorAll('.timeline-item').forEach((item, index) => {
+            if (index !== 0) {
+                item.style.marginTop = '15px';
+                item.style.paddingTop = '15px';
+                item.style.borderTop = '1px solid #eee';
+            }
+            item.classList.add('d-flex', 'align-items-start');
+            const icon = item.querySelector('i');
+            icon.style.marginRight = '10px';
+            icon.style.fontSize = '1.2em';
+        });
+    </script>
+</body>
+</html>
