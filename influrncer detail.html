@@ -681,27 +681,47 @@ button:focus:not(:focus-visible) {
 /* ===============================
    🛍 Product Grid
 ================================= */
-.product-grid {
+.products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 30px;
-    padding: 1.5rem 0;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 1rem 0;
 }
 
-.product-item {
-    background-color: #1f1f1f;
-    border-radius: 7px;
+@media (max-width: 992px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+}
+
+@media (max-width: 576px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .product-img-wrapper {
+        height: 200px;
+    }
+
+    .product-title {
+        font-size: 14px;
+    }
+
+    .product-price {
+        font-size: 16px;
+    }
+}
+
+.product-card {
+    background-color: #1e293b;
+    border-radius: 16px;
     overflow: hidden;
-    transition: all 0.4s ease-in-out;
+    transition: all 0.3s ease;
     cursor: pointer;
-    transform: scale(1) translateY(0px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    flex: 0 0 auto;
+    border: 1px solid #334155;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .product-item::before {
@@ -721,86 +741,90 @@ button:focus:not(:focus-visible) {
     opacity: 1;
 }
 
-.product-item:hover {
-    transform: scale(1.03) translateY(-5px);
-    background-color: #252525;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-.product-img {
-    width: 100%;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.4s ease-in-out;
+.product-img-wrapper {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
 }
 
-.product-item:hover .product-img {
-    transform: scale(1.05);
+.promoted-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: linear-gradient(135deg, #818cf8, #6366f1);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(129, 140, 248, 0.4);
+    text-align: center;
 }
 
-.product-img img {
+.product-img-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-img-wrapper img {
+    transform: scale(1.05);
 }
 
 
 
 .product-details {
-    padding: 10px;
+    padding: 1.5rem;
 }
 
 .product-title {
+    font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: 5px;
-    font-size: 1rem;
-    color: var(--heading-color);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    color: #f1f5f9;
+    margin-bottom: 0.5rem;
 }
 
 .product-brand {
-    font-size: 0.85rem;
-    color: var(--text-color);
-    margin: 8px 0;
-    font-style: italic;
-    display: block;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin-top: 5px;
 }
 
 .product-price {
-    color: #fff;
-    margin-top: 10px;
+    font-size: 1.5rem;
     font-weight: 700;
+    color: #10b981;
 }
 
 
 
-.product-action {
+.product-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 1rem;
 }
 
-.add-btn {
-    background-color: #404040;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    line-height: 30px;
+.heart-btn {
+    background: none;
     border: none;
-    color: white;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    color: #94a3b8;
+    transition: color 0.2s;
 }
 
-.add-btn:hover {
-    background-color: var(--color-primary);
-    transform: scale(1.1);
+.heart-btn:hover {
+    color: #f43f5e;
 }
 
 
@@ -1506,7 +1530,7 @@ button:focus:not(:focus-visible) {
         <!-- Popular Products -->
         <section class="artist-section pt-5-rem">
             <div class="section-title-bar">
-                <h2>All Products</h2>
+                <h2>All Product</h2>
             </div>
 
             <!-- ===============================
@@ -1539,11 +1563,12 @@ button:focus:not(:focus-visible) {
             </div>
 
             <!-- Product Grid -->
-            <div class="product-grid isotope-grid">
+            <div class="products-grid isotope-grid">
                 {% for product in products %}
                     <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
-                    <div class="product-item {{ product.category.name|lower }}">
-                        <div class="product-img">
+                    <div class="product-card {{ product.category.name|lower }}">
+                        <div class="product-img-wrapper">
+                            <span class="promoted-badge">Promoted</span>
                             {% if product.image %}
                                 <img src="{{ product.image.url }}" alt="{{ product.name }}">
                             {% else %}
@@ -1553,10 +1578,10 @@ button:focus:not(:focus-visible) {
                         <div class="product-details">
                             <h3 class="product-title">{{ product.name }}</h3>
                             <p class="product-brand">by {{ influencer.get_full_name|default:influencer.username }}</p>
-                            <p class="product-price">₹{{ product.price }}</p>
-                            <div class="product-action">
-                                <button class="add-btn" title="Add to Cart">
-                                    <i class="bi bi-bag-plus"></i>
+                            <div class="product-footer">
+                                <p class="product-price">₹{{ product.price }}</p>
+                                <button class="heart-btn" title="Add to Wishlist">
+                                    <i class="bi bi-heart"></i>
                                 </button>
                             </div>
                         </div>
