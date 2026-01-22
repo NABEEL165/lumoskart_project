@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumoskart</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+
+    <!-- Preconnect for Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link href="https://fonts.cdnfonts.com/css/universal-serif" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap 5 Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Swiper.js CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<style>
+    :root {
+        --font-primary: 'Universal Serif', sans-serif;
+        --font-secondary: "Poppins", sans-serif;
+        --color-primary: #00c7f7;
+        --text-color: #b3b3b3;
+        --heading-color: #e3e3e3;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: var(--font-secondary);
+        font-size: 14px;
+        line-height: 1.6;
+        background-color: #121212;
+        color: var(--text-color);
+    }
+
+    a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    p {
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 1rem;
+    }
+
+    ul li {
+        color: var(--text-color);
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    button:focus:not(:focus-visible) {
+        box-shadow: none;
+    }
+
+    .navbar {
+        background-color: #121212;
+        padding: 5px 20px;
+        position: sticky;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 99;
+        height: 70px;
+        /* Reduced for better mobile fit */
+    }
+
+    .navbar-brand img {
+        width: 100%;
+        max-width: 180px;
+        /* Base size for desktop */
+        height: auto;
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-brand img:hover {
+        transform: scale(1.1);
+    }
+
+    .search-bar {
+        background-color: #1f1f1f;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 15px;
+        color: #fff;
+        width: 100%;
+        max-width: 400px;
+        padding-left: 40px;
+        font-size: 16px;
+        border: 1px solid #1f1f1f;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+    }
+
+    .search-bar:focus {
+        background-color: #3a3a3a;
+        outline: none;
+        box-shadow: none;
+        color: #fff;
+        border: 1px solid #fff;
+    }
+
+    .search-bar::placeholder {
+        color: var(--text-color);
+        opacity: 1;
+    }
+
+    .search-container {
+        position: relative;
+        margin: 0 20px;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-color);
+        transition: color 0.3s ease;
+    }
+
+    .search-container:focus-within .search-icon {
+        color: #fff;
+    }
+
+    .nav-link {
+        color: var(--text-color) !important;
+        font-size: 18px;
+        position: relative;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+        margin: 0 8px;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #fff !important;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        background-color: var(--color-primary);
+        bottom: -2px;
+        left: 0;
+        transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+    .btn-signup,
+    .btn-login,
+    .btn-open-app {
+        font-size: 18px;
+        padding: 6px 12px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-signup {
+        color: var(--text-color);
+        background-color: transparent;
+        border: none;
+    }
+
+    .btn-signup:hover {
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    .btn-login,
+    .btn-open-app {
+        background-color: #fff;
+        color: #000;
+        border-radius: 20px;
+    }
+
+    .btn-login:hover,
+    .btn-open-app:hover {
+        background-color: #f0f0f0;
+        transform: scale(1.05);
+    }
+
+    .btn-search {
+        background-color: transparent;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        margin-left: 10px;
+        transition: color 0.3s ease;
+    }
+
+    .btn-search:hover {
+        color: var(--text-color);
+    }
+
+    .navbar-toggler {
+        border: none;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.7)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+
+    .offcanvas {
+        background-color: #181818;
+        color: #fff;
+    }
+
+    .offcanvas-header {
+        background-color: #121212;
+    }
+
+    .offcanvas-title img {
+        width: 100%;
+        max-width: 140px;
+        /* Adjusted for off-canvas */
+        height: auto;
+    }
+
+    .offcanvas-body .nav-link {
+        font-size: 14px;
+        width: fit-content;
+    }
+
+    .offcanvas-body .nav-link:hover {
+        color: #fff !important;
+    }
+
+    /* Layout */
+    .layout-wrapper {
+        display: flex;
+        flex-direction: row;
+        min-height: 90vh;
+        gap: 0.6rem;
+        background: #000000;
+        padding: 10px;
+        height: 100%;
+        max-height: 90vh;
+    }
+
+    .sidebar-panel {
+        background-color: #121212;
+        max-width: 450px;
+        padding: 1rem;
+        flex-shrink: 0;
+        border-radius: 7px;
+    }
+
+    .sidebar-title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        font-weight: bold;
+    }
+
+    .sidebar-section {
+        background-color: #1c1c1c;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-section h6 {
+        margin-bottom: 0.5rem;
+    }
+
+    .sidebar-section p {
+        color: #bbb;
+        font-size: 1.3rem;
+    }
+
+    .sidebar-section button {
+        margin-top: 0.5rem;
+        background-color: #fff;
+        font-size: 1rem;
+        color: #000;
+        border: none;
+        padding: 1rem;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .sidebar-footer {
+        font-size: 1rem;
+        color: #777;
+        margin-top: 3rem;
+        padding: 10px;
+    }
+
+    .main-content-area {
+        flex: 1;
+        padding: 2rem;
+        background-color: #121212;
+        border-radius: 7px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .artist-section {
+        padding-bottom: 75px;
+    }
+
+    .section-title-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title-bar h2 {
+        font-size: 2rem;
+        color: var(--heading-color);
+        margin: 0;
+    }
+
+    .section-title-bar a {
+        font-size: 1.3rem;
+        color: #bbb;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .footer-links {
+        list-style: none;
+        margin: 0;
+        padding: 0 0 2rem 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .footer-links li a {
+        color: var(--text-color);
+        transition: 0.4s all;
+        font-size: 18px;
+    }
+
+    .footer-links li a:hover {
+        color: #fff;
+    }
+
+    .footer-social {
+        list-style: none;
+        margin: 0;
+        padding: 0 0 2rem 0;
+        display: flex;
+        gap: 1rem;
+    }
+
+    .footer-social a {
+        color: var(--text-color);
+        text-decoration: none;
+        transition: color 0.4s ease;
+    }
+
+    .footer-social a:hover {
+        color: #fff;
+    }
+
+    .footer-social i {
+        font-size: 1.5rem;
+    }
+
+    .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .filter-button {
+        background-color: #1f1f1f;
+        color: var(--text-color);
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .filter-button:hover,
+    .filter-button.active {
+        background-color: var(--color-primary);
+        color: #000;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 1.5rem 0;
+    }
+
+    .product-item {
+        background-color: #1f1f1f;
+        border-radius: 7px;
+        overflow: hidden;
+        transition: all 0.4s ease-in-out;
+        cursor: pointer;
+        transform: scale(1) translateY(0px);
+    }
+
+    .product-item:hover {
+        transform: scale(1.01) translateY(-5px);
+        background-color: #252525;
+    }
+
+    .product-img {
+        width: 100%;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .product-img img {
+        height: 40vh;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .product-details {
+        padding: 15px;
+    }
+
+    .product-title,
+    .product-brand {
+        font-weight: 600;
+        margin-bottom: 5px;
+        font-size: 1.2rem;
+        color: var(--heading-color);
+    }
+
+    .product-brand {
+        font-size: 0.85rem;
+        color: var(--text-color);
+    }
+
+    .product-price {
+        color: #fff;
+        margin-top: 10px;
+        font-weight: 700;
+    }
+
+    .product-action {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    .add-btn {
+        background-color: #404040;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        line-height: 30px;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+
+    .add-btn:hover {
+        background-color: var(--color-primary);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #bbb;
+    }
+
+    /* WhatsApp Widget */
+    .whatsapp-widget {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        transition: all 0.3s ease;
+    }
+
+    .whatsapp-button {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #25d366, #128c7e);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        animation: whatsappPulse 2s infinite;
+        border: none;
+        outline: none;
+    }
+
+    .whatsapp-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+    }
+
+    .whatsapp-button i {
+        font-size: 32px;
+        color: #fff;
+    }
+
+    @keyframes whatsappPulse {
+        0% {
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        50% {
+            box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7);
+        }
+
+        100% {
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        }
+    }
+
+    .whatsapp-tooltip {
+        position: absolute;
+        right: 75px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #fff;
+        color: #333;
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .whatsapp-widget:hover .whatsapp-tooltip {
+        opacity: 1;
+        visibility: visible;
+        right: 80px;
+    }
+
+    .whatsapp-tooltip::after {
+        content: '';
+        position: absolute;
+        right: -8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left: 8px solid #fff;
+    }
+
+    /* Responsive Styles */
+    @media (min-width: 1700px) {
+        .layout-wrapper {
+            height: 100%;
+            max-height: 100%;
+        }
+
+        .navbar-brand img {
+            max-width: 200px;
+            /* Larger logo for wide screens */
+        }
+    }
+
+    @media (max-width: 1140px) {
+        .sidebar-panel {
+            max-width: 250px;
+        }
+
+        .navbar-brand img {
+            max-width: 160px;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .mobile-view {
+            display: none !important;
+        }
+
+        .desktop-view {
+            display: flex !important;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .desktop-view {
+            display: none !important;
+        }
+
+        .mobile-view {
+            display: flex !important;
+        }
+
+        .navbar {
+            padding: 10px 15px;
+            height: auto;
+            min-height: 60px;
+        }
+
+        .navbar-brand img {
+            max-width: 140px;
+            /* Adjusted for tablets */
+        }
+
+        .btn-open-app {
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+
+        .search-container {
+            margin: 0;
+        }
+
+        .layout-wrapper {
+            flex-direction: column;
+            max-height: 100%;
+            gap: 10px;
+        }
+
+        .sidebar-panel {
+            order: 2;
+            max-width: 100%;
+        }
+
+        .main-content-area {
+            order: 1;
+            padding: 1rem;
+            max-height: 100%;
+        }
+
+        .product-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .product-img img {
+            height: 35vh;
+        }
+
+        .product-title {
+            font-size: 1.4rem;
+        }
+
+        .product-brand {
+            font-size: 0.9rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        body {
+            font-size: 12px;
+        }
+
+        .navbar {
+            padding: 8px 10px;
+        }
+
+        .navbar-brand img {
+            max-width: 120px;
+            /* Smaller logo for mobile */
+        }
+
+        .section-title-bar h2 {
+            font-size: 1.3rem;
+        }
+
+        .section-title-bar a {
+            font-size: 0.9rem;
+        }
+
+        .product-img img {
+            height: 30vh;
+        }
+
+        .add-btn {
+            width: 40px;
+            height: 40px;
+        }
+
+        .add-btn i {
+            font-size: 22px;
+        }
+
+        .sidebar-title {
+            font-size: 1.4rem;
+        }
+
+        .sidebar-section p {
+            font-size: 1rem;
+        }
+
+        .sidebar-section button {
+            font-size: 0.9rem;
+            padding: 0.8rem;
+        }
+
+        .footer-links li a {
+            font-size: 14px;
+        }
+
+        .whatsapp-widget {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .whatsapp-button {
+            width: 55px;
+            height: 55px;
+        }
+
+        .whatsapp-button i {
+            font-size: 28px;
+        }
+
+        .whatsapp-tooltip {
+            display: none;
+        }
+
+        .offcanvas-title img {
+            max-width: 120px;
+            /* Adjusted for mobile off-canvas */
+        }
+    }
+
+    @media (max-width: 480px) {
+        .navbar-brand img {
+            max-width: 100px;
+            /* Smallest size for very small screens */
+        }
+
+        .btn-open-app {
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+
+        .product-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .product-img img {
+            height: 25vh;
+        }
+
+        .product-details {
+            padding: 10px;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+        }
+
+        .product-brand {
+            font-size: 0.75rem;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+        }
+
+        .add-btn {
+            width: 35px;
+            height: 35px;
+        }
+
+        .add-btn i {
+            font-size: 18px;
+        }
+
+        .section-title-bar h2 {
+            font-size: 1.1rem;
+        }
+
+        .section-title-bar a {
+            font-size: 0.8rem;
+        }
+
+        .offcanvas-title img {
+            max-width: 100px;
+        }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+        background-color: #363636;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #121212;
+        border-radius: 7px;
+        border: 7px solid #333333;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #272727;
+        border-radius: 7px;
+    }
+
+    .navbar-brand:hover .brand-text {
+        color: #ffffff;
+        text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
+        /* Teal glow using your primary color */
+        transition: all 0.3s ease;
+    }
+
+    .navbar-brand:hover .logo-img {
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+
+    /* Mobile Navbar Optimization */
+    @media (max-width: 991px) {
+        .navbar-container {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            width: 100% !important;
+            padding: 0 5px !important;
+        }
+
+        .navbar-brand {
+            margin-right: 0 !important;
+            gap: 10px !important;
+            flex-shrink: 0;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .logo-img {
+            max-height: 40px !important;
+            width: auto !important;
+            flex-shrink: 0;
+        }
+
+        .brand-text {
+            font-size: 1.4rem !important;
+            display: inline-block !important;
+            color: #ffffff !important;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            white-space: nowrap !important;
+        }
+
+        .mobile-view {
+            display: flex !important;
+            align-items: center !important;
+            gap: 5px !important;
+            flex-shrink: 0;
+        }
+
+        .desktop-view {
+            display: none !important;
+        }
+
+        .btn-open-app {
+            padding: 4px 12px !important;
+            font-size: 0.85rem !important;
+            height: fit-content;
+        }
+    }
+
+
+    /* Custom Toggler Icon and Buttons */
+    .navbar-toggler {
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        padding: 5px 8px !important;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        width: 1.25em !important;
+        height: 1.25em !important;
+    }
+
+    .mobile-view .btn-outline-light {
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff !important;
+    }
+
+    .mobile-view .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Influencer Swiper Styles */
+    .influencers-swiper {
+        width: 100%;
+        padding: 20px 0;
+    }
+
+    .influencers-swiper .swiper-slide {
+        display: flex;
+        justify-content: center;
+    }
+
+    .influencers-swiper .swiper-wrapper {
+        padding: 10px 0;
+    }
+
+
+    .swiper-pagination.influencers-pagination {
+        bottom: 0 !important;
+    }
+
+    .swiper-pagination-bullet {
+        background: #00c7f7;
+        opacity: 0.5;
+    }
+
+    .swiper-pagination-bullet-active {
+        opacity: 1;
+        background: #00c7f7;
+    }
+
+    /* Logo + Brand Text Container */
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        /* Space between logo and text */
+        text-decoration: none !important;
+    }
+
+    /* Logo Image */
+    .navbar-brand img,
+    .logo-img {
+        height: 50px;
+        width: auto;
+        border-radius: 8px;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Hover effect on logo */
+    .navbar-brand:hover img,
+    .navbar-brand:hover .logo-img {
+        transform: scale(1.1) rotate(2deg);
+        box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+        /* Teal glow */
+    }
+
+    /* Brand Text - "LumosKart" */
+    .brand-text {
+        font-size: 1.8rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #ffffff;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    /* Hover glow on text */
+    .navbar-brand:hover .brand-text {
+        text-shadow:
+            0 2px 10px rgba(0, 0, 0, 0.3),
+            0 0 15px rgba(0, 199, 247, 0.6);
+        /* Stronger teal glow */
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid navbar-container">
+            <!-- Logo & Brand -->
+            <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                    alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                <span class="brand-text">LumosKart</span>
+            </a>
+
+            <!-- Desktop View -->
+            <div class="desktop-view collapse navbar-collapse justify-content-between" id="navbarNav">
+                <!-- Search Bar (Centered) -->
+                <div class="search-container mx-auto">
+                    <form action="{% url 'search' %}" method="get" class="d-flex align-items-center" style="gap: 10px;">
+                        <input type="hidden" name="page" value="products">
+                        <button type="submit"
+                            style="border-radius: 20px; background: none; border: none; padding: 8px; cursor: pointer;">
+                            <i class="bi bi-search" style="font-size: 20px; color: #6c757d;"></i>
+                        </button>
+                        <input type="text" name="q" class="form-control search-bar" placeholder="Search products..."
+                            value="{{ request.GET.q|default:'' }}">
+                        {% if request.GET.q %}
+                        <a href="{% url 'product_lists' %}" class="btn btn-outline-secondary"
+                            style="border-radius: 20px;">Clear</a>
+                        {% endif %}
+                    </form>
+                </div>
+
+                <!-- Navigation Links (Right Aligned) -->
+                <div class="d-flex align-items-center">
+                    <ul class="navbar-nav me-3 d-flex flex-row gap-3">
+                        <li class="nav-item"><a class="nav-link" href="#">Premium</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Download</a></li>
+                    </ul>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'register_customer' %}" class="btn btn-signup">Sign up</a>
+                        <a href="{% url 'login' %}" class="btn btn-login">Log in</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile View (Right Aligned) -->
+            <div class="mobile-view d-flex align-items-center gap-2">
+                <a href="{% url 'login' %}" class="btn btn-open-app">Login</a>
+                <button class="btn btn-search" data-bs-toggle="offcanvas" data-bs-target="#searchOffcanvas"
+                    aria-controls="searchOffcanvas">
+                    <i class="bi bi-search"></i>
+                </button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Off-canvas Menu for Mobile/Tablet -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
+        <!--<div class="offcanvas-header">-->
+        <!--    <h5 class="offcanvas-title" id="navbarOffcanvasLabel">-->
+        <!--        <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="" height="50" class="d-inline-block align-middle mr-2">-->
+        <!--    </h5>-->
+        <div class="offcanvas-header" style="background-color: #1e293b;">
+            <h5 class="offcanvas-title" id="navbarOffcanvasLabel">
+                <div class="navbar-brand d-flex align-items-center gap-2">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                    <span class="brand-text" style="font-size: 1.4rem;">LumosKart</span>
+                </div>
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#">Premiu</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Download</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register_customer' %}">Sign up</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log in</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Off-canvas Search for Mobile/Tablet -->
+    <!--    <div class="offcanvas offcanvas-start" tabindex="-1" id="searchOffcanvas" aria-labelledby="searchOffcanvasLabel">-->
+    <!--        <div class="offcanvas-header">-->
+    <!--            <h5 class="offcanvas-title" id="searchOffcanvasLabel">Search</h5>-->
+    <!--            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>-->
+    <!--        </div>-->
+    <!--        <div class="offcanvas-body">-->
+    <!--            <form action="{% url 'search' %}" method="get" class="search-container w-100">-->
+    <!--                <input type="hidden" name="page" value="products">-->
+    <!--                <button type="submit" style="border-radius: 20px; background: none; border: none; padding: 8px; cursor: pointer;">-->
+    <!--    <i class="bi bi-search" style="font-size: 20px; color: #6c757d;"></i>-->
+    <!--</button>-->
+    <!--<i class="bi bi-search search-icon"></i>-->
+    <!--                <input type="text" name="q" class="form-control search-bar" placeholder="Search products..." value="{{ request.GET.q|default:'' }}">-->
+    <!--<button type="submit" class="btn btn-primary mt-2" style="border-radius: 20px;">Search</button>-->
+
+    <!--                {% if request.GET.q %}-->
+    <!--                    <a href="{% url 'product_lists' %}" class="btn btn-outline-secondary mt-2" style="border-radius: 20px;">Clear</a>-->
+    <!--                {% endif %}-->
+    <!--            </form>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+
+
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="searchOffcanvas" aria-labelledby="searchOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="searchOffcanvasLabel">Search</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+            <form action="{% url 'search' %}" method="get" class="d-flex align-items-center w-100" style="gap: 10px;">
+                <input type="hidden" name="page" value="home">
+
+                <!-- Search Input -->
+                <input type="text" name="q" class="form-control search-bar"
+                    placeholder="Search influencers or products..." value="{{ request.GET.q|default:'' }}"
+                    style="border-radius: 20px; padding: 8px 15px;">
+
+                <!-- Search Button -->
+                <button type="submit" class="btn"
+                    style="border-radius: 50%; background: none; border: none; padding: 6px;">
+                    <i class="bi bi-search" style="font-size: 20px; color: #6c757d;"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- Main Content -->
+    <main class="main-content-area">
+        <!-- Search Results Feedback -->
+        {% if request.GET.q %}
+        <div class="search-results-feedback mb-4">
+            <p>Showing results for "{{ request.GET.q }}": {{ products|length }} products</p>
+            {% if not products %}
+            <p>No results found. Try a different search term.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Popular Products -->
+        <section class="artist-section">
+            <div class="section-title-bar ">
+                <h2>All Product</h2>
+            </div>
+
+            <!-- Category filter -->
+            <div class="filter-buttons">
+                <!-- All category -->
+                <a href="?category=All" class="filter-button {% if selected_category == 'All' %}active{% endif %}"
+                    data-filter="*">
+                    All
+                </a>
+
+                <!-- Other categories -->
+                {% for category in categories %}
+                <a href="?category={{ category.name }}"
+                    class="filter-button {% if selected_category == category.name %}active{% endif %}"
+                    data-filter=".{{ category.name|slugify }}">
+                    {{ category.name }}
+                </a>
+                {% endfor %}
+            </div>
+
+            <!-- Products grid -->
+            <div class="product-grid isotope-grid">
+                {% for product in products %}
+                <div class="product-item {{ product.category.name|slugify }}">
+                    <div class="product-img">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="{% static 'images/product-placeholder.png' %}" alt="No image">
+                        {% endif %}
+                    </div>
+                    <div class="product-details">
+                        <div class="product-title">{{ product.name }}</div>
+                        <div class="product-price">₹{{ product.price }}</div>
+                        <div class="product-action">
+                            <button class="add-btn"><i class="bi bi-bag-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="empty-state">
+                    <p>No products found for this category.</p>
+                </div>
+                {% endfor %}
+            </div>
+
+        </section>
+        <!-- End Section -->
+
+    </main>
+
+    <!-- End Section -->
+    <div class="whatsapp-widget">
+        <div class="whatsapp-tooltip">Chat with us on WhatsApp</div>
+        <a href="https://api.whatsapp.com/send?phone=918075909735&text=Hello!%20I'm%20interested%20in%20your%20products"
+            target="_blank" class="whatsapp-button" aria-label="Chat with us on WhatsApp">
+            <i class="bi bi-whatsapp"></i>
+        </a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Swiper.js JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <!-- Isotop Filter -->
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <!-- Main JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
