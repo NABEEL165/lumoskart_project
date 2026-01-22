@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sold Products - Lumoskart</title>
+    <style>
+        :root {
+            --primary-black: #000000;
+            --secondary-black: #1a1a1a;
+            --dark-grey: #333333;
+            --medium-grey: #666666;
+            --light-grey: #cccccc;
+            --bg-grey: #f5f5f5;
+            --white: #ffffff;
+            --border-grey: #e0e0e0;
+            --primary-blue: #007bff;
+            --success-green: #28a745;
+            --warning-orange: #ffc107;
+            --danger-red: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-grey);
+            background-color: var(--bg-grey);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--primary-black);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-item a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-item a:hover {
+            background-color: var(--dark-grey);
+        }
+
+        .nav-item a.active {
+            background-color: var(--white);
+            color: var(--primary-black);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex: 1;
+        }
+
+        .products-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .products-header {
+            background-color: var(--secondary-black);
+            color: var(--white);
+            padding: 2rem;
+            border-bottom: 3px solid var(--primary-black);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .products-header h2 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Filter Section */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            color: var(--white);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-grey);
+            background-color: var(--white);
+            font-size: 0.9rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .products-content {
+            padding: 2rem;
+        }
+
+        /* Stats Section */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            text-align: center;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .stat-card.weekly {
+            border-left-color: var(--warning-orange);
+        }
+
+        .stat-card.daily {
+            border-left-color: var(--success-green);
+        }
+
+        .stat-title {
+            font-size: 1rem;
+            color: var(--medium-grey);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-black);
+        }
+
+        .stat-value.weekly {
+            color: var(--warning-orange);
+        }
+
+        .stat-value.daily {
+            color: var(--success-green);
+        }
+
+        /* Sold Products Table */
+        .products-table-container {
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .products-table th,
+        .products-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-grey);
+        }
+
+        .products-table th {
+            background-color: var(--secondary-black);
+            color: var(--white);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .products-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .products-table tr:hover {
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        .amount {
+            font-weight: 700;
+            color: var(--primary-black);
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 3rem 2rem;
+            background-color: var(--bg-grey);
+            border-radius: 8px;
+            color: var(--medium-grey);
+            font-size: 1.1rem;
+            border: 1px dashed var(--light-grey);
+            grid-column: 1 / -1;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .pagination a,
+        .pagination span {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-grey);
+            text-decoration: none;
+            color: var(--dark-grey);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
+        }
+
+        .pagination .current {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-black);
+            color: var(--white);
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--light-grey);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--white);
+        }
+
+        /* Tablet Responsive */
+        @media (max-width: 1024px) {
+            .stats-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .products-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filters {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .logo img {
+                height: 28px;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .nav-item a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .container {
+                margin: 1rem auto;
+                padding: 0 1rem;
+            }
+
+            .products-header {
+                padding: 1.5rem;
+            }
+
+            .products-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .products-content {
+                padding: 1.5rem;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .products-table th,
+            .products-table td {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .product-image {
+                width: 50px;
+                height: 50px;
+            }
+
+            .no-products {
+                padding: 2rem 1rem;
+                font-size: 1rem;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                justify-content: space-between;
+            }
+        }
+
+        /* Small Mobile */
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 0.75rem;
+            }
+
+            .logo {
+                font-size: 1.25rem;
+            }
+
+            .nav-menu {
+                gap: 0.5rem;
+            }
+
+            .nav-item a {
+                padding: 0.35rem 0.7rem;
+                font-size: 0.85rem;
+            }
+
+            .products-header {
+                padding: 1.25rem;
+            }
+
+            .products-header h2 {
+                font-size: 1.35rem;
+            }
+
+            .products-content {
+                padding: 1rem;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-title {
+                font-size: 0.9rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .products-table th,
+            .products-table td {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            .product-image {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" style="height: 32px; width: auto; margin-right: 10px;">
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="nav-item"><a href="{% url 'influencer_dashboard' %}" class="active">Dashboard</a></li>
+                <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="products-card">
+            <div class="products-header">
+                <h2>Sold Products</h2>
+                <form method="GET" class="filters">
+                    <div class="filter-group">
+                        <label class="filter-label">Filter by:</label>
+                        <select class="filter-select" id="filterType" name="filter_type">
+                            <option value="">All</option>
+                            <option value="month" {% if filter_type == 'month' %}selected{% endif %}>Month</option>
+                            <option value="product" {% if filter_type == 'product' %}selected{% endif %}>Product</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select class="filter-select" id="filterValue" name="filter_value">
+                            <option value="">All</option>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <button type="submit" class="filter-btn">Apply Filter</button>
+                </form>
+            </div>
+
+            <div class="products-content">
+                <!-- Hidden product data for JavaScript -->
+                {% for product in influencer_products %}
+                    <div class="product-data" data-id="{{ product.id }}" data-name="{{ product.name }}" style="display: none;"></div>
+                {% endfor %}
+                
+                <!-- Stats Section -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-title">Monthly Revenue</div>
+                        <div class="stat-value">₹{{ stats.monthly_revenue }}</div>
+                    </div>
+                    <div class="stat-card weekly">
+                        <div class="stat-title">Weekly Revenue</div>
+                        <div class="stat-value weekly">₹{{ stats.weekly_revenue }}</div>
+                    </div>
+                    <div class="stat-card daily">
+                        <div class="stat-title">Daily Revenue</div>
+                        <div class="stat-value daily">₹{{ stats.daily_revenue }}</div>
+                    </div>
+                </div>
+
+                <!-- Sold Products Table -->
+                {% if sold_products %}
+                    <div class="products-table-container">
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Product</th>
+                                    <th>Date</th>
+                                    <th>Amount (₹)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in sold_products %}
+                                    <tr>
+                                        <td>#{{ item.order_id }}</td>
+                                        <td>{{ item.customer_name }}</td>
+                                        <td>
+                                            {% if item.product.image %}
+                                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="product-image">
+                                            {% endif %}
+                                            {{ item.product.name }}
+                                        </td>
+                                        <td>{{ item.date }}</td>
+                                        <td class="amount">₹{{ item.total }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <a href="#">&laquo; Previous</a>
+                        <a href="#" class="current">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">Next &raquo;</a>
+                    </div>
+                {% else %}
+                    <div class="no-products">
+                        <p>You have not sold any products yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Lumoskart. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Create products data array
+        const productsData = [];
+        
+        // Populate products data from hidden elements
+        document.querySelectorAll('.product-data').forEach(element => {
+            productsData.push({
+                id: parseInt(element.dataset.id),
+                name: element.dataset.name
+            });
+        });
+
+        // Update filter values based on filter type
+        document.getElementById('filterType').addEventListener('change', function() {
+            const filterValueSelect = document.getElementById('filterValue');
+            const filterType = this.value;
+
+            // Clear existing options
+            filterValueSelect.innerHTML = '<option value="">All</option>';
+
+            if (filterType === 'month') {
+                // Populate with months
+                const months = [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ];
+                
+                // Get current year and previous year for options
+                const currentYear = new Date().getFullYear();
+                const years = [currentYear, currentYear - 1];
+                
+                years.forEach(year => {
+                    months.forEach((month, index) => {
+                        const option = document.createElement('option');
+                        option.value = `${index + 1}-${year}`;
+                        option.textContent = `${month} ${year}`;
+                        filterValueSelect.appendChild(option);
+                    });
+                });
+            } else if (filterType === 'product') {
+                // Populate with products
+                productsData.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = product.name;
+                    filterValueSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Trigger change event on page load if a filter type is already selected
+        window.addEventListener('DOMContentLoaded', function() {
+            const filterTypeSelect = document.getElementById('filterType');
+            if (filterTypeSelect.value) {
+                // Dispatch the change event to populate the second dropdown
+                filterTypeSelect.dispatchEvent(new Event('change'));
+                
+                // Set the selected value if there was a previous selection
+                if ("{{ filter_value }}" !== "") {
+                    document.getElementById('filterValue').value = "{{ filter_value }}";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
