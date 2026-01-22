@@ -11,6 +11,7 @@ from .forms import InfluencerRegisterForm, CustomerRegisterForm, InfluencerProfi
 from .models import CustomUser, InfluencerProfile, InfluencerVideo, WithdrawRequest, Order, OrderItem, InfluencerApplication,Banner, BlogPost, PageContent, PromoVideo
 from django.contrib import messages
 
+
 try:
     from product.models import Category, Product
 except (ModuleNotFoundError, ImportError):
@@ -182,6 +183,30 @@ def influencer_dashboard(request):
         order__created_at__month=current_month
     ).aggregate(total=Sum(F('price') * F('quantity')))['total'] or 0
 
+
+    #  # Calculate pending orders for this influencer (confirmed but not shipped)
+    # pending_orders = OrderItem.objects.filter(
+    #     product__influencer=influencer,
+    #     order__status=Order.PENDING
+    # ).aggregate(total=Count('order', distinct=True))['total'] or 0
+
+    # # Calculate shipped orders for this influencer (dispatched and in transit)
+    # shipped_orders = OrderItem.objects.filter(
+    #     product__influencer=influencer,
+    #     order__status=Order.SHIPPED
+    # ).aggregate(total=Count('order', distinct=True))['total'] or 0
+  # Calculate pending orders for this influencer (confirmed but not shipped)
+    pending_orders = Order.objects.filter(
+        items__product__influencer=influencer,
+        status=Order.PENDING
+    ).distinct().count()
+
+    # Calculate shipped orders for this influencer (dispatched and in transit)
+    shipped_orders = Order.objects.filter(
+        items__product__influencer=influencer,
+        status=Order.SHIPPED
+    ).distinct().count()
+
     # Calculate monthly orders for current month
     monthly_orders = OrderItem.objects.filter(
         product__influencer=influencer,
@@ -211,8 +236,8 @@ def influencer_dashboard(request):
     ).aggregate(total=Sum(F('price') * F('quantity')))['total'] or 0
 
     total_revenue_change = 0
-    if previous_month_revenue > 0:
-        total_revenue_change = min(100, int((total_revenue / previous_month_revenue) * 100))
+    if float(previous_month_revenue) > 0:
+        total_revenue_change = min(100, int((float(total_revenue) / float(previous_month_revenue)) * 100))
 
     # Calculate orders change percentage
     previous_month_orders = OrderItem.objects.filter(
@@ -223,18 +248,20 @@ def influencer_dashboard(request):
     ).aggregate(total=Count('order', distinct=True))['total'] or 0
 
     total_orders_change = 0
-    if previous_month_orders > 0:
-        total_orders_change = min(100, int((total_orders / previous_month_orders) * 100))
+    if float(previous_month_orders) > 0:
+        total_orders_change = min(100, int((float(total_orders) / float(previous_month_orders)) * 100))
 
     monthly_revenue_change = 0
-    if previous_month_revenue > 0:
-        monthly_revenue_change = min(100, int((monthly_revenue / previous_month_revenue) * 100))
+    if float(previous_month_revenue) > 0:
+        monthly_revenue_change = min(100, int((float(monthly_revenue) / float(previous_month_revenue)) * 100))
 
     context = {
         'total_revenue': total_revenue,
         'total_orders': total_orders,
         'monthly_revenue': monthly_revenue,
         'monthly_orders': monthly_orders,
+        'pending_orders': pending_orders,
+        'shipped_orders': shipped_orders,
         'total_revenue_change': total_revenue_change,
         'total_orders_change': total_orders_change,
         'revenue_change': monthly_revenue_change,
@@ -242,6 +269,45 @@ def influencer_dashboard(request):
     }
     return render(request, 'influencer_dashboard.html', context)
 
+
+@login_required
+def influencer_pending_orders(request):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    # Get pending orders for this influencer (confirmed but not shipped)
+    pending_orders = Order.objects.filter(
+        items__product__influencer=request.user,
+        status=Order.PENDING
+    ).distinct().select_related('user').prefetch_related('items__product')
+
+    context = {
+        'orders': pending_orders,
+        'order_type': 'Pending',
+        'status_description': 'Orders confirmed but not yet shipped'
+    }
+
+    return render(request, 'influencer_orders.html', context)
+
+
+@login_required
+def influencer_shipped_orders(request):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    # Get shipped orders for this influencer (dispatched and in transit)
+    shipped_orders = Order.objects.filter(
+        items__product__influencer=request.user,
+        status=Order.SHIPPED
+    ).distinct().select_related('user').prefetch_related('items__product')
+
+    context = {
+        'orders': shipped_orders,
+        'order_type': 'Shipped',
+        'status_description': 'Orders dispatched and in transit'
+    }
+
+    return render(request, 'influencer_orders.html', context)
 
 
 
@@ -278,6 +344,14 @@ def customer_dashboard(request):
         return redirect('login')
 
     influencers = InfluencerProfile.objects.filter(user__is_active=True).select_related('user')
+    # Get featured products only for featured section
+    featured_products = Product.objects.filter(
+        stock__gt=0,
+        is_featured=True,
+        is_hidden=False
+    ).select_related('category', 'influencer')[:12]
+
+    # Get all products for other sections (excluding featured)
     products = Product.objects.filter(stock__gt=0).select_related('category', 'influencer')[:12]
     categories = Category.objects.all()
 
@@ -287,6 +361,7 @@ def customer_dashboard(request):
     return render(request, 'customer_dashboard.html', {
         'influencers': influencers,
         'products': products,
+         'featured_products': featured_products,
         'categories': categories,
         'reels_videos': reels_videos,
     })
@@ -523,11 +598,18 @@ def admin_dashboard(request):
     # Calculate commission based on percentage if commission_amount is 0
     if total_commission == 0:
         completed_orders = Order.objects.filter(status='Completed')
-        total_commission = sum(float(order.total_amount) * (float(order.commission_percentage) / 100)
-                             for order in completed_orders if order.total_amount and order.commission_percentage)
+        total_commission = 0  # Initialize to 0
+        for order in completed_orders:
+            if order.total_amount:
+                try:
+                    commission_percentage = order.commission_percentage
+                    total_commission += float(order.total_amount) * (float(commission_percentage) / 100)
+                except AttributeError:
+                    # If commission_percentage field doesn't exist, use a default of 10%
+                    total_commission += float(order.total_amount) * (20.0 / 100)
 
-    commission_percentage = round((total_commission / total_revenue * 100), 2) if total_revenue and total_revenue != 0 else 0
-    total_influencer_earnings = total_revenue - total_commission
+    commission_percentage = round((float(total_commission) / float(total_revenue) * 100), 2) if total_revenue and total_revenue != 0 else 0
+    total_influencer_earnings = float(total_revenue) - float(total_commission)
 
     # Counts
     active_influencers = CustomUser.objects.filter(user_type='influencer', is_active=True).count()
@@ -591,8 +673,8 @@ def admin_dashboard(request):
             try:
                 commission_percentage = order.commission_percentage
             except AttributeError:
-                commission_percentage = 10.0  # Default 10% commission
-            earnings = item.price * item.quantity * (1 - commission_percentage / 100)
+                commission_percentage = 20.0  # Default 10% commission
+            earnings = float(item.price) * float(item.quantity) * (1 - float(commission_percentage) / 100)
 
             if influencer.id not in influencer_earnings:
                 influencer_earnings[influencer.id] = {'user': influencer, 'total_earnings': 0}
@@ -894,7 +976,7 @@ def reset_influencer_password(request, user_id):
     if request.method == 'POST':
         # Check if a custom password was provided
         custom_password = request.POST.get('custom_password')
-        
+
         if custom_password:
             # Use the custom password provided by admin
             temp_password = custom_password
@@ -903,11 +985,11 @@ def reset_influencer_password(request, user_id):
             import secrets
             import string
             temp_password = ''.join(secrets.choice(string.ascii_letters + string.digits + string.punctuation) for _ in range(12))
-        
+
         # Set the new password
         influencer.set_password(temp_password)
         influencer.save()
-        
+
         # Send email notification with the temporary password
         try:
             send_mail(
@@ -921,7 +1003,7 @@ def reset_influencer_password(request, user_id):
         except Exception as e:
             # If email fails, still notify the admin
             messages.warning(request, f'Password reset for {influencer.username}, but email notification failed. Please inform the user manually.')
-        
+
         return redirect('manage_influencers')
 
     # If GET request, show confirmation page
@@ -943,19 +1025,24 @@ def influencer_earnings(request):
     ).select_related('order', 'product')
 
     # Calculate total earnings
-    total_earnings = sum([
-        float(item.price) * item.quantity * (1 - float(item.order.commission_percentage) / 100)
-        for item in influencer_orders
-    ])
+    total_earnings = 0
+    for item in influencer_orders:
+        try:
+            commission_percentage = item.order.commission_percentage
+            total_earnings += float(item.price) * item.quantity * (1 - float(commission_percentage) / 100)
+        except AttributeError:
+            # If commission_percentage field doesn't exist, use a default of 20%
+            total_earnings += float(item.price) * item.quantity * (1 - 20.0 / 100)
 
     # Get withdraw requests for this influencer
     withdraw_requests = WithdrawRequest.objects.filter(influencer=request.user).order_by('-created_at')
 
     # Calculate pending withdrawals
-    pending_withdrawals = WithdrawRequest.objects.filter(
+    pending_withdrawals_decimal = WithdrawRequest.objects.filter(
         influencer=request.user,
         status='pending'
     ).aggregate(total=Sum('amount'))['total'] or 0
+    pending_withdrawals = float(pending_withdrawals_decimal)
 
     context = {
         'total_earnings': total_earnings,
@@ -1021,6 +1108,33 @@ def influencer_application_success(request):
 def support(request):
     return render(request, 'support.html')
 
+
+@login_required
+def accept_pending_order(request, order_id):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    order = get_object_or_404(Order, id=order_id)
+
+    # Check if the order contains products from this influencer
+    order_items = order.items.all()
+    influencer_products = [item for item in order_items if item.product.influencer == request.user]
+
+    if not influencer_products:
+        messages.error(request, 'You are not authorized to accept this order.')
+        return redirect('influencer_pending_orders')
+
+    # If the order is still pending, update its status to Shipped
+    if order.status == Order.PENDING:
+        # When an influencer accepts a pending order, they're taking responsibility for it
+        # So we'll move it to SHIPPED status since they'll be handling the shipment
+        order.status = Order.SHIPPED
+        order.save()
+        messages.success(request, f'Order #{order.id} has been accepted and moved to shipped status.')
+    else:
+        messages.error(request, 'This order cannot be accepted at this time.')
+
+    return redirect('influencer_pending_orders')
 
 
 
@@ -1690,3 +1804,249 @@ def manage_thumbnails(request):
     }
 
     return render(request, 'manage_thumbnails.html', context)
+
+
+
+@login_required
+def complete_shipped_order(request, order_id):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    order = get_object_or_404(Order, id=order_id)
+
+    # Check if the order contains products from this influencer
+    order_items = order.items.all()
+    influencer_products = [item for item in order_items if item.product.influencer == request.user]
+
+    if not influencer_products:
+        messages.error(request, 'You are not authorized to complete this order.')
+        return redirect('influencer_shipped_orders')
+
+    # If the order is shipped, update its status to Completed
+    if order.status == Order.SHIPPED:
+        # When an influencer marks a shipped order as complete,
+        # it means the customer has received it
+        order.status = Order.COMPLETED
+        order.save()
+        messages.success(request, f'Order #{order.id} has been marked as completed.')
+    else:
+        messages.error(request, 'This order cannot be marked as completed at this time.')
+
+    return redirect('influencer_shipped_orders')
+
+
+
+@login_required
+def mark_order_delivered(request, order_id):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    order = get_object_or_404(Order, id=order_id)
+
+    # Update order status to Delivered
+    if order.status in [Order.SHIPPED, Order.PENDING]:
+        order.status = Order.DELIVERED
+        order.save()
+        messages.success(request, f'Order #{order.id} has been marked as delivered.')
+    else:
+        messages.error(request, 'This order cannot be marked as delivered at this time.')
+
+    return redirect('manage_orders')
+
+
+@login_required
+def download_invoice(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    # Check if user has permission to download this invoice
+    if not (request.user.is_staff or order.user == request.user):
+        return redirect('home')
+
+    # Get order items
+    order_items = order.items.all()
+
+    context = {
+        'order': order,
+        'order_items': order_items,
+        'company_name': 'LumosKart',
+        'company_address': '123 Business Street, City, State 12345',
+        'company_email': 'contact@lumoskart.com',
+        'company_phone': '(123) 456-7890',
+    }
+
+    # Render HTML invoice template
+    return render(request, 'invoice_template.html', context)
+
+
+
+
+@login_required
+def export_admin_dashboard_data(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    # Import required functions
+    from django.db.models import Sum, F, Q
+
+    # Get dashboard data similar to admin_dashboard view
+    today = timezone.now()
+
+    # 1. Total revenue & commission
+    total_revenue = Order.objects.filter(status='Completed').aggregate(
+        total=Sum('total_amount')
+    )['total'] or 0
+
+    # Check if commission_amount field exists before using it
+    try:
+        total_commission = Order.objects.filter(status='Completed').aggregate(
+            total=Sum('commission_amount')
+        )['total'] or 0
+    except FieldError:
+        # Fallback if commission_amount field doesn't exist
+        total_commission = 0
+
+    # Calculate commission based on percentage if commission_amount is 0
+    if total_commission == 0:
+        completed_orders = Order.objects.filter(status='Completed')
+        total_commission = 0  # Initialize to 0
+        for order in completed_orders:
+            if order.total_amount:
+                try:
+                    commission_percentage = order.commission_percentage
+                    total_commission += float(order.total_amount) * (float(commission_percentage) / 100)
+                except AttributeError:
+                    # If commission_percentage field doesn't exist, use a default of 10%
+                    total_commission += float(order.total_amount) * (20.0 / 100)
+
+    commission_percentage = round((float(total_commission) / float(total_revenue) * 100), 2) if total_revenue and total_revenue != 0 else 0
+    total_influencer_earnings = float(total_revenue) - float(total_commission)
+
+    # Counts
+    active_influencers = CustomUser.objects.filter(user_type='influencer', is_active=True).count()
+    active_customers = CustomUser.objects.filter(user_type='customer', is_active=True).count()
+    pending_influencer_approvals = CustomUser.objects.filter(user_type='influencer', is_active=False)
+    pending_orders = Order.objects.filter(status='Pending').count()
+    shipped_orders = Order.objects.filter(status='Shipped').count()
+    completed_orders = Order.objects.filter(status='Completed').count()
+    canceled_orders = Order.objects.filter(status='Canceled').count()
+
+    # Top performing influencers
+    top_influencers = (
+        CustomUser.objects
+        .filter(user_type='influencer', is_active=True)
+        .annotate(
+            total_revenue=Sum(
+                F('product__orderitem__order__total_amount'),
+                filter=Q(product__orderitem__order__status='Completed')
+            )
+        )
+        .filter(total_revenue__isnull=False)
+        .order_by('-total_revenue')[:5]
+    )
+
+    # Top selling products
+    top_products = (
+        Product.objects
+        .annotate(
+            total_sold=Sum(
+                'orderitem__quantity',
+                filter=Q(orderitem__order__status='Completed')
+            )
+        )
+        .filter(total_sold__isnull=False)
+        .order_by('-total_sold')[:10]
+    )
+
+    context = {
+        'total_revenue': total_revenue,
+        'total_commission': total_commission,
+        'total_influencer_earnings': total_influencer_earnings,
+        'commission_percentage': commission_percentage,
+        'active_influencers': active_influencers,
+        'active_customers': active_customers,
+        'pending_influencer_approvals': pending_influencer_approvals,
+        'pending_orders': pending_orders,
+        'shipped_orders': shipped_orders,
+        'completed_orders': completed_orders,
+        'canceled_orders': canceled_orders,
+        'top_influencers': top_influencers,
+        'top_products': top_products,
+        'company_name': 'LumosKart',
+        'company_address': '123 Business Street, City, State 12345',
+        'company_email': 'contact@lumoskart.com',
+        'company_phone': '(123) 456-7890',
+        'export_date': today,
+    }
+
+    return render(request, 'admin_dashboard_export.html', context)
+
+
+
+
+@login_required
+def export_manage_orders_data(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    # Get all orders with related data
+    orders = Order.objects.select_related('user').prefetch_related('items__product__influencer').order_by('-created_at')
+
+    # Apply the same filters that are used in manage_orders view
+    influencer_filter = request.GET.get('influencer')
+    customer_filter = request.GET.get('customer')
+    status_filter = request.GET.get('status')
+    date_filter = request.GET.get('date')
+
+    if influencer_filter:
+        orders = orders.filter(items__product__influencer__username__icontains=influencer_filter)
+    if customer_filter:
+        orders = orders.filter(user__username__icontains=customer_filter)
+    if status_filter:
+        orders = orders.filter(status=status_filter)
+    if date_filter:
+        orders = orders.filter(created_at__date=date_filter)
+
+    # Remove duplicates if filtering caused joins
+    orders = orders.distinct()
+
+    # Get summary statistics
+    total_orders = orders.count()
+    total_revenue = sum(float(order.total_amount) for order in orders)
+
+    # Status breakdown
+    status_counts = {}
+    for status_choice, _ in Order.ORDER_STATUS_CHOICES:
+        status_counts[status_choice] = orders.filter(status=status_choice).count()
+
+    # Top customers
+    from django.db.models import Count, Sum
+    top_customers = (
+        Order.objects
+        .values('user__username')
+        .annotate(
+            order_count=Count('id'),
+            total_spent=Sum('total_amount')
+        )
+        .order_by('-total_spent')[:10]
+    )
+
+    context = {
+        'orders': orders,
+        'total_orders': total_orders,
+        'total_revenue': total_revenue,
+        'status_counts': status_counts,
+        'top_customers': top_customers,
+        'company_name': 'LumosKart',
+        'company_address': '123 Business Street, City, State 12345',
+        'company_email': 'contact@lumoskart.com',
+        'company_phone': '(123) 456-7890',
+        'export_date': timezone.now(),
+        'filters_applied': {
+            'influencer': influencer_filter,
+            'customer': customer_filter,
+            'status': status_filter,
+            'date': date_filter,
+        }
+    }
+
+    return render(request, 'manage_orders_export.html', context)
