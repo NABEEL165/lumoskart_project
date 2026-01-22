@@ -184,18 +184,28 @@ def influencer_dashboard(request):
     ).aggregate(total=Sum(F('price') * F('quantity')))['total'] or 0
 
 
-     # Calculate pending orders for this influencer (confirmed but not shipped)
-    pending_orders = OrderItem.objects.filter(
-        product__influencer=influencer,
-        order__status=Order.PENDING
-    ).aggregate(total=Count('order', distinct=True))['total'] or 0
+    #  # Calculate pending orders for this influencer (confirmed but not shipped)
+    # pending_orders = OrderItem.objects.filter(
+    #     product__influencer=influencer,
+    #     order__status=Order.PENDING
+    # ).aggregate(total=Count('order', distinct=True))['total'] or 0
+
+    # # Calculate shipped orders for this influencer (dispatched and in transit)
+    # shipped_orders = OrderItem.objects.filter(
+    #     product__influencer=influencer,
+    #     order__status=Order.SHIPPED
+    # ).aggregate(total=Count('order', distinct=True))['total'] or 0
+  # Calculate pending orders for this influencer (confirmed but not shipped)
+    pending_orders = Order.objects.filter(
+        items__product__influencer=influencer,
+        status=Order.PENDING
+    ).distinct().count()
 
     # Calculate shipped orders for this influencer (dispatched and in transit)
-    shipped_orders = OrderItem.objects.filter(
-        product__influencer=influencer,
-        order__status=Order.SHIPPED
-    ).aggregate(total=Count('order', distinct=True))['total'] or 0
-
+    shipped_orders = Order.objects.filter(
+        items__product__influencer=influencer,
+        status=Order.SHIPPED
+    ).distinct().count()
 
     # Calculate monthly orders for current month
     monthly_orders = OrderItem.objects.filter(
