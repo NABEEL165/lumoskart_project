@@ -160,10 +160,20 @@ class Order(models.Model):
         default=PENDING
     )
 
-    def save(self, *args, **kwargs):
+    # def save(self, *args, **kwargs):
+    #     # Auto-calculate commission_amount before saving
+    #     if self.total_amount:
+    #         self.commission_amount = self.total_amount * (self.commission_percentage / 100)
+
+def save(self, *args, **kwargs):
         # Auto-calculate commission_amount before saving
         if self.total_amount:
-            self.commission_amount = self.total_amount * (self.commission_percentage / 100)
+            try:
+                commission_percentage = self.commission_percentage
+            except AttributeError:
+                commission_percentage = 20.0  # Default to 20% if field doesn't exist
+            self.commission_amount = self.total_amount * (commission_percentage / Decimal('100'))
+
 
 
             # Check if status is being updated to Shipped or Completed
@@ -187,9 +197,8 @@ class Order(models.Model):
                     # in a separate model or field. For now, we just log the action.
                     pass
 
-    def __str__(self):
-        return f"Order #{self.id} - {self.user.email} - ₹{self.total_amount}"
-
+def __str__(self):
+    return f"Order #{self.id} - {self.user.email} - ₹{self.total_amount}"
     def get_status_display_choices(self):
         return self.ORDER_STATUS_CHOICES
 
@@ -276,3 +285,73 @@ class VideoLike(models.Model):
 
     def __str__(self):
         return f"{self.user.username} liked {self.video.title}"
+
+
+
+
+
+
+
+
+
+
+
+
+class Banner(models.Model):
+    SECTION_CHOICES = (
+        ('hero', 'Hero Slider'),
+        ('middle', 'Middle Section'),
+        ('bottom', 'Bottom Section'),
+    )
+    title = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='banners/')
+    link_url = models.URLField(blank=True, help_text="Target URL when banner is clicked")
+    section = models.CharField(max_length=20, choices=SECTION_CHOICES, default='hero')
+    order = models.PositiveIntegerField(default=0, help_text="Display order")
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['section', 'order']
+        verbose_name = 'Banner & Slider'
+        verbose_name_plural = 'Banners & Sliders'
+
+    def __str__(self):
+        return f"{self.title} ({self.get_section_display()})"
+
+
+class PageContent(models.Model):
+    slug = models.SlugField(unique=True, help_text="e.g. 'about-us', 'terms', 'help'")
+    title = models.CharField(max_length=200)
+    content = models.TextField(help_text="HTML/Content for the page")
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+
+class BlogPost(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+    content = models.TextField()
+    thumbnail = models.ImageField(upload_to='blog/', blank=True, null=True)
+    is_published = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title
+
+
+class PromoVideo(models.Model):
+    title = models.CharField(max_length=200)
+    video_file = models.FileField(upload_to='promo_videos/')
+    thumbnail = models.ImageField(upload_to='promo_thumbnails/', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
