@@ -10,6 +10,7 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Preconnect for Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1599,142 +1600,105 @@
         font-weight: 500;
     }
 
-    /* Footer Styles - Consolidated and Responsive */
-    .footer {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        border-top: 2px solid #334155;
-        padding: 4rem 2rem 2rem;
-        margin-top: 4rem;
-    }
+ /* Footer Styles */
+.footer {
+    background: linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 100%);
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    padding: 60px 24px 30px;
+    margin-top: 100px;
+}
 
-    .footer-container {
-        max-width: 1400px;
-        margin: 0 auto;
-    }
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
 
-    .footer-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        margin-bottom: 3rem;
-    }
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
 
-    .footer-column h3 {
-        font-size: 1.2rem;
-        margin-bottom: 1.5rem;
-        color: #e2e8f0;
-        position: relative;
-        padding-bottom: 0.5rem;
-    }
+.footer-column h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #e0e0e0;
+    position: relative;
+    padding-bottom: 10px;
+}
 
-    .footer-column h3::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 50px;
-        height: 3px;
-        background: linear-gradient(90deg, #818cf8, #6366f1);
-        border-radius: 2px;
-    }
+.footer-column h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #9e9e9e, #757575);
+    border-radius: 2px;
+}
 
-    .footer-links {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
-    .footer-links li {
-        margin-bottom: 0.75rem;
-    }
+.footer-links li {
+    margin-bottom: 12px;
+}
 
-    .footer-links a {
-        color: #94a3b8;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        font-size: 0.95rem;
-        display: block;
-        padding: 0.25rem 0;
-    }
+.footer-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    display: block;
+    padding: 5px 0;
+}
 
-    .footer-links a:hover {
-        color: #818cf8;
-        transform: translateX(5px);
-    }
+.footer-links a:hover {
+    color: #9e9e9e;
+    transform: translateX(5px);
+}
 
-    .social-links {
-        display: flex;
-        gap: 1rem;
-        margin-top: 1.5rem;
-    }
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
 
-    .social-link {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: #334155;
-        color: white;
-        font-size: 1.1rem;
-        transition: all 0.3s ease;
-        text-decoration: none;
-    }
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background:black;
+    color: white;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
 
-    .social-link:hover {
-        background: #818cf8;
-        transform: translateY(-3px);
-    }
+.social-link:hover {
+    background: #9e9e9e;
+    transform: translateY(-3px);
+}
+.social-link i {
+    color: white;
+    font-size: 1.2rem;
+}
 
-    .footer-bottom {
-        border-top: 1px solid #334155;
-        padding-top: 2rem;
-        text-align: center;
-        color: #94a3b8;
-        font-size: 0.9rem;
-    }
-
-    /* Enhanced Footer Responsiveness */
-    @media (max-width: 768px) {
-        .footer {
-            padding: 3rem 1rem 1.5rem;
-        }
-
-        .footer-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-
-        .footer-column h3 {
-            font-size: 1.1rem;
-        }
-
-        .social-links {
-            justify-content: center;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .footer {
-            padding: 2rem 0.5rem 1rem;
-        }
-
-        .footer-column h3 {
-            font-size: 1rem;
-        }
-
-        .footer-links a {
-            font-size: 0.9rem;
-        }
-
-        .social-link {
-            width: 36px;
-            height: 36px;
-            font-size: 1rem;
-        }
-    }
-
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 30px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
     .influencers-section {
         position: relative;
         width: 100%;
@@ -5553,75 +5517,82 @@
         </div>
 
 
-
-
-
- <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-container">
-                <div class="footer-grid">
-                    <!-- About Us -->
-                    <div class="footer-column">
-                        <h3 data-en="About Us" data-ar="من نحن" data-hi="हमारे बारे में">About Us</h3>
-                        <ul class="footer-links">
-                            <li><a href="{% url 'about_us' %}">Our Story</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">Press</a></li>
-                            <li><a href="#">Blog</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Terms & Conditions -->
-                    <div class="footer-column">
-                        <h3 data-en="Terms & Conditions" data-ar="الشروط والأحكام" data-hi="नियम एवं शर्तें">Terms &
-                            Conditions</h3>
-                        <ul class="footer-links">
-                            <li><a href="#">Terms of Service</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Return Policy</a></li>
-                            <li><a href="#">Shipping Policy</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Connect With Us -->
-                    <div class="footer-column">
-                        <h3 data-en="Connect With Us" data-ar="تواصل معنا" data-hi="हमसे संपर्क करें">Connect With Us
-                        </h3>
-                        <ul class="footer-links">
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">FAQs</a></li>
-                            <li><a href="{% url 'support' %}">Support Center</a></li>
-
-                        </ul>
-                        <div class="social-links">
-                            <a href="#" class="social-link" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                            <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
-                            <a href="#" class="social-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                            <a href="#" class="social-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Let Us Help You -->
-                    <div class="footer-column">
-                        <h3 data-en="Let Us Help You" data-ar="دعنا نساعدك" data-hi="हम आपकी सहायता करें">Let Us Help
-                            You</h3>
-                        <ul class="footer-links">
-                            <li><a href="#">Customer Service</a></li>
-                            <li><a href="#">Track Your Order</a></li>
-                            <li><a href="#">Returns & Exchanges</a></li>
-                            <li><a href="#">Payment Options</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="footer-bottom">
-                    <p>&copy; 2025 Lumoskart. All rights reserved.</p>
-                </div>
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <!-- About Us -->
+            <div class="footer-column">
+                <h3 data-en="About Us" data-ar="من نحن" data-hi="हमारे बारे में">About Us</h3>
+                <ul class="footer-links">
+                    <li><a href="{% url 'about_us' %}">Our Story</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
             </div>
-        </footer>
+
+            <!-- Terms & Conditions -->
+            <div class="footer-column">
+                <h3 data-en="Terms & Conditions" data-ar="الشروط والأحكام" data-hi="नियम एवं शर्तें">Terms &
+                    Conditions</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Shipping Policy</a></li>
+                </ul>
+            </div>
+
+            <!-- Connect With Us -->
+            <div class="footer-column">
+                <h3 data-en="Connect With Us" data-ar="تواصل معنا" data-hi="हमसे संपर्क करें">Connect With Us
+                </h3>
+                <ul class="footer-links">
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="{% url 'support' %}">Support Center</a></li>
+
+                </ul>
+              <div class="social-links">
+    <a href="#" class="social-link">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="#" class="social-link">
+        <i class="fab fa-instagram"></i>
+    </a>
+    <a href="#" class="social-link">
+        <i class="fab fa-twitter"></i>
+    </a>
+    <a href="#" class="social-link">
+        <i class="fab fa-linkedin-in"></i>
+    </a>
+</div>
+
+            </div>
+
+            <!-- Let Us Help You -->
+            <div class="footer-column">
+                <h3 data-en="Let Us Help You" data-ar="دعنا نساعدك" data-hi="हम आपकी सहायता करें">Let Us Help
+                    You</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Customer Service</a></li>
+                    <li><a href="#">Track Your Order</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Payment Options</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Lumoskart. All rights reserved.</p>
+        </div>
     </div>
+</footer>
+</div>
 
 
+ 
 
 
 
