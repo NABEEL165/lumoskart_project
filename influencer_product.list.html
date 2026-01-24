@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Inventory Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Black, White & Grey Color Palette */
+        :root {
+            --primary: #000000;           /* Black */
+            --primary-light: #404040;     /* Dark Grey */
+            --primary-dark: #000000;      /* Pure Black */
+            --secondary: #1a1a1a;         /* Almost Black */
+            --secondary-light: #666666;   /* Medium Grey */
+            --accent: #333333;            /* Dark Grey */
+            --success: #000000;           /* Black */
+            --success-light: #f5f5f5;     /* Very Light Grey */
+            --danger: #000000;            /* Black */
+            --danger-light: #e8e8e8;      /* Light Grey */
+            --warning: #4d4d4d;           /* Medium Dark Grey */
+            --warning-light: #f0f0f0;     /* Light Grey */
+            --dark: #000000;              /* Black */
+            --gray-50: #fafafa;           /* Lightest grey */
+            --gray-100: #f5f5f5;          /* Very light grey */
+            --gray-200: #e5e5e5;          /* Light grey */
+            --gray-300: #d4d4d4;          /* Light medium grey */
+            --gray-400: #a3a3a3;          /* Medium grey */
+            --gray-500: #737373;          /* Grey */
+            --gray-600: #525252;          /* Dark grey */
+            --gray-700: #404040;          /* Darker grey */
+            --gray-800: #262626;          /* Very dark grey */
+            --gray-900: #171717;          /* Almost black */
+
+            /* Elevations */
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+
+            /* Typography */
+            --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-display: 'Montserrat', var(--font-sans);
+
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+
+            /* Radiuses */
+            --radius-sm: 0.25rem;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --radius-xl: 0.75rem;
+            --radius-2xl: 1rem;
+            --radius-full: 9999px;
+        }
+
+        /* Font imports */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@500;600;700;800&display=swap');
+
+        /* Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+            /* Navbar Styles */
+        .navbar {
+            background-color: var(--primary);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gray-400);
+        }
+
+        /* Layout */
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-header {
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            padding: var(--space-6) 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 3px solid var(--gray-200);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: var(--space-8) 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-10);
+        }
+
+        .page-title-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+            position: relative;
+            margin-bottom: var(--space-1);
+        }
+
+        .page-subtitle {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            max-width: 600px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3) var(--space-6);
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            transition: all 0.2s;
+            text-decoration: none;
+            cursor: pointer;
+            line-height: 1.4;
+            font-size: 0.95rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-md), 0 0 0 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--gray-800);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg), 0 0 0 3px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0px);
+        }
+
+        .btn-icon {
+            margin-right: var(--space-2);
+            font-size: 0.9em;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--gray-200);
+            margin-bottom: var(--space-6);
+        }
+
+        .tab {
+            padding: var(--space-3) var(--space-6);
+            font-weight: 600;
+            color: var(--gray-600);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab:hover:not(.active) {
+            color: var(--gray-800);
+            background-color: var(--gray-100);
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .filter-select {
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-300);
+            background-color: white;
+            font-weight: 500;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--space-6);
+            list-style-type: none;
+        }
+
+        /* Product Card */
+        .product-card {
+            background-color: white;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            border: 1px solid var(--gray-200);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--gray-400);
+        }
+
+        /* Product Image */
+        .product-image-wrapper {
+            position: relative;
+            height: 240px;
+            background: linear-gradient(135deg, #fafafa, #f5f5f5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .no-image {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-4);
+            color: var(--gray-500);
+            height: 100%;
+            width: 100%;
+            text-align: center;
+        }
+
+        .no-image i {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-3);
+            opacity: 0.7;
+        }
+
+        .no-image span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Stock Badge */
+        .product-badge {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            z-index: 1;
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            backdrop-filter: blur(4px);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .badge-in-stock {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(0, 0, 0, 0.3);
+        }
+
+        .badge-out-stock {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--gray-600);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .badge-featured {
+            background-color: rgba(255, 215, 0, 0.2);
+            color: #d4af37;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+        }
+
+        /* Product Details */
+        .product-content {
+            padding: var(--space-6);
+        }
+
+        .product-category {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            background-color: var(--gray-100);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            margin-bottom: var(--space-3);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .product-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: var(--space-4);
+            line-height: 1.3;
+        }
+
+        /* Product Stats */
+        .product-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .stat:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 70%;
+            width: 1px;
+            background-color: var(--gray-200);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.25rem;
+        }
+
+        .stat-stock {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            font-weight: 600;
+        }
+
+        .in-stock {
+            color: var(--primary);
+        }
+
+        .out-of-stock {
+            color: var(--gray-600);
+        }
+
+        /* Product Actions */
+        .product-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3);
+            margin-bottom: var(--space-5);
+        }
+
+        .btn-action {
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background-color: var(--gray-200);
+            color: var(--gray-800);
+        }
+
+        .btn-edit:hover {
+            background-color: var(--gray-800);
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: var(--gray-200);
+            color: var(--gray-800);
+        }
+
+        .btn-delete:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            background-color: var(--gray-50);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+        }
+
+        .reviews-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-4);
+        }
+
+        .reviews-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--gray-700);
+        }
+
+        .reviews-count {
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.15rem 0.5rem;
+            border-radius: var(--radius-full);
+        }
+
+        .reviews-list {
+            list-style-type: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+            max-height: 220px;
+            overflow-y: auto;
+            padding-right: var(--space-2);
+            /* Scrollbar styling */
+            scrollbar-width: thin;
+            scrollbar-color: var(--gray-400) transparent;
+        }
+
+        .reviews-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .reviews-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .reviews-list::-webkit-scrollbar-thumb {
+            background-color: var(--gray-400);
+            border-radius: var(--radius-full);
+        }
+
+        .review-item {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-3) var(--space-4);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.15s ease;
+        }
+
+        .review-item:hover {
+            transform: translateX(2px);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-2);
+        }
+
+        .review-user {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-full);
+            background-color: var(--gray-200);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .review-rating {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            color: var(--gray-800);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .review-comment {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        .no-reviews {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-5);
+            color: var(--gray-500);
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--space-10) var(--space-4);
+            margin: 0 auto;
+            max-width: 500px;
+        }
+
+        .empty-state-icon {
+            font-size: 3.5rem;
+            color: var(--gray-400);
+            margin-bottom: var(--space-6);
+            background-color: var(--gray-100);
+            height: 120px;
+            width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-full);
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-700);
+            margin-bottom: var(--space-2);
+        }
+
+        .empty-state-description {
+            color: var(--gray-600);
+            margin-bottom: var(--space-6);
+            max-width: 400px;
+        }
+
+        /* Top Performing Products */
+        .top-products-section {
+            margin-top: var(--space-10);
+            padding-top: var(--space-8);
+            border-top: 2px solid var(--gray-200);
+        }
+
+        .section-header {
+            margin-bottom: var(--space-6);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: var(--space-2);
+        }
+
+        .section-description {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        .app-footer {
+            background-color: white;
+            border-top: 1px solid var(--gray-200);
+            padding: var(--space-6) 0;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-text {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.75rem 1rem;
+            }
+
+            .navbar-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .nav-links li {
+                margin-left: 0;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-4);
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: var(--space-4);
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar {
+                padding: 0.5rem 0.75rem;
+            }
+
+            .logo img {
+                height: 32px;
+            }
+
+            .nav-links {
+                width: 100%;
+            }
+
+            .nav-links a {
+                font-size: 0.875rem;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .product-stats {
+                flex-direction: column;
+                gap: var(--space-3);
+            }
+
+            .stat:not(:last-child)::after {
+                display: none;
+            }
+
+            .product-image-wrapper {
+                height: 200px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: var(--space-3);
+                text-align: center;
+            }
+        }
+
+        /* High-end visuals */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Additional animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-card {
+            animation: fadeIn 0.5s ease-out forwards;
+            animation-delay: calc(var(--animation-order) * 0.1s);
+            opacity: 0;
+        }
+
+        /* Custom styling for status indicators */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 0;
+        }
+
+        .status-dot {
+            display: block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .status-dot.active {
+            background-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--gray-200);
+        }
+
+        .status-dot.inactive {
+            background-color: var(--gray-500);
+            box-shadow: 0 0 0 2px var(--gray-200);
+        }
+         .navbar-brand:hover .brand-text {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
+            /* Teal glow using your primary color */
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Navbar Optimization */
+        @media (max-width: 991px) {
+            .navbar-container {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+                padding: 0 5px !important;
+            }
+
+            .navbar-brand {
+                margin-right: 0 !important;
+                gap: 10px !important;
+                flex-shrink: 0;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            .logo-img {
+                max-height: 40px !important;
+                width: auto !important;
+                flex-shrink: 0;
+            }
+
+            .brand-text {
+                font-size: 1.4rem !important;
+                display: inline-block !important;
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+                -webkit-background-clip: text !important;
+                background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                white-space: nowrap !important;
+                max-width: 150px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .mobile-view {
+                display: flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                flex-shrink: 0;
+            }
+
+            .desktop-view {
+                display: none !important;
+            }
+
+            .btn-open-app {
+                padding: 4px 12px !important;
+                font-size: 0.85rem !important;
+                height: fit-content;
+            }
+        }
+
+
+        /* Custom Toggler Icon and Buttons */
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 5px 8px !important;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+            width: 1.25em !important;
+            height: 1.25em !important;
+        }
+
+        .mobile-view .btn-outline-light {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff !important;
+        }
+
+        .mobile-view .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Influencer Swiper Styles */
+        .influencers-swiper {
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .influencers-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+        }
+
+        .influencers-swiper .swiper-wrapper {
+            padding: 10px 0;
+        }
+
+
+        .swiper-pagination.influencers-pagination {
+            bottom: 0 !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: #00c7f7;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #00c7f7;
+        }
+
+        /* Logo + Brand Text Container */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Space between logo and text */
+            text-decoration: none !important;
+        }
+
+        /* Logo Image */
+        .navbar-brand img,
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hover effect on logo */
+        .navbar-brand:hover img,
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+            /* Teal glow */
+        }
+
+        /* Brand Text - "LumosKart" */
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* Hover glow on text */
+        .navbar-brand:hover .brand-text {
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 0 15px rgba(0, 199, 247, 0.6);
+            /* Stronger teal glow */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container-fluid navbar-container">
+                <a href="{% url 'customer_dashboard' %}" class="navbar-brand d-flex align-items-center gap-3">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                    <span class="brand-text">LumosKart</span>
+                </a>
+            <ul class="nav-links">
+                <li><a href="{%url 'home'%}">Home</a></li>
+                <li><a href="{%url 'influencer_product_list'%}">Products</a></li>
+                <li><a href="{%url 'influencer_dashboard'%}">Dashboard</a></li>
+                <li><a href="{%url 'logout'%}">Logout</a></li>
+                </ul>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="container">
+                <div class="page-header">
+                    <div class="page-title-group">
+                        <h1 class="page-title">Product Inventory</h1>
+                        <p class="page-subtitle">Manage your products, track inventory, and view customer reviews in one place.</p>
+                    </div>
+
+                    <a href="{% url 'add_product' %}" class="btn btn-primary">
+                        <i class="fas fa-plus btn-icon"></i>
+                        Add New Product
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <div class="tab active">Products</div>
+                    <div class="tab">Manage Products</div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <span class="filter-label">Status:</span>
+                        <select class="filter-select" onchange="filterProducts(this.value)">
+                            <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All Products</option>
+                            <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active</option>
+                            <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>Inactive</option>
+                            <option value="featured" {% if status_filter == 'featured' %}selected{% endif %}>Featured</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <span class="filter-label">Sort by:</span>
+                        <select class="filter-select" onchange="sortProducts(this.value)">
+                            <option value="-created_at" {% if sort_by == '-created_at' %}selected{% endif %}>Newest First</option>
+                            <option value="created_at" {% if sort_by == 'created_at' %}selected{% endif %}>Oldest First</option>
+                            <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name A-Z</option>
+                            <option value="-name" {% if sort_by == '-name' %}selected{% endif %}>Name Z-A</option>
+                            <option value="-stock" {% if sort_by == '-stock' %}selected{% endif %}>Stock (High to Low)</option>
+                            <option value="stock" {% if sort_by == 'stock' %}selected{% endif %}>Stock (Low to High)</option>
+                            <option value="-price" {% if sort_by == '-price' %}selected{% endif %}>Price (High to Low)</option>
+                            <option value="price" {% if sort_by == 'price' %}selected{% endif %}>Price (Low to High)</option>
+                        </select>
+                    </div>
+                </div>
+
+                {% if products %}
+                    <ul class="product-grid">
+                        {% for product in products %}
+                        <li class="product-card" style="--animation-order: {{ forloop.counter }}">
+                            <div class="product-image-wrapper">
+                                {% if product.featured %}
+                                    <div class="product-badge badge-featured">
+                                        <i class="fas fa-star"></i>
+                                        Featured
+                                    </div>
+                                {% elif product.stock > 0 %}
+                                    <div class="product-badge badge-in-stock">
+                                        <i class="fas fa-check-circle"></i>
+                                        In Stock
+                                    </div>
+                                {% else %}
+                                    <div class="product-badge badge-out-stock">
+                                        <i class="fas fa-times-circle"></i>
+                                        Out of Stock
+                                    </div>
+                                {% endif %}
+
+                                {% if product.video %}
+                                    <video controls class="product-image">
+                                        <source src="{{ product.video.url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                {% elif product.image %}
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                                {% else %}
+                                    <div class="no-image">
+                                        <i class="fas fa-camera-retro"></i>
+                                        <span>No image available</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="product-content">
+                                <span class="product-category">{{ product.category }}</span>
+                                <h3 class="product-name">{{ product.name }}</h3>
+
+                                <div class="product-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Price</span>
+                                        <span class="stat-value">₹{{ product.price }}</span>
+                                    </div>
+
+                                    <div class="stat">
+                                        <span class="stat-label">Stock</span>
+                                        {% if product.stock > 0 %}
+                                            <div class="stat-stock in-stock">
+                                                <span class="status-dot active"></span>
+                                                {{ product.stock }} units
+                                            </div>
+                                        {% else %}
+                                            <div class="stat-stock out-of-stock">
+                                                <span class="status-dot inactive"></span>
+                                                Out of stock
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="product-actions">
+                                    <a href="{% url 'edit_product' product.id %}" class="btn-action btn-edit">
+                                        <i class="fas fa-pen"></i>
+                                        Edit
+                                    </a>
+                                    <a href="{% url 'delete_product' product.id %}" class="btn-action btn-delete">
+                                        <i class="fas fa-trash"></i>
+                                        Delete
+                                    </a>
+                                </div>
+
+                                <div class="reviews-section">
+                                    <div class="reviews-header">
+                                        <h4 class="reviews-title">Customer Reviews</h4>
+                                        <span class="reviews-count">{{ product.reviews.all|length }}</span>
+                                    </div>
+
+                                    {% if product.reviews.all %}
+                                        <ul class="reviews-list">
+                                            {% for review in product.reviews.all %}
+                                                <li class="review-item">
+                                                    <div class="review-header">
+                                                        <div class="review-user">
+                                                            <div class="avatar">
+                                                                {{ review.user.username|slice:":1"|upper }}
+                                                            </div>
+                                                            {{ review.user.username }}
+                                                        </div>
+                                                        <div class="review-rating">
+                                                            {{ review.rating }}
+                                                            <i class="fas fa-star"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="review-comment">{{ review.comment }}</div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <div class="no-reviews">
+                                            <i class="fas fa-comment-slash"></i>
+                                            No reviews available for this product yet
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <h2 class="empty-state-title">No Products Found</h2>
+                        <p class="empty-state-description">
+                            Your inventory is currently empty. Start by adding your first product with the button below.
+                        </p>
+                        <a href="{% url 'add_product' %}" class="btn btn-primary">
+                            <i class="fas fa-plus btn-icon"></i>
+                            Add Your First Product
+                        </a>
+                    </div>
+                {% endif %}
+
+                <!-- Top Performing Products -->
+                {% if top_products %}
+                <div class="top-products-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Top Performing Products</h2>
+                        <p class="section-description">Your best-selling products based on current inventory levels</p>
+                    </div>
+
+                    <ul class="product-grid">
+                        {% for product in top_products %}
+                        <li class="product-card" style="--animation-order: {{ forloop.counter }}">
+                            <div class="product-image-wrapper">
+                                {% if product.stock > 0 %}
+                                    <div class="product-badge badge-in-stock">
+                                        <i class="fas fa-check-circle"></i>
+                                        In Stock
+                                    </div>
+                                {% else %}
+                                    <div class="product-badge badge-out-stock">
+                                        <i class="fas fa-times-circle"></i>
+                                        Out of Stock
+                                    </div>
+                                {% endif %}
+
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                                {% else %}
+                                    <div class="no-image">
+                                        <i class="fas fa-camera-retro"></i>
+                                        <span>No image available</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="product-content">
+                                <span class="product-category">{{ product.category }}</span>
+                                <h3 class="product-name">{{ product.name }}</h3>
+
+                                <div class="product-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Price</span>
+                                        <span class="stat-value">₹{{ product.price }}</span>
+                                    </div>
+
+                                    <div class="stat">
+                                        <span class="stat-label">Stock</span>
+                                        {% if product.stock > 0 %}
+                                            <div class="stat-stock in-stock">
+                                                <span class="status-dot active"></span>
+                                                {{ product.stock }} units
+                                            </div>
+                                        {% else %}
+                                            <div class="stat-stock out-of-stock">
+                                                <span class="status-dot inactive"></span>
+                                                Out of stock
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-text">
+                        <p>&copy; {% now "Y" %} Lumoskart. All rights reserved.</p>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function filterProducts(status) {
+            const url = new URL(window.location);
+            url.searchParams.set('status', status);
+            window.location.href = url;
+        }
+
+        function sortProducts(sortBy) {
+            const url = new URL(window.location);
+            url.searchParams.set('sort', sortBy);
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>
