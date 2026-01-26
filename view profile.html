@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Profile - Lumoskart</title>
+    <style>
+        :root {
+            --primary-black: #0a0a0a;
+            --secondary-black: #1a1a1a;
+            --dark-grey: #2a2a2a;
+            --medium-grey: #4a4a4a;
+            --light-grey: #e5e5e5;
+            --white: #ffffff;
+            --accent-grey: #6a6a6a;
+            --border-grey: #3a3a3a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--primary-black);
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: var(--primary-black);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-grey);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2.5rem;
+        }
+
+        .logo {
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateX(5px);
+        }
+
+        .logo img {
+            /*filter: brightness(0) invert(1);*/
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .nav-item a {
+            color: var(--light-grey);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--white);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item a:hover,
+        .nav-item a.active {
+            color: var(--white);
+            background-color: var(--secondary-black);
+        }
+
+        .nav-item a:hover::before,
+        .nav-item a.active::before {
+            transform: translateX(0);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .profile-card {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-black) 0%, var(--medium-grey) 100%);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
+            color: var(--white);
+            padding: 2.5rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .profile-header h2 {
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-header h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--white);
+            margin-top: 12px;
+            border-radius: 2px;
+        }
+
+        .profile-content {
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .profile-photo {
+            text-align: center;
+            position: sticky;
+            top: 100px;
+        }
+
+        .photo-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .photo-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-black), var(--medium-grey));
+            z-index: -1;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 0.4; }
+        }
+
+        .profile-photo img {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--white);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--light-grey);
+        }
+
+        .profile-photo img:hover {
+            transform: scale(1.05) rotate(3deg);
+        }
+
+        .no-photo {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary-black), var(--dark-grey));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-grey);
+            font-size: 0.9rem;
+            text-align: center;
+            border: 5px solid var(--white);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            line-height: 1.5;
+        }
+
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .profile-field {
+            transition: transform 0.3s ease;
+            animation: fadeInUp 0.6s ease backwards;
+        }
+
+        .profile-field:nth-child(1) { animation-delay: 0.1s; }
+        .profile-field:nth-child(2) { animation-delay: 0.2s; }
+        .profile-field:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-field:hover {
+            transform: translateX(8px);
+        }
+
+        .field-label {
+            font-weight: 700;
+            color: var(--primary-black);
+            margin-bottom: 0.8rem;
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        .field-value {
+            font-size: 1.05rem;
+            color: var(--secondary-black);
+            background: linear-gradient(to right, #fafafa, #ffffff);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-black);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .field-value::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-black), var(--medium-grey));
+        }
+
+        .field-value:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            border-left-color: var(--dark-grey);
+        }
+
+        .bio-content {
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        .edit-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            background: var(--primary-black);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .edit-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .edit-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .edit-button:hover {
+            background: var(--secondary-black);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .edit-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-black);
+            color: var(--light-grey);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid var(--border-grey);
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .footer a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer a:hover {
+            opacity: 0.7;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 968px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .profile-photo {
+                position: static;
+            }
+
+            .photo-wrapper {
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem 1.5rem;
+                gap: 1rem;
+            }
+
+            .nav-menu {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .nav-item a {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .profile-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .profile-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .profile-content {
+                padding: 2rem 1.5rem;
+                gap: 2rem;
+            }
+
+            .profile-photo img,
+            .no-photo {
+                width: 180px;
+                height: 180px;
+            }
+
+            .field-value {
+                padding: 1.2rem;
+                font-size: 1rem;
+            }
+
+            .edit-button {
+                width: 100%;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-header h2 {
+                font-size: 1.3rem;
+            }
+
+            .profile-photo img,
+            .no-photo {
+                width: 150px;
+                height: 150px;
+            }
+
+            .profile-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .field-label {
+                font-size: 0.7rem;
+            }
+
+            .field-value {
+                font-size: 0.95rem;
+                padding: 1rem;
+            }
+
+            .nav-item a {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+          .navbar-brand:hover .brand-text {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
+            /* Teal glow using your primary color */
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Navbar Optimization */
+        @media (max-width: 991px) {
+            .navbar-container {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+                padding: 0 5px !important;
+            }
+
+            .navbar-brand {
+                margin-right: 0 !important;
+                gap: 10px !important;
+                flex-shrink: 0;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            .logo-img {
+                max-height: 40px !important;
+                width: auto !important;
+                flex-shrink: 0;
+            }
+
+            .brand-text {
+                font-size: 1.4rem !important;
+                display: inline-block !important;
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+                -webkit-background-clip: text !important;
+                background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                white-space: nowrap !important;
+            }
+
+            .mobile-view {
+                display: flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                flex-shrink: 0;
+            }
+
+            .desktop-view {
+                display: none !important;
+            }
+
+            .btn-open-app {
+                padding: 4px 12px !important;
+                font-size: 0.85rem !important;
+                height: fit-content;
+            }
+        }
+
+
+        /* Custom Toggler Icon and Buttons */
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 5px 8px !important;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+            width: 1.25em !important;
+            height: 1.25em !important;
+        }
+
+        .mobile-view .btn-outline-light {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff !important;
+        }
+
+        .mobile-view .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Influencer Swiper Styles */
+        .influencers-swiper {
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .influencers-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+        }
+
+        .influencers-swiper .swiper-wrapper {
+            padding: 10px 0;
+        }
+
+
+        .swiper-pagination.influencers-pagination {
+            bottom: 0 !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: #00c7f7;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #00c7f7;
+        }
+
+        /* Logo + Brand Text Container */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Space between logo and text */
+            text-decoration: none !important;
+        }
+
+        /* Logo Image */
+        .navbar-brand img,
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hover effect on logo */
+        .navbar-brand:hover img,
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+            /* Teal glow */
+        }
+
+        /* Brand Text - "LumosKart" */
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* Hover glow on text */
+        .navbar-brand:hover .brand-text {
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 0 15px rgba(0, 199, 247, 0.6);
+            /* Stronger teal glow */
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+<!--        <div class="nav-container">-->
+<!--            <a href="#" class="logo">-->
+<!--                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" style="height: 32px; width: auto; margin-right: 10px;">-->
+<!--                <span>Lumoskart</span>-->
+<!--            </a>-->
+ <div class="container-fluid navbar-container">
+                <a href="{% url 'customer_dashboard' %}" class="navbar-brand d-flex align-items-center gap-3">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                    <span class="brand-text">LumosKart</span>
+                </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="{% url 'home' %}" class="active">Home</a></li>
+                <li class="nav-item"><a href="{%url 'influencer_dashboard'%}">Dashboard</a></li>
+                <li class="nav-item"><a href="{%url 'logout'%}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <h2>My Profile</h2>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-photo">
+                    <div class="photo-wrapper">
+                        {% if profile.photo %}
+                            <img src="{{ profile.photo.url }}" alt="Profile Photo">
+                        {% else %}
+                            <div class="no-photo">
+                                <span>No profile photo uploaded</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="profile-details">
+                    <div class="profile-field">
+                        <span class="field-label">Username</span>
+                        <div class="field-value">{{ profile.user.username }}</div>
+                    </div>
+
+                    <div class="profile-field">
+                        <span class="field-label">Email</span>
+                        <div class="field-value">{{ profile.user.email }}</div>
+                    </div>
+
+                    <div class="profile-field">
+                        <span class="field-label">Bio</span>
+                        <div class="field-value bio-content">{{ profile.bio|linebreaksbr }}</div>
+                    </div>
+
+                    <a href="{% url 'edit_profile' %}" class="edit-button">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Lumoskart. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
