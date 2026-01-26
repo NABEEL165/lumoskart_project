@@ -5653,6 +5653,163 @@
         </section>
 
 
+   <!-- Instagram Reels Section -->
+        <section class="video-shorts-section">
+            <div class="section-header">
+                <h2 class="section-title" data-en="Videos" data-ar="فيديوهات" data-hi="वीडियो">Videos</h2>
+                <p class="section-description" data-en="Watch engaging videos from our top influencers"
+                    data-ar="شاهد مقاطع الفيديو الممتعة من مؤثرينا الأعلى"
+                    data-hi="हमारे शीर्ष प्रभावकों से आकर्षक वीडियो देखें">Watch engaging videos from our top
+                    influencers</p>
+            </div>
+
+            {% if reels_videos %}
+            <div class="reels-grid">
+                {% for video in reels_videos %}
+                <div class="reel-widget-card position-relative overflow-hidden" data-video-id="{{ video.id }}"
+                    data-video-index="{{ forloop.counter0 }}">
+                    {% with product=video.products.first %}
+                    <!-- Badges -->
+                    <div class="reel-discount-badge">60%</div>
+                    <div class="reel-views-badge">
+                        <i class="fas fa-eye"></i> {{ video.views|default:0 }}
+                    </div>
+
+                    <!-- Video Background -->
+                    <a href="javascript:void(0);" class="text-decoration-none video-shorts-item"
+                        data-video-id="{{ video.id }}" data-video-url="{{ video.video_file.url }}"
+                        data-video-title="{{ video.title }}" data-video-influencer="{{ video.influencer.username }}"
+                        data-video-influencer-id="{{ video.influencer.id }}"
+                        data-video-likes="{{ video.likes|default:0 }}" data-video-views="{{ video.views|default:0 }}"
+                        data-video-products='{% for prod in video.products.all %}{"id": {{ prod.id }}, "name": "{{ prod.name }}", "price": {{ prod.price }}, "currency": "INR", "image": "{{ prod.image.url|default:"" }}", "influencer_id": {{ video.influencer.id }}}{% if not forloop.last %},{% endif %}{% endfor %}'>
+                        <video class="w-100 h-100 object-fit-cover" muted autoplay loop playsinline preload="metadata"
+                            volume="0">
+                            <source src="{{ video.video_file.url }}#t=0.1" type="video/mp4">
+                        </video>
+
+                        <!-- Bottom Gradient for contrast -->
+                        <div class="reel-overlay-gradient"></div>
+
+                        <!-- Video Info (Influencer Name and Bio) -->
+                        <div class="reel-video-info">
+                            <h6 class="reel-video-title">{{ video.title|truncatewords:6 }}</h6>
+                            <p class="reel-video-influencer">@{{ video.influencer.username }}</p>
+
+                        </div>
+
+                        {% if product %}
+                        <!-- Product Overlay -->
+                        <div class="reel-product-overlay">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" class="reel-product-thumb" alt="{{ product.name }}">
+                            {% else %}
+                            <div
+                                class="reel-product-thumb d-flex align-items-center justify-content-center bg-secondary">
+                                <i class="fas fa-image text-white-50"></i>
+                            </div>
+                            {% endif %}
+                            <div class="reel-product-info">
+                                <div class="reel-product-name">{{ product.name }}</div>
+                                <div class="reel-product-price-row">
+                                    <span class="reel-current-price" data-price="{{ product.price }}"
+                                        data-currency="INR">₹{{ product.price }}</span>
+                                    <span class="reel-original-price" data-price="{% widthratio product.price 4 10 %}"
+                                        data-currency="INR">₹{% widthratio product.price 4 10 %}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </a>
+
+                    <!-- Add to Cart / Buy Now Bar -->
+                    {% if product %}
+                    <a href="{% url 'view_influencer_products' product.influencer.id %}"
+                        class="reel-add-to-cart-bar buy-now-btn" data-en="Buy Now" data-ar="اشتري الآن"
+                        data-hi="अभी खरीदें">
+                        <span class="btn-text">Buy Now</span> <i class="fas fa-caret-down"></i>
+                    </a>
+                    {% else %}
+                    <div class="reel-add-to-cart-bar disabled" style="opacity: 0.5; cursor: not-allowed;">
+                        <a href="javascript:void(0);" class="video-shorts-action-btn video-shorts-buy"
+                            id="video-shorts-buy-btn" data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">
+                            <i class="fas fa-shopping-cart"></i> <span class="btn-text">Buy Now</span>
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <h4 data-en="No Reels Yet" data-ar="لا توجد مقاطع بعد" data-hi="अभी तक कोई रील्स नहीं">No Reels Yet</h4>
+                <p data-en="Be the first influencer to post!" data-ar="كن أول مؤثر ينشر!"
+                    data-hi="पोस्ट करने वाले पहले प्रभावक बनें!">Be the first influencer to post!</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Video Shorts Player Modal (Instagram Reels Style) -->
+        <div class="video-shorts-player">
+            <div class="video-shorts-content">
+                <div class="video-shorts-video-container">
+                    <video class="video-shorts-video" muted playsinline loop></video>
+
+                    <!-- Close Button -->
+                    <button class="video-shorts-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+
+                    <!-- Right Sidebar Actions -->
+                    <div class="video-shorts-actions-sidebar">
+                        <div class="action-item">
+                            <button class="video-shorts-like">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <span class="like-count"></span>
+                        </div>
+                        <div class="action-item">
+                            <button class="video-shorts-share">
+                                <i class="far fa-paper-plane"></i>
+                            </button>
+                            <span class="action-label">Share</span>
+                        </div>
+                        <div class="action-item">
+                            <button class="video-shorts-buy" id="video-shorts-buy-btn">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                            <span class="action-label">Shop</span>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Overlay Info -->
+                    <div class="video-shorts-info-overlay">
+                        <div class="influencer-info">
+                            <div class="influencer-avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3 class="video-shorts-influencer"></h3>
+                        </div>
+                        <div class="video-shorts-description"></div>
+                        <!-- Hidden title element for JS compatibility -->
+                        <div class="video-shorts-title" style="display:none;"></div>
+
+                        <div class="video-shorts-products">
+                            <!-- Products will be injected here as pills -->
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="video-progress-container">
+                        <div class="video-progress-bar"></div>
+                    </div>
+
+                    <!-- Navigation Arrows (Desktop) -->
+                    <button class="nav-arrow prev-video"><i class="fas fa-chevron-up"></i></button>
+                    <button class="nav-arrow next-video"><i class="fas fa-chevron-down"></i></button>
+                </div>
+            </div>
+        </div>
 
 
         <!-- Products by Category (Amazon/Flipkart Style) -->
@@ -5836,163 +5993,6 @@
         </section>
         {% endfor %}
 
-        <!-- Instagram Reels Section -->
-        <section class="video-shorts-section">
-            <div class="section-header">
-                <h2 class="section-title" data-en="Videos" data-ar="فيديوهات" data-hi="वीडियो">Videos</h2>
-                <p class="section-description" data-en="Watch engaging videos from our top influencers"
-                    data-ar="شاهد مقاطع الفيديو الممتعة من مؤثرينا الأعلى"
-                    data-hi="हमारे शीर्ष प्रभावकों से आकर्षक वीडियो देखें">Watch engaging videos from our top
-                    influencers</p>
-            </div>
-
-            {% if reels_videos %}
-            <div class="reels-grid">
-                {% for video in reels_videos %}
-                <div class="reel-widget-card position-relative overflow-hidden" data-video-id="{{ video.id }}"
-                    data-video-index="{{ forloop.counter0 }}">
-                    {% with product=video.products.first %}
-                    <!-- Badges -->
-                    <div class="reel-discount-badge">60%</div>
-                    <div class="reel-views-badge">
-                        <i class="fas fa-eye"></i> {{ video.views|default:0 }}
-                    </div>
-
-                    <!-- Video Background -->
-                    <a href="javascript:void(0);" class="text-decoration-none video-shorts-item"
-                        data-video-id="{{ video.id }}" data-video-url="{{ video.video_file.url }}"
-                        data-video-title="{{ video.title }}" data-video-influencer="{{ video.influencer.username }}"
-                        data-video-influencer-id="{{ video.influencer.id }}"
-                        data-video-likes="{{ video.likes|default:0 }}" data-video-views="{{ video.views|default:0 }}"
-                        data-video-products='{% for prod in video.products.all %}{"id": {{ prod.id }}, "name": "{{ prod.name }}", "price": {{ prod.price }}, "currency": "INR", "image": "{{ prod.image.url|default:"" }}", "influencer_id": {{ video.influencer.id }}}{% if not forloop.last %},{% endif %}{% endfor %}'>
-                        <video class="w-100 h-100 object-fit-cover" muted autoplay loop playsinline preload="metadata"
-                            volume="0">
-                            <source src="{{ video.video_file.url }}#t=0.1" type="video/mp4">
-                        </video>
-
-                        <!-- Bottom Gradient for contrast -->
-                        <div class="reel-overlay-gradient"></div>
-
-                        <!-- Video Info (Influencer Name and Bio) -->
-                        <div class="reel-video-info">
-                            <h6 class="reel-video-title">{{ video.title|truncatewords:6 }}</h6>
-                            <p class="reel-video-influencer">@{{ video.influencer.username }}</p>
-
-                        </div>
-
-                        {% if product %}
-                        <!-- Product Overlay -->
-                        <div class="reel-product-overlay">
-                            {% if product.image %}
-                            <img src="{{ product.image.url }}" class="reel-product-thumb" alt="{{ product.name }}">
-                            {% else %}
-                            <div
-                                class="reel-product-thumb d-flex align-items-center justify-content-center bg-secondary">
-                                <i class="fas fa-image text-white-50"></i>
-                            </div>
-                            {% endif %}
-                            <div class="reel-product-info">
-                                <div class="reel-product-name">{{ product.name }}</div>
-                                <div class="reel-product-price-row">
-                                    <span class="reel-current-price" data-price="{{ product.price }}"
-                                        data-currency="INR">₹{{ product.price }}</span>
-                                    <span class="reel-original-price" data-price="{% widthratio product.price 4 10 %}"
-                                        data-currency="INR">₹{% widthratio product.price 4 10 %}</span>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                    </a>
-
-                    <!-- Add to Cart / Buy Now Bar -->
-                    {% if product %}
-                    <a href="{% url 'view_influencer_products' product.influencer.id %}"
-                        class="reel-add-to-cart-bar buy-now-btn" data-en="Buy Now" data-ar="اشتري الآن"
-                        data-hi="अभी खरीदें">
-                        <span class="btn-text">Buy Now</span> <i class="fas fa-caret-down"></i>
-                    </a>
-                    {% else %}
-                    <div class="reel-add-to-cart-bar disabled" style="opacity: 0.5; cursor: not-allowed;">
-                        <a href="javascript:void(0);" class="video-shorts-action-btn video-shorts-buy"
-                            id="video-shorts-buy-btn" data-en="Buy Now" data-ar="اشتري الآن" data-hi="अभी खरीदें">
-                            <i class="fas fa-shopping-cart"></i> <span class="btn-text">Buy Now</span>
-                        </a>
-                    </div>
-                    {% endif %}
-                    {% endwith %}
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="empty-state">
-                <h4 data-en="No Reels Yet" data-ar="لا توجد مقاطع بعد" data-hi="अभी तक कोई रील्स नहीं">No Reels Yet</h4>
-                <p data-en="Be the first influencer to post!" data-ar="كن أول مؤثر ينشر!"
-                    data-hi="पोस्ट करने वाले पहले प्रभावक बनें!">Be the first influencer to post!</p>
-            </div>
-            {% endif %}
-        </section>
-
-        <!-- Video Shorts Player Modal (Instagram Reels Style) -->
-        <div class="video-shorts-player">
-            <div class="video-shorts-content">
-                <div class="video-shorts-video-container">
-                    <video class="video-shorts-video" muted playsinline loop></video>
-
-                    <!-- Close Button -->
-                    <button class="video-shorts-close">
-                        <i class="fas fa-times"></i>
-                    </button>
-
-                    <!-- Right Sidebar Actions -->
-                    <div class="video-shorts-actions-sidebar">
-                        <div class="action-item">
-                            <button class="video-shorts-like">
-                                <i class="far fa-heart"></i>
-                            </button>
-                            <span class="like-count"></span>
-                        </div>
-                        <div class="action-item">
-                            <button class="video-shorts-share">
-                                <i class="far fa-paper-plane"></i>
-                            </button>
-                            <span class="action-label">Share</span>
-                        </div>
-                        <div class="action-item">
-                            <button class="video-shorts-buy" id="video-shorts-buy-btn">
-                                <i class="fas fa-shopping-bag"></i>
-                            </button>
-                            <span class="action-label">Shop</span>
-                        </div>
-                    </div>
-
-                    <!-- Bottom Overlay Info -->
-                    <div class="video-shorts-info-overlay">
-                        <div class="influencer-info">
-                            <div class="influencer-avatar-placeholder">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <h3 class="video-shorts-influencer"></h3>
-                        </div>
-                        <div class="video-shorts-description"></div>
-                        <!-- Hidden title element for JS compatibility -->
-                        <div class="video-shorts-title" style="display:none;"></div>
-
-                        <div class="video-shorts-products">
-                            <!-- Products will be injected here as pills -->
-                        </div>
-                    </div>
-
-                    <!-- Progress Bar -->
-                    <div class="video-progress-container">
-                        <div class="video-progress-bar"></div>
-                    </div>
-
-                    <!-- Navigation Arrows (Desktop) -->
-                    <button class="nav-arrow prev-video"><i class="fas fa-chevron-up"></i></button>
-                    <button class="nav-arrow next-video"><i class="fas fa-chevron-down"></i></button>
-                </div>
-            </div>
-        </div>
 
 
         <!-- Footer -->
