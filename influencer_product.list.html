@@ -852,188 +852,44 @@
             background-color: var(--gray-500);
             box-shadow: 0 0 0 2px var(--gray-200);
         }
-         .navbar-brand:hover .brand-text {
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
-            /* Teal glow using your primary color */
-            transition: all 0.3s ease;
+        
+        /* Product Type Badge */
+        .product-type-badge {
+            margin: var(--space-3) 0;
         }
-
-        .navbar-brand:hover .logo-img {
-            transform: scale(1.05);
-            transition: all 0.3s ease;
+        
+        .badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: var(--space-2);
         }
-
-        /* Mobile Navbar Optimization */
-        @media (max-width: 991px) {
-            .navbar-container {
-                display: flex !important;
-                flex-wrap: nowrap !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                width: 100% !important;
-                padding: 0 5px !important;
-            }
-
-            .navbar-brand {
-                margin-right: 0 !important;
-                gap: 10px !important;
-                flex-shrink: 0;
-                display: flex !important;
-                align-items: center !important;
-            }
-
-            .logo-img {
-                max-height: 40px !important;
-                width: auto !important;
-                flex-shrink: 0;
-            }
-
-            .brand-text {
-                font-size: 1.4rem !important;
-                display: inline-block !important;
-                color: #ffffff !important;
-                background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
-                -webkit-background-clip: text !important;
-                background-clip: text !important;
-                -webkit-text-fill-color: transparent !important;
-                white-space: nowrap !important;
-                max-width: 150px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            .mobile-view {
-                display: flex !important;
-                align-items: center !important;
-                gap: 5px !important;
-                flex-shrink: 0;
-            }
-
-            .desktop-view {
-                display: none !important;
-            }
-
-            .btn-open-app {
-                padding: 4px 12px !important;
-                font-size: 0.85rem !important;
-                height: fit-content;
-            }
+        
+        .badge-own-product {
+            background-color: var(--gray-100);
+            color: var(--primary);
+            border: 1px solid var(--gray-300);
         }
-
-
-        /* Custom Toggler Icon and Buttons */
-        .navbar-toggler {
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            padding: 5px 8px !important;
-        }
-
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-            width: 1.25em !important;
-            height: 1.25em !important;
-        }
-
-        .mobile-view .btn-outline-light {
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff !important;
-        }
-
-        .mobile-view .btn-outline-light:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Influencer Swiper Styles */
-        .influencers-swiper {
-            width: 100%;
-            padding: 20px 0;
-        }
-
-        .influencers-swiper .swiper-slide {
-            display: flex;
-            justify-content: center;
-        }
-
-        .influencers-swiper .swiper-wrapper {
-            padding: 10px 0;
-        }
-
-
-        .swiper-pagination.influencers-pagination {
-            bottom: 0 !important;
-        }
-
-        .swiper-pagination-bullet {
-            background: #00c7f7;
-            opacity: 0.5;
-        }
-
-        .swiper-pagination-bullet-active {
-            opacity: 1;
-            background: #00c7f7;
-        }
-
-        /* Logo + Brand Text Container */
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            /* Space between logo and text */
-            text-decoration: none !important;
-        }
-
-        /* Logo Image */
-        .navbar-brand img,
-        .logo-img {
-            height: 50px;
-            width: auto;
-            border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Hover effect on logo */
-        .navbar-brand:hover img,
-        .navbar-brand:hover .logo-img {
-            transform: scale(1.1) rotate(2deg);
-            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
-            /* Teal glow */
-        }
-
-        /* Brand Text - "LumosKart" */
-        .brand-text {
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: #ffffff;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        /* Hover glow on text */
-        .navbar-brand:hover .brand-text {
-            text-shadow:
-                0 2px 10px rgba(0, 0, 0, 0.3),
-                0 0 15px rgba(0, 199, 247, 0.6);
-            /* Stronger teal glow */
+        
+        .badge-affiliate-product {
+            background-color: rgba(255, 165, 0, 0.1);
+            color: #FF8C00;
+            border: 1px solid rgba(255, 165, 0, 0.3);
         }
     </style>
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="container-fluid navbar-container">
-                <a href="{% url 'customer_dashboard' %}" class="navbar-brand d-flex align-items-center gap-3">
-                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
-                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
-                    <span class="brand-text">LumosKart</span>
-                </a>
+        <div class="navbar-container">
+            <div class="logo">
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="GreenStore Logo">
+<!--                <span class="logo-text">Lumoskart</span>-->
+            </div>
             <ul class="nav-links">
                 <li><a href="{%url 'home'%}">Home</a></li>
                 <li><a href="{%url 'influencer_product_list'%}">Products</a></li>
@@ -1137,6 +993,15 @@
                             <div class="product-content">
                                 <span class="product-category">{{ product.category }}</span>
                                 <h3 class="product-name">{{ product.name }}</h3>
+                                
+                                <!-- Product Type Badge -->
+                                <div class="product-type-badge">
+                                    {% if product.product_type == 'own' %}
+                                        <span class="badge badge-own-product">Own Product</span>
+                                    {% elif product.product_type == 'affiliate' %}
+                                        <span class="badge badge-affiliate-product">Affiliate Product</span>
+                                    {% endif %}
+                                </div>
 
                                 <div class="product-stats">
                                     <div class="stat">
@@ -1261,6 +1126,15 @@
                             <div class="product-content">
                                 <span class="product-category">{{ product.category }}</span>
                                 <h3 class="product-name">{{ product.name }}</h3>
+                                
+                                <!-- Product Type Badge -->
+                                <div class="product-type-badge">
+                                    {% if product.product_type == 'own' %}
+                                        <span class="badge badge-own-product">Own Product</span>
+                                    {% elif product.product_type == 'affiliate' %}
+                                        <span class="badge badge-affiliate-product">Affiliate Product</span>
+                                    {% endif %}
+                                </div>
 
                                 <div class="product-stats">
                                     <div class="stat">
