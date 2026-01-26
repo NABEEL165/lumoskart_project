@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, Review, Category
 from .forms import ProductForm, ReviewForm, CategoryForm
 from accounts.models import CustomUser
-from orders.models import WishlistItem,  OrderItem
+from orders.models import WishlistItem, OrderItem, Order
 from django.contrib import messages
 from django.db.models import Avg,  Sum
 from django.http import HttpResponse
@@ -118,8 +118,62 @@ def influencer_sold_products(request):
     if request.user.user_type != 'influencer':
         return redirect('home')
 
+    from datetime import datetime, timedelta
+    from django.db.models import Sum, F
+    from django.utils import timezone
+    
+    # Get all completed orders containing products from this influencer
+    order_items = OrderItem.objects.filter(
+        product__influencer=request.user,
+        order__status='Completed'
+    ).select_related('order', 'product').order_by('-order__created_at')
+    
+    # Prepare sold products data
     sold_products = []
-    stats = {}
+    for item in order_items:
+        sold_products.append({
+            'order_id': item.order.id,
+            'customer_name': item.order.user.first_name or item.order.user.username,
+            'product': item.product,
+            'date': item.order.created_at.strftime('%Y-%m-%d'),
+            'total': float(item.price) * item.quantity,
+        })
+    
+    # Calculate statistics
+    today = timezone.now().date()
+    current_week_start = today - timedelta(days=today.weekday())
+    current_month = today.month
+    current_year = today.year
+    
+    # Monthly revenue
+    monthly_revenue = order_items.filter(
+        order__created_at__year=current_year,
+        order__created_at__month=current_month
+    ).aggregate(total=Sum(F('price') * F('quantity')))['total'] or 0
+    
+    # Weekly revenue
+    weekly_revenue = order_items.filter(
+        order__created_at__date__gte=current_week_start
+    ).aggregate(total=Sum(F('price') * F('quantity')))['total'] or 0
+    
+    # Daily revenue
+    daily_revenue = order_items.filter(
+        order__created_at__date=today
+    ).aggregate(total=Sum(F('price') * F('quantity')))['total'] or 0
+    
+    # Calculate earnings after 20% platform fee
+    monthly_earnings = float(monthly_revenue) * 0.8  # 80% after 20% platform fee
+    weekly_earnings = float(weekly_revenue) * 0.8   # 80% after 20% platform fee
+    daily_earnings = float(daily_revenue) * 0.8     # 80% after 20% platform fee
+    
+    stats = {
+        'monthly_revenue': monthly_revenue,
+        'weekly_revenue': weekly_revenue,
+        'daily_revenue': daily_revenue,
+        'monthly_earnings': monthly_earnings,
+        'weekly_earnings': weekly_earnings,
+        'daily_earnings': daily_earnings,
+    }
 
     return render(request, 'sold_product.html', {
         'sold_products': sold_products,
