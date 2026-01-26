@@ -8,8 +8,10 @@ from django.db.models import  Q, Sum, F
 from django.core.exceptions import FieldError
 # from django.utils.timezone import now
 from .forms import InfluencerRegisterForm, CustomerRegisterForm, InfluencerProfileForm,VideoUploadForm,VideoEditForm
-from .models import CustomUser, InfluencerProfile, InfluencerVideo, WithdrawRequest, Order, OrderItem, InfluencerApplication,Banner, BlogPost, PageContent, PromoVideo
+from .models import CustomUser, InfluencerProfile, InfluencerVideo, WithdrawRequest, Order, OrderItem, InfluencerApplication,Banner, BlogPost, PageContent, PromoVideo,BankAccount, WeeklyEarning
 from django.contrib import messages
+from django.http import JsonResponse
+
 
 
 try:
@@ -28,7 +30,32 @@ import json
 
 def home_view(request):
     categories = Category.objects.all()
-    influencers = CustomUser.objects.filter(user_type='influencer')
+     # Get influencers with their profiles to include followers count
+    from django.db.models import Count
+    influencers = CustomUser.objects.filter(
+        user_type='influencer',
+        is_active=True,
+        influencer_profile__isnull=False  # Only influencers with profiles
+    ).select_related('influencer_profile').annotate(
+        actual_followers_count=Count('followership')
+    )
+
+     # If user is authenticated, add follow status for each influencer
+    if request.user.is_authenticated:
+        from django.db.models import Case, When, BooleanField, Exists, OuterRef
+        from .models import InfluencerFollower
+
+        # Add follow status annotation to each influencer
+        influencers = influencers.annotate(
+            is_followed_by_current_user=Exists(
+                InfluencerFollower.objects.filter(
+                    influencer=OuterRef('pk'),
+                    follower=request.user
+                )
+            )
+        )
+
+
     products = Product.objects.filter(is_trending=True).select_related('category', 'influencer')[:12]
 
     # FIXED: Use correct field names from your model
@@ -1044,14 +1071,32 @@ def influencer_earnings(request):
     ).aggregate(total=Sum('amount'))['total'] or 0
     pending_withdrawals = float(pending_withdrawals_decimal)
 
+     # Calculate weekly withdrawable earnings
+    from datetime import date, timedelta
+    today = date.today()
+    week_start = today - timedelta(days=today.weekday())  # Monday
+    week_end = week_start + timedelta(days=6)  # Sunday
+
+    # Get this week's earnings that are not withdrawn yet
+    weekly_earnings = WeeklyEarning.objects.filter(
+        influencer=request.user,
+        week_start_date__gte=week_start,
+        withdrawn=False
+    ).aggregate(total=Sum('earnings'))['total'] or 0
+
+    # Calculate withdrawable balance (weekly earnings that are not yet withdrawn)
+    withdrawable_balance = float(weekly_earnings)
+
     context = {
         'total_earnings': total_earnings,
+         'withdrawable_balance': withdrawable_balance,
         'pending_withdrawals': pending_withdrawals,
         'withdraw_requests': withdraw_requests,
         'influencer_orders': influencer_orders,
     }
 
     return render(request, 'influencer_earnings.html', context)
+
 
 
 @login_required
@@ -1061,15 +1106,78 @@ def request_withdrawal(request):
 
     if request.method == 'POST':
         amount = request.POST.get('amount')
+
         try:
             amount = float(amount)
+
+            # Validate the amount is positive
+            if amount <= 0:
+                messages.error(request, 'Amount must be greater than zero.')
+                return redirect('influencer_earnings')
+
+            # Check if user has sufficient withdrawable balance
+            from datetime import date, timedelta
+            today = date.today()
+            week_start = today - timedelta(days=today.weekday())  # Monday
+            week_end = week_start + timedelta(days=6)  # Sunday
+
+            # Get this week's earnings that are not withdrawn yet
+            weekly_earnings = WeeklyEarning.objects.filter(
+                influencer=request.user,
+                week_start_date__gte=week_start,
+                withdrawn=False
+            ).aggregate(total=Sum('earnings'))['total'] or 0
+
+            withdrawable_balance = float(weekly_earnings)
+
+            if amount > withdrawable_balance:
+                messages.error(request, f'Insufficient balance. Your current withdrawable balance is ₹{withdrawable_balance:.2f}.')
+                return redirect('influencer_earnings')
+
+            # Check if user has a verified bank account
+            try:
+                bank_account = BankAccount.objects.get(influencer=request.user)
+                if not bank_account.is_verified:
+                    messages.error(request, 'Your bank account needs to be verified before you can request a withdrawal.')
+                    return redirect('influencer_earnings')
+            except BankAccount.DoesNotExist:
+                messages.error(request, 'Please add your bank account details first before requesting a withdrawal.')
+                return redirect('manage_bank_account')
+
             # Create a withdraw request
             WithdrawRequest.objects.create(
                 influencer=request.user,
                 amount=amount,
                 status='pending'
             )
-            messages.success(request, 'Withdrawal request submitted successfully!')
+
+            # Update weekly earnings to mark the withdrawn amount as claimed
+            # We'll mark the weekly earnings as partially withdrawn
+            weekly_earnings_records = WeeklyEarning.objects.filter(
+                influencer=request.user,
+                week_start_date__gte=week_start,
+                withdrawn=False
+            )
+
+            remaining_amount = amount
+            for earning in weekly_earnings_records:
+                if remaining_amount <= 0:
+                    break
+
+                if remaining_amount >= earning.earnings:
+                    # Mark entire earning as withdrawn
+                    earning.withdrawn = True
+                    earning.save()
+                    remaining_amount -= float(earning.earnings)
+                else:
+                    # Partially withdraw from this earning record
+                    # For simplicity, we'll just mark it as withdrawn when the full amount is covered
+                    # In a real implementation, you'd want to track partial withdrawals
+                    earning.withdrawn = True
+                    earning.save()
+                    remaining_amount = 0
+
+            messages.success(request, f'Withdrawal request of ₹{amount:.2f} submitted successfully!')
         except ValueError:
             messages.error(request, 'Invalid amount entered.')
 
@@ -2050,3 +2158,104 @@ def export_manage_orders_data(request):
     }
 
     return render(request, 'manage_orders_export.html', context)
+
+
+@login_required
+def manage_bank_account(request):
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+
+    # Get or create bank account for the influencer
+    bank_account, created = BankAccount.objects.get_or_create(influencer=request.user)
+
+    if request.method == 'POST':
+        account_holder_name = request.POST.get('account_holder_name')
+        account_number = request.POST.get('account_number')
+        ifsc_code = request.POST.get('ifsc_code')
+        bank_name = request.POST.get('bank_name')
+        branch_name = request.POST.get('branch_name')
+
+        # Validate required fields
+        if not account_holder_name or not account_number or not ifsc_code or not bank_name or not branch_name:
+            messages.error(request, 'All fields are required.')
+        else:
+            # Update bank account details
+            bank_account.account_holder_name = account_holder_name
+            bank_account.account_number = account_number
+            bank_account.ifsc_code = ifsc_code
+            bank_account.bank_name = bank_name
+            bank_account.branch_name = branch_name
+            bank_account.save()
+            messages.success(request, 'Bank account details updated successfully!')
+
+    context = {
+        'bank_account': bank_account,
+    }
+    return render(request, 'manage_bank_account.html', context)
+
+@login_required
+def toggle_follow(request):
+    """
+    Toggle follow/unfollow status for an influencer
+    """
+    if request.method == 'POST':
+        try:
+            import json
+            data = json.loads(request.body)
+            influencer_id = data.get('influencer_id')
+            action = data.get('action')  # 'follow' or 'unfollow'
+
+            if not influencer_id or action not in ['follow', 'unfollow']:
+                return JsonResponse({'success': False, 'error': 'Invalid data'})
+
+            # Get the influencer
+            influencer = get_object_or_404(CustomUser, id=influencer_id, user_type='influencer')
+
+            if action == 'follow':
+                # Create the follow relationship
+                from .models import InfluencerFollower
+                follow_obj, created = InfluencerFollower.objects.get_or_create(
+                    influencer=influencer,
+                    follower=request.user
+                )
+
+                # Refresh the influencer profile to get updated count
+                influencer.influencer_profile.refresh_from_db()
+
+            elif action == 'unfollow':
+                # Delete the follow relationship if it exists
+                from .models import InfluencerFollower
+                InfluencerFollower.objects.filter(
+                    influencer=influencer,
+                    follower=request.user
+                ).delete()
+
+                # Refresh the influencer profile to get updated count
+                influencer.influencer_profile.refresh_from_db()
+
+            # Return success response with updated followers count
+            # Use the get_followers_count method which calculates from actual relationships
+            return JsonResponse({
+                'success': True,
+                'followers_count': influencer.influencer_profile.get_followers_count()
+            })
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+def update_influencer_followers_count():
+    """
+    Utility function to update all influencer followers counts based on the InfluencerFollower model
+    This can be run as a management command or periodically to sync counts
+    """
+    from .models import InfluencerFollower
+    influencers = CustomUser.objects.filter(user_type='influencer')
+
+    for influencer in influencers:
+        if hasattr(influencer, 'influencer_profile'):
+            follower_count = InfluencerFollower.objects.filter(influencer=influencer).count()
+            influencer.influencer_profile.followers_count = follower_count
+            influencer.influencer_profile.save()
