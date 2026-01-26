@@ -2845,6 +2845,8 @@
             width: 100% !important;
             max-width: 100vw !important;
         }
+
+
     </style>
 
 </head>
@@ -3202,7 +3204,7 @@
                     latest trends and highest quality items.</p>
             </div>
 
-            <!-- Swiper for Influencers -->
+
             <div class="swiper influencers-swiper">
                 <div class="swiper-wrapper">
                     {% for profile in influencers %}
@@ -3238,10 +3240,11 @@
                     </div>
                     {% endfor %}
                 </div>
-                <!-- Add Pagination -->
+                 Add Pagination
                 <div class="swiper-pagination influencers-pagination"></div>
             </div>
         </div>
+
 
         <!-- Category Showcase Swiper Section (Amazon Style) -->
         <section class="category-showcase-section">
@@ -3451,69 +3454,8 @@
             </div>
         </section>
 
-        <!-- Enhanced Products Section -->
-        <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span data-en="🛒 Featured Products" data-ar="🛒 المنتجات المميزة"
-                        data-hi="🛒 विशेष रूप से प्रदर्शित उत्पाद">🛒 Featured Products</span>
-                </h2>
-                <p class="section-description"
-                    data-en="Browse our complete collection of premium products from various categories, all recommended by trusted influencers and brands."
-                    data-ar="تصفح مجموعتنا الكاملة من المنتجات المتميزة من فئات مختلفة، كلها موصى بها من قبل المؤثرين والعلامات التجارية الموثوقة."
-                    data-hi="विभिन्न श्रेणियों से प्रीमियम उत्पादों के हमारे पूर्ण संग्रह को ब्राउज़ करें, जिन्हें भरोसेमंद प्रभावकों और ब्रांडों द्वारा अनुशंसित किया गया है।">
-                    Browse our complete collection of premium products from various categories, all recommended by
-                    trusted influencers and brands.</p>
-            </div>
-            <div class="grid-container">
-                {% for product in products %}
-                <a href="{% url 'product_detail' product.id %}" class="card-base product-card">
-                    {% if product.image %}
-                    <div class="product-image-container">
-                        <img src="{{ product.image.url }}" class="product-image" alt="{{ product.name }}"
-                            loading="lazy">
-                    </div>
-                    {% endif %}
-                    <div class="product-content">
-                        <h5 class="product-name">{{ product.name }}</h5>
-                        <p class="product-description">{{ product.description|truncatewords:10 }}</p>
-                        <div class="product-footer">
-                            <div class="price-section">
-                                <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{
-                                    product.price }}</span>
-                                {% if product.original_price %}
-                                <span class="original-price" data-price="{{ product.original_price }}"
-                                    data-currency="INR">₹{{ product.original_price }}</span>
-                                <span class="discount-badge">{% widthratio product.price product.original_price 100 %}%
-                                    OFF</span>
-                                {% endif %}
-                            </div>
-                            <!--<button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"-->
-                            <!--    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">-->
-                            <!--    <i class="fas fa-heart"></i>-->
-                            <!--</button>-->
 
-
-
-
-
-                        </div>
-                    </div>
-                </a>
-                {% empty %}
-                <div class="empty-state">
-                    <div class="empty-icon">📦</div>
-                    <p class="empty-text" data-en="No products available yet. Stay tuned for amazing deals!"
-                        data-ar="لا توجد منتجات متاحة بعد. تابع معنا للحصول على عروض مذهلة!"
-                        data-hi="अभी तक कोई उत्पाद उपलब्ध नहीं है। शानदार सौदों के लिए बने रहें!">No products available
-                        yet. Stay tuned for amazing deals!</p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-
-
-        {% if reels_videos %}
+  {% if reels_videos %}
         <div class="section-container">
             <div class="section-header">
                 <h2 class="section-title">
@@ -3672,6 +3614,70 @@
                 </div>
             </div>
         </div>
+
+        <!-- Enhanced Products Section -->
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span data-en="🛒 Featured Products" data-ar="🛒 المنتجات المميزة"
+                        data-hi="🛒 विशेष रूप से प्रदर्शित उत्पाद">🛒 Featured Products</span>
+                </h2>
+                <p class="section-description"
+                    data-en="Browse our complete collection of premium products from various categories, all recommended by trusted influencers and brands."
+                    data-ar="تصفح مجموعتنا الكاملة من المنتجات المتميزة من فئات مختلفة، كلها موصى بها من قبل المؤثرين والعلامات التجارية الموثوقة."
+                    data-hi="विभिन्न श्रेणियों से प्रीमियम उत्पादों के हमारे पूर्ण संग्रह को ब्राउज़ करें, जिन्हें भरोसेमंद प्रभावकों और ब्रांडों द्वारा अनुशंसित किया गया है।">
+                    Browse our complete collection of premium products from various categories, all recommended by
+                    trusted influencers and brands.</p>
+            </div>
+            <div class="grid-container">
+                 {% for product in featured_products %}
+                <a href="{% url 'product_detail' product.id %}" class="card-base product-card">
+                    {% if product.image %}
+                    <div class="product-image-container">
+                        <img src="{{ product.image.url }}" class="product-image" alt="{{ product.name }}"
+                            loading="lazy">
+                    </div>
+                    {% endif %}
+                    <div class="product-content">
+                        <h5 class="product-name">{{ product.name }}</h5>
+                        <p class="product-description">{{ product.description|truncatewords:10 }}</p>
+                        <div class="product-footer">
+                            <div class="price-section">
+                                <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{
+                                    product.price }}</span>
+                                {% if product.original_price %}
+                                <span class="original-price" data-price="{{ product.original_price }}"
+                                    data-currency="INR">₹{{ product.original_price }}</span>
+                                <span class="discount-badge">{% widthratio product.price product.original_price 100 %}%
+                                    OFF</span>
+                                {% endif %}
+                            </div>
+                            <!--<button class="heart-btn" aria-label="Add to wishlist" data-en="Add to wishlist"-->
+                            <!--    data-ar="أضف إلى قائمة الأمنيات" data-hi="इच्छा सूची में जोड़ें">-->
+                            <!--    <i class="fas fa-heart"></i>-->
+                            <!--</button>-->
+
+
+
+
+
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="empty-state">
+                    <div class="empty-icon">📦</div>
+                    <p class="empty-text" data-en="No featured products available yet. Stay tuned for amazing deals!"
+                        data-ar="لا توجد منتجات مميزة متاحة بعد. تابع معنا للحصول على عروض مذهلة!"
+                        data-hi="अभी तक कोई विशेष उत्पाद उपलब्ध नहीं है। शानदार सौदों के लिए बने रहें!">No featured products available
+                        yet. Stay tuned for amazing deals!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+
 
 
         <!-- Footer -->
