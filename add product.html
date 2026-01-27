@@ -556,6 +556,124 @@
                 0 0 15px rgba(0, 199, 247, 0.6);
             /* Stronger teal glow */
         }
+
+        /* Influencer Selection Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: #fff;
+            width: 600px;
+            max-width: 90%;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .option {
+            flex: 1;
+            border: 2px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .option:hover {
+            border-color: #7c8cfb;
+        }
+
+        .option.selected {
+            border-color: #7c8cfb;
+            background: #f5f7ff;
+        }
+
+        .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .icon.blue {
+            color: #4a90e2;
+        }
+
+        .icon.orange {
+            color: #f5a623;
+        }
+
+        .option h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .option p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+        .cancel-btn {
+            background: none;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .continue-btn {
+            background: #7c8cfb;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .continue-btn:hover {
+            background: #6a7bfa;
+        }
+
+        /* Option Link Styles */
+        .option-link {
+            text-decoration: none;
+            color: inherit;
+            flex: 1;
+        }
     </style>
 </head>
 <body>
@@ -598,6 +716,39 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Influencer Selection Modal -->
+    <div class="modal-overlay" id="influencerModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>Are you an Own Product Influencer or Affiliate Influencer?</h2>
+                <span class="close-btn" onclick="closeModal()">×</span>
+            </div>
+
+            <div class="modal-body">
+                <a href="{% url 'add_product' %}?type=own" class="option-link">
+                    <div class="option selected" onclick="selectOption(this)">
+                        <div class="icon blue">🛍️</div>
+                        <h3>Own Product Influencer</h3>
+                        <p>Promote and sell your own products or brand</p>
+                    </div>
+                </a>
+
+                <a href="{% url 'affliated' %}" class="option-link">
+                    <div class="option" onclick="selectOption(this)">
+                        <div class="icon orange">📣</div>
+                        <h3>Affiliate Influencer</h3>
+                        <p>Promote other brands' products and earn commissions</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeModal()">← Cancel</button>
+                <button class="continue-btn" onclick="continueToForm()">Continue →</button>
+            </div>
         </div>
     </div>
 
@@ -662,6 +813,41 @@ document.getElementById("add-category-link").addEventListener("click", function 
                 }
             });
         });
+});
+
+// Influencer Selection Modal Functions
+function selectOption(element) {
+    document.querySelectorAll('.option').forEach(opt => {
+        opt.classList.remove('selected');
+    });
+    element.classList.add('selected');
+}
+
+function closeModal() {
+    document.getElementById('influencerModal').style.display = 'none';
+}
+
+function continueToForm() {
+    const selectedOption = document.querySelector('.option.selected');
+    if (selectedOption) {
+        const optionText = selectedOption.querySelector('h3').textContent;
+        console.log('Selected option:', optionText);
+        
+        // Redirect based on selection
+        if (optionText.includes("Own Product Influencer")) {
+            window.location.href = "{% url 'add_product' %}?type=own";
+        } else if (optionText.includes("Affiliate Influencer")) {
+            window.location.href = "{% url 'affliated' %}";
+        }
+        closeModal();
+    }
+}
+
+// Show modal when page loads
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        document.getElementById('influencerModal').style.display = 'flex';
+    }, 1000); // Show after 1 second
 });
 </script>
 
