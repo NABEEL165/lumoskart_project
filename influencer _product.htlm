@@ -32,6 +32,65 @@
             z-index: 1000;
         }
 
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+
+        .hamburger-line {
+            width: 100%;
+            height: 2px;
+            background-color: #fff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            transform-origin: center;
+        }
+
+        /* Navbar Links */
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .navbar-nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .navbar-nav a:hover {
+            color: #4CAF50;
+        }
+
+        .navbar-nav i {
+            margin-right: 5px;
+            color: #fff;
+        }
+
         .navbar-brand {
             display: flex;
             align-items: center;
@@ -355,11 +414,11 @@
                 height: 35px;
             }
 
-            .hamburger {
+            .mobile-menu-btn {
                 display: flex;
             }
 
-            .navbar-links {
+            .navbar-nav {
                 position: fixed;
                 top: 0;
                 right: -100%;
@@ -377,11 +436,11 @@
                 border-left: 3px solid #fff;
             }
 
-            .navbar-links.active {
+            .navbar-nav.active {
                 right: 0;
             }
 
-            .navbar-links a {
+            .navbar-nav a {
                 margin: 0 0 1.5rem 0;
                 width: 100%;
                 font-size: 1.1rem;
@@ -390,7 +449,7 @@
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
 
-            .navbar-links a:last-child {
+            .navbar-nav a:last-child {
                 border-bottom: none;
             }
 
@@ -669,29 +728,27 @@
     <div class="nav-overlay" id="navOverlay"></div>
 
     <!-- Navbar -->
-    <div class="navbar">
-        <!--<div class="navbar-brand">-->
-        <!--    <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" class="logo-img">-->
-        <!--</div>-->
-<div class="container-fluid navbar-container">
-                <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
-                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
-                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
-                    <span class="brand-text">LumosKart</span>
-                </a>
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+    <nav class="navbar">
+        <div class="container-fluid navbar-container">
+            <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center gap-3">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                    alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                <span class="brand-text">LumosKart</span>
+            </a>
 
-        <div class="navbar-links" id="navLinks">
+            <button class="mobile-menu-btn" id="hamburger" aria-label="Menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
 
-            <a href="{% url 'wishlist' %}"><i class="far fa-heart"></i> <span data-translate="wishlist">Wishlist</span></a>
-            <a href="{%url 'view_cart' %}"><i class="fas fa-shopping-cart"></i> <span data-translate="cart">Cart</span></a>
-            <a href="#"><i class="fas fa-sign-out-alt"></i> <span data-translate="logout">Logout</span></a>
+            <div class="navbar-nav" id="navLinks">
+                <a href="{% url 'wishlist' %}"><i class="far fa-heart"></i> <span data-translate="wishlist">Wishlist</span></a>
+                <a href="{% url 'view_cart' %}"><i class="fas fa-shopping-cart"></i> <span data-translate="cart">Cart</span></a>
+                <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> <span data-translate="logout">Logout</span></a>
+            </div>
         </div>
-    </div>
+    </nav>
 
 
     {% comment %} <!-- Search Section -->
@@ -778,22 +835,27 @@
         const navLinks = document.getElementById('navLinks');
         const navOverlay = document.getElementById('navOverlay');
 
-        function toggleMenu() {
+        function toggleMobileMenu() {
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('active');
             navOverlay.classList.toggle('active');
             document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
         }
 
-        hamburger.addEventListener('click', toggleMenu);
-        navOverlay.addEventListener('click', toggleMenu);
+        // Add event listeners for mobile menu toggle
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMobileMenu();
+        });
+
+        navOverlay.addEventListener('click', toggleMobileMenu);
 
         // Close menu when clicking on a link
         const navLinkItems = navLinks.querySelectorAll('a');
         navLinkItems.forEach(link => {
             link.addEventListener('click', () => {
                 if (window.innerWidth <= 768) {
-                    toggleMenu();
+                    toggleMobileMenu();
                 }
             });
         });
@@ -801,7 +863,7 @@
         // Close menu on window resize if open
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
-                toggleMenu();
+                toggleMobileMenu();
             }
         });
 
