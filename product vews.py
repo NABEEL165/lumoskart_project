@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, Review, Category
 from .forms import ProductForm, ReviewForm, CategoryForm
 from accounts.models import CustomUser
+from django.http import HttpResponse, JsonResponse
+from django.urls import reverse
+import uuid
 from orders.models import WishlistItem, OrderItem, Order
 from django.contrib import messages
 from django.db.models import Avg,  Sum
@@ -12,7 +15,30 @@ from django.http import HttpResponse
 @login_required
 def influencer_product_list(request):
     products = Product.objects.filter(influencer=request.user)
-    return render(request, 'influencer_product_list.html', {'products': products})
+    
+    # Get affiliate relationships for the influencer's products
+    try:
+        from accounts.models import AffiliateRelationship
+        affiliate_relationships = AffiliateRelationship.objects.filter(
+            influencer=request.user,
+            is_active=True
+        ).select_related('product')
+        
+        # Create a list of dictionaries for affiliate links
+        affiliate_links_list = []
+        for relationship in affiliate_relationships:
+            affiliate_links_list.append({
+                'product_id': relationship.product.id,
+                'affiliate_link': relationship.affiliate_link
+            })
+    except ImportError:
+        # Fallback if AffiliateRelationship model doesn't exist
+        affiliate_links_list = []
+    
+    return render(request, 'influencer_product_list.html', {
+        'products': products,
+        'affiliate_links_list': affiliate_links_list
+    })
 
 
 @login_required
@@ -121,13 +147,13 @@ def influencer_sold_products(request):
     from datetime import datetime, timedelta
     from django.db.models import Sum, F
     from django.utils import timezone
-    
+
     # Get all completed orders containing products from this influencer
     order_items = OrderItem.objects.filter(
         product__influencer=request.user,
         order__status='Completed'
     ).select_related('order', 'product').order_by('-order__created_at')
-    
+
     # Prepare sold products data
     sold_products = []
     for item in order_items:
@@ -138,34 +164,34 @@ def influencer_sold_products(request):
             'date': item.order.created_at.strftime('%Y-%m-%d'),
             'total': float(item.price) * item.quantity,
         })
-    
+
     # Calculate statistics
     today = timezone.now().date()
     current_week_start = today - timedelta(days=today.weekday())
     current_month = today.month
     current_year = today.year
-    
+
     # Monthly revenue
     monthly_revenue = order_items.filter(
         order__created_at__year=current_year,
         order__created_at__month=current_month
     ).aggregate(total=Sum(F('price') * F('quantity')))['total'] or 0
-    
+
     # Weekly revenue
     weekly_revenue = order_items.filter(
         order__created_at__date__gte=current_week_start
     ).aggregate(total=Sum(F('price') * F('quantity')))['total'] or 0
-    
+
     # Daily revenue
     daily_revenue = order_items.filter(
         order__created_at__date=today
     ).aggregate(total=Sum(F('price') * F('quantity')))['total'] or 0
-    
+
     # Calculate earnings after 20% platform fee
     monthly_earnings = float(monthly_revenue) * 0.8  # 80% after 20% platform fee
     weekly_earnings = float(weekly_revenue) * 0.8   # 80% after 20% platform fee
     daily_earnings = float(daily_revenue) * 0.8     # 80% after 20% platform fee
-    
+
     stats = {
         'monthly_revenue': monthly_revenue,
         'weekly_revenue': weekly_revenue,
@@ -243,6 +269,60 @@ def add_category(request):
             form.save()
             return HttpResponse('success')
     return render(request, 'add_category.html', {'form': form})
+
+
+@login_required
+def generate_affiliate_link(request, product_id):
+    """Generate an affiliate link for a specific product and influencer"""
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+    
+    product = get_object_or_404(Product, id=product_id)
+    
+    # Get or create the affiliate relationship
+    try:
+        from accounts.models import AffiliateRelationship
+        affiliate_relationship, created = AffiliateRelationship.objects.get_or_create(
+            influencer=request.user,
+            product=product,
+            defaults={
+                'affiliate_link': f"https://lumoskart.com/affiliate/{request.user.id}/{product.id}/{uuid.uuid4()}",
+                'is_active': True
+            }
+        )
+        
+        # Return the affiliate link as JSON response
+        return JsonResponse({'affiliate_link': affiliate_relationship.affiliate_link})
+    except ImportError:
+        # Return an error if AffiliateRelationship model doesn't exist
+        return JsonResponse({'error': 'Affiliate functionality is not available'}, status=500)
+
+
+@login_required
+def get_affiliate_links_for_influencer(request):
+    """Get all affiliate links for the current influencer"""
+    if request.user.user_type != 'influencer':
+        return redirect('home')
+    
+    try:
+        from accounts.models import AffiliateRelationship
+        affiliate_relationships = AffiliateRelationship.objects.filter(
+            influencer=request.user,
+            is_active=True
+        ).select_related('product')
+        
+        affiliate_data = []
+        for relationship in affiliate_relationships:
+            affiliate_data.append({
+                'product_id': relationship.product.id,
+                'product_name': relationship.product.name,
+                'affiliate_link': relationship.affiliate_link,
+            })
+        
+        return JsonResponse({'affiliate_links': affiliate_data})
+    except ImportError:
+        # Return an empty list if AffiliateRelationship model doesn't exist
+        return JsonResponse({'affiliate_links': []})
 
 
 
