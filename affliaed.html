@@ -551,6 +551,19 @@
                 closeAffiliateModal();
             }
         });
+        
+        // Handle Add Products button click
+        document.querySelector('.add-btn').addEventListener('click', function() {
+            const affiliateLink = document.getElementById('affiliateLink').value.trim();
+            
+            if (!affiliateLink) {
+                alert('Please enter an affiliate link');
+                return;
+            }
+            
+            // Redirect to add product page with affiliate link
+            window.location.href = '{% url "add_product" %}?affiliate_link=' + encodeURIComponent(affiliateLink);
+        });
     </script>
 </body>
 </html>
