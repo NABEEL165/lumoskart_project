@@ -622,6 +622,38 @@
             border-radius: 8px;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        
+        /* Desktop navigation menu */
+        .desktop-nav-menu {
+            display: none;
+        }
+        
+        @media (min-width: 992px) {
+            .desktop-nav-menu {
+                display: flex;
+                list-style: none;
+                gap: 0.5rem;
+            }
+            
+            .desktop-nav-menu .nav-item a {
+                color: var(--light-grey);
+                text-decoration: none;
+                font-weight: 500;
+                padding: 0.7rem 1.5rem;
+                border-radius: 8px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                font-size: 0.95rem;
+                letter-spacing: 0.3px;
+                position: relative;
+                overflow: hidden;
+            }
+        }
+        
+        @media (max-width: 991px) {
+            .desktop-nav-menu {
+                display: none;
+            }
+        }
 
         /* Hover effect on logo */
         .navbar-brand:hover img,
@@ -659,25 +691,51 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar">
-<!--        <div class="nav-container">-->
-<!--            <a href="#" class="logo">-->
-<!--                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" style="height: 32px; width: auto; margin-right: 10px;">-->
-<!--                <span>Lumoskart</span>-->
-<!--            </a>-->
- <div class="container-fluid navbar-container">
-                <a href="{% url 'customer_dashboard' %}" class="navbar-brand d-flex align-items-center gap-3">
-                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
-                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
-                    <span class="brand-text">LumosKart</span>
-                </a>
-            <ul class="nav-menu">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid navbar-container">
+            <a href="{% url 'customer_dashboard' %}" class="navbar-brand d-flex align-items-center gap-3">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                    alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                <span class="brand-text">LumosKart</span>
+            </a>
+            
+            <!-- Desktop Navigation Menu -->
+            <ul class="desktop-nav-menu">
                 <li class="nav-item"><a href="{% url 'home' %}" class="active">Home</a></li>
                 <li class="nav-item"><a href="{%url 'influencer_dashboard'%}">Dashboard</a></li>
                 <li class="nav-item"><a href="{%url 'logout'%}">Logout</a></li>
             </ul>
+            
+            <!-- Hamburger menu button for mobile offcanvas -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
     </nav>
+    
+    <!-- Offcanvas Menu for Mobile -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
+        <div class="offcanvas-header">
+            <div class="navbar-brand d-flex align-items-center gap-2">
+                <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                    alt="LumosKart Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                <span class="brand-text" style="font-size: 1.4rem;">LumosKart</span>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a href="{% url 'home' %}" class="nav-link active">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{%url 'influencer_dashboard'%}" class="nav-link">Dashboard</a></li>
+                <li class="nav-item">
+                    <a href="{%url 'logout'%}" class="nav-link">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <div class="container">
@@ -718,6 +776,28 @@
                     <a href="{% url 'edit_profile' %}" class="edit-button">Edit Profile</a>
                 </div>
             </div>
+            
+            <!-- Affiliate Links Section -->
+            {% if affiliate_relationships %}
+            <div class="affiliate-links-section" style="padding: 2rem 3rem; margin-top: 2rem; background: var(--white); border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);">
+                <h3 style="margin: 0 0 1.5rem 0; font-size: 1.5rem; font-weight: 700; color: var(--primary-black);">Your Affiliate Links</h3>
+                <div class="affiliate-links-container">
+                    {% for relationship in affiliate_relationships %}
+                    <div class="affiliate-link-item" style="display: flex; align-items: center; padding: 1rem; margin-bottom: 1rem; background: linear-gradient(to right, #fafafa, #ffffff); border-radius: 12px; border-left: 4px solid var(--primary-black); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);">
+                        <div class="affiliate-product-info" style="flex: 1;">
+                            <strong>{{ relationship.product.name }}</strong><br>
+                            <small style="color: var(--medium-grey);">{{ relationship.product.description|truncatewords:10 }}</small>
+                        </div>
+                        <div class="affiliate-link-actions" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="text" class="affiliate-link-input" value="{{ relationship.affiliate_link }}" readonly style="padding: 0.5rem; border: 1px solid var(--gray-300); border-radius: 4px; font-size: 0.9rem; width: 300px;">
+                            <button class="copy-affiliate-link-btn" onclick="copyAffiliateLink(this, '{{ relationship.affiliate_link }}')" style="background: var(--primary-black); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">Copy</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
         </div>
     </div>
 
@@ -725,5 +805,38 @@
     <footer class="footer">
         <p>&copy; 2025 Lumoskart. All Rights Reserved.</p>
     </footer>
+    
+    <script>
+        function copyAffiliateLink(button, link) {
+            navigator.clipboard.writeText(link).then(function() {
+                // Change button text temporarily
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                
+                // Revert back to original text after 2 seconds
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = link;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                // Change button text temporarily
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                
+                // Revert back to original text after 2 seconds
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+    </script>
 </body>
 </html>
