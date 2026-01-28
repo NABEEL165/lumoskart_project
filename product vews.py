@@ -15,7 +15,7 @@ from django.http import HttpResponse
 @login_required
 def influencer_product_list(request):
     products = Product.objects.filter(influencer=request.user)
-    
+
     # Get affiliate relationships for the influencer's products
     try:
         from accounts.models import AffiliateRelationship
@@ -23,7 +23,7 @@ def influencer_product_list(request):
             influencer=request.user,
             is_active=True
         ).select_related('product')
-        
+
         # Create a list of dictionaries for affiliate links
         affiliate_links_list = []
         for relationship in affiliate_relationships:
@@ -34,7 +34,7 @@ def influencer_product_list(request):
     except ImportError:
         # Fallback if AffiliateRelationship model doesn't exist
         affiliate_links_list = []
-    
+
     return render(request, 'influencer_product_list.html', {
         'products': products,
         'affiliate_links_list': affiliate_links_list
@@ -276,9 +276,9 @@ def generate_affiliate_link(request, product_id):
     """Generate an affiliate link for a specific product and influencer"""
     if request.user.user_type != 'influencer':
         return redirect('home')
-    
+
     product = get_object_or_404(Product, id=product_id)
-    
+
     # Get or create the affiliate relationship
     try:
         from accounts.models import AffiliateRelationship
@@ -290,7 +290,7 @@ def generate_affiliate_link(request, product_id):
                 'is_active': True
             }
         )
-        
+
         # Return the affiliate link as JSON response
         return JsonResponse({'affiliate_link': affiliate_relationship.affiliate_link})
     except ImportError:
@@ -303,14 +303,14 @@ def get_affiliate_links_for_influencer(request):
     """Get all affiliate links for the current influencer"""
     if request.user.user_type != 'influencer':
         return redirect('home')
-    
+
     try:
         from accounts.models import AffiliateRelationship
         affiliate_relationships = AffiliateRelationship.objects.filter(
             influencer=request.user,
             is_active=True
         ).select_related('product')
-        
+
         affiliate_data = []
         for relationship in affiliate_relationships:
             affiliate_data.append({
@@ -318,7 +318,7 @@ def get_affiliate_links_for_influencer(request):
                 'product_name': relationship.product.name,
                 'affiliate_link': relationship.affiliate_link,
             })
-        
+
         return JsonResponse({'affiliate_links': affiliate_data})
     except ImportError:
         # Return an empty list if AffiliateRelationship model doesn't exist
@@ -328,6 +328,6 @@ def get_affiliate_links_for_influencer(request):
 
 
 
-
-
+def affliated(request):
+    return render(request,'affliated.html')
 
