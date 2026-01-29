@@ -330,4 +330,3 @@ def get_affiliate_links_for_influencer(request):
 
 def affliated(request):
     return render(request,'affliated.html')
-
