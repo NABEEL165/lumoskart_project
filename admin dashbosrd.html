@@ -5,574 +5,222 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - LumosKart</title>
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" type="image/x-icon">
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-      .navbar-brand:hover .brand-text {
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
-            /* Teal glow using your primary color */
-            transition: all 0.3s ease;
-        }
-
-        .navbar-brand:hover .logo-img {
-            transform: scale(1.05);
-            transition: all 0.3s ease;
-        }
-
-        /* Mobile Navbar Optimization */
-        @media (max-width: 991px) {
-            .navbar-container {
-                display: flex !important;
-                flex-wrap: nowrap !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                width: 100% !important;
-                padding: 0 5px !important;
-            }
-
-            .navbar-brand {
-                margin-right: 0 !important;
-                gap: 10px !important;
-                flex-shrink: 0;
-                display: flex !important;
-                align-items: center !important;
-            }
-
-            .logo-img {
-                max-height: 40px !important;
-                width: auto !important;
-                flex-shrink: 0;
-            }
-
-            .brand-text {
-                font-size: 1.4rem !important;
-                display: inline-block !important;
-                color: #ffffff !important;
-                background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
-                -webkit-background-clip: text !important;
-                background-clip: text !important;
-                -webkit-text-fill-color: transparent !important;
-                white-space: nowrap !important;
-            }
-
-            .mobile-view {
-                display: flex !important;
-                align-items: center !important;
-                gap: 5px !important;
-                flex-shrink: 0;
-            }
-
-            .desktop-view {
-                display: none !important;
-            }
-
-            .btn-open-app {
-                padding: 4px 12px !important;
-                font-size: 0.85rem !important;
-                height: fit-content;
-            }
-        }
-
-
-        /* Custom Toggler Icon and Buttons */
-        .navbar-toggler {
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            padding: 5px 8px !important;
-        }
-
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-            width: 1.25em !important;
-            height: 1.25em !important;
-        }
-
-        .mobile-view .btn-outline-light {
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff !important;
-        }
-
-        .mobile-view .btn-outline-light:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Influencer Swiper Styles */
-        .influencers-swiper {
-            width: 100%;
-            padding: 20px 0;
-        }
-
-        .influencers-swiper .swiper-slide {
-            display: flex;
-            justify-content: center;
-        }
-
-        .influencers-swiper .swiper-wrapper {
-            padding: 10px 0;
-        }
-
-
-        .swiper-pagination.influencers-pagination {
-            bottom: 0 !important;
-        }
-
-        .swiper-pagination-bullet {
-            background: #00c7f7;
-            opacity: 0.5;
-        }
-
-        .swiper-pagination-bullet-active {
-            opacity: 1;
-            background: #00c7f7;
-        }
-
-        /* Logo + Brand Text Container */
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            /* Space between logo and text */
-            text-decoration: none !important;
-        }
-
-        /* Logo Image */
-        .navbar-brand img,
-        .logo-img {
-            height: 50px;
-            width: auto;
-            border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Hover effect on logo */
-        .navbar-brand:hover img,
-        .navbar-brand:hover .logo-img {
-            transform: scale(1.1) rotate(2deg);
-            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
-            /* Teal glow */
-        }
-
-        /* Brand Text - "LumosKart" */
-        .brand-text {
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: #ffffff;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        /* Hover glow on text */
-        .navbar-brand:hover .brand-text {
-            text-shadow:
-                0 2px 10px rgba(0, 0, 0, 0.3),
-                0 0 15px rgba(0, 199, 247, 0.6);
-            /* Stronger teal glow */
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8fafc;
-            color: #334155;
-            overflow-x: hidden;
-        }
-
-        .admin-container {
-            padding: 2rem 1rem;
-        }
-
         .dashboard-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            margin-bottom: 20px;
         }
-
         .dashboard-card:hover {
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
         }
-
-        .metric-card {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            border-radius: 16px;
-            padding: 1.5rem;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.15);
-        }
-
-        .metric-card.revenue {
-            background: linear-gradient(135deg, #059669, #10b981);
-        }
-
-        .metric-card.commission {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-        }
-
-        .metric-card.earnings {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-        }
-
-        .metric-card.users {
-            background: linear-gradient(135deg, #ec4899, #db2777);
-        }
-
         .metric-value {
-            font-size: 2rem;
-            font-weight: 700;
-            display: block;
-            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            font-weight: bold;
         }
-
         .metric-label {
             font-size: 0.9rem;
-            opacity: 0.9;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: #6c757d;
         }
-
-        .section-header {
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .table-container {
+            max-height: 300px;
+            overflow-y: auto;
         }
-
-        .section-header h3 {
-            font-weight: 600;
-            color: #1e293b;
-            margin: 0;
-        }
-
-        .status-badge {
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: inline-block;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-approved {
-            background-color: #dcfce7;
-            color: #166534;
-        }
-
-        .status-pending {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-active {
-            background-color: #dcfce7;
-            color: #166534;
-        }
-
-        .status-inactive {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
-
         .action-btn {
-            margin: 0.25rem;
-            font-size: 0.85rem;
-            padding: 0.5rem 1rem;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: all 0.2s ease;
+            padding: 2px 8px;
+            font-size: 0.8rem;
         }
-
-        .action-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        .action-btn i {
-            margin-right: 0.25rem;
-        }
-
-        .table th {
-            background-color: #f1f5f9;
-            color: #334155;
-            font-weight: 600;
-            padding: 1rem;
-        }
-
-        .table td {
-            padding: 1rem;
-            vertical-align: middle;
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: #f8fafc;
-        }
-
-        .text-truncate {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .card-title {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-subtitle {
-            color: #64748b;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .alert {
-            border-radius: 12px;
-            border: none;
-        }
-
-        .btn {
-            border-radius: 8px;
-            font-weight: 500;
-        }
-
-        .navbar {
-            background: white !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            padding: 1rem 0;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            color: #4f46e5 !important;
-        }
-
-        .nav-link {
-            font-weight: 500;
-            color: #64748b !important;
-            transition: all 0.2s ease;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: #4f46e5 !important;
-        }
-
-        .navbar-logo {
-            max-height: 40px;
-        }
-
         .sidebar {
-            background-color: white;
+            background-color: #f8f9fa;
             height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
-            width: 280px;
-            padding-top: 80px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-            z-index: 1000;
-            overflow-y: auto;
+            z-index: 100;
+            padding-top: 60px;
+            display: none; /* Initially hidden on mobile */
         }
 
+        @media (min-width: 992px) {
+            .sidebar {
+                display: block !important; /* Show on desktop */
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 280px;
+            }
+        }
         .main-content {
             margin-left: 280px;
-            padding: 2rem 1rem;
+            padding: 20px;
         }
 
-        .sidebar .nav-link {
-            padding: 0.75rem 1.5rem;
-            color: #64748b;
-            transition: all 0.2s ease;
-        }
-
-        .sidebar .nav-link:hover {
-            background-color: #f1f5f9;
-            color: #4f46e5;
-        }
-
-        .sidebar .nav-link.active {
-            background-color: #e0e7ff;
-            color: #4f46e5;
-            border-left: 4px solid #4f46e5;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                padding-top: 20px;
-            }
-
+        @media (max-width: 991.98px) {
             .main-content {
                 margin-left: 0;
-                padding: 1rem;
-            }
-
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-
-            .metric-value {
-                font-size: 1.5rem;
-            }
-
-            .dashboard-card {
-                padding: 1rem;
-            }
-
-            .action-btn {
-                margin: 0.25rem 0.125rem;
-                padding: 0.4rem 0.75rem;
-                font-size: 0.8rem;
-            }
-
-            .table th, .table td {
-                padding: 0.75rem 0.5rem;
-                font-size: 0.85rem;
-            }
-
-            .metric-card {
-                padding: 1rem;
+                padding: 80px 15px 20px 15px; /* Account for mobile header height */
             }
         }
 
-        @media (max-width: 576px) {
-            .metric-value {
-                font-size: 1.25rem;
+        /* Responsive adjustments */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                height: 100vh;
+                width: 280px !important;
+                position: fixed;
+                top: 0;
+                left: -280px;
+                transition: left 0.3s ease;
+                z-index: 1050;
+                overflow-y: auto;
+                display: block; /* Override the default display: none */
             }
-
-            .metric-label {
-                font-size: 0.75rem;
+            .sidebar.active {
+                left: 0;
             }
-
-            .section-header h3 {
-                font-size: 1.25rem;
+            .main-content {
+                margin-left: 0;
+                padding: 80px 15px 20px 15px; /* Account for mobile header height */
             }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .action-btn {
-                padding: 0.35rem 0.65rem;
-                font-size: 0.75rem;
-            }
-
-            .d-flex.flex-wrap {
-                flex-direction: column;
-            }
-
-            .action-btn {
-                margin: 0.25rem 0;
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
                 width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 1045; /* Between sidebar and mobile header */
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+            .sidebar-overlay.active {
+                display: block;
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        .sidebar-mobile-header {
+            display: none;
+            background-color: #343a40;
+            color: white;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1040;
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar-mobile-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .sidebar-nav {
+            padding-top: 70px;
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar-nav {
+                padding-top: 60px;
             }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <!--<div class="container-fluid">-->
-        <!--    <div class="navbar-brand d-flex align-items-center">-->
-        <!--        <img src="{% static 'accounts/images/Lumoskart.png' %}" alt="Company Logo" class="navbar-logo" style="max-height: 40px;">-->
-        <!--        <span class="company-name ms-2 fw-bold text-primary">Lumoskart Admin</span>-->
-        <!--    </div>-->
-        <div class="container-fluid navbar-container">
-                <a href="{% url 'customer_dashboard' %}" class="navbar-brand d-flex align-items-center gap-3">
-                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
-                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
-                    <span class="brand-text">LumosKart </span>
-                </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="{% url 'admin_dashboard' %}" class="nav-link fw-medium"><i class="fas fa-tachometer-alt me-1"></i> Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'manage_influencers' %}" class="nav-link fw-medium"><i class="fas fa-users me-1"></i> Manage Influencers</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'home' %}" class="nav-link fw-medium"><i class="fas fa-home me-1"></i> Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'logout' %}" class="nav-link fw-medium"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Mobile Header with Toggle Button -->
+    <div class="sidebar-mobile-header">
+        <h5 class="mb-0">Admin Panel</h5>
+        <button class="btn btn-light" type="button" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Overlay for mobile sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-2 d-none d-md-block sidebar">
+            <!-- Sidebar (Desktop & Mobile Offcanvas) -->
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                 <div class="position-sticky pt-3">
-                    <h5 class="text-center mb-4 fw-bold text-primary">Admin Panel</h5>
+                    <h5 class="text-center mb-4 d-md-block d-none">Admin Panel</h5>
+                    <h5 class="text-center mb-4 d-md-none d-block">Admin Panel</h5>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'admin_dashboard' %}">
-                                <i class="fas fa-tachometer-alt me-2"></i>
+                            <a class="nav-link" aria-current="page" href="{% url 'admin_dashboard' %}">
+                                <i class="fas fa-home me-2"></i>
                                 Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'manage_influencers' %}">
                                 <i class="fas fa-users me-2"></i>
-                                Manage Influencers
+                                Users Management
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'manage_users' %}">
-                                <i class="fas fa-users me-2"></i>
-                                Manage Users
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{% url 'manage_orders' %}">
                                 <i class="fas fa-shopping-cart me-2"></i>
                                 Orders
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_support_tickets' %}">
+                                <i class="fas fa-ticket-alt me-2"></i>
+                                Support Tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_products' %}">
+                                <i class="fas fa-box me-2"></i>
+                                Product Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_banners_sliders' %}">
+                                <i class="fas fa-images me-2"></i>
+                                Banners & Sliders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_promo_videos' %}">
+                                <i class="fas fa-film me-2"></i>
+                                Promo Videos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_cms_pages' %}">
+                                <i class="fas fa-file-alt me-2"></i>
+                                CMS Pages
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_blog_posts' %}">
+                                <i class="fas fa-blog me-2"></i>
+                                Blog Posts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_thumbnails' %}">
+                                <i class="fas fa-sync-alt me-2"></i>
+                                Manage Thumbnails
+                            </a>
+                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <i class="fas fa-chart-bar me-2"></i>
@@ -581,8 +229,84 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
+                                <i class="fas fa-dollar-sign me-2"></i>
+                                Transactions
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Mobile Sidebar (Offcanvas) -->
+            <nav class="d-md-none bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <h5 class="text-center mb-4">Admin Panel</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{% url 'admin_dashboard' %}">
+                                <i class="fas fa-home me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_influencers' %}">
+                                <i class="fas fa-users me-2"></i>
+                                Users Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_orders' %}">
+                                <i class="fas fa-shopping-cart me-2"></i>
+                                Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_support_tickets' %}">
+                                <i class="fas fa-ticket-alt me-2"></i>
+                                Support Tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_products' %}">
                                 <i class="fas fa-box me-2"></i>
-                                Products
+                                Product Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_banners_sliders' %}">
+                                <i class="fas fa-images me-2"></i>
+                                Banners & Sliders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_promo_videos' %}">
+                                <i class="fas fa-film me-2"></i>
+                                Promo Videos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_cms_pages' %}">
+                                <i class="fas fa-file-alt me-2"></i>
+                                CMS Pages
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_blog_posts' %}">
+                                <i class="fas fa-blog me-2"></i>
+                                Blog Posts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'manage_thumbnails' %}">
+                                <i class="fas fa-sync-alt me-2"></i>
+                                Manage Thumbnails
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Analytics
                             </a>
                         </li>
                         <li class="nav-item">
@@ -596,19 +320,15 @@
             </nav>
 
             <!-- Main Content -->
-            <main class="col-md-10 ms-sm-auto px-md-4 main-content">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
-                    <div>
-                        <h1 class="mb-2 fw-bold text-dark">Admin Dashboard</h1>
-                        <p class="text-muted mb-0">Welcome to your admin dashboard. Here's an overview of your platform.</p>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-outline-primary">
-                            <i class="fas fa-download me-2"></i>Export Data
-                        </button>
-                        <button type="button" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>New Report
-                        </button>
+            <main class="col-12 col-md-10 ms-sm-auto px-md-4 main-content sidebar-nav">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Admin Dashboard</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+  <a href="{% url 'export_admin_dashboard_data' %}" class="btn btn-sm btn-outline-secondary">Export Data</a>
+
+
+                        </div>
                     </div>
                 </div>
 
@@ -623,156 +343,223 @@
                 {% endif %}
 
                 <!-- Key Metrics Row -->
-                <div class="row mb-5">
-                    <div class="col-12 col-md-6 col-xl-3 mb-4">
-                        <div class="metric-card revenue">
-                            <span class="metric-value">₹{{ total_revenue|floatformat:2 }}</span>
-                            <span class="metric-label">Total Revenue</span>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="metric-value">₹{{ total_revenue|floatformat:2 }}</div>
+                                <div class="metric-label">Total Revenue</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-xl-3 mb-4">
-                        <div class="metric-card commission">
-                            <span class="metric-value">₹{{ total_commission|floatformat:2 }} ({{ commission_percentage|floatformat:2 }}%)</span>
-                            <span class="metric-label">LumosKart Commission</span>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="metric-value">₹{{ total_commission|floatformat:2 }} ({{ commission_percentage|floatformat:2 }}%)</div>
+                                <div class="metric-label">LumosKart Commission</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-xl-3 mb-4">
-                        <div class="metric-card earnings">
-                            <span class="metric-value">₹{{ total_influencer_earnings|floatformat:2 }}</span>
-                            <span class="metric-label">Influencer Earnings</span>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="metric-value">₹{{ total_influencer_earnings|floatformat:2 }}</div>
+                                <div class="metric-label">Influencer Earnings</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-xl-3 mb-4">
-                        <div class="metric-card users">
-                            <span class="metric-value">{{ active_influencers }} / {{ active_customers }}</span>
-                            <span class="metric-label">Active Influencers / Customers</span>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="metric-value">{{ active_influencers }} / {{ active_customers }}</div>
+                                <div class="metric-label">Active Influencers / Customers</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Pending Items Row -->
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-4 mb-4">
-                        <div class="dashboard-card">
-                            <div class="p-4">
-                                <h5 class="mb-4 fw-bold text-dark">Pending Influencer Approvals ({{ pending_influencer_approvals_count }})</h5>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Pending Influencer Approvals ({{ pending_influencer_approvals_count }})</h5>
+                            </div>
+                            <div class="card-body table-container">
                                 {% if pending_influencer_approvals %}
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-hover mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Username</th>
-                                                <th>Email</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for user in pending_influencer_approvals %}
-                                            <tr>
-                                                <td class="text-truncate" style="max-width: 100px;">{{ user.username }}</td>
-                                                <td class="text-truncate" style="max-width: 120px;">{{ user.email }}</td>
-                                                <td>
-                                                    <form method="post" class="d-inline">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" name="user_id" value="{{ user.id }}">
-                                                        <input type="hidden" name="action" value="approve_influencer">
-                                                        <button type="submit" class="btn btn-success action-btn" title="Approve Influencer">
-                                                            <i class="fas fa-check"></i>
-                                                        </button>
-                                                    </form>
-                                                    <form method="post" class="d-inline">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" name="user_id" value="{{ user.id }}">
-                                                        <input type="hidden" name="action" value="deny_influencer">
-                                                        <button type="submit" class="btn btn-danger action-btn" title="Deny Influencer">
-                                                            <i class="fas fa-times"></i>
-                                                        </button>
-                                                    </form>
-                                                    <a href="{% url 'view_influencer_details' user.id %}" class="btn btn-primary action-btn" title="View Details">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for user in pending_influencer_approvals %}
+                                        <tr>
+                                            <td>{{ user.username }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>
+                                                <form method="post" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                                    <input type="hidden" name="action" value="approve_influencer">
+                                                    <button type="submit" class="btn btn-success btn-sm action-btn">Approve</button>
+                                                </form>
+                                                <form method="post" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                                    <input type="hidden" name="action" value="deny_influencer">
+                                                    <button type="submit" class="btn btn-danger btn-sm action-btn">Deny</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                                 {% else %}
-                                <p class="text-muted mb-0">No pending approvals</p>
+                                <p class="text-muted">No pending approvals</p>
                                 {% endif %}
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-4 mb-4">
-                        <div class="dashboard-card p-4">
-                            <h5 class="mb-4 fw-bold text-dark">Pending Orders ({{ pending_orders }})</h5>
-                            <p class="text-muted mb-3">There are {{ pending_orders }} orders awaiting processing.</p>
-                            <a href="#" class="btn btn-primary">View All Orders</a>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Pending Orders ({{ pending_orders }})</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">There are {{ pending_orders }} orders awaiting processing.</p>
+                                <a href="{% url 'manage_orders' %}" class="btn btn-primary btn-sm">View All Orders</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-4 mb-4">
-                        <div class="dashboard-card">
-                            <div class="p-4">
-                                <h5 class="mb-4 fw-bold text-dark">Pending Withdraw Requests</h5>
-                                {% if pending_withdraw_requests %}
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-hover mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Influencer</th>
-                                                <th>Amount</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for request in pending_withdraw_requests %}
-                                            <tr>
-                                                <td class="text-truncate" style="max-width: 100px;">{{ request.influencer.username }}</td>
-                                                <td>₹{{ request.amount }}</td>
-                                                <td>
-                                                    <form method="post" class="d-inline">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" name="request_id" value="{{ request.id }}">
-                                                        <input type="hidden" name="action" value="approve_withdraw">
-                                                        <button type="submit" class="btn btn-success action-btn">Approve</button>
-                                                    </form>
-                                                    <button type="button" class="btn btn-danger action-btn" data-bs-toggle="modal" data-bs-target="#denyModal{{ request.id }}">Deny</button>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Shipped Orders ({{ shipped_orders }})</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">{{ shipped_orders }} orders are currently in transit.</p>
+                                <a href="{% url 'manage_orders' %}?status=Shipped" class="btn btn-warning btn-sm">View Shipped</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Completed Orders ({{ completed_orders }})</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">{{ completed_orders }} orders have been delivered.</p>
+                                <a href="{% url 'manage_orders' %}?status=Completed" class="btn btn-success btn-sm">View Completed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                                    <!-- Deny Modal -->
-                                                    <div class="modal fade" id="denyModal{{ request.id }}" tabindex="-1" aria-labelledby="denyModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title fw-bold" id="denyModalLabel">Deny Withdraw Request</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <form method="post">
-                                                                    {% csrf_token %}
-                                                                    <div class="modal-body">
-                                                                        <input type="hidden" name="request_id" value="{{ request.id }}">
-                                                                        <input type="hidden" name="action" value="deny_withdraw">
-                                                                        <div class="mb-3">
-                                                                            <label for="reason" class="form-label fw-medium">Reason for denial:</label>
-                                                                            <textarea class="form-control" id="reason" name="reason" rows="3"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                                        <button type="submit" class="btn btn-danger">Deny Request</button>
-                                                                    </div>
-                                                                </form>
+                <!-- Additional Order Stats Row -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Canceled Orders ({{ canceled_orders }})</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">{{ canceled_orders }} orders have been canceled.</p>
+                                <a href="{% url 'manage_orders' %}?status=Canceled" class="btn btn-danger btn-sm">View Canceled</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Total Orders ({{ total_orders }})</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">Total number of orders in the system.</p>
+                                <a href="{% url 'manage_orders' %}" class="btn btn-info btn-sm">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Withdraw Requests</h5>
+                            </div>
+                            <div class="card-body table-container">
+                                {% if pending_withdraw_requests %}
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Influencer</th>
+                                            <th>Amount</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for request in pending_withdraw_requests %}
+                                        <tr>
+                                            <td>{{ request.influencer.username }}</td>
+                                            <td>₹{{ request.amount }}</td>
+                                            <td>
+                                                <form method="post" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="request_id" value="{{ request.id }}">
+                                                    <input type="hidden" name="action" value="approve_withdraw">
+                                                    <button type="submit" class="btn btn-success btn-sm action-btn">Approve</button>
+                                                </form>
+                                                <button type="button" class="btn btn-danger btn-sm action-btn" data-bs-toggle="modal" data-bs-target="#denyModal{{ request.id }}">Deny</button>
+
+                                                <!-- Deny Modal -->
+                                                <div class="modal fade" id="denyModal{{ request.id }}" tabindex="-1" aria-labelledby="denyModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="denyModalLabel">Deny Withdraw Request</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
+                                                            <form method="post">
+                                                                {% csrf_token %}
+                                                                <div class="modal-body">
+                                                                    <input type="hidden" name="request_id" value="{{ request.id }}">
+                                                                    <input type="hidden" name="action" value="deny_withdraw">
+                                                                    <div class="mb-3">
+                                                                        <label for="reason" class="form-label">Reason for denial:</label>
+                                                                        <textarea class="form-control" id="reason" name="reason" rows="3"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-danger">Deny Request</button>
+                                                                </div>
+                                                            </form>
                                                         </div>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                                 {% else %}
-                                <p class="text-muted mb-0">No pending withdraw requests</p>
+                                <p class="text-muted">No pending withdraw requests</p>
                                 {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Quick Actions</h5>
+                            </div>
+                            <div class="card-body">
+                                <a href="{% url 'manage_orders' %}" class="btn btn-primary btn-sm d-block mb-2">Manage Orders</a>
+                                <a href="{% url 'manage_support_tickets' %}" class="btn btn-warning btn-sm d-block mb-2">Support Tickets</a>
+                                <a href="{% url 'manage_products' %}" class="btn btn-info btn-sm d-block mb-2">Product Management</a>
+                                <a href="{% url 'manage_influencers' %}" class="btn btn-success btn-sm d-block">Manage Influencers</a>
+                                <a href="{% url 'manage_influencers' %}" class="btn btn-info btn-sm d-block mt-2">Reset Influencer Passwords</a>
                             </div>
                         </div>
                     </div>
@@ -780,20 +567,24 @@
 
                 <!-- Charts and Top Performers Row -->
                 <div class="row">
-                    <div class="col-12 col-lg-6 mb-4">
-                        <div class="dashboard-card p-4">
-                            <h5 class="mb-4 fw-bold text-dark">Monthly Revenue</h5>
-                            <div class="chart-container">
+                    <div class="col-md-6">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Monthly Revenue</h5>
+                            </div>
+                            <div class="card-body">
                                 <canvas id="revenueChart" width="400" height="200"></canvas>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-3 mb-4">
-                        <div class="dashboard-card p-4">
-                            <h5 class="mb-4 fw-bold text-dark">Top Performing Influencers</h5>
-                            {% if top_influencers %}
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover mb-0">
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Top Performing Influencers</h5>
+                            </div>
+                            <div class="card-body table-container">
+                                {% if top_influencers %}
+                                <table class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Influencer</th>
@@ -803,24 +594,26 @@
                                     <tbody>
                                         {% for influencer in top_influencers %}
                                         <tr>
-                                            <td class="text-truncate" style="max-width: 100px;">{{ influencer.user.username }}</td>
+                                            <td>{{ influencer.user.username }}</td>
                                             <td>₹{{ influencer.total_earnings|floatformat:2 }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
+                                {% else %}
+                                <p class="text-muted">No data available</p>
+                                {% endif %}
                             </div>
-                            {% else %}
-                            <p class="text-muted mb-0">No data available</p>
-                            {% endif %}
                         </div>
                     </div>
-                    <div class="col-12 col-lg-3 mb-4">
-                        <div class="dashboard-card p-4">
-                            <h5 class="mb-4 fw-bold text-dark">Top Selling Products</h5>
-                            {% if top_products %}
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover mb-0">
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Top Selling Products</h5>
+                            </div>
+                            <div class="card-body table-container">
+                                {% if top_products %}
+                                <table class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Product</th>
@@ -830,136 +623,32 @@
                                     <tbody>
                                         {% for product in top_products %}
                                         <tr>
-                                            <td class="text-truncate" style="max-width: 100px;">{{ product.name }}</td>
+                                            <td>{{ product.name }}</td>
                                             <td>{{ product.total_sold }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                            </div>
-                            {% else %}
-                            <p class="text-muted mb-0">No data available</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- All Influencers Management Section -->
-                <div class="row mt-5">
-                    <div class="col-12">
-                        <div class="dashboard-card">
-                            <div class="p-4">
-                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
-                                    <h5 class="mb-0 fw-bold text-dark">All Influencers ({{ all_influencers.count }})</h5>
-                                    <a href="{% url 'manage_influencers' %}" class="btn btn-primary">Manage All Influencers</a>
-                                </div>
-                                {% if all_influencers %}
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-hover mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Username</th>
-                                                <th>Email</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for influencer in all_influencers|slice:":5" %}
-                                            <tr>
-                                                <td class="text-truncate" style="max-width: 150px;">{{ influencer.username }}</td>
-                                                <td class="text-truncate" style="max-width: 150px;">{{ influencer.email }}</td>
-                                                <td>
-                                                    {% if influencer.is_active %}
-                                                        <span class="status-badge status-active">Active</span>
-                                                    {% else %}
-                                                        <span class="status-badge status-inactive">Inactive</span>
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex gap-2">
-                                                        <a href="{% url 'view_influencer_details' influencer.id %}" class="btn btn-primary action-btn" title="View Details">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-                                                        <a href="{% url 'toggle_influencer_status' influencer.id %}" class="btn btn-{{ influencer.is_active|yesno:'warning,success' }} action-btn" title="{{ influencer.is_active|yesno:'Disable,Enable' }}">
-                                                            <i class="fas fa-{{ influencer.is_active|yesno:'ban,check' }}"></i>
-                                                        </a>
-                                                        <a href="{% url 'delete_influencer' influencer.id %}" class="btn btn-danger action-btn" title="Delete">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
                                 {% else %}
-                                <p class="text-muted mb-0">No influencers registered yet.</p>
+                                <p class="text-muted">No data available</p>
                                 {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- All Users Management Section -->
-                <div class="row mt-5">
+                <!-- Quick Links -->
+                <div class="row mt-4">
                     <div class="col-12">
-                        <div class="dashboard-card">
-                            <div class="p-4">
-                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
-                                    <h5 class="mb-0 fw-bold text-dark">All Users ({{ all_users.count }})</h5>
-                                    <a href="{% url 'manage_users' %}" class="btn btn-primary">Manage All Users</a>
-                                </div>
-                                {% if all_users %}
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-hover mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Username</th>
-                                                <th>Email</th>
-                                                <th>Full Name</th>
-                                                <th>Status</th>
-                                                <th>Join Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for user in all_users|slice:":5" %}
-                                            <tr>
-                                                <td class="text-truncate" style="max-width: 120px;">{{ user.username }}</td>
-                                                <td class="text-truncate" style="max-width: 150px;">{{ user.email }}</td>
-                                                <td class="text-truncate" style="max-width: 150px;">{{ user.full_name|default:"-" }}</td>
-                                                <td>
-                                                    {% if user.is_active %}
-                                                        <span class="status-badge status-active">Active</span>
-                                                    {% else %}
-                                                        <span class="status-badge status-inactive">Inactive</span>
-                                                    {% endif %}
-                                                </td>
-                                                <td>{{ user.date_joined|date:"M d, Y" }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                {% else %}
-                                <p class="text-muted mb-0">No users registered yet.</p>
-                                {% endif %}
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h5>Quick Actions</h5>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="row mt-5">
-                    <div class="col-12">
-                        <div class="dashboard-card p-4">
-                            <h5 class="mb-4 fw-bold text-dark">Quick Actions</h5>
-                            <div class="d-flex flex-wrap gap-3">
-                                <a href="{% url 'manage_influencers' %}" class="btn btn-outline-primary">Manage Influencers</a>
-                                <a href="{% url 'manage_influencers' %}" class="btn btn-outline-success">View All Influencers</a>
-                                <a href="#" class="btn btn-outline-secondary">Analytics Reports</a>
-                                <a href="{% url 'manage_users' %}" class="btn btn-outline-info">User Management</a>
+                            <div class="card-body">
+                                <a href="{% url 'manage_products' %}" class="btn btn-outline-primary me-2">Product Management</a>
+                                <a href="{% url 'manage_influencers' %}" class="btn btn-outline-success me-2">Manage Influencers</a>
+                                <a href="{% url 'manage_influencers' %}" class="btn btn-outline-info me-2">Reset Influencer Passwords</a>
+                                <a href="#" class="btn btn-outline-secondary me-2">Analytics Reports</a>
                                 <a href="#" class="btn btn-outline-warning">System Settings</a>
                             </div>
                         </div>
@@ -1003,6 +692,63 @@
                             }
                         }
                     }
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const desktopSidebar = document.querySelector('nav.d-none.d-md-block.sidebar');
+            const mobileSidebar = document.querySelector('nav.d-md-none.sidebar');
+            const sidebar = mobileSidebar || desktopSidebar; // Use mobile sidebar if available
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                    sidebarOverlay.classList.toggle('active');
+
+                    // Prevent body scroll when sidebar is open
+                    if (sidebar.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            }
+
+            // Close sidebar when clicking on overlay
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', function() {
+                    if(desktopSidebar) desktopSidebar.classList.remove('active');
+                    if(mobileSidebar) mobileSidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                });
+            }
+
+            // Close sidebar when clicking on any sidebar link (for mobile)
+            const allSidebarLinks = document.querySelectorAll('nav.sidebar .nav-link');
+            allSidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 992) {
+                        if(mobileSidebar) mobileSidebar.classList.remove('active');
+                        sidebarOverlay.classList.remove('active');
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            });
+
+            // Update layout on window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 992) {
+                    if(desktopSidebar) desktopSidebar.classList.remove('active');
+                    if(mobileSidebar) mobileSidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                    document.body.style.overflow = 'auto';
                 }
             });
         });
