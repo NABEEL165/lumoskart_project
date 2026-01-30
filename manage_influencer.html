@@ -453,6 +453,9 @@
                                         <a href="{% url 'toggle_influencer_status' application.user.id %}" class="btn btn-warning action-btn">
                                             <i class="fas fa-ban"></i> Disable
                                         </a>
+                                        <a href="{% url 'reset_influencer_password' application.user.id %}" class="btn btn-info action-btn">
+                                            <i class="fas fa-key"></i> Reset Password
+                                        </a>
                                         <a href="{% url 'delete_influencer' application.user.id %}" class="btn btn-danger action-btn">
                                             <i class="fas fa-trash"></i> Delete
                                         </a>
@@ -513,6 +516,9 @@
                                                         </a>
                                                         <a href="{% url 'toggle_influencer_status' influencer.id %}" class="btn btn-{{ influencer.is_active|yesno:'warning,success' }} action-btn">
                                                             <i class="fas fa-{{ influencer.is_active|yesno:'ban,check' }}"></i> {{ influencer.is_active|yesno:'Disable,Enable' }}
+                                                        </a>
+                                                        <a href="{% url 'reset_influencer_password' influencer.id %}" class="btn btn-info action-btn">
+                                                            <i class="fas fa-key"></i> Reset Password
                                                         </a>
                                                         <a href="{% url 'delete_influencer' influencer.id %}" class="btn btn-danger action-btn">
                                                             <i class="fas fa-trash"></i> Delete
