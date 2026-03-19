@@ -481,6 +481,59 @@
             color: #f43f5e;
         }
 
+        .affiliate-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-check-it-out {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-check-it-out:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .affiliate-product-card {
+            background-color: #1e293b;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .affiliate-product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
         .instagram-reels-widget {
             background: #1e293b;
             border-radius: 20px;
@@ -5993,7 +6046,76 @@
         </section>
         {% endfor %}
 
+        <!-- Affiliate Products Section -->
+        {% if affiliate_products %}
+        <section class="artist-section">
+            <div class="section-title-bar">
+                <h2 data-en="Featured Affiliate Products" data-ar="منتجات الشراكة" data-hi="विशेष सहयोग उत्पाद">Featured Affiliate Products</h2>
+                <a href="{% url 'product_lists' %}" class="view-all-btn" data-en="View More" data-ar="عرض المزيد"
+                    data-hi="और देखें">View More</a>
+            </div>
+            <div class="products-grid">
+                {% for product in affiliate_products %}
+                <div class="affiliate-product-card" data-product-id="{{ product.id }}"
+                    data-category-id="{{ product.category.id|default:'0' }}">
+                    <div class="product-img-wrapper">
+                        {% if product.product_type == 'affiliate' and product.amazon_image_url %}
+                        <img src="{{ product.amazon_image_url }}" alt="{{ product.name }}">
+                        {% elif product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="{% static 'images/product-placeholder.jpg' %}" alt="Product Image">
+                        {% endif %}
 
+                        {% if product.category %}
+                        <div class="category-badge">{{ product.category.name }}</div>
+                        {% endif %}
+
+                        <div class="affiliate-badge">
+                            <i class="fas fa-external-link-alt"></i> Affiliate
+                        </div>
+
+                        {% if product.influencer %}
+                        <div class="promoted-badge">{{ product.influencer.username|upper }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="product-details">
+                        <h3 class="product-title">{{ product.name }}</h3>
+
+                        <!-- Influencer Name -->
+                        {% if product.influencer %}
+                        <p class="product-influencer">by {{ product.influencer.username }}</p>
+                        {% endif %}
+
+                        {% if product.description %}
+                        <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                        {% endif %}
+
+                        <div class="product-footer">
+                            {% if product.price > 0 %}
+                            <span class="product-price" data-price="{{ product.price }}" data-currency="INR">₹{{ product.price }}</span>
+                            {% else %}
+                            <span class="product-price">Check Price</span>
+                            {% endif %}
+                            
+                            <!-- Check it out button -->
+                            <a href="{{ product.affiliate_link }}" target="_blank" rel="noopener noreferrer" 
+                               class="btn-check-it-out" onclick="trackAffiliateClick('{{ product.id }}')">
+                                <i class="fas fa-shopping-cart me-1"></i>Check it out
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="empty-state">
+                    <p data-en="No affiliate products available." data-ar="لا توجد منتجات شراكة متاحة."
+                        data-hi="कोई सहयोग उत्पाद उपलब्ध नहीं है।">No affiliate products available.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
 
         <!-- Footer -->
         <footer class="footer">
@@ -6085,6 +6207,12 @@
         <script>
             // Handle Add to Cart and Buy Now buttons
             document.addEventListener('DOMContentLoaded', function () {
+                // Track affiliate clicks
+                window.trackAffiliateClick = function(productId) {
+                    console.log('Affiliate product clicked:', productId);
+                    // You can add analytics tracking here
+                };
+
                 // Handle language selection
                 const languageItems = document.querySelectorAll('.lang-option');
                 languageItems.forEach(item => {
