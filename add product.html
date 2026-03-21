@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -674,6 +675,80 @@
             color: inherit;
             flex: 1;
         }
+
+        /* Affiliate Product Modal */
+        .affiliate-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .affiliate-modal-box {
+            background: #fff;
+            width: 600px;
+            max-width: 90%;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .affiliate-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .affiliate-modal-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .affiliate-close-btn {
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .affiliate-form-group {
+            margin-bottom: 16px;
+        }
+
+        .affiliate-form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .affiliate-form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .affiliate-submit-btn {
+            background: #00c7f7;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .affiliate-submit-btn:hover {
+            background: #00a8d3;
+        }
     </style>
 </head>
 <body>
@@ -723,32 +798,45 @@
     <div class="modal-overlay" id="influencerModal">
         <div class="modal-box">
             <div class="modal-header">
-                <h2>Are you an Own Product Influencer or Affiliate Influencer?</h2>
+                <h2>Choose Product Type</h2>
                 <span class="close-btn" onclick="closeModal()">×</span>
             </div>
 
             <div class="modal-body">
-                <a href="{% url 'add_product' %}?type=own" class="option-link">
-                    <div class="option selected" onclick="selectOption(this)">
-                        <div class="icon blue">🛍️</div>
-                        <h3>Own Product Influencer</h3>
-                        <p>Promote and sell your own products or brand</p>
-                    </div>
-                </a>
+                <div class="option selected" onclick="selectOption(this)" data-type="own">
+                    <div class="icon blue">🛍️</div>
+                    <h3>Own Product Influencer</h3>
+                    <p>Promote and sell your own products or brand</p>
+                </div>
 
-                <a href="{% url 'affliated' %}" class="option-link">
-                    <div class="option" onclick="selectOption(this)">
-                        <div class="icon orange">📣</div>
-                        <h3>Affiliate Influencer</h3>
-                        <p>Promote other brands' products and earn commissions</p>
-                    </div>
-                </a>
+                <div class="option" onclick="selectOption(this)" data-type="affiliate">
+                    <div class="icon orange">📣</div>
+                    <h3>Affiliate Influencer</h3>
+                    <p>Promote other brands' products and earn commissions</p>
+                </div>
             </div>
 
             <div class="modal-footer">
                 <button class="cancel-btn" onclick="closeModal()">← Cancel</button>
                 <button class="continue-btn" onclick="continueToForm()">Continue →</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Affiliate Product Modal -->
+    <div class="affiliate-modal-overlay" id="affiliateModal">
+        <div class="affiliate-modal-box">
+            <div class="affiliate-modal-header">
+                <h2>Add Affiliate Product</h2>
+                <button class="affiliate-close-btn" onclick="closeAffiliateModal()">×</button>
+            </div>
+            <form id="affiliateForm">
+                <div class="affiliate-form-group">
+                    <label for="affiliateLink">Add Your Affiliate Link</label>
+                    <input type="url" id="affiliateLink" name="affiliate_link" required placeholder="https://amzn.to/...">
+                </div>
+                <button type="submit" class="affiliate-submit-btn">Add Product</button>
+            </form>
         </div>
     </div>
 
@@ -823,21 +911,18 @@ function selectOption(element) {
     element.classList.add('selected');
 }
 
-function closeModal() {
-    document.getElementById('influencerModal').style.display = 'none';
-}
+
 
 function continueToForm() {
     const selectedOption = document.querySelector('.option.selected');
     if (selectedOption) {
-        const optionText = selectedOption.querySelector('h3').textContent;
-        console.log('Selected option:', optionText);
-        
+        const optionType = selectedOption.getAttribute('data-type');
+
         // Redirect based on selection
-        if (optionText.includes("Own Product Influencer")) {
+        if (optionType === "own") {
             window.location.href = "{% url 'add_product' %}?type=own";
-        } else if (optionText.includes("Affiliate Influencer")) {
-            window.location.href = "{% url 'affliated' %}";
+        } else if (optionType === "affiliate") {
+            openAffiliateModal();
         }
         closeModal();
     }
@@ -845,9 +930,48 @@ function continueToForm() {
 
 // Show modal when page loads
 window.addEventListener('load', function() {
-    setTimeout(function() {
-        document.getElementById('influencerModal').style.display = 'flex';
-    }, 1000); // Show after 1 second
+    // Check if modal has been shown before in this session
+    if (!localStorage.getItem('influencerModalShown')) {
+        setTimeout(function() {
+            document.getElementById('influencerModal').style.display = 'flex';
+        }, 1000); // Show after 1 second
+    }
+});
+
+// Mark modal as shown when closed
+function closeModal() {
+    document.getElementById('influencerModal').style.display = 'none';
+    localStorage.setItem('influencerModalShown', 'true');
+}
+
+// Affiliate Product Modal Functions
+function openAffiliateModal() {
+    document.getElementById('affiliateModal').style.display = 'flex';
+}
+
+function closeAffiliateModal() {
+    document.getElementById('affiliateModal').style.display = 'none';
+    document.getElementById('affiliateForm').reset();
+}
+
+// Handle affiliate form submission
+document.getElementById('affiliateForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const affiliateLink = document.getElementById('affiliateLink').value.trim();
+
+    if (!affiliateLink) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Please enter an Amazon affiliate link.',
+            confirmButtonColor: '#00c7f7',
+        });
+        return;
+    }
+
+    // Redirect to the proper affiliate product form page
+    window.location.href = '{% url "affiliate_product_form" %}?link=' + encodeURIComponent(affiliateLink);
 });
 </script>
 
