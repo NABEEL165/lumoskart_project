@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Videos - Lumoskart</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+     .navbar-brand:hover .brand-text {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 199, 247, 0.5);
+            /* Teal glow using your primary color */
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Navbar Optimization */
+        @media (max-width: 991px) {
+            .navbar-container {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+                padding: 0 5px !important;
+            }
+
+            .navbar-brand {
+                margin-right: 0 !important;
+                gap: 10px !important;
+                flex-shrink: 0;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            .logo-img {
+                max-height: 40px !important;
+                width: auto !important;
+                flex-shrink: 0;
+            }
+
+            .brand-text {
+                font-size: 1.4rem !important;
+                display: inline-block !important;
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%) !important;
+                -webkit-background-clip: text !important;
+                background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                white-space: nowrap !important;
+            }
+
+            .mobile-view {
+                display: flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                flex-shrink: 0;
+            }
+
+            .desktop-view {
+                display: none !important;
+            }
+
+            .btn-open-app {
+                padding: 4px 12px !important;
+                font-size: 0.85rem !important;
+                height: fit-content;
+            }
+        }
+
+
+        /* Custom Toggler Icon and Buttons */
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 5px 8px !important;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+            width: 1.25em !important;
+            height: 1.25em !important;
+        }
+
+        .mobile-view .btn-outline-light {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff !important;
+        }
+
+        .mobile-view .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Influencer Swiper Styles */
+        .influencers-swiper {
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .influencers-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+        }
+
+        .influencers-swiper .swiper-wrapper {
+            padding: 10px 0;
+        }
+
+
+        .swiper-pagination.influencers-pagination {
+            bottom: 0 !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: #00c7f7;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #00c7f7;
+        }
+
+        /* Logo + Brand Text Container */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Space between logo and text */
+            text-decoration: none !important;
+        }
+
+        /* Logo Image */
+        .navbar-brand img,
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hover effect on logo */
+        .navbar-brand:hover img,
+        .navbar-brand:hover .logo-img {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 15px rgba(0, 199, 247, 0.4);
+            /* Teal glow */
+        }
+
+        /* Brand Text - "LumosKart" */
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #00c7f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* Hover glow on text */
+        .navbar-brand:hover .brand-text {
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 0 15px rgba(0, 199, 247, 0.6);
+            /* Stronger teal glow */
+        }
+
+        :root {
+            --primary-black: #000000;
+            --secondary-black: #1a1a1a;
+            --dark-grey: #333333;
+            --medium-grey: #666666;
+            --light-grey: #cccccc;
+            --bg-grey: #f5f5f5;
+            --white: #ffffff;
+            --border-grey: #e0e0e0;
+            --primary-blue: #007bff;
+            --success-green: #28a745;
+            --warning-orange: #ffc107;
+            --danger-red: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-grey);
+            background-color: var(--bg-grey);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--primary-black);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-item a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-item a:hover {
+            background-color: var(--dark-grey);
+        }
+
+        .nav-item a.active {
+            background-color: var(--white);
+            color: var(--primary-black);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex: 1;
+        }
+
+        .videos-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .videos-header {
+            background-color: var(--secondary-black);
+            color: var(--white);
+            padding: 2rem;
+            border-bottom: 3px solid var(--primary-black);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .videos-header h2 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .videos-content {
+            padding: 2rem;
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-card {
+            border: 1px solid var(--border-grey);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: var(--bg-grey);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--medium-grey);
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-grey);
+        }
+
+        .video-description {
+            color: var(--medium-grey);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .video-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--medium-grey);
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-grey);
+            border-radius: 4px;
+            background-color: var(--white);
+            color: var(--dark-grey);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-action:hover {
+            background-color: var(--bg-grey);
+        }
+
+        .btn-edit {
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .btn-edit:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+
+        .btn-delete {
+            color: var(--danger-red);
+            border-color: var(--danger-red);
+        }
+
+        .btn-delete:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
+        .no-videos {
+            text-align: center;
+            padding: 3rem 2rem;
+            background-color: var(--bg-grey);
+            border-radius: 8px;
+            color: var(--medium-grey);
+            font-size: 1.1rem;
+            border: 1px dashed var(--light-grey);
+            grid-column: 1 / -1;
+        }
+
+        .products-tagged {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-grey);
+        }
+
+        .products-tagged h5 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--dark-grey);
+        }
+
+        .products-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .product-tag {
+            background-color: var(--bg-grey);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-black);
+            color: var(--white);
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--light-grey);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--white);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .container {
+                margin: 1rem auto;
+                padding: 0 1rem;
+            }
+
+            .videos-header {
+                padding: 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .videos-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .videos-content {
+                padding: 1.5rem;
+            }
+
+            .videos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 0.75rem;
+            }
+
+            .logo {
+                font-size: 1.25rem;
+            }
+
+            .videos-header {
+                padding: 1.25rem;
+            }
+
+            .videos-header h2 {
+                font-size: 1.35rem;
+            }
+
+            .videos-content {
+                padding: 1rem;
+            }
+
+            .video-info {
+                padding: 1rem;
+            }
+
+            .video-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+          <div class="container-fluid navbar-container">
+                <a href="{% url 'customer_dashboard' %}" class="navbar-brand d-flex align-items-center gap-3">
+                    <img src="{% static 'accounts/images/WhatsApp Image 2026-01-07 at 6.45.12 PM.jpeg' %}"
+                        alt="LumosKart Logo" class="logo-img" style="max-height: 50px; width: auto;">
+                    <span class="brand-text">LumosKart</span>
+                </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="{% url 'influencer_dashboard' %}">Dashboard</a></li>
+                <li class="nav-item"><a href="{% url 'upload_video' %}" class="active">Upload Video</a></li>
+                <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="videos-card">
+            <div class="videos-header">
+                <h2>Manage Videos</h2>
+                <a href="{% url 'upload_video' %}" class="btn-primary">
+                    <i class="fas fa-plus-circle mr-2"></i>Upload New Video
+                </a>
+            </div>
+
+            <div class="videos-content">
+                {% if videos %}
+                    <div class="videos-grid">
+                        {% for video in videos %}
+                            <div class="video-card">
+                                {% if video.thumbnail %}
+                                    <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="video-thumbnail">
+                                {% else %}
+                                    <div class="video-thumbnail">
+                                        <i class="fas fa-video fa-3x"></i>
+                                    </div>
+                                {% endif %}
+
+                                <div class="video-info">
+                                    <h3 class="video-title">{{ video.title }}</h3>
+                                    <p class="video-description">{{ video.description|truncatewords:20 }}</p>
+
+                                    <div class="video-stats">
+                                        <span><i class="fas fa-eye mr-1"></i> {{ video.views }} views</span>
+                                        <span><i class="fas fa-heart mr-1"></i> {{ video.likes }} likes</span>
+                                        <span><i class="fas fa-calendar-alt mr-1"></i> {{ video.created_at|date:"M d, Y" }}</span>
+                                    </div>
+
+                                    {% if video.products.all %}
+                                        <div class="products-tagged">
+                                            <h5>Tagged Products:</h5>
+                                            <div class="products-list">
+                                                {% for product in video.products.all %}
+                                                    <span class="product-tag">{{ product.name }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="video-actions mt-3">
+                                        <a href="{% url 'edit_video' video.id %}" class="btn-action btn-edit">
+                                            <i class="fas fa-edit mr-1"></i> Edit
+                                        </a>
+                                        <a href="{% url 'delete_video' video.id %}" class="btn-action btn-delete">
+                                            <i class="fas fa-trash mr-1"></i> Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-videos">
+                        <i class="fas fa-video fa-3x mb-3"></i>
+                        <h3>No Videos Found</h3>
+                        <p>You haven't uploaded any videos yet.</p>
+                        <a href="{% url 'upload_video' %}" class="btn-primary mt-3">Upload Your First Video</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Lumoskart. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
