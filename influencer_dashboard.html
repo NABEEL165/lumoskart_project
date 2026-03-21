@@ -1787,33 +1787,7 @@
                 <li><a href="{% url 'influencer_product_list' %}" class="nav-link">Products</a></li>
                 <li><a href="{% url 'influencer_sold_products' %}" class="nav-link">Orders</a></li>
                 <li><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
-                <!-- Language Selection -->
-            <!--    <li class="dropdown">-->
-            <!--        <button class="dropdown-toggle" type="button" id="languageDropdown" aria-expanded="false">-->
-            <!--            <i class="fas fa-globe mr-1"></i> <span id="currentLanguage">English</span> ▼-->
-            <!--        </button>-->
-            <!--        <div class="dropdown-menu" aria-labelledby="languageDropdown">-->
-            <!--            <a class="dropdown-item lang-option" href="#" data-lang="en">English</a>-->
-            <!--            <a class="dropdown-item lang-option" href="#" data-lang="ar">Arabic</a>-->
-            <!--            <a class="dropdown-item lang-option" href="#" data-lang="hi">Hindi</a>-->
-            <!--        </div>-->
-            <!--    </li>-->
-                <!-- Currency Converter Dropdown -->
-            <!--    <li class="dropdown">-->
-            <!--        <button class="dropdown-toggle" type="button" id="currencyDropdown" aria-expanded="false">-->
-            <!--            <i class="fas fa-exchange-alt mr-1"></i> <span id="currentCurrency">INR (₹)</span> ▼-->
-            <!--        </button>-->
-            <!--        <div class="dropdown-menu" aria-labelledby="currencyDropdown">-->
-            <!--            <a class="dropdown-item currency-option" href="#" data-currency="INR" data-symbol="₹">India (INR)</a>-->
-            <!--            <a class="dropdown-item currency-option" href="#" data-currency="AED" data-symbol="د.إ">UAE (AED)</a>-->
-            <!--            <a class="dropdown-item currency-option" href="#" data-currency="SGD" data-symbol="$">Singapore (SGD)</a>-->
-            <!--            <a class="dropdown-item currency-option" href="#" data-currency="PHP" data-symbol="₱">Philippines (PHP)</a>-->
-            <!--            <a class="dropdown-item currency-option" href="#" data-currency="USD" data-symbol="$">USA (USD)</a>-->
-            <!--            <a class="dropdown-item currency-option" href="#" data-currency="EUR" data-symbol="€">Germany (EUR)</a>-->
-            <!--            <a class="dropdown-item currency-option" href="#" data-currency="IDR" data-symbol="Rp">Indonesia (IDR)</a>-->
-            <!--        </div>-->
-            <!--    </li>-->
-            <!--</ul>-->
+
             <div class="dropdown">
                 <button class="dropdown-toggle" onclick="toggleDropdown(event)">
                     <i class="fas fa-user-circle mr-1"></i> {{ request.user.full_name|default:request.user.username }} ▼
@@ -1873,6 +1847,18 @@
                             <a class="nav-link" href="{% url 'influencer_earnings' %}">
                                 <i class="fas fa-wallet"></i>
                                 <span>Earnings / Withdrawals</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'affiliate_product_form' %}">
+                                <i class="fas fa-wallet"></i>
+                                <span>affiliated</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                <span>Logout</span>
                             </a>
                         </li>
                     </ul>
