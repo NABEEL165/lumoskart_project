@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - Lumoskart</title>
+    <style>
+        :root {
+            --primary-black: #0a0a0a;
+            --secondary-black: #1a1a1a;
+            --dark-grey: #2a2a2a;
+            --medium-grey: #4a4a4a;
+            --light-grey: #e5e5e5;
+            --white: #ffffff;
+            --accent-grey: #6a6a6a;
+            --border-grey: #3a3a3a;
+            --error-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--primary-black);
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: var(--primary-black);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-grey);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2.5rem;
+        }
+
+        .logo {
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateX(5px);
+        }
+
+        .logo img {
+            /*filter: brightness(0) invert(1);*/
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .nav-item a {
+            color: var(--light-grey);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--white);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item a:hover,
+        .nav-item a.active {
+            color: var(--white);
+            background-color: var(--secondary-black);
+        }
+
+        .nav-item a:hover::before,
+        .nav-item a.active::before {
+            transform: translateX(0);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .profile-card {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            position: relative;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-black) 0%, var(--medium-grey) 100%);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
+            color: var(--white);
+            padding: 2.5rem 3rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .profile-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .profile-header h2 {
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-header h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--white);
+            margin: 12px auto 0;
+            border-radius: 2px;
+        }
+
+        .profile-content {
+            padding: 3rem;
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.6s ease backwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.15s; }
+        .form-group:nth-child(3) { animation-delay: 0.2s; }
+        .form-group:nth-child(4) { animation-delay: 0.25s; }
+        .form-group:nth-child(5) { animation-delay: 0.3s; }
+        .form-group:nth-child(6) { animation-delay: 0.35s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group:hover {
+            transform: translateX(5px);
+        }
+
+        .form-group label {
+            font-weight: 700;
+            color: var(--primary-black);
+            margin-bottom: 0.8rem;
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            font-size: 1rem;
+            color: var(--secondary-black);
+            background: linear-gradient(to right, #fafafa, #ffffff);
+            padding: 1.2rem;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            border-left: 4px solid var(--primary-black);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--dark-grey);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            background: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.8;
+        }
+
+        .form-group input[type="file"] {
+            padding: 1rem;
+            background-color: #fafafa;
+            cursor: pointer;
+            border: 2px dashed var(--medium-grey);
+            border-left: 4px solid var(--primary-black);
+        }
+
+        .form-group input[type="file"]:hover {
+            border-color: var(--primary-black);
+            background-color: #f5f5f5;
+        }
+
+        /* Photo Preview */
+        .photo-preview {
+            margin-top: 1.5rem;
+            position: relative;
+            display: inline-block;
+            animation: scaleIn 0.4s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .photo-preview::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-black), var(--medium-grey));
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .photo-preview img {
+            max-width: 150px;
+            border-radius: 12px;
+            border: 3px solid var(--white);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .photo-preview img:hover {
+            transform: scale(1.05);
+        }
+
+        .help-text,
+        .form-text {
+            font-size: 0.8rem;
+            color: var(--accent-grey);
+            margin-top: 0.6rem;
+            display: block;
+            line-height: 1.5;
+            padding-left: 0.5rem;
+            border-left: 2px solid var(--light-grey);
+        }
+
+        .errorlist,
+        .text-danger {
+            list-style: none;
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 0.6rem;
+            background-color: rgba(220, 53, 69, 0.08);
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--error-color);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        button[type="submit"],
+        .btn-primary {
+            width: 100%;
+            background: var(--primary-black);
+            color: var(--white);
+            padding: 1.2rem 2rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            margin-top: 1.5rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button[type="submit"]::before,
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button[type="submit"]:hover::before,
+        .btn-primary:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        button[type="submit"]:hover,
+        .btn-primary:hover {
+            background: var(--secondary-black);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        button[type="submit"]:active,
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-black);
+            color: var(--light-grey);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid var(--border-grey);
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .footer a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer a:hover {
+            opacity: 0.7;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem 1.5rem;
+                gap: 1rem;
+            }
+
+            .nav-menu {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .nav-item a {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .profile-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .profile-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .profile-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 1rem;
+                font-size: 0.95rem;
+            }
+
+            button[type="submit"],
+            .btn-primary {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+
+            .photo-preview img {
+                max-width: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-header h2 {
+                font-size: 1.3rem;
+            }
+
+            .profile-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .form-group label {
+                font-size: 0.7rem;
+            }
+
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                font-size: 0.9rem;
+                padding: 0.9rem;
+            }
+
+            .nav-item a {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .photo-preview img {
+                max-width: 100px;
+            }
+        }
+
+        /* Additional Bootstrap-like utilities */
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-5 { margin-top: 3rem; }
+        .mb-3 { margin-bottom: 1rem; }
+        .mb-4 { margin-bottom: 1.5rem; }
+        .w-100 { width: 100%; }
+        .text-center { text-align: center; }
+        .text-muted { color: var(--accent-grey); }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="{% static 'accounts/images/lumoskart-logo.png' %}" alt="Lumoskart Logo" style="height: 32px; width: auto; margin-right: 10px;">
+<!--                <span>Lumoskart</span>-->
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="nav-item"><a href="{%url 'influencer_dashboard'%}">Dashboard</a></li>
+                <li class="nav-item"><a href="{%url 'profile'%}" class="active">Profile</a></li>
+                <li class="nav-item"><a href="{%url 'logout'%}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <div class="profile-card p-4 shadow-lg rounded">
+            <div class="profile-header mb-3 text-center">
+                <h2>Edit Profile</h2>
+            </div>
+
+            <div class="profile-content">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Full Name -->
+                    <div class="form-group mb-3">
+                        <label for="{{ form.full_name.id_for_label }}">Full Name</label>
+                        {{ form.full_name }}
+                        {% if form.full_name.errors %}
+                            <div class="text-danger">
+                                {{ form.full_name.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Username -->
+                    <div class="form-group mb-3">
+                        <label for="{{ form.username.id_for_label }}">Username</label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <div class="text-danger">
+                                {{ form.username.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group mb-3">
+                        <label for="{{ form.email.id_for_label }}">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-danger">
+                                {{ form.email.errors }}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">Must be a Gmail address (example@gmail.com).</small>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="form-group mb-3">
+                        <label for="{{ form.phone.id_for_label }}">Phone Number</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                            <div class="text-danger">
+                                {{ form.phone.errors }}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">Enter a 10-digit phone number starting with 6-9.</small>
+                    </div>
+
+                    <!-- Profile Photo -->
+                    <div class="form-group mb-3">
+                        <label for="{{ form.photo.id_for_label }}">Profile Photo</label><br>
+                        {{ form.photo }}
+                        {% if form.instance.photo %}
+                            <div class="photo-preview mt-2">
+                                <img src="{{ form.instance.photo.url }}" alt="Profile Photo">
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Bio -->
+                    <div class="form-group mb-4">
+                        <label for="{{ form.bio.id_for_label }}">Bio</label>
+                        {{ form.bio }}
+                        {% if form.bio.errors %}
+                            <div class="text-danger">
+                                {{ form.bio.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Lumoskart. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
