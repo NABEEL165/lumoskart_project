@@ -1,3 +1,30 @@
+
+
+
+<!DOCTYPE html> {% load static %} <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Lumoskart</title> <!-- Favicon --> <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-ico
+
+pasted
+
+
+
+
+How can I help you today?
+
+Code
+
+Write
+
+Learn
+
+Life stuff
+
+Claude’s choice
+
+Pasted content
+254.02 KB •7,740 lines
+•
+Formatting may be inconsistent from source
+
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -527,11 +554,66 @@
             cursor: pointer;
             border: 1px solid #334155;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
         }
 
         .affiliate-product-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .affiliate-product-card .product-img-wrapper {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .affiliate-product-card .product-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .affiliate-product-card:hover .product-img-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .affiliate-product-card .product-details {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .affiliate-product-card .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .affiliate-product-card .product-influencer {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .affiliate-product-card .product-description {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+
+        .affiliate-product-card .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
         }
 
         .instagram-reels-widget {
@@ -785,7 +867,7 @@
             transform: scale(1.1);
         }
 
-        /* Right Sidebar Actions */
+
         .video-shorts-actions-sidebar {
             position: absolute;
             right: 15px;
@@ -797,13 +879,35 @@
             align-items: center;
         }
 
+
+.video-shorts-actions-sidebar button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 26px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.9));
+}
+.video-shorts-actions-sidebar .like-count,
+.video-shorts-actions-sidebar .action-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 1);
+    color: white;
+}
         .video-shorts-actions-sidebar .action-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 5px;
         }
-
         .video-shorts-actions-sidebar button {
             background: none;
             border: none;
@@ -818,28 +922,23 @@
             transition: transform 0.2s;
             text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
-
         .video-shorts-actions-sidebar button:hover {
             transform: scale(1.1);
         }
-
         .video-shorts-actions-sidebar button.liked i {
-            color: #ef4444;
+            color:
+#ef4444;
             font-weight: 900;
         }
-
         .video-shorts-actions-sidebar button.liked i.far {
             display: none;
         }
-
         .video-shorts-actions-sidebar .like-count,
         .video-shorts-actions-sidebar .action-label {
             font-size: 13px;
             font-weight: 500;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
         }
-
-
         /* Bottom Info Overlay */
         .video-shorts-info-overlay {
             position: absolute;
@@ -5723,7 +5822,7 @@
                     data-video-index="{{ forloop.counter0 }}">
                     {% with product=video.products.first %}
                     <!-- Badges -->
-                    <div class="reel-discount-badge">60%</div>
+                    <!--<div class="reel-discount-badge"></div>-->
                     <div class="reel-views-badge">
                         <i class="fas fa-eye"></i> {{ video.views|default:0 }}
                     </div>
@@ -6098,9 +6197,9 @@
                             {% else %}
                             <span class="product-price">Check Price</span>
                             {% endif %}
-                            
+
                             <!-- Check it out button -->
-                            <a href="{{ product.affiliate_link }}" target="_blank" rel="noopener noreferrer" 
+                            <a href="{{ product.affiliate_link }}" target="_blank" rel="noopener noreferrer"
                                class="btn-check-it-out" onclick="trackAffiliateClick('{{ product.id }}')">
                                 <i class="fas fa-shopping-cart me-1"></i>Check it out
                             </a>
